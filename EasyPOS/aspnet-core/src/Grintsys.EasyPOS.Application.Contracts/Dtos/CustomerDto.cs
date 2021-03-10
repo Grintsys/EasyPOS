@@ -1,10 +1,10 @@
 ﻿using Grintsys.EasyPOS.Enums;
 using System;
-using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.Application.Dtos;
 
-namespace Grintsys.EasyPOS.Models
+namespace Grintsys.EasyPOS.Dtos
 {
-    public class Customer : FullAuditedAggregateRoot<Guid>
+    public class CustomerDto : FullAuditedEntityDto<Guid>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

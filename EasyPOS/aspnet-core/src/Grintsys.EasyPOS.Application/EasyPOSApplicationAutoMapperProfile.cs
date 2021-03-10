@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using Grintsys.EasyPOS.CreateUpdateDtos;
+using Grintsys.EasyPOS.Dtos;
+using Grintsys.EasyPOS.Models;
 
 namespace Grintsys.EasyPOS
 {
@@ -6,9 +9,10 @@ namespace Grintsys.EasyPOS
     {
         public EasyPOSApplicationAutoMapperProfile()
         {
-            /* You can configure your AutoMapper mapping configuration here.
-             * Alternatively, you can split your mapping configurations
-             * into multiple profile classes for a better organization. */
+            CreateMap<Product, ProductDto>();
+            CreateMap<CreateUpdateProductDto, Product>();
+            CreateMap<Customer, CustomerDto>();
+            CreateMap<CreateUpdateCustomerDto, CustomerDto>();
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
-using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.Application.Dtos;
 
-namespace Grintsys.EasyPOS.Models
+namespace Grintsys.EasyPOS.Dtos
 {
-    public class Product : FullAuditedAggregateRoot<Guid>
+    public class ProductDto : FullAuditedEntityDto<Guid>
     {
         public string Name { get; set; }
         public string Description { get; set; }
