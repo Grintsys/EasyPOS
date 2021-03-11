@@ -1,0 +1,99 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col col-md-6">
+                <h5 class="card-title">
+                    {{ '::Menu:Customers' | abpLocalization }}
+                </h5>
+            </div>
+            <div class="text-right col col-md-6">
+                <div class="text-lg-right pt-2">
+                    <button id="create" class="btn btn-primary" type="button" (click)="createCustomer()">
+                        <i class="fa fa-plus mr-1"></i>
+                        <span>{{ "::NewCustomer" | abpLocalization }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <ngx-datatable [rows]="customer.items" [count]="customer.totalCount" [list]="list" default>
+            <ngx-datatable-column [name]="'::FirstName' | abpLocalization" prop="firstName"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::LastName' | abpLocalization" prop="lastName"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::IdNumber' | abpLocalization" prop="idNumber"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::RTN' | abpLocalization" prop="rtn"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Address' | abpLocalization" prop="address"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::PhoneNumber' | abpLocalization" prop="phoneNumber"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Status' | abpLocalization" prop="status">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ '::Enum:CustomerStatus:' + row.status | abpLocalization}}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Code' | abpLocalization" prop="code"></ngx-datatable-column>
+        </ngx-datatable>
+    </div>
+</div>
+
+<abp-modal [(visible)]="isModalOpen">
+    <ng-template #abpHeader>
+        <h3>{{ '::NewCustomer' | abpLocalization }}</h3>
+    </ng-template>
+
+    <ng-template #abpBody>
+        <form [formGroup]="form" (ngSubmit)="save()">
+            <div class="form-group">
+                <label for="firstname">{{ '::Customer:FirstName' | abpLocalization }}</label><span> * </span>
+                <input type="text" id="firstname" class="form-control" formControlName="firstName" autofocus />
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">{{ '::Customer:LastName' | abpLocalization }}</label><span> * </span>
+                <input type="text" id="lastName" class="form-control" formControlName="lastName" />
+            </div>
+
+            <div class="form-group">
+                <label for="idNumber">{{ '::Customer:Id' | abpLocalization }}</label><span> * </span>
+                <input type="text" id="idNumber" class="form-control" formControlName="idNumber" />
+            </div>
+            
+            <div class="form-group">
+                <label for="rtn">{{ '::Customer:Rtn' | abpLocalization }}</label><span> * </span>
+                <input type="text" id="rtn" class="form-control" formControlName="rtn" />
+            </div>
+
+            <div class="form-group">
+                <label for="address">{{ '{{ '::Customer:Address' | abpLocalization }}' | abpLocalization }}</label><span> * </span>
+                <input type="text" id="address" class="form-control" formControlName="address" />
+            </div>
+
+            <div class="form-group">
+                <label for="phoneNumber">{{ '::Customer:PhoneNumber' | abpLocalization }}</label><span> * </span>
+                <input type="text" id="phoneNumber" class="form-control" formControlName="phoneNumber" />
+            </div>
+
+            <!-- <div class="form-group">
+                <label for="customerStatus">Status</label><span> * </span>
+                <select class="form-control" id="customerStatus" formControlName="status">
+                    <option [ngValue]="null">Select a Status</option>
+                    <option [ngValue]="status.value" *ngFor="let status of customerStatusTypes"> {{ status.key }}</option>
+                </select>
+            </div> -->
+
+            <div class="form-group">
+                <label for="code">{{ '::Customer:Code' | abpLocalization }}</label><span> * </span>
+                <input type="text" id="code" class="form-control" formControlName="code" />
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-template #abpFooter>
+        <button type="button" class="btn btn-secondary" #abpClose>
+            {{ '::Close' | abpLocalization }}
+        </button>
+
+        <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
+            <i class="fa fa-check mr-1"></i>
+            {{ '::Save' | abpLocalization }}
+      </button>
+    </ng-template>
+</abp-modal>

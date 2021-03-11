@@ -15,6 +15,18 @@ function configureRoutes(routesService: RoutesService) {
         order: 1,
         layout: eLayoutType.application,
       },
+      {
+        path: '/products',
+        name: '::Menu:Products',
+        parentName: '::Menu:Home',
+        layout: eLayoutType.application,
+      },
+      {
+        path: '/customers',
+        name: '::Menu:Customer',
+        parentName: '::Menu:Home',
+        layout: eLayoutType.application,
+      },
     ]);
   };
 }
