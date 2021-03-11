@@ -2,6 +2,18 @@
   "culture": "en",
   "texts": {
     "Menu:Home": "Home",
+    "Menu:Customers": "Customers",
+    "Menu:Products": "Products",
+    "Enum:CustomerStatus:1": "Created",
+    "Enum:CustomerStatus:2": "Transferred",
+    "NewCustomer": "New Customer",
+    "Customer:FirstName": "First Name",
+    "Customer:LastName": "Last Name",
+    "Customer:IdNumber": "Id Number",
+    "Customer:RTN": "RTN",
+    "Customer:Address": "Address",
+    "Customer:PhoneNumber": "Phone Number",
+    "Customer:Status": "Status",
     "Welcome": "Welcome",
     "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io."
   }

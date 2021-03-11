@@ -12,7 +12,7 @@ namespace Grintsys.EasyPOS
             CreateMap<Product, ProductDto>();
             CreateMap<CreateUpdateProductDto, Product>();
             CreateMap<Customer, CustomerDto>();
-            CreateMap<CreateUpdateCustomerDto, CustomerDto>();
+            CreateMap<CreateUpdateCustomerDto, Customer>();
         }
     }
 }

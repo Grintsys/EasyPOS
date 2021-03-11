@@ -13,22 +13,21 @@ namespace Grintsys.EasyPOS.CreateUpdateDtos
         
         [Required]
         [StringLength(13)]
-        [RegularExpression("[^0-9]", ErrorMessage = "Id must be numeric")]
+        [RegularExpression(@"^(\d{13}|\s*)?$", ErrorMessage = "Id must be numeric")]
         public string IdNumber { get; set; }
 
         [Required]
         [StringLength(14)]
-        [RegularExpression("[^0-9]", ErrorMessage = "RTN must be numeric")]
+        [RegularExpression(@"^(\d{14}|\s*)?$", ErrorMessage = "RTN must be numeric")]
         public string RTN { get; set; }
 
         [Required]
         public string Address { get; set; }
 
         [Required]
-        [RegularExpression(@"^(504)(?!0+$)(+\d{1,3}[- ]?)?(?!0+$)\d{8,8}$", ErrorMessage = "Please enter valid phone No, please see the following example: (504)2509-2421")]
+        [RegularExpression(@"^\([0-9]{3}[\-\)][0-9]{4}-[0-9]{4}$", ErrorMessage = "Please enter valid phone No, please see the following example: (504)2509-2421")]
         public string PhoneNumber { get; set; }
 
-        [Required]
         public CustomerStatus Status { get; set; } = CustomerStatus.Created;
 
         [Required]
