@@ -8,13 +8,14 @@
     "Menu:Products": "Productos",
     "Enum:CustomerStatus:1": "Creado",
     "Enum:CustomerStatus:2": "Transferido",
-    "NewCustomer": "Nuevo Client",
+    "NewCustomer": "Nuevo Cliente",
     "Customer:FirstName": "Nombre",
     "Customer:LastName": "Apellido",
     "Customer:IdNumber": "Identidad",
-    "Customer:RTN": "RTN",
+    "Customer:Rtn": "RTN",
     "Customer:Address": "Dirección",
     "Customer:PhoneNumber": "Telefono",
-    "Customer:Status": "Estado"
+    "Customer:Status": "Estado",
+    "Customer:Code": "Codigo"
   }
 }

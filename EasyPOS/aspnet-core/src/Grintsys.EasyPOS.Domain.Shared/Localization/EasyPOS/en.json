@@ -14,6 +14,7 @@
     "Customer:Address": "Address",
     "Customer:PhoneNumber": "Phone Number",
     "Customer:Status": "Status",
+    "Customer:Code": "Code",
     "Welcome": "Welcome",
     "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io."
   }

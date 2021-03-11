@@ -18,18 +18,18 @@
     </div>
     <div class="card-body">
         <ngx-datatable [rows]="customer.items" [count]="customer.totalCount" [list]="list" default>
-            <ngx-datatable-column [name]="'::FirstName' | abpLocalization" prop="firstName"></ngx-datatable-column>
-            <ngx-datatable-column [name]="'::LastName' | abpLocalization" prop="lastName"></ngx-datatable-column>
-            <ngx-datatable-column [name]="'::IdNumber' | abpLocalization" prop="idNumber"></ngx-datatable-column>
-            <ngx-datatable-column [name]="'::RTN' | abpLocalization" prop="rtn"></ngx-datatable-column>
-            <ngx-datatable-column [name]="'::Address' | abpLocalization" prop="address"></ngx-datatable-column>
-            <ngx-datatable-column [name]="'::PhoneNumber' | abpLocalization" prop="phoneNumber"></ngx-datatable-column>
-            <ngx-datatable-column [name]="'::Status' | abpLocalization" prop="status">
+            <ngx-datatable-column [name]="'::Customer:FirstName' | abpLocalization" prop="firstName"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Customer:LastName' | abpLocalization" prop="lastName"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Customer:IdNumber' | abpLocalization" prop="idNumber"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Customer:RTN' | abpLocalization" prop="rtn"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Customer:Address' | abpLocalization" prop="address"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Customer:PhoneNumber' | abpLocalization" prop="phoneNumber"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Customer:Status' | abpLocalization" prop="status">
                 <ng-template let-row="row" ngx-datatable-cell-template>
                     {{ '::Enum:CustomerStatus:' + row.status | abpLocalization}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [name]="'::Code' | abpLocalization" prop="code"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Customer:Code' | abpLocalization" prop="code"></ngx-datatable-column>
         </ngx-datatable>
     </div>
 </div>
@@ -52,7 +52,7 @@
             </div>
 
             <div class="form-group">
-                <label for="idNumber">{{ '::Customer:Id' | abpLocalization }}</label><span> * </span>
+                <label for="idNumber">{{ '::Customer:IdNumber' | abpLocalization }}</label><span> * </span>
                 <input type="text" id="idNumber" class="form-control" formControlName="idNumber" />
             </div>
             
@@ -62,7 +62,7 @@
             </div>
 
             <div class="form-group">
-                <label for="address">{{ '{{ '::Customer:Address' | abpLocalization }}' | abpLocalization }}</label><span> * </span>
+                <label for="address">{{ '::Customer:Address' | abpLocalization }}</label><span> * </span>
                 <input type="text" id="address" class="form-control" formControlName="address" />
             </div>
 
