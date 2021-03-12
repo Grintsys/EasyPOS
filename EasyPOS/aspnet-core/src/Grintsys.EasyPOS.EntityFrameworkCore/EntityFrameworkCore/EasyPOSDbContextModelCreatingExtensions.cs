@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Grintsys.EasyPOS.Models;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Grintsys.EasyPOS.EntityFrameworkCore
 {
@@ -11,12 +13,17 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
 
             /* Configure your own tables/entities inside here */
 
-            //builder.Entity<YourEntity>(b =>
-            //{
-            //    b.ToTable(EasyPOSConsts.DbTablePrefix + "YourEntities", EasyPOSConsts.DbSchema);
-            //    b.ConfigureByConvention(); //auto configure for the base class props
-            //    //...
-            //});
+            builder.Entity<Product>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "Products", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+            });
+
+            builder.Entity<Customer>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "Customers", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+            });
         }
     }
 }

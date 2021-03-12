@@ -4,15 +4,17 @@ using Grintsys.EasyPOS.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Grintsys.EasyPOS.Migrations
 {
     [DbContext(typeof(EasyPOSMigrationsDbContext))]
-    partial class EasyPOSMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210310224850_Created_Product_And_Customer_Entity")]
+    partial class Created_Product_And_Customer_Entity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
