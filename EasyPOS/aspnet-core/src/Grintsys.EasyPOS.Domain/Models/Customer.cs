@@ -1,5 +1,6 @@
 ﻿using Grintsys.EasyPOS.Enums;
 using System;
+using System.Collections.Generic;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Grintsys.EasyPOS.Models
@@ -14,5 +15,6 @@ namespace Grintsys.EasyPOS.Models
         public string PhoneNumber { get; set; }
         public CustomerStatus Status { get; set; }
         public string Code { get; set; }
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

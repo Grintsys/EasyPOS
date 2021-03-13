@@ -6,6 +6,7 @@ namespace Grintsys.EasyPOS.Models
     public class OrderItem : FullAuditedAggregateRoot<Guid>
     {
         public Guid OrderId { get; set; }
+        public Order Order { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Code { get; set; }

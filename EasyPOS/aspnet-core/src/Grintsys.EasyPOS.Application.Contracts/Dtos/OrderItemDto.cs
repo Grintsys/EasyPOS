@@ -5,6 +5,7 @@ namespace Grintsys.EasyPOS.Dtos
 {
     public class OrderItemDto : FullAuditedEntityDto<Guid>
     {
+        public Guid OrderId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Code { get; set; }

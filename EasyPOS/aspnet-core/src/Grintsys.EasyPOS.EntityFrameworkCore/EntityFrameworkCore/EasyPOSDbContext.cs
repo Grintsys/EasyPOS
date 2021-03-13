@@ -24,6 +24,8 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
         public DbSet<AppUser> Users { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         /* Add DbSet properties for your Aggregate Roots / Entities here.
          * Also map them inside EasyPOSDbContextModelCreatingExtensions.ConfigureEasyPOS

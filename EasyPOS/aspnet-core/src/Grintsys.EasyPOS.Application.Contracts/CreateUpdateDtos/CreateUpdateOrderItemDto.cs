@@ -1,9 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Grintsys.EasyPOS.CreateUpdateDtos
 {
     public class CreateUpdateOrderItemDto
     {
+        [Required] 
+        public Guid OrderId { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

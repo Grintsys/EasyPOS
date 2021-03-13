@@ -9,6 +9,7 @@ namespace Grintsys.EasyPOS.Models
     public class Order : FullAuditedAggregateRoot<Guid>
     {
         public Guid CustomerId { get; set; }
+        public Customer Customer { get; set; }
         public OrderStates OrderState { get; set; } = OrderStates.Created;
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public float ISV => OrderItems.Sum(x =>  x.Taxes * x.SalePrice * x.Quantity);
