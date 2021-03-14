@@ -1,25 +1,18 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Domain.Entities.Auditing;
 
-namespace Grintsys.EasyPOS.CreateUpdateDtos
+namespace Grintsys.EasyPOS.OrderItem
 {
-    public class CreateUpdateOrderItemDto
+    public class OrderItem : FullAuditedAggregateRoot<Guid>
     {
-        [Required] 
         public Guid OrderId { get; set; }
-        [Required]
+        public Order.Order Order { get; set; }
         public string Name { get; set; }
-        [Required]
         public string Description { get; set; }
-        [Required]
         public string Code { get; set; }
-        [Required]
         public float SalePrice { get; set; }
-        [Required]
         public float Taxes { get; set; }
-        [Required]
         public int Quantity { get; set; }
-        [Required]
-        public float TotalItem { get; set; }
+        public float TotalItem => Quantity * SalePrice + (SalePrice * Taxes *  Quantity);
     }
 }

@@ -1,12 +1,9 @@
-﻿using Grintsys.EasyPOS.CreateUpdateDtos;
-using Grintsys.EasyPOS.Dtos;
-using Grintsys.EasyPOS.Models;
-using System;
+﻿using System;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 
-namespace Grintsys.EasyPOS.AppServices
+namespace Grintsys.EasyPOS.OrderItem
 {
     public class OrderItemAppService : 
         CrudAppService<

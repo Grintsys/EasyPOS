@@ -1,5 +1,4 @@
-﻿using Grintsys.EasyPOS.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
@@ -13,13 +12,13 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
 
             /* Configure your own tables/entities inside here */
 
-            builder.Entity<Product>(b =>
+            builder.Entity<Product.Product>(b =>
             {
                 b.ToTable(EasyPOSConsts.DbTablePrefix + "Products", EasyPOSConsts.DbSchema);
                 b.ConfigureByConvention();
             });
 
-            builder.Entity<Customer>(b =>
+            builder.Entity<Customer.Customer>(b =>
             {
                 b.ToTable(EasyPOSConsts.DbTablePrefix + "Customers", EasyPOSConsts.DbSchema);
                 b.ConfigureByConvention();
@@ -29,7 +28,7 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                     .IsRequired();
             });
 
-            builder.Entity<Order>(b =>
+            builder.Entity<Order.Order>(b =>
             {
                 b.ToTable(EasyPOSConsts.DbTablePrefix + "Orders", EasyPOSConsts.DbSchema);
                 b.ConfigureByConvention();
@@ -39,7 +38,7 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                     .IsRequired();
             });
 
-            builder.Entity<OrderItem>(b =>
+            builder.Entity<OrderItem.OrderItem>(b =>
             {
                 b.ToTable(EasyPOSConsts.DbTablePrefix + "OrderItems", EasyPOSConsts.DbSchema);
                 b.ConfigureByConvention();

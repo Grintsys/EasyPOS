@@ -1,10 +1,11 @@
-﻿using Grintsys.EasyPOS.Enums;
-using System;
-using Volo.Abp.Application.Dtos;
+﻿using System;
+using System.Collections.Generic;
+using Grintsys.EasyPOS.Enums;
+using Volo.Abp.Domain.Entities.Auditing;
 
-namespace Grintsys.EasyPOS.Dtos
+namespace Grintsys.EasyPOS.Customer
 {
-    public class CustomerDto : FullAuditedEntityDto<Guid>
+    public class Customer : FullAuditedAggregateRoot<Guid>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -14,5 +15,6 @@ namespace Grintsys.EasyPOS.Dtos
         public string PhoneNumber { get; set; }
         public CustomerStatus Status { get; set; }
         public string Code { get; set; }
+        public ICollection<Order.Order> Orders { get; set; } = new List<Order.Order>();
     }
 }

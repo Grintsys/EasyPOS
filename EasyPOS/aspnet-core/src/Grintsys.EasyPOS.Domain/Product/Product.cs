@@ -1,7 +1,7 @@
 ﻿using System;
 using Volo.Abp.Domain.Entities.Auditing;
 
-namespace Grintsys.EasyPOS.Models
+namespace Grintsys.EasyPOS.Product
 {
     public class Product : FullAuditedAggregateRoot<Guid>
     {

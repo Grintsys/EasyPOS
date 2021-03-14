@@ -1,9 +1,10 @@
-﻿using Grintsys.EasyPOS.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Grintsys.EasyPOS.Enums;
+using Grintsys.EasyPOS.OrderItem;
 using Volo.Abp.Application.Dtos;
 
-namespace Grintsys.EasyPOS.Dtos
+namespace Grintsys.EasyPOS.Order
 {
     public class OrderDto : FullAuditedEntityDto<Guid>
     {

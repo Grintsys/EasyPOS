@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using Grintsys.EasyPOS.CreateUpdateDtos;
-using Grintsys.EasyPOS.Dtos;
-using Grintsys.EasyPOS.Models;
+using Grintsys.EasyPOS.Customer;
+using Grintsys.EasyPOS.Order;
+using Grintsys.EasyPOS.OrderItem;
+using Grintsys.EasyPOS.Product;
 
 namespace Grintsys.EasyPOS
 {

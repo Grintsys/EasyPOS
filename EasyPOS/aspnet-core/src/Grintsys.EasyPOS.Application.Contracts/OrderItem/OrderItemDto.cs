@@ -1,16 +1,17 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
 
-namespace Grintsys.EasyPOS.Dtos
+namespace Grintsys.EasyPOS.OrderItem
 {
-    public class ProductDto : FullAuditedEntityDto<Guid>
+    public class OrderItemDto : FullAuditedEntityDto<Guid>
     {
+        public Guid OrderId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Code { get; set; }
         public float SalePrice { get; set; }
         public float Taxes { get; set; }
-        public bool IsActive { get; set; }
-        public string ImageUrl { get; set; }
+        public int Quantity { get; set; }
+        public float TotalItem { get; set; }
     }
 }
