@@ -13,7 +13,8 @@ namespace Grintsys.EasyPOS.Order
         public OrderStates OrderState { get; set; } = OrderStates.Created;
         public ICollection<OrderItem.OrderItem> OrderItems { get; set; } = new List<OrderItem.OrderItem>();
         public float ISV => OrderItems.Sum(x =>  x.Taxes * x.SalePrice * x.Quantity);
+        public float Discount => OrderItems.Sum(x => x.Discount * x.SalePrice * x.Quantity);
         public float SubTotal => OrderItems.Sum(x => x.TotalItem);
-        public float Total => SubTotal + ISV;
+        public float Total => SubTotal + ISV - Discount;
     }
 }

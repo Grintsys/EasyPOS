@@ -12,7 +12,8 @@ namespace Grintsys.EasyPOS.OrderItem
         public string Code { get; set; }
         public float SalePrice { get; set; }
         public float Taxes { get; set; }
+        public float Discount { get; set; }
         public int Quantity { get; set; }
-        public float TotalItem => Quantity * SalePrice + (SalePrice * Taxes *  Quantity);
+        public float TotalItem => Quantity * SalePrice + (SalePrice * Taxes *  Quantity) - (SalePrice * Discount * Quantity);
     }
 }
