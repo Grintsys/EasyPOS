@@ -10,14 +10,16 @@ namespace Grintsys.EasyPOS
     {
         public EasyPOSApplicationAutoMapperProfile()
         {
-            CreateMap<Product, ProductDto>();
-            CreateMap<CreateUpdateProductDto, Product>();
-            CreateMap<Customer, CustomerDto>();
+            CreateMap<Product.Product, ProductDto>();
+            CreateMap<Product.Product, ProductLookupDto>();
+            CreateMap<CreateUpdateProductDto, Product.Product>();
+            CreateMap<Customer.Customer, CustomerDto>();
+            CreateMap<Customer.Customer, CustomerLookupDto>();
             CreateMap<CreateUpdateCustomerDto, CustomerDto>();
-            CreateMap<Order, OrderDto>();
-            CreateMap<CreateUpdateOrderDto, Order>();
-            CreateMap<OrderItem, OrderItemDto>();
-            CreateMap<CreateUpdateOrderItemDto, OrderItem>();
+            CreateMap<Order.Order, OrderDto>();
+            CreateMap<CreateUpdateOrderDto, Order.Order>();
+            CreateMap<OrderItem.OrderItem, OrderItemDto>();
+            CreateMap<CreateUpdateOrderItemDto, OrderItem.OrderItem>();
         }
     }
 }

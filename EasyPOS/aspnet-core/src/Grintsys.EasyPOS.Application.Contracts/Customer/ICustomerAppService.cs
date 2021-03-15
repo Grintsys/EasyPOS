@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
@@ -11,6 +12,6 @@ namespace Grintsys.EasyPOS.Customer
             PagedAndSortedResultRequestDto,
             CreateUpdateCustomerDto>
     {
-
+        Task<ListResultDto<CustomerLookupDto>> GetCustomerLookupAsync();
     }
 }
