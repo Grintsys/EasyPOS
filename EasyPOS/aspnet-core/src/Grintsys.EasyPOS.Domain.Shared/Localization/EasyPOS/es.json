@@ -3,6 +3,19 @@
   "texts": {
     "Menu:Home": "Inicio",
     "Welcome": "Bienvenido",
-    "LongWelcomeMessage": "Bienvenido a la aplicación, este es un proyecto base basado en el framework ABP. Para más información, visita abp.io."
+    "LongWelcomeMessage": "Bienvenido a la aplicación, este es un proyecto base basado en el framework ABP. Para más información, visita abp.io.",
+    "Menu:Customers": "Clientes",
+    "Menu:Products": "Productos",
+    "Enum:CustomerStatus:1": "Creado",
+    "Enum:CustomerStatus:2": "Transferido",
+    "NewCustomer": "Nuevo Cliente",
+    "Customer:FirstName": "Nombre",
+    "Customer:LastName": "Apellido",
+    "Customer:IdNumber": "Identidad",
+    "Customer:Rtn": "RTN",
+    "Customer:Address": "Dirección",
+    "Customer:PhoneNumber": "Telefono",
+    "Customer:Status": "Estado",
+    "Customer:Code": "Codigo"
   }
 }
