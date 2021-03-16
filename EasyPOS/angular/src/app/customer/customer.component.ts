@@ -1,7 +1,6 @@
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { CustomerService } from '@proxy/app-services';
-import { CustomerDto } from '@proxy/dtos';
+import { CustomerService, CustomerDto } from '@proxy/customer';
 import { customerStatusOptions } from '@proxy/enums';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -17,12 +16,12 @@ export class CustomerComponent implements OnInit {
   form: FormGroup; // add this line
   isModalOpen = false; // add this line
   customerStatusTypes = customerStatusOptions;
-  
+
   constructor(
-    public readonly list: ListService, 
+    public readonly list: ListService,
     private customerService: CustomerService,
     private fb: FormBuilder
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     const customerStreamCreator = (query) => this.customerService.getList(query);
@@ -37,7 +36,7 @@ export class CustomerComponent implements OnInit {
     this.isModalOpen = true;
   }
 
-  buildForm(){
+  buildForm() {
     this.form = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -50,12 +49,12 @@ export class CustomerComponent implements OnInit {
     });
   }
 
-  save(){
-    if(this.form.invalid){
+  save() {
+    if (this.form.invalid) {
       return;
     }
 
-    this.customerService.create(this.form.value).subscribe(() =>{
+    this.customerService.create(this.form.value).subscribe(() => {
       this.isModalOpen = false;
       this.form.reset();
       this.list.get();

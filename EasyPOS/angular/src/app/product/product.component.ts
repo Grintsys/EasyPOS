@@ -1,7 +1,6 @@
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { ProductService} from '@proxy/app-services';
-import { ProductDto} from '@proxy/dtos';
+import { ProductDto, ProductService } from '@proxy/product';
 
 @Component({
   selector: 'app-product',

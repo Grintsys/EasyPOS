@@ -1,19 +1,18 @@
+import type { CreateUpdateOrderItemDto, OrderItemDto } from './models';
 import { RestService } from '@abp/ng.core';
 import type { PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
-import type { CreateUpdateProductDto } from '../create-update-dtos/models';
-import type { ProductDto } from '../dtos/models';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProductService {
+export class OrderItemService {
   apiName = 'Default';
 
-  create = (input: CreateUpdateProductDto) =>
-    this.restService.request<any, ProductDto>({
+  create = (input: CreateUpdateOrderItemDto) =>
+    this.restService.request<any, OrderItemDto>({
       method: 'POST',
-      url: `/api/app/product`,
+      url: `/api/app/order-item`,
       body: input,
     },
     { apiName: this.apiName });
@@ -21,29 +20,29 @@ export class ProductService {
   delete = (id: string) =>
     this.restService.request<any, void>({
       method: 'DELETE',
-      url: `/api/app/product/${id}`,
+      url: `/api/app/order-item/${id}`,
     },
     { apiName: this.apiName });
 
   get = (id: string) =>
-    this.restService.request<any, ProductDto>({
+    this.restService.request<any, OrderItemDto>({
       method: 'GET',
-      url: `/api/app/product/${id}`,
+      url: `/api/app/order-item/${id}`,
     },
     { apiName: this.apiName });
 
   getList = (input: PagedAndSortedResultRequestDto) =>
-    this.restService.request<any, PagedResultDto<ProductDto>>({
+    this.restService.request<any, PagedResultDto<OrderItemDto>>({
       method: 'GET',
-      url: `/api/app/product`,
+      url: `/api/app/order-item`,
       params: { skipCount: input.skipCount, maxResultCount: input.maxResultCount, sorting: input.sorting },
     },
     { apiName: this.apiName });
 
-  update = (id: string, input: CreateUpdateProductDto) =>
-    this.restService.request<any, ProductDto>({
+  update = (id: string, input: CreateUpdateOrderItemDto) =>
+    this.restService.request<any, OrderItemDto>({
       method: 'PUT',
-      url: `/api/app/product/${id}`,
+      url: `/api/app/order-item/${id}`,
       body: input,
     },
     { apiName: this.apiName });

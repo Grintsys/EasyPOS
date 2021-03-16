@@ -28,7 +28,7 @@ function configureRoutes(routesService: RoutesService) {
         layout: eLayoutType.application,
       },
       {
-        path: '/orders',
+        path: '/order',
         name: '::Menu:Orders',
         parentName: '::Menu:Home',
         layout: eLayoutType.application,
