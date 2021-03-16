@@ -27,6 +27,12 @@ function configureRoutes(routesService: RoutesService) {
         parentName: '::Menu:Home',
         layout: eLayoutType.application,
       },
+      {
+        path: '/orders',
+        name: '::Menu:Orders',
+        parentName: '::Menu:Home',
+        layout: eLayoutType.application,
+      },
     ]);
   };
 }
