@@ -3,6 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { OrderService, OrderDto } from '@proxy/order';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { orderStatesOptions } from '@proxy/enums/order-states.enum';
+import { CustomerLookupDto, CustomerService } from '@proxy/customer';
+import { Observable } from 'rxjs/internal/Observable';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-order',
@@ -15,15 +18,19 @@ export class OrderComponent implements OnInit {
   form: FormGroup; // add this line
   isModalOpen = false; // add this line
   orderStatusTypes = orderStatesOptions;
+  customers$: Observable<CustomerLookupDto[]>;
 
   constructor(
     public readonly list: ListService,
     private orderService: OrderService,
+    private customerService: CustomerService,
     private fb: FormBuilder
-  ) { }
+  ) { 
+    this.customers$ = customerService.getCustomerLookup().pipe(map((r) => r.items));
+  }
 
   ngOnInit(): void {
-    const orderStreamCreator = (query) => this.orderService.getList(query);
+    const orderStreamCreator = () => this.orderService.getAllOrders();
 
     this.list.hookToQuery(orderStreamCreator).subscribe((response) => {
       this.order = response;
@@ -36,7 +43,7 @@ export class OrderComponent implements OnInit {
     });
   }
 
-  createCustomer() {
+  createOrder() {
     this.buildForm();
     this.isModalOpen = true;
   }

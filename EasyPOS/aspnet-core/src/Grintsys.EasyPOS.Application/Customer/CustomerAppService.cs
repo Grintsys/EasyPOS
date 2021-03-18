@@ -18,6 +18,7 @@ namespace Grintsys.EasyPOS.Customer
         ICustomerAppService
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly IRepository<EasyPOS.Customer.Customer, Guid> _customerRepository2;
         public CustomerAppService(IRepository<Customer, Guid> repository, 
             ICustomerRepository customerRepository) : base(repository)
         {

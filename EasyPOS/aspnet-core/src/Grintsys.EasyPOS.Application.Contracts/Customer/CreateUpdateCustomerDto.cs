@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Grintsys.EasyPOS.Enums;
+﻿using Grintsys.EasyPOS.Enums;
+using Grintsys.EasyPOS.Order;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Grintsys.EasyPOS.Customer
 {

@@ -32,7 +32,7 @@ export class OrderService {
     { apiName: this.apiName });
 
   getAllOrders = () =>
-    this.restService.request<any, OrderDto[]>({
+    this.restService.request<any, PagedResultDto<OrderDto>>({
       method: 'GET',
       url: `/api/app/order/orders`,
     },

@@ -15,7 +15,7 @@ namespace Grintsys.EasyPOS
             CreateMap<CreateUpdateProductDto, Product.Product>();
             CreateMap<Customer.Customer, CustomerDto>();
             CreateMap<Customer.Customer, CustomerLookupDto>();
-            CreateMap<CreateUpdateCustomerDto, CustomerDto>();
+            CreateMap<CreateUpdateCustomerDto, Customer.Customer>();
             CreateMap<Order.Order, OrderDto>();
             CreateMap<CreateUpdateOrderDto, Order.Order>();
             CreateMap<OrderItem.OrderItem, OrderItemDto>();

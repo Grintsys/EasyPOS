@@ -1,6 +1,7 @@
 {
   "culture": "es",
   "texts": {
+    "Actions": "Acciones",
     "Menu:Home": "Inicio",
     "Welcome": "Bienvenido",
     "LongWelcomeMessage": "Bienvenido a la aplicación, este es un proyecto base basado en el framework ABP. Para más información, visita abp.io.",
@@ -16,6 +17,15 @@
     "Customer:Address": "Dirección",
     "Customer:PhoneNumber": "Telefono",
     "Customer:Status": "Estado",
-    "Customer:Code": "Codigo"
+    "Customer:Code": "Codigo",
+    "Product:Name": "Nombre",
+    "Product:Description": "Descripción",
+    "Product:Code": "Codigo",
+    "Product:SalesPrice": "Precio de Venta",
+    "Product:Taxes": "Impuesto",
+    "Product:IsActive": "Activo",
+    "Product:Image": "Imagen",
+    "Enum:ProductActive:1": "Si",
+    "Enum:ProductActive:2": "No"
   }
 }
