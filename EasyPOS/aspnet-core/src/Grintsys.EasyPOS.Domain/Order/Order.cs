@@ -16,5 +16,6 @@ namespace Grintsys.EasyPOS.Order
         public float Discount => OrderItems.Sum(x => x.Discount * x.SalePrice * x.Quantity);
         public float SubTotal => OrderItems.Sum(x => x.TotalItem);
         public float Total => SubTotal + ISV - Discount;
+        public string CustomerName => Customer?.FirstName + " " + Customer?.LastName;
     }
 }

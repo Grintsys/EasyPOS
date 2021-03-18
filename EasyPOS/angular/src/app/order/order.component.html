@@ -23,7 +23,10 @@
                     {{ '::Enum:OrderState:' + row.orderState | abpLocalization}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [name]="'::Order:CustomerName' | abpLocalization" prop="customerId"></ngx-datatable-column>
+            <ngx-datatable-column
+  [name]="'::Author' | abpLocalization"
+  prop="customerName"
+></ngx-datatable-column>
             <ngx-datatable-column [name]="'::Order:SubTotal' | abpLocalization" prop="subTotal"></ngx-datatable-column>
             <ngx-datatable-column [name]="'::Order:ISV' | abpLocalization" prop="isv"></ngx-datatable-column>
             <ngx-datatable-column [name]="'::Order:Discount' | abpLocalization" prop="discount"></ngx-datatable-column>

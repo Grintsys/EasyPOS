@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Grintsys.EasyPOS.Application.Contracts\Grintsys.EasyPOS.Application.Contracts.csproj" />
     <ProjectReference Include="..\Grintsys.EasyPOS.Domain.Shared\Grintsys.EasyPOS.Domain.Shared.csproj" />
   </ItemGroup>
 

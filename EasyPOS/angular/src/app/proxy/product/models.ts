@@ -1,13 +1,13 @@
 import type { EntityDto, FullAuditedEntityDto } from '@abp/ng.core';
 
 export interface CreateUpdateProductDto {
-  name: string;
-  description: string;
-  code: string;
+  name?: string;
+  description?: string;
+  code?: string;
   salePrice: number;
   taxes: number;
   isActive: boolean;
-  imageUrl: string;
+  imageUrl?: string;
 }
 
 export interface ProductDto extends FullAuditedEntityDto<string> {

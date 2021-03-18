@@ -46,6 +46,13 @@ export class OrderService {
     },
     { apiName: this.apiName });
 
+  getOrderById = (id: string) =>
+    this.restService.request<any, OrderDto>({
+      method: 'GET',
+      url: `/api/app/order/${id}/order-by-id`,
+    },
+    { apiName: this.apiName });
+
   update = (id: string, input: CreateUpdateOrderDto) =>
     this.restService.request<any, OrderDto>({
       method: 'PUT',

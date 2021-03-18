@@ -38,12 +38,14 @@ namespace Grintsys.EasyPOS.Order
             await base.UpdateAsync(id, createUpdateDto);
         }
 
-        protected override async Task<Order> GetEntityByIdAsync(Guid id)
+        public async Task<OrderDto> GetOrderByIdAsync(Guid id)
         {
-            return await _orderRepository.GetOrdersByIdAsync(id);
+            var order = await _orderRepository.GetOrdersByIdAsync(id);
+            var dto = ObjectMapper.Map<Order, OrderDto>(order);
+            return dto;
         }
 
-        public async Task<PagedResultDto<OrderDto>> GetAllOrders()
+        public async Task<PagedResultDto<OrderDto>> GetAllOrdersAsync()
         {
             var orders = await _orderRepository.GetOrdersAsync();
             var orderDto = await MapToGetListOutputDtosAsync(orders);

@@ -9,6 +9,7 @@ namespace Grintsys.EasyPOS.Order
     public class OrderDto : FullAuditedEntityDto<Guid>
     {
         public Guid CustomerId { get; set; }
+        public string CustomerName { get; set; }
         public OrderStates OrderState { get; set; }
         public float SubTotal { get; set; }
         public float ISV { get; set; }

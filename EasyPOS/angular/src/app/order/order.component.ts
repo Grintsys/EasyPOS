@@ -39,7 +39,7 @@ export class OrderComponent implements OnInit {
 
   buildForm() {
     this.form = this.fb.group({
-      order: [null, Validators.required],
+      customerId:  [null, Validators.required],
     });
   }
 

@@ -19,7 +19,8 @@ namespace Grintsys.EasyPOS.Order
         public async Task<List<Order>> GetOrdersAsync()
         {
             var data = (await GetQueryableAsync())
-                .Include(x => x.OrderItems);
+                .Include(x => x.OrderItems)
+                .Include(x => x.Customer);
             return await data.ToListAsync();
         }
 
@@ -27,6 +28,7 @@ namespace Grintsys.EasyPOS.Order
         {
             var data = (await GetQueryableAsync())
                 .Include(x => x.OrderItems)
+                .Include(x => x.Customer)
                 .FirstOrDefaultAsync(x => x.Id == id);
             return await data;
         }
