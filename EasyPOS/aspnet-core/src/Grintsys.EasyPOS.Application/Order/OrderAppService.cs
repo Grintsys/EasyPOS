@@ -45,11 +45,11 @@ namespace Grintsys.EasyPOS.Order
             return await _orderRepository.GetOrdersByIdAsync(id);
         }
 
-        public async Task<List<OrderDto>> GetAllOrders()
+        public async Task<PagedResultDto<OrderDto>> GetAllOrders()
         {
             var orders = await _orderRepository.GetOrdersAsync();
-            return new List<OrderDto>(
-                ObjectMapper.Map<List<Order>, List<OrderDto>>(orders));
+            var orderDto = await MapToGetListOutputDtosAsync(orders);
+            return new PagedResultDto<OrderDto>(orders.Count, orderDto);
         }
     }
 }

@@ -14,6 +14,6 @@ namespace Grintsys.EasyPOS.Order
             CreateUpdateOrderDto
         >
     {
-        Task<List<OrderDto>> GetAllOrders();
+        Task<PagedResultDto<OrderDto>> GetAllOrders();
     }
 }
