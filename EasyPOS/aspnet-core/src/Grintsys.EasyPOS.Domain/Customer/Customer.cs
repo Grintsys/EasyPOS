@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Grintsys.EasyPOS.Enums;
 using Volo.Abp.Domain.Entities.Auditing;
 

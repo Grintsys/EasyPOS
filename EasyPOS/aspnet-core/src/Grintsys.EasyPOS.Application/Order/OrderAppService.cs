@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Grintsys.EasyPOS.Enums;
+using System;
 using System.Threading.Tasks;
-using Grintsys.EasyPOS.Enums;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;

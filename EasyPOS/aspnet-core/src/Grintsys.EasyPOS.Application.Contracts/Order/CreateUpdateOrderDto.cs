@@ -8,7 +8,6 @@ namespace Grintsys.EasyPOS.Order
 {
     public class CreateUpdateOrderDto
     {
-        [Required]
         public Guid CustomerId { get; set; }
 
         public OrderStates OrderState { get; set; } = OrderStates.Created;
