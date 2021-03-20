@@ -11,13 +11,24 @@
     </div>
     <div class="card-body">
         <ngx-datatable [rows]="product.items" [count]="product.totalCount" [list]="list" default>
-            <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
-            <ngx-datatable-column [name]="'::Description' | abpLocalization" prop="description"></ngx-datatable-column>
-            <ngx-datatable-column [name]="'::Code' | abpLocalization" prop="code"></ngx-datatable-column>
-            <ngx-datatable-column [name]="'::SalesPrice' | abpLocalization" prop="salesPrice"></ngx-datatable-column>
-            <ngx-datatable-column [name]="'::Taxes' | abpLocalization" prop="taxes"></ngx-datatable-column>
-            <ngx-datatable-column [name]="'::IsActive' | abpLocalization" prop="isActive"></ngx-datatable-column>
-            <ngx-datatable-column [name]="'::Image' | abpLocalization" prop="image"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Product:Name' | abpLocalization" prop="name"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Product:Description' | abpLocalization" prop="description">
+            </ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Product:Code' | abpLocalization" prop="code"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Product:SalesPrice' | abpLocalization" prop="salePrice">
+            </ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Product:Taxes' | abpLocalization" prop="taxes"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Product:IsActive' | abpLocalization" prop="isActive">
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span *ngIf="value === false">{{ '::Enum:ProductActive:1' | abpLocalization}}</span>
+                    <span *ngIf="value === true">{{ '::Enum:ProductActive:2' | abpLocalization}}</span>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Image' | abpLocalization" prop="imageUrl">
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <img style="height: 80px;" [src]='value'>
+                </ng-template>
+            </ngx-datatable-column>
         </ngx-datatable>
     </div>
 </div>

@@ -1,10 +1,9 @@
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { CustomerService } from '@proxy/app-services';
-import { CustomerDto } from '@proxy/dtos';
+import { CustomerService, CustomerDto } from '@proxy/customer';
 import { customerStatusOptions } from '@proxy/enums';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-
+import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-customer',
@@ -14,15 +13,17 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class CustomerComponent implements OnInit {
   customer = { items: [], totalCount: 0 } as PagedResultDto<CustomerDto>;
+  selectedCustomer = {} as CustomerDto; // declare selectedBook
   form: FormGroup; // add this line
   isModalOpen = false; // add this line
   customerStatusTypes = customerStatusOptions;
-  
+
   constructor(
-    public readonly list: ListService, 
+    public readonly list: ListService,
     private customerService: CustomerService,
-    private fb: FormBuilder
-    ) { }
+    private fb: FormBuilder,
+    private confirmation: ConfirmationService
+  ) { }
 
   ngOnInit(): void {
     const customerStreamCreator = (query) => this.customerService.getList(query);
@@ -33,11 +34,20 @@ export class CustomerComponent implements OnInit {
   }
 
   createCustomer() {
+    this.selectedCustomer = {} as CustomerDto; 
     this.buildForm();
     this.isModalOpen = true;
   }
 
-  buildForm(){
+  editCustomer(id: string) {
+    this.customerService.get(id).subscribe((customer) => {
+      this.selectedCustomer = customer;
+      this.buildForm();
+      this.isModalOpen = true;
+    });
+  }
+
+  buildForm() {
     this.form = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -50,15 +60,27 @@ export class CustomerComponent implements OnInit {
     });
   }
 
-  save(){
-    if(this.form.invalid){
+  save() {
+    if (this.form.invalid) {
       return;
     }
 
-    this.customerService.create(this.form.value).subscribe(() =>{
+    const request = this.selectedCustomer.id
+    ? this.customerService.update(this.selectedCustomer.id, this.form.value)
+    : this.customerService.create(this.form.value);
+
+    request.subscribe(() => {
       this.isModalOpen = false;
       this.form.reset();
       this.list.get();
-    })
+    });
+  }
+
+  delete(id: string) {
+    this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure').subscribe((status) => {
+      if (status === Confirmation.Status.confirm) {
+        this.customerService.delete(id).subscribe(() => this.list.get());
+      }
+    });
   }
 }

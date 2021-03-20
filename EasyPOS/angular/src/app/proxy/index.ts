@@ -1,5 +1,6 @@
-import * as AppServices from './app-services';
-import * as CreateUpdateDtos from './create-update-dtos';
-import * as Dtos from './dtos';
+import * as Customer from './customer';
 import * as Enums from './enums';
-export { AppServices, CreateUpdateDtos, Dtos, Enums };
+import * as Order from './order';
+import * as OrderItem from './order-item';
+import * as Product from './product';
+export { Customer, Enums, Order, OrderItem, Product };

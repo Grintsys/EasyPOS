@@ -3,292 +3,36 @@
     "app"
   ],
   "modules": {
-    "multi-tenancy": {
-      "rootPath": "multi-tenancy",
-      "remoteServiceName": "AbpTenantManagement",
+    "featureManagement": {
+      "rootPath": "featureManagement",
+      "remoteServiceName": "AbpFeatureManagement",
       "controllers": {
-        "Volo.Abp.TenantManagement.TenantController": {
-          "controllerName": "Tenant",
-          "type": "Volo.Abp.TenantManagement.TenantController",
+        "Volo.Abp.FeatureManagement.FeaturesController": {
+          "controllerName": "Features",
+          "type": "Volo.Abp.FeatureManagement.FeaturesController",
           "interfaces": [
             {
-              "type": "Volo.Abp.TenantManagement.ITenantAppService"
+              "type": "Volo.Abp.FeatureManagement.IFeatureAppService"
             }
           ],
           "actions": {
-            "GetAsyncById": {
-              "uniqueName": "GetAsyncById",
+            "GetAsyncByProviderNameAndProviderKey": {
+              "uniqueName": "GetAsyncByProviderNameAndProviderKey",
               "name": "GetAsync",
               "httpMethod": "GET",
-              "url": "api/multi-tenancy/tenants/{id}",
+              "url": "api/feature-management/features",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
-                  "name": "id",
-                  "typeAsString": "System.Guid, System.Private.CoreLib",
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "id",
-                  "name": "id",
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "Volo.Abp.TenantManagement.TenantDto",
-                "typeSimple": "Volo.Abp.TenantManagement.TenantDto"
-              }
-            },
-            "GetListAsyncByInput": {
-              "uniqueName": "GetListAsyncByInput",
-              "name": "GetListAsync",
-              "httpMethod": "GET",
-              "url": "api/multi-tenancy/tenants",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "input",
-                  "typeAsString": "Volo.Abp.TenantManagement.GetTenantsInput, Volo.Abp.TenantManagement.Application.Contracts",
-                  "type": "Volo.Abp.TenantManagement.GetTenantsInput",
-                  "typeSimple": "Volo.Abp.TenantManagement.GetTenantsInput",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "input",
-                  "name": "Filter",
+                  "name": "providerName",
+                  "typeAsString": "System.String, System.Private.CoreLib",
                   "type": "System.String",
                   "typeSimple": "string",
                   "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "Sorting",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "SkipCount",
-                  "type": "System.Int32",
-                  "typeSimple": "number",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "MaxResultCount",
-                  "type": "System.Int32",
-                  "typeSimple": "number",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                }
-              ],
-              "returnValue": {
-                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Abp.TenantManagement.TenantDto>",
-                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Abp.TenantManagement.TenantDto>"
-              }
-            },
-            "CreateAsyncByInput": {
-              "uniqueName": "CreateAsyncByInput",
-              "name": "CreateAsync",
-              "httpMethod": "POST",
-              "url": "api/multi-tenancy/tenants",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "input",
-                  "typeAsString": "Volo.Abp.TenantManagement.TenantCreateDto, Volo.Abp.TenantManagement.Application.Contracts",
-                  "type": "Volo.Abp.TenantManagement.TenantCreateDto",
-                  "typeSimple": "Volo.Abp.TenantManagement.TenantCreateDto",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "input",
-                  "name": "input",
-                  "type": "Volo.Abp.TenantManagement.TenantCreateDto",
-                  "typeSimple": "Volo.Abp.TenantManagement.TenantCreateDto",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "Body",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "Volo.Abp.TenantManagement.TenantDto",
-                "typeSimple": "Volo.Abp.TenantManagement.TenantDto"
-              }
-            },
-            "UpdateAsyncByIdAndInput": {
-              "uniqueName": "UpdateAsyncByIdAndInput",
-              "name": "UpdateAsync",
-              "httpMethod": "PUT",
-              "url": "api/multi-tenancy/tenants/{id}",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "id",
-                  "typeAsString": "System.Guid, System.Private.CoreLib",
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
                   "defaultValue": null
                 },
                 {
-                  "name": "input",
-                  "typeAsString": "Volo.Abp.TenantManagement.TenantUpdateDto, Volo.Abp.TenantManagement.Application.Contracts",
-                  "type": "Volo.Abp.TenantManagement.TenantUpdateDto",
-                  "typeSimple": "Volo.Abp.TenantManagement.TenantUpdateDto",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "id",
-                  "name": "id",
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
-                  "descriptorName": ""
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "input",
-                  "type": "Volo.Abp.TenantManagement.TenantUpdateDto",
-                  "typeSimple": "Volo.Abp.TenantManagement.TenantUpdateDto",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "Body",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "Volo.Abp.TenantManagement.TenantDto",
-                "typeSimple": "Volo.Abp.TenantManagement.TenantDto"
-              }
-            },
-            "DeleteAsyncById": {
-              "uniqueName": "DeleteAsyncById",
-              "name": "DeleteAsync",
-              "httpMethod": "DELETE",
-              "url": "api/multi-tenancy/tenants/{id}",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "id",
-                  "typeAsString": "System.Guid, System.Private.CoreLib",
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "id",
-                  "name": "id",
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "System.Void",
-                "typeSimple": "System.Void"
-              }
-            },
-            "GetDefaultConnectionStringAsyncById": {
-              "uniqueName": "GetDefaultConnectionStringAsyncById",
-              "name": "GetDefaultConnectionStringAsync",
-              "httpMethod": "GET",
-              "url": "api/multi-tenancy/tenants/{id}/default-connection-string",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "id",
-                  "typeAsString": "System.Guid, System.Private.CoreLib",
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "id",
-                  "name": "id",
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "System.String",
-                "typeSimple": "string"
-              }
-            },
-            "UpdateDefaultConnectionStringAsyncByIdAndDefaultConnectionString": {
-              "uniqueName": "UpdateDefaultConnectionStringAsyncByIdAndDefaultConnectionString",
-              "name": "UpdateDefaultConnectionStringAsync",
-              "httpMethod": "PUT",
-              "url": "api/multi-tenancy/tenants/{id}/default-connection-string",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "id",
-                  "typeAsString": "System.Guid, System.Private.CoreLib",
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                },
-                {
-                  "name": "defaultConnectionString",
+                  "name": "providerKey",
                   "typeAsString": "System.String, System.Private.CoreLib",
                   "type": "System.String",
                   "typeSimple": "string",
@@ -298,19 +42,19 @@
               ],
               "parameters": [
                 {
-                  "nameOnMethod": "id",
-                  "name": "id",
-                  "type": "System.Guid",
+                  "nameOnMethod": "providerName",
+                  "name": "providerName",
+                  "type": "System.String",
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
                   "descriptorName": ""
                 },
                 {
-                  "nameOnMethod": "defaultConnectionString",
-                  "name": "defaultConnectionString",
+                  "nameOnMethod": "providerKey",
+                  "name": "providerKey",
                   "type": "System.String",
                   "typeSimple": "string",
                   "isOptional": false,
@@ -321,15 +65,280 @@
                 }
               ],
               "returnValue": {
+                "type": "Volo.Abp.FeatureManagement.GetFeatureListResultDto",
+                "typeSimple": "Volo.Abp.FeatureManagement.GetFeatureListResultDto"
+              }
+            },
+            "UpdateAsyncByProviderNameAndProviderKeyAndInput": {
+              "uniqueName": "UpdateAsyncByProviderNameAndProviderKeyAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/feature-management/features",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "providerName",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "providerKey",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.FeatureManagement.UpdateFeaturesDto, Volo.Abp.FeatureManagement.Application.Contracts",
+                  "type": "Volo.Abp.FeatureManagement.UpdateFeaturesDto",
+                  "typeSimple": "Volo.Abp.FeatureManagement.UpdateFeaturesDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "providerName",
+                  "name": "providerName",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "providerKey",
+                  "name": "providerKey",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "type": "Volo.Abp.FeatureManagement.UpdateFeaturesDto",
+                  "typeSimple": "Volo.Abp.FeatureManagement.UpdateFeaturesDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
                 "type": "System.Void",
                 "typeSimple": "System.Void"
               }
+            }
+          }
+        }
+      }
+    },
+    "permissionManagement": {
+      "rootPath": "permissionManagement",
+      "remoteServiceName": "AbpPermissionManagement",
+      "controllers": {
+        "Volo.Abp.PermissionManagement.PermissionsController": {
+          "controllerName": "Permissions",
+          "type": "Volo.Abp.PermissionManagement.PermissionsController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.PermissionManagement.IPermissionAppService"
+            }
+          ],
+          "actions": {
+            "GetAsyncByProviderNameAndProviderKey": {
+              "uniqueName": "GetAsyncByProviderNameAndProviderKey",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/permission-management/permissions",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "providerName",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "providerKey",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "providerName",
+                  "name": "providerName",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "providerKey",
+                  "name": "providerKey",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.PermissionManagement.GetPermissionListResultDto",
+                "typeSimple": "Volo.Abp.PermissionManagement.GetPermissionListResultDto"
+              }
             },
-            "DeleteDefaultConnectionStringAsyncById": {
-              "uniqueName": "DeleteDefaultConnectionStringAsyncById",
-              "name": "DeleteDefaultConnectionStringAsync",
-              "httpMethod": "DELETE",
-              "url": "api/multi-tenancy/tenants/{id}/default-connection-string",
+            "UpdateAsyncByProviderNameAndProviderKeyAndInput": {
+              "uniqueName": "UpdateAsyncByProviderNameAndProviderKeyAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/permission-management/permissions",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "providerName",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "providerKey",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.PermissionManagement.UpdatePermissionsDto, Volo.Abp.PermissionManagement.Application.Contracts",
+                  "type": "Volo.Abp.PermissionManagement.UpdatePermissionsDto",
+                  "typeSimple": "Volo.Abp.PermissionManagement.UpdatePermissionsDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "providerName",
+                  "name": "providerName",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "providerKey",
+                  "name": "providerKey",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "type": "Volo.Abp.PermissionManagement.UpdatePermissionsDto",
+                  "typeSimple": "Volo.Abp.PermissionManagement.UpdatePermissionsDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              }
+            }
+          }
+        }
+      }
+    },
+    "abp": {
+      "rootPath": "abp",
+      "remoteServiceName": "abp",
+      "controllers": {
+        "Pages.Abp.MultiTenancy.AbpTenantController": {
+          "controllerName": "AbpTenant",
+          "type": "Pages.Abp.MultiTenancy.AbpTenantController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.AspNetCore.Mvc.MultiTenancy.IAbpTenantAppService"
+            }
+          ],
+          "actions": {
+            "FindTenantByNameAsyncByName": {
+              "uniqueName": "FindTenantByNameAsyncByName",
+              "name": "FindTenantByNameAsync",
+              "httpMethod": "GET",
+              "url": "api/abp/multi-tenancy/tenants/by-name/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.AspNetCore.Mvc.MultiTenancy.FindTenantResultDto",
+                "typeSimple": "Volo.Abp.AspNetCore.Mvc.MultiTenancy.FindTenantResultDto"
+              }
+            },
+            "FindTenantByIdAsyncById": {
+              "uniqueName": "FindTenantByIdAsyncById",
+              "name": "FindTenantByIdAsync",
+              "httpMethod": "GET",
+              "url": "api/abp/multi-tenancy/tenants/by-id/{id}",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -355,8 +364,73 @@
                 }
               ],
               "returnValue": {
-                "type": "System.Void",
-                "typeSimple": "System.Void"
+                "type": "Volo.Abp.AspNetCore.Mvc.MultiTenancy.FindTenantResultDto",
+                "typeSimple": "Volo.Abp.AspNetCore.Mvc.MultiTenancy.FindTenantResultDto"
+              }
+            }
+          }
+        },
+        "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationController": {
+          "controllerName": "AbpApplicationConfiguration",
+          "type": "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.IAbpApplicationConfigurationAppService"
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/abp/application-configuration",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ApplicationConfigurationDto",
+                "typeSimple": "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ApplicationConfigurationDto"
+              }
+            }
+          }
+        },
+        "Volo.Abp.AspNetCore.Mvc.ApiExploring.AbpApiDefinitionController": {
+          "controllerName": "AbpApiDefinition",
+          "type": "Volo.Abp.AspNetCore.Mvc.ApiExploring.AbpApiDefinitionController",
+          "interfaces": [],
+          "actions": {
+            "GetByModel": {
+              "uniqueName": "GetByModel",
+              "name": "Get",
+              "httpMethod": "GET",
+              "url": "api/abp/api-definition",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "model",
+                  "typeAsString": "Volo.Abp.Http.Modeling.ApplicationApiDescriptionModelRequestDto, Volo.Abp.Http",
+                  "type": "Volo.Abp.Http.Modeling.ApplicationApiDescriptionModelRequestDto",
+                  "typeSimple": "Volo.Abp.Http.Modeling.ApplicationApiDescriptionModelRequestDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "model",
+                  "name": "IncludeTypes",
+                  "type": "System.Boolean",
+                  "typeSimple": "boolean",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "model"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Http.Modeling.ApplicationApiDescriptionModel",
+                "typeSimple": "Volo.Abp.Http.Modeling.ApplicationApiDescriptionModel"
               }
             }
           }
@@ -1292,9 +1366,9 @@
       "rootPath": "app",
       "remoteServiceName": "Default",
       "controllers": {
-        "Grintsys.EasyPOS.AppServices.CustomerAppService": {
-          "controllerName": "Customer",
-          "type": "Grintsys.EasyPOS.AppServices.CustomerAppService",
+        "Grintsys.EasyPOS.Product.ProductAppService": {
+          "controllerName": "Product",
+          "type": "Grintsys.EasyPOS.Product.ProductAppService",
           "interfaces": [
             {
               "type": "Volo.Abp.Validation.IValidationEnabled"
@@ -1303,22 +1377,35 @@
               "type": "Volo.Abp.Auditing.IAuditingEnabled"
             },
             {
-              "type": "Grintsys.EasyPOS.AppServices.ICustomerAppService"
+              "type": "Grintsys.EasyPOS.Product.IProductAppService"
             }
           ],
           "actions": {
-            "CreateAsyncByInput": {
-              "uniqueName": "CreateAsyncByInput",
-              "name": "CreateAsync",
-              "httpMethod": "POST",
-              "url": "api/app/customer",
+            "GetProductLookupAsync": {
+              "uniqueName": "GetProductLookupAsync",
+              "name": "GetProductLookupAsync",
+              "httpMethod": "GET",
+              "url": "api/app/product/product-lookup",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<Grintsys.EasyPOS.Product.ProductLookupDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Grintsys.EasyPOS.Product.ProductLookupDto>"
+              }
+            },
+            "GetProductFilteredQueryAsyncByInput": {
+              "uniqueName": "GetProductFilteredQueryAsyncByInput",
+              "name": "GetProductFilteredQueryAsync",
+              "httpMethod": "GET",
+              "url": "api/app/product/product-filtered-query",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
                   "name": "input",
-                  "typeAsString": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateCustomerDto, Grintsys.EasyPOS.Application.Contracts",
-                  "type": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateCustomerDto",
-                  "typeSimple": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateCustomerDto",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null
                 }
@@ -1327,8 +1414,42 @@
                 {
                   "nameOnMethod": "input",
                   "name": "input",
-                  "type": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateCustomerDto",
-                  "typeSimple": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateCustomerDto",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<Grintsys.EasyPOS.Product.ProductDto>",
+                "typeSimple": "[Grintsys.EasyPOS.Product.ProductDto]"
+              }
+            },
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/app/product",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Grintsys.EasyPOS.Product.CreateUpdateProductDto, Grintsys.EasyPOS.Application.Contracts",
+                  "type": "Grintsys.EasyPOS.Product.CreateUpdateProductDto",
+                  "typeSimple": "Grintsys.EasyPOS.Product.CreateUpdateProductDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "type": "Grintsys.EasyPOS.Product.CreateUpdateProductDto",
+                  "typeSimple": "Grintsys.EasyPOS.Product.CreateUpdateProductDto",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -1337,15 +1458,15 @@
                 }
               ],
               "returnValue": {
-                "type": "Grintsys.EasyPOS.Dtos.CustomerDto",
-                "typeSimple": "Grintsys.EasyPOS.Dtos.CustomerDto"
+                "type": "Grintsys.EasyPOS.Product.ProductDto",
+                "typeSimple": "Grintsys.EasyPOS.Product.ProductDto"
               }
             },
             "UpdateAsyncByIdAndInput": {
               "uniqueName": "UpdateAsyncByIdAndInput",
               "name": "UpdateAsync",
               "httpMethod": "PUT",
-              "url": "api/app/customer/{id}",
+              "url": "api/app/product/{id}",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -1358,9 +1479,9 @@
                 },
                 {
                   "name": "input",
-                  "typeAsString": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateCustomerDto, Grintsys.EasyPOS.Application.Contracts",
-                  "type": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateCustomerDto",
-                  "typeSimple": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateCustomerDto",
+                  "typeAsString": "Grintsys.EasyPOS.Product.CreateUpdateProductDto, Grintsys.EasyPOS.Application.Contracts",
+                  "type": "Grintsys.EasyPOS.Product.CreateUpdateProductDto",
+                  "typeSimple": "Grintsys.EasyPOS.Product.CreateUpdateProductDto",
                   "isOptional": false,
                   "defaultValue": null
                 }
@@ -1380,8 +1501,8 @@
                 {
                   "nameOnMethod": "input",
                   "name": "input",
-                  "type": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateCustomerDto",
-                  "typeSimple": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateCustomerDto",
+                  "type": "Grintsys.EasyPOS.Product.CreateUpdateProductDto",
+                  "typeSimple": "Grintsys.EasyPOS.Product.CreateUpdateProductDto",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -1390,15 +1511,15 @@
                 }
               ],
               "returnValue": {
-                "type": "Grintsys.EasyPOS.Dtos.CustomerDto",
-                "typeSimple": "Grintsys.EasyPOS.Dtos.CustomerDto"
+                "type": "Grintsys.EasyPOS.Product.ProductDto",
+                "typeSimple": "Grintsys.EasyPOS.Product.ProductDto"
               }
             },
             "DeleteAsyncById": {
               "uniqueName": "DeleteAsyncById",
               "name": "DeleteAsync",
               "httpMethod": "DELETE",
-              "url": "api/app/customer/{id}",
+              "url": "api/app/product/{id}",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -1432,7 +1553,7 @@
               "uniqueName": "GetAsyncById",
               "name": "GetAsync",
               "httpMethod": "GET",
-              "url": "api/app/customer/{id}",
+              "url": "api/app/product/{id}",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -1458,15 +1579,15 @@
                 }
               ],
               "returnValue": {
-                "type": "Grintsys.EasyPOS.Dtos.CustomerDto",
-                "typeSimple": "Grintsys.EasyPOS.Dtos.CustomerDto"
+                "type": "Grintsys.EasyPOS.Product.ProductDto",
+                "typeSimple": "Grintsys.EasyPOS.Product.ProductDto"
               }
             },
             "GetListAsyncByInput": {
               "uniqueName": "GetListAsyncByInput",
               "name": "GetListAsync",
               "httpMethod": "GET",
-              "url": "api/app/customer",
+              "url": "api/app/product",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -1514,15 +1635,15 @@
                 }
               ],
               "returnValue": {
-                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Grintsys.EasyPOS.Dtos.CustomerDto>",
-                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Grintsys.EasyPOS.Dtos.CustomerDto>"
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Grintsys.EasyPOS.Product.ProductDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Grintsys.EasyPOS.Product.ProductDto>"
               }
             }
           }
         },
-        "Grintsys.EasyPOS.AppServices.ProductAppService": {
-          "controllerName": "Product",
-          "type": "Grintsys.EasyPOS.AppServices.ProductAppService",
+        "Grintsys.EasyPOS.Order.OrderAppService": {
+          "controllerName": "Order",
+          "type": "Grintsys.EasyPOS.Order.OrderAppService",
           "interfaces": [
             {
               "type": "Volo.Abp.Validation.IValidationEnabled"
@@ -1531,22 +1652,69 @@
               "type": "Volo.Abp.Auditing.IAuditingEnabled"
             },
             {
-              "type": "Grintsys.EasyPOS.AppServices.IProductAppService"
+              "type": "Grintsys.EasyPOS.Order.IOrderAppService"
             }
           ],
           "actions": {
+            "GetOrderByIdAsyncById": {
+              "uniqueName": "GetOrderByIdAsyncById",
+              "name": "GetOrderByIdAsync",
+              "httpMethod": "GET",
+              "url": "api/app/order/{id}/order-by-id",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Grintsys.EasyPOS.Order.OrderDto",
+                "typeSimple": "Grintsys.EasyPOS.Order.OrderDto"
+              }
+            },
+            "GetAllOrdersAsync": {
+              "uniqueName": "GetAllOrdersAsync",
+              "name": "GetAllOrdersAsync",
+              "httpMethod": "GET",
+              "url": "api/app/order/orders",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Grintsys.EasyPOS.Order.OrderDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Grintsys.EasyPOS.Order.OrderDto>"
+              }
+            },
             "CreateAsyncByInput": {
               "uniqueName": "CreateAsyncByInput",
               "name": "CreateAsync",
               "httpMethod": "POST",
-              "url": "api/app/product",
+              "url": "api/app/order",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
                   "name": "input",
-                  "typeAsString": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateProductDto, Grintsys.EasyPOS.Application.Contracts",
-                  "type": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateProductDto",
-                  "typeSimple": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateProductDto",
+                  "typeAsString": "Grintsys.EasyPOS.Order.CreateUpdateOrderDto, Grintsys.EasyPOS.Application.Contracts",
+                  "type": "Grintsys.EasyPOS.Order.CreateUpdateOrderDto",
+                  "typeSimple": "Grintsys.EasyPOS.Order.CreateUpdateOrderDto",
                   "isOptional": false,
                   "defaultValue": null
                 }
@@ -1555,8 +1723,8 @@
                 {
                   "nameOnMethod": "input",
                   "name": "input",
-                  "type": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateProductDto",
-                  "typeSimple": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateProductDto",
+                  "type": "Grintsys.EasyPOS.Order.CreateUpdateOrderDto",
+                  "typeSimple": "Grintsys.EasyPOS.Order.CreateUpdateOrderDto",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -1565,15 +1733,15 @@
                 }
               ],
               "returnValue": {
-                "type": "Grintsys.EasyPOS.Dtos.ProductDto",
-                "typeSimple": "Grintsys.EasyPOS.Dtos.ProductDto"
+                "type": "Grintsys.EasyPOS.Order.OrderDto",
+                "typeSimple": "Grintsys.EasyPOS.Order.OrderDto"
               }
             },
             "UpdateAsyncByIdAndInput": {
               "uniqueName": "UpdateAsyncByIdAndInput",
               "name": "UpdateAsync",
               "httpMethod": "PUT",
-              "url": "api/app/product/{id}",
+              "url": "api/app/order/{id}",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -1586,9 +1754,9 @@
                 },
                 {
                   "name": "input",
-                  "typeAsString": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateProductDto, Grintsys.EasyPOS.Application.Contracts",
-                  "type": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateProductDto",
-                  "typeSimple": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateProductDto",
+                  "typeAsString": "Grintsys.EasyPOS.Order.CreateUpdateOrderDto, Grintsys.EasyPOS.Application.Contracts",
+                  "type": "Grintsys.EasyPOS.Order.CreateUpdateOrderDto",
+                  "typeSimple": "Grintsys.EasyPOS.Order.CreateUpdateOrderDto",
                   "isOptional": false,
                   "defaultValue": null
                 }
@@ -1608,8 +1776,8 @@
                 {
                   "nameOnMethod": "input",
                   "name": "input",
-                  "type": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateProductDto",
-                  "typeSimple": "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateProductDto",
+                  "type": "Grintsys.EasyPOS.Order.CreateUpdateOrderDto",
+                  "typeSimple": "Grintsys.EasyPOS.Order.CreateUpdateOrderDto",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -1618,15 +1786,15 @@
                 }
               ],
               "returnValue": {
-                "type": "Grintsys.EasyPOS.Dtos.ProductDto",
-                "typeSimple": "Grintsys.EasyPOS.Dtos.ProductDto"
+                "type": "Grintsys.EasyPOS.Order.OrderDto",
+                "typeSimple": "Grintsys.EasyPOS.Order.OrderDto"
               }
             },
             "DeleteAsyncById": {
               "uniqueName": "DeleteAsyncById",
               "name": "DeleteAsync",
               "httpMethod": "DELETE",
-              "url": "api/app/product/{id}",
+              "url": "api/app/order/{id}",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -1660,7 +1828,7 @@
               "uniqueName": "GetAsyncById",
               "name": "GetAsync",
               "httpMethod": "GET",
-              "url": "api/app/product/{id}",
+              "url": "api/app/order/{id}",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -1686,15 +1854,15 @@
                 }
               ],
               "returnValue": {
-                "type": "Grintsys.EasyPOS.Dtos.ProductDto",
-                "typeSimple": "Grintsys.EasyPOS.Dtos.ProductDto"
+                "type": "Grintsys.EasyPOS.Order.OrderDto",
+                "typeSimple": "Grintsys.EasyPOS.Order.OrderDto"
               }
             },
             "GetListAsyncByInput": {
               "uniqueName": "GetListAsyncByInput",
               "name": "GetListAsync",
               "httpMethod": "GET",
-              "url": "api/app/product",
+              "url": "api/app/order",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -1742,140 +1910,49 @@
                 }
               ],
               "returnValue": {
-                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Grintsys.EasyPOS.Dtos.ProductDto>",
-                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Grintsys.EasyPOS.Dtos.ProductDto>"
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Grintsys.EasyPOS.Order.OrderDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Grintsys.EasyPOS.Order.OrderDto>"
               }
             }
           }
-        }
-      }
-    },
-    "featureManagement": {
-      "rootPath": "featureManagement",
-      "remoteServiceName": "AbpFeatureManagement",
-      "controllers": {
-        "Volo.Abp.FeatureManagement.FeaturesController": {
-          "controllerName": "Features",
-          "type": "Volo.Abp.FeatureManagement.FeaturesController",
+        },
+        "Grintsys.EasyPOS.OrderItem.OrderItemAppService": {
+          "controllerName": "OrderItem",
+          "type": "Grintsys.EasyPOS.OrderItem.OrderItemAppService",
           "interfaces": [
             {
-              "type": "Volo.Abp.FeatureManagement.IFeatureAppService"
+              "type": "Volo.Abp.Validation.IValidationEnabled"
+            },
+            {
+              "type": "Volo.Abp.Auditing.IAuditingEnabled"
+            },
+            {
+              "type": "Grintsys.EasyPOS.OrderItem.IOrderItemAppService"
             }
           ],
           "actions": {
-            "GetAsyncByProviderNameAndProviderKey": {
-              "uniqueName": "GetAsyncByProviderNameAndProviderKey",
-              "name": "GetAsync",
-              "httpMethod": "GET",
-              "url": "api/feature-management/features",
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/app/order-item",
               "supportedVersions": [],
               "parametersOnMethod": [
-                {
-                  "name": "providerName",
-                  "typeAsString": "System.String, System.Private.CoreLib",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                },
-                {
-                  "name": "providerKey",
-                  "typeAsString": "System.String, System.Private.CoreLib",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "providerName",
-                  "name": "providerName",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": ""
-                },
-                {
-                  "nameOnMethod": "providerKey",
-                  "name": "providerKey",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "Volo.Abp.FeatureManagement.GetFeatureListResultDto",
-                "typeSimple": "Volo.Abp.FeatureManagement.GetFeatureListResultDto"
-              }
-            },
-            "UpdateAsyncByProviderNameAndProviderKeyAndInput": {
-              "uniqueName": "UpdateAsyncByProviderNameAndProviderKeyAndInput",
-              "name": "UpdateAsync",
-              "httpMethod": "PUT",
-              "url": "api/feature-management/features",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "providerName",
-                  "typeAsString": "System.String, System.Private.CoreLib",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                },
-                {
-                  "name": "providerKey",
-                  "typeAsString": "System.String, System.Private.CoreLib",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                },
                 {
                   "name": "input",
-                  "typeAsString": "Volo.Abp.FeatureManagement.UpdateFeaturesDto, Volo.Abp.FeatureManagement.Application.Contracts",
-                  "type": "Volo.Abp.FeatureManagement.UpdateFeaturesDto",
-                  "typeSimple": "Volo.Abp.FeatureManagement.UpdateFeaturesDto",
+                  "typeAsString": "Grintsys.EasyPOS.OrderItem.CreateUpdateOrderItemDto, Grintsys.EasyPOS.Application.Contracts",
+                  "type": "Grintsys.EasyPOS.OrderItem.CreateUpdateOrderItemDto",
+                  "typeSimple": "Grintsys.EasyPOS.OrderItem.CreateUpdateOrderItemDto",
                   "isOptional": false,
                   "defaultValue": null
                 }
               ],
               "parameters": [
-                {
-                  "nameOnMethod": "providerName",
-                  "name": "providerName",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": ""
-                },
-                {
-                  "nameOnMethod": "providerKey",
-                  "name": "providerKey",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": ""
-                },
                 {
                   "nameOnMethod": "input",
                   "name": "input",
-                  "type": "Volo.Abp.FeatureManagement.UpdateFeaturesDto",
-                  "typeSimple": "Volo.Abp.FeatureManagement.UpdateFeaturesDto",
+                  "type": "Grintsys.EasyPOS.OrderItem.CreateUpdateOrderItemDto",
+                  "typeSimple": "Grintsys.EasyPOS.OrderItem.CreateUpdateOrderItemDto",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -1884,140 +1961,51 @@
                 }
               ],
               "returnValue": {
-                "type": "System.Void",
-                "typeSimple": "System.Void"
-              }
-            }
-          }
-        }
-      }
-    },
-    "permissionManagement": {
-      "rootPath": "permissionManagement",
-      "remoteServiceName": "AbpPermissionManagement",
-      "controllers": {
-        "Volo.Abp.PermissionManagement.PermissionsController": {
-          "controllerName": "Permissions",
-          "type": "Volo.Abp.PermissionManagement.PermissionsController",
-          "interfaces": [
-            {
-              "type": "Volo.Abp.PermissionManagement.IPermissionAppService"
-            }
-          ],
-          "actions": {
-            "GetAsyncByProviderNameAndProviderKey": {
-              "uniqueName": "GetAsyncByProviderNameAndProviderKey",
-              "name": "GetAsync",
-              "httpMethod": "GET",
-              "url": "api/permission-management/permissions",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "providerName",
-                  "typeAsString": "System.String, System.Private.CoreLib",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                },
-                {
-                  "name": "providerKey",
-                  "typeAsString": "System.String, System.Private.CoreLib",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "providerName",
-                  "name": "providerName",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": ""
-                },
-                {
-                  "nameOnMethod": "providerKey",
-                  "name": "providerKey",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "Volo.Abp.PermissionManagement.GetPermissionListResultDto",
-                "typeSimple": "Volo.Abp.PermissionManagement.GetPermissionListResultDto"
+                "type": "Grintsys.EasyPOS.OrderItem.OrderItemDto",
+                "typeSimple": "Grintsys.EasyPOS.OrderItem.OrderItemDto"
               }
             },
-            "UpdateAsyncByProviderNameAndProviderKeyAndInput": {
-              "uniqueName": "UpdateAsyncByProviderNameAndProviderKeyAndInput",
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
               "name": "UpdateAsync",
               "httpMethod": "PUT",
-              "url": "api/permission-management/permissions",
+              "url": "api/app/order-item/{id}",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
-                  "name": "providerName",
-                  "typeAsString": "System.String, System.Private.CoreLib",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                },
-                {
-                  "name": "providerKey",
-                  "typeAsString": "System.String, System.Private.CoreLib",
-                  "type": "System.String",
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null
                 },
                 {
                   "name": "input",
-                  "typeAsString": "Volo.Abp.PermissionManagement.UpdatePermissionsDto, Volo.Abp.PermissionManagement.Application.Contracts",
-                  "type": "Volo.Abp.PermissionManagement.UpdatePermissionsDto",
-                  "typeSimple": "Volo.Abp.PermissionManagement.UpdatePermissionsDto",
+                  "typeAsString": "Grintsys.EasyPOS.OrderItem.CreateUpdateOrderItemDto, Grintsys.EasyPOS.Application.Contracts",
+                  "type": "Grintsys.EasyPOS.OrderItem.CreateUpdateOrderItemDto",
+                  "typeSimple": "Grintsys.EasyPOS.OrderItem.CreateUpdateOrderItemDto",
                   "isOptional": false,
                   "defaultValue": null
                 }
               ],
               "parameters": [
                 {
-                  "nameOnMethod": "providerName",
-                  "name": "providerName",
-                  "type": "System.String",
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "type": "System.Guid",
                   "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": ""
-                },
-                {
-                  "nameOnMethod": "providerKey",
-                  "name": "providerKey",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
                   "descriptorName": ""
                 },
                 {
                   "nameOnMethod": "input",
                   "name": "input",
-                  "type": "Volo.Abp.PermissionManagement.UpdatePermissionsDto",
-                  "typeSimple": "Volo.Abp.PermissionManagement.UpdatePermissionsDto",
+                  "type": "Grintsys.EasyPOS.OrderItem.CreateUpdateOrderItemDto",
+                  "typeSimple": "Grintsys.EasyPOS.OrderItem.CreateUpdateOrderItemDto",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -2026,8 +2014,373 @@
                 }
               ],
               "returnValue": {
+                "type": "Grintsys.EasyPOS.OrderItem.OrderItemDto",
+                "typeSimple": "Grintsys.EasyPOS.OrderItem.OrderItemDto"
+              }
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/app/order-item/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
                 "type": "System.Void",
                 "typeSimple": "System.Void"
+              }
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/app/order-item/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Grintsys.EasyPOS.OrderItem.OrderItemDto",
+                "typeSimple": "Grintsys.EasyPOS.OrderItem.OrderItemDto"
+              }
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/app/order-item",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto, Volo.Abp.Ddd.Application.Contracts",
+                  "type": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+                  "typeSimple": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Grintsys.EasyPOS.OrderItem.OrderItemDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Grintsys.EasyPOS.OrderItem.OrderItemDto>"
+              }
+            }
+          }
+        },
+        "Grintsys.EasyPOS.Customer.CustomerAppService": {
+          "controllerName": "Customer",
+          "type": "Grintsys.EasyPOS.Customer.CustomerAppService",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Validation.IValidationEnabled"
+            },
+            {
+              "type": "Volo.Abp.Auditing.IAuditingEnabled"
+            },
+            {
+              "type": "Grintsys.EasyPOS.Customer.ICustomerAppService"
+            }
+          ],
+          "actions": {
+            "GetCustomerLookupAsync": {
+              "uniqueName": "GetCustomerLookupAsync",
+              "name": "GetCustomerLookupAsync",
+              "httpMethod": "GET",
+              "url": "api/app/customer/customer-lookup",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<Grintsys.EasyPOS.Customer.CustomerLookupDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Grintsys.EasyPOS.Customer.CustomerLookupDto>"
+              }
+            },
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/app/customer",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Grintsys.EasyPOS.Customer.CreateUpdateCustomerDto, Grintsys.EasyPOS.Application.Contracts",
+                  "type": "Grintsys.EasyPOS.Customer.CreateUpdateCustomerDto",
+                  "typeSimple": "Grintsys.EasyPOS.Customer.CreateUpdateCustomerDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "type": "Grintsys.EasyPOS.Customer.CreateUpdateCustomerDto",
+                  "typeSimple": "Grintsys.EasyPOS.Customer.CreateUpdateCustomerDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Grintsys.EasyPOS.Customer.CustomerDto",
+                "typeSimple": "Grintsys.EasyPOS.Customer.CustomerDto"
+              }
+            },
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/app/customer/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "Grintsys.EasyPOS.Customer.CreateUpdateCustomerDto, Grintsys.EasyPOS.Application.Contracts",
+                  "type": "Grintsys.EasyPOS.Customer.CreateUpdateCustomerDto",
+                  "typeSimple": "Grintsys.EasyPOS.Customer.CreateUpdateCustomerDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "type": "Grintsys.EasyPOS.Customer.CreateUpdateCustomerDto",
+                  "typeSimple": "Grintsys.EasyPOS.Customer.CreateUpdateCustomerDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Grintsys.EasyPOS.Customer.CustomerDto",
+                "typeSimple": "Grintsys.EasyPOS.Customer.CustomerDto"
+              }
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/app/customer/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              }
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/app/customer/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Grintsys.EasyPOS.Customer.CustomerDto",
+                "typeSimple": "Grintsys.EasyPOS.Customer.CustomerDto"
+              }
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/app/customer",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto, Volo.Abp.Ddd.Application.Contracts",
+                  "type": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+                  "typeSimple": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Grintsys.EasyPOS.Customer.CustomerDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Grintsys.EasyPOS.Customer.CustomerDto>"
               }
             }
           }
@@ -2241,58 +2594,24 @@
         }
       }
     },
-    "abp": {
-      "rootPath": "abp",
-      "remoteServiceName": "abp",
+    "multi-tenancy": {
+      "rootPath": "multi-tenancy",
+      "remoteServiceName": "AbpTenantManagement",
       "controllers": {
-        "Pages.Abp.MultiTenancy.AbpTenantController": {
-          "controllerName": "AbpTenant",
-          "type": "Pages.Abp.MultiTenancy.AbpTenantController",
+        "Volo.Abp.TenantManagement.TenantController": {
+          "controllerName": "Tenant",
+          "type": "Volo.Abp.TenantManagement.TenantController",
           "interfaces": [
             {
-              "type": "Volo.Abp.AspNetCore.Mvc.MultiTenancy.IAbpTenantAppService"
+              "type": "Volo.Abp.TenantManagement.ITenantAppService"
             }
           ],
           "actions": {
-            "FindTenantByNameAsyncByName": {
-              "uniqueName": "FindTenantByNameAsyncByName",
-              "name": "FindTenantByNameAsync",
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
               "httpMethod": "GET",
-              "url": "api/abp/multi-tenancy/tenants/by-name/{name}",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "name",
-                  "typeAsString": "System.String, System.Private.CoreLib",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "name",
-                  "name": "name",
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "Volo.Abp.AspNetCore.Mvc.MultiTenancy.FindTenantResultDto",
-                "typeSimple": "Volo.Abp.AspNetCore.Mvc.MultiTenancy.FindTenantResultDto"
-              }
-            },
-            "FindTenantByIdAsyncById": {
-              "uniqueName": "FindTenantByIdAsyncById",
-              "name": "FindTenantByIdAsync",
-              "httpMethod": "GET",
-              "url": "api/abp/multi-tenancy/tenants/by-id/{id}",
+              "url": "api/multi-tenancy/tenants/{id}",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -2318,73 +2637,317 @@
                 }
               ],
               "returnValue": {
-                "type": "Volo.Abp.AspNetCore.Mvc.MultiTenancy.FindTenantResultDto",
-                "typeSimple": "Volo.Abp.AspNetCore.Mvc.MultiTenancy.FindTenantResultDto"
+                "type": "Volo.Abp.TenantManagement.TenantDto",
+                "typeSimple": "Volo.Abp.TenantManagement.TenantDto"
               }
-            }
-          }
-        },
-        "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationController": {
-          "controllerName": "AbpApplicationConfiguration",
-          "type": "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationController",
-          "interfaces": [
-            {
-              "type": "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.IAbpApplicationConfigurationAppService"
-            }
-          ],
-          "actions": {
-            "GetAsync": {
-              "uniqueName": "GetAsync",
-              "name": "GetAsync",
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
               "httpMethod": "GET",
-              "url": "api/abp/application-configuration",
-              "supportedVersions": [],
-              "parametersOnMethod": [],
-              "parameters": [],
-              "returnValue": {
-                "type": "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ApplicationConfigurationDto",
-                "typeSimple": "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ApplicationConfigurationDto"
-              }
-            }
-          }
-        },
-        "Volo.Abp.AspNetCore.Mvc.ApiExploring.AbpApiDefinitionController": {
-          "controllerName": "AbpApiDefinition",
-          "type": "Volo.Abp.AspNetCore.Mvc.ApiExploring.AbpApiDefinitionController",
-          "interfaces": [],
-          "actions": {
-            "GetByModel": {
-              "uniqueName": "GetByModel",
-              "name": "Get",
-              "httpMethod": "GET",
-              "url": "api/abp/api-definition",
+              "url": "api/multi-tenancy/tenants",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
-                  "name": "model",
-                  "typeAsString": "Volo.Abp.Http.Modeling.ApplicationApiDescriptionModelRequestDto, Volo.Abp.Http",
-                  "type": "Volo.Abp.Http.Modeling.ApplicationApiDescriptionModelRequestDto",
-                  "typeSimple": "Volo.Abp.Http.Modeling.ApplicationApiDescriptionModelRequestDto",
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.TenantManagement.GetTenantsInput, Volo.Abp.TenantManagement.Application.Contracts",
+                  "type": "Volo.Abp.TenantManagement.GetTenantsInput",
+                  "typeSimple": "Volo.Abp.TenantManagement.GetTenantsInput",
                   "isOptional": false,
                   "defaultValue": null
                 }
               ],
               "parameters": [
                 {
-                  "nameOnMethod": "model",
-                  "name": "IncludeTypes",
-                  "type": "System.Boolean",
-                  "typeSimple": "boolean",
+                  "nameOnMethod": "input",
+                  "name": "Filter",
+                  "type": "System.String",
+                  "typeSimple": "string",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "model"
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
                 }
               ],
               "returnValue": {
-                "type": "Volo.Abp.Http.Modeling.ApplicationApiDescriptionModel",
-                "typeSimple": "Volo.Abp.Http.Modeling.ApplicationApiDescriptionModel"
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Abp.TenantManagement.TenantDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Abp.TenantManagement.TenantDto>"
+              }
+            },
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/multi-tenancy/tenants",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.TenantManagement.TenantCreateDto, Volo.Abp.TenantManagement.Application.Contracts",
+                  "type": "Volo.Abp.TenantManagement.TenantCreateDto",
+                  "typeSimple": "Volo.Abp.TenantManagement.TenantCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "type": "Volo.Abp.TenantManagement.TenantCreateDto",
+                  "typeSimple": "Volo.Abp.TenantManagement.TenantCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.TenantManagement.TenantDto",
+                "typeSimple": "Volo.Abp.TenantManagement.TenantDto"
+              }
+            },
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/multi-tenancy/tenants/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.TenantManagement.TenantUpdateDto, Volo.Abp.TenantManagement.Application.Contracts",
+                  "type": "Volo.Abp.TenantManagement.TenantUpdateDto",
+                  "typeSimple": "Volo.Abp.TenantManagement.TenantUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "type": "Volo.Abp.TenantManagement.TenantUpdateDto",
+                  "typeSimple": "Volo.Abp.TenantManagement.TenantUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.TenantManagement.TenantDto",
+                "typeSimple": "Volo.Abp.TenantManagement.TenantDto"
+              }
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/multi-tenancy/tenants/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              }
+            },
+            "GetDefaultConnectionStringAsyncById": {
+              "uniqueName": "GetDefaultConnectionStringAsyncById",
+              "name": "GetDefaultConnectionStringAsync",
+              "httpMethod": "GET",
+              "url": "api/multi-tenancy/tenants/{id}/default-connection-string",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              }
+            },
+            "UpdateDefaultConnectionStringAsyncByIdAndDefaultConnectionString": {
+              "uniqueName": "UpdateDefaultConnectionStringAsyncByIdAndDefaultConnectionString",
+              "name": "UpdateDefaultConnectionStringAsync",
+              "httpMethod": "PUT",
+              "url": "api/multi-tenancy/tenants/{id}/default-connection-string",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "defaultConnectionString",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "defaultConnectionString",
+                  "name": "defaultConnectionString",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              }
+            },
+            "DeleteDefaultConnectionStringAsyncById": {
+              "uniqueName": "DeleteDefaultConnectionStringAsyncById",
+              "name": "DeleteDefaultConnectionStringAsync",
+              "httpMethod": "DELETE",
+              "url": "api/multi-tenancy/tenants/{id}/default-connection-string",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
               }
             }
           }
@@ -5013,78 +5576,47 @@
         }
       ]
     },
-    "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateCustomerDto": {
-      "baseType": null,
+    "Grintsys.EasyPOS.Product.ProductLookupDto": {
+      "baseType": "Volo.Abp.Application.Dtos.EntityDto<System.Guid>",
       "isEnum": false,
       "enumNames": null,
       "enumValues": null,
       "genericArguments": null,
       "properties": [
         {
-          "name": "FirstName",
+          "name": "Name",
           "type": "System.String",
           "typeSimple": "string",
-          "isRequired": true
-        },
-        {
-          "name": "LastName",
-          "type": "System.String",
-          "typeSimple": "string",
-          "isRequired": true
-        },
-        {
-          "name": "IdNumber",
-          "type": "System.String",
-          "typeSimple": "string",
-          "isRequired": true
-        },
-        {
-          "name": "RTN",
-          "type": "System.String",
-          "typeSimple": "string",
-          "isRequired": true
-        },
-        {
-          "name": "Address",
-          "type": "System.String",
-          "typeSimple": "string",
-          "isRequired": true
-        },
-        {
-          "name": "PhoneNumber",
-          "type": "System.String",
-          "typeSimple": "string",
-          "isRequired": true
-        },
-        {
-          "name": "Status",
-          "type": "Grintsys.EasyPOS.Enums.CustomerStatus",
-          "typeSimple": "Grintsys.EasyPOS.Enums.CustomerStatus",
-          "isRequired": true
-        },
-        {
-          "name": "Code",
-          "type": "System.String",
-          "typeSimple": "string",
-          "isRequired": true
+          "isRequired": false
         }
       ]
     },
-    "Grintsys.EasyPOS.Enums.CustomerStatus": {
-      "baseType": "System.Enum",
-      "isEnum": true,
-      "enumNames": [
-        "Created",
-        "Transferred"
+    "Volo.Abp.Application.Dtos.EntityDto<T0>": {
+      "baseType": "Volo.Abp.Application.Dtos.EntityDto",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": [
+        "TKey"
       ],
-      "enumValues": [
-        1,
-        2
-      ],
-      "genericArguments": null,
-      "properties": null
+      "properties": [
+        {
+          "name": "Id",
+          "type": "TKey",
+          "typeSimple": "TKey",
+          "isRequired": false
+        }
+      ]
     },
-    "Grintsys.EasyPOS.Dtos.CustomerDto": {
+    "Volo.Abp.Application.Dtos.EntityDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": []
+    },
+    "Grintsys.EasyPOS.Product.ProductDto": {
       "baseType": "Volo.Abp.Application.Dtos.FullAuditedEntityDto<System.Guid>",
       "isEnum": false,
       "enumNames": null,
@@ -5092,49 +5624,43 @@
       "genericArguments": null,
       "properties": [
         {
-          "name": "FirstName",
+          "name": "Name",
           "type": "System.String",
           "typeSimple": "string",
           "isRequired": false
         },
         {
-          "name": "LastName",
+          "name": "Description",
           "type": "System.String",
           "typeSimple": "string",
-          "isRequired": false
-        },
-        {
-          "name": "IdNumber",
-          "type": "System.String",
-          "typeSimple": "string",
-          "isRequired": false
-        },
-        {
-          "name": "RTN",
-          "type": "System.String",
-          "typeSimple": "string",
-          "isRequired": false
-        },
-        {
-          "name": "Address",
-          "type": "System.String",
-          "typeSimple": "string",
-          "isRequired": false
-        },
-        {
-          "name": "PhoneNumber",
-          "type": "System.String",
-          "typeSimple": "string",
-          "isRequired": false
-        },
-        {
-          "name": "Status",
-          "type": "Grintsys.EasyPOS.Enums.CustomerStatus",
-          "typeSimple": "Grintsys.EasyPOS.Enums.CustomerStatus",
           "isRequired": false
         },
         {
           "name": "Code",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "SalePrice",
+          "type": "System.Single",
+          "typeSimple": "number",
+          "isRequired": false
+        },
+        {
+          "name": "Taxes",
+          "type": "System.Single",
+          "typeSimple": "number",
+          "isRequired": false
+        },
+        {
+          "name": "IsActive",
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false
+        },
+        {
+          "name": "ImageUrl",
           "type": "System.String",
           "typeSimple": "string",
           "isRequired": false
@@ -5216,32 +5742,7 @@
         }
       ]
     },
-    "Volo.Abp.Application.Dtos.EntityDto<T0>": {
-      "baseType": "Volo.Abp.Application.Dtos.EntityDto",
-      "isEnum": false,
-      "enumNames": null,
-      "enumValues": null,
-      "genericArguments": [
-        "TKey"
-      ],
-      "properties": [
-        {
-          "name": "Id",
-          "type": "TKey",
-          "typeSimple": "TKey",
-          "isRequired": false
-        }
-      ]
-    },
-    "Volo.Abp.Application.Dtos.EntityDto": {
-      "baseType": null,
-      "isEnum": false,
-      "enumNames": null,
-      "enumValues": null,
-      "genericArguments": null,
-      "properties": []
-    },
-    "Grintsys.EasyPOS.CreateUpdateDtos.CreateUpdateProductDto": {
+    "Grintsys.EasyPOS.Product.CreateUpdateProductDto": {
       "baseType": null,
       "isEnum": false,
       "enumNames": null,
@@ -5252,47 +5753,47 @@
           "name": "Name",
           "type": "System.String",
           "typeSimple": "string",
-          "isRequired": true
+          "isRequired": false
         },
         {
           "name": "Description",
           "type": "System.String",
           "typeSimple": "string",
-          "isRequired": true
+          "isRequired": false
         },
         {
           "name": "Code",
           "type": "System.String",
           "typeSimple": "string",
-          "isRequired": true
+          "isRequired": false
         },
         {
           "name": "SalePrice",
           "type": "System.Single",
           "typeSimple": "number",
-          "isRequired": true
+          "isRequired": false
         },
         {
           "name": "Taxes",
           "type": "System.Single",
           "typeSimple": "number",
-          "isRequired": true
+          "isRequired": false
         },
         {
           "name": "IsActive",
           "type": "System.Boolean",
           "typeSimple": "boolean",
-          "isRequired": true
+          "isRequired": false
         },
         {
           "name": "ImageUrl",
           "type": "System.String",
           "typeSimple": "string",
-          "isRequired": true
+          "isRequired": false
         }
       ]
     },
-    "Grintsys.EasyPOS.Dtos.ProductDto": {
+    "Grintsys.EasyPOS.Order.OrderDto": {
       "baseType": "Volo.Abp.Application.Dtos.FullAuditedEntityDto<System.Guid>",
       "isEnum": false,
       "enumNames": null,
@@ -5300,6 +5801,83 @@
       "genericArguments": null,
       "properties": [
         {
+          "name": "CustomerId",
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "CustomerName",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "OrderState",
+          "type": "Grintsys.EasyPOS.Enums.OrderStates",
+          "typeSimple": "Grintsys.EasyPOS.Enums.OrderStates",
+          "isRequired": false
+        },
+        {
+          "name": "SubTotal",
+          "type": "System.Single",
+          "typeSimple": "number",
+          "isRequired": false
+        },
+        {
+          "name": "ISV",
+          "type": "System.Single",
+          "typeSimple": "number",
+          "isRequired": false
+        },
+        {
+          "name": "Discount",
+          "type": "System.Single",
+          "typeSimple": "number",
+          "isRequired": false
+        },
+        {
+          "name": "Total",
+          "type": "System.Single",
+          "typeSimple": "number",
+          "isRequired": false
+        },
+        {
+          "name": "OrderItems",
+          "type": "[Grintsys.EasyPOS.OrderItem.OrderItemDto]",
+          "typeSimple": "[Grintsys.EasyPOS.OrderItem.OrderItemDto]",
+          "isRequired": false
+        }
+      ]
+    },
+    "Grintsys.EasyPOS.Enums.OrderStates": {
+      "baseType": "System.Enum",
+      "isEnum": true,
+      "enumNames": [
+        "Created",
+        "Cancelled"
+      ],
+      "enumValues": [
+        1,
+        2
+      ],
+      "genericArguments": null,
+      "properties": null
+    },
+    "Grintsys.EasyPOS.OrderItem.OrderItemDto": {
+      "baseType": "Volo.Abp.Application.Dtos.FullAuditedEntityDto<System.Guid>",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "OrderId",
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
           "name": "Name",
           "type": "System.String",
           "typeSimple": "string",
@@ -5330,13 +5908,264 @@
           "isRequired": false
         },
         {
-          "name": "IsActive",
-          "type": "System.Boolean",
-          "typeSimple": "boolean",
+          "name": "Discount",
+          "type": "System.Single",
+          "typeSimple": "number",
           "isRequired": false
         },
         {
-          "name": "ImageUrl",
+          "name": "Quantity",
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false
+        },
+        {
+          "name": "TotalItem",
+          "type": "System.Single",
+          "typeSimple": "number",
+          "isRequired": false
+        }
+      ]
+    },
+    "Grintsys.EasyPOS.Order.CreateUpdateOrderDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "CustomerId",
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "OrderState",
+          "type": "Grintsys.EasyPOS.Enums.OrderStates",
+          "typeSimple": "Grintsys.EasyPOS.Enums.OrderStates",
+          "isRequired": false
+        },
+        {
+          "name": "OrderItems",
+          "type": "[Grintsys.EasyPOS.OrderItem.CreateUpdateOrderItemDto]",
+          "typeSimple": "[Grintsys.EasyPOS.OrderItem.CreateUpdateOrderItemDto]",
+          "isRequired": false
+        }
+      ]
+    },
+    "Grintsys.EasyPOS.OrderItem.CreateUpdateOrderItemDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "OrderId",
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "Name",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "Description",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "Code",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "SalePrice",
+          "type": "System.Single",
+          "typeSimple": "number",
+          "isRequired": false
+        },
+        {
+          "name": "Taxes",
+          "type": "System.Single",
+          "typeSimple": "number",
+          "isRequired": false
+        },
+        {
+          "name": "Quantity",
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false
+        },
+        {
+          "name": "Discount",
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false
+        },
+        {
+          "name": "TotalItem",
+          "type": "System.Single",
+          "typeSimple": "number",
+          "isRequired": false
+        }
+      ]
+    },
+    "Grintsys.EasyPOS.Customer.CustomerLookupDto": {
+      "baseType": "Volo.Abp.Application.Dtos.EntityDto<System.Guid>",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "FirstName",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "LastName",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "FullName",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        }
+      ]
+    },
+    "Grintsys.EasyPOS.Customer.CreateUpdateCustomerDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "FirstName",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "LastName",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "IdNumber",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "RTN",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "Address",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "PhoneNumber",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "Status",
+          "type": "Grintsys.EasyPOS.Enums.CustomerStatus",
+          "typeSimple": "Grintsys.EasyPOS.Enums.CustomerStatus",
+          "isRequired": false
+        },
+        {
+          "name": "Code",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        }
+      ]
+    },
+    "Grintsys.EasyPOS.Enums.CustomerStatus": {
+      "baseType": "System.Enum",
+      "isEnum": true,
+      "enumNames": [
+        "Created",
+        "Transferred"
+      ],
+      "enumValues": [
+        1,
+        2
+      ],
+      "genericArguments": null,
+      "properties": null
+    },
+    "Grintsys.EasyPOS.Customer.CustomerDto": {
+      "baseType": "Volo.Abp.Application.Dtos.FullAuditedEntityDto<System.Guid>",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "FirstName",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "LastName",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "IdNumber",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "RTN",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "Address",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "PhoneNumber",
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false
+        },
+        {
+          "name": "Status",
+          "type": "Grintsys.EasyPOS.Enums.CustomerStatus",
+          "typeSimple": "Grintsys.EasyPOS.Enums.CustomerStatus",
+          "isRequired": false
+        },
+        {
+          "name": "Code",
           "type": "System.String",
           "typeSimple": "string",
           "isRequired": false

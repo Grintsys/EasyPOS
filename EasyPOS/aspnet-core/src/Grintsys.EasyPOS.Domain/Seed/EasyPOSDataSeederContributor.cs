@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Grintsys.EasyPOS.Enums;
-using Grintsys.EasyPOS.Models;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
@@ -10,12 +9,12 @@ namespace Grintsys.EasyPOS.Seed
 {
     public class EasyPOSDataSeederContributor : IDataSeedContributor, ITransientDependency
     {
-        private readonly IRepository<Customer, Guid> _customerRepository;
-        private readonly IRepository<Product, Guid> _productRepository;
+        private readonly IRepository<Customer.Customer, Guid> _customerRepository;
+        private readonly IRepository<Product.Product, Guid> _productRepository;
 
         public EasyPOSDataSeederContributor(
-            IRepository<Customer, Guid> customerRepository, 
-            IRepository<Product, Guid> productRepository)
+            IRepository<Customer.Customer, Guid> customerRepository, 
+            IRepository<Product.Product, Guid> productRepository)
         {
             _customerRepository = customerRepository;
             _productRepository = productRepository;
@@ -24,7 +23,7 @@ namespace Grintsys.EasyPOS.Seed
         public async Task SeedAsync(DataSeedContext context)
         {
             await _productRepository.InsertAsync(
-                new Product()
+                new Product.Product()
                 {
                     Name = "Coca Cola 12oz",
                     Description = "The Coca-Cola - Classic 12oz cans",
@@ -36,7 +35,7 @@ namespace Grintsys.EasyPOS.Seed
                 });
 
             await _productRepository.InsertAsync(
-                new Product()
+                new Product.Product()
                 {
                     Name = "Doritos Flamin' Hot 9.75oz",
                     Description = "Doritos Tortilla Chips, Flamin' Hot flavor, 9.75 Ounce (Pack of 1)",
@@ -48,7 +47,7 @@ namespace Grintsys.EasyPOS.Seed
                 });
 
             await _productRepository.InsertAsync(
-                new Product()
+                new Product.Product()
                 {
                     Name = "Cheetos Flamin' Hot 1oz",
                     Description = "Cheetos Crunchy Flamin' Hot Cheese Flavored Snacks, 1 Ounce (Pack of 40)",
@@ -60,7 +59,7 @@ namespace Grintsys.EasyPOS.Seed
                 });
 
             await _productRepository.InsertAsync(
-                new Product()
+                new Product.Product()
                 {
                     Name = "Coca Cola 12oz",
                     Description = "The Coca-Cola - Classic 12oz cans (Pack of 18)",
@@ -72,7 +71,7 @@ namespace Grintsys.EasyPOS.Seed
                 });
 
             await _productRepository.InsertAsync(
-                new Product()
+                new Product.Product()
                 {
                     Name = "Sprite, Lemon-Lime Soda 12oz",
                     Description = "Lemon-Lime Soda, 100% Natural Flavors 12oz cans (Pack of 18)",
@@ -84,7 +83,7 @@ namespace Grintsys.EasyPOS.Seed
                 });
 
             await _productRepository.InsertAsync(
-                new Product()
+                new Product.Product()
                 {
                     Name = "Sprite, Lemon-Lime Soda 12oz",
                     Description = "Lemon-Lime Soda, 100% Natural Flavors 12oz cans",
@@ -96,7 +95,7 @@ namespace Grintsys.EasyPOS.Seed
                 });
 
             await _productRepository.InsertAsync(
-                new Product()
+                new Product.Product()
                 {
                     Name = "3 Musketeers Chocolate Candy Bar",
                     Description = "Made with a fluffy, whipped chocolate center and covered in milk chocolate (Pack 24)",
@@ -108,7 +107,7 @@ namespace Grintsys.EasyPOS.Seed
                 });
 
             await _productRepository.InsertAsync(
-                new Product()
+                new Product.Product()
                 {
                     Name = "Kit Kat Dark Chocolate Wafer Candy",
                     Description = "Fill snack drawers, lunch boxes and candy displays all year long with dark chocolate and wafer KIT KAT candy bars (Pack 24)",
@@ -120,7 +119,7 @@ namespace Grintsys.EasyPOS.Seed
                 });
 
             await _productRepository.InsertAsync(
-                new Product()
+                new Product.Product()
                 {
                     Name = "M&M'S Peanut Chocolate Candy Singles ,1.74 Ounce (Pack of 48)",
                     Description = "Made with roasted peanuts and real milk chocolate surrounded by a colorful candy shell (Pack of 48)",
@@ -132,7 +131,7 @@ namespace Grintsys.EasyPOS.Seed
                 });
 
             await _productRepository.InsertAsync(
-                new Product()
+                new Product.Product()
                 {
                     Name = "Milky Way Candy Bars",
                     Description = "MILKY WAY Candy Bars feature creamy caramel and smooth nougat enrobed in rich milk chocolate (Pack 36)",
@@ -144,7 +143,7 @@ namespace Grintsys.EasyPOS.Seed
                 });
 
             await _customerRepository.InsertAsync(
-                new Customer()
+                new Customer.Customer()
                 {
                     FirstName = "Jane",
                     LastName = "Doe",
@@ -157,7 +156,7 @@ namespace Grintsys.EasyPOS.Seed
                 });
 
             await _customerRepository.InsertAsync(
-                new Customer()
+                new Customer.Customer()
                 {
                     FirstName = "John",
                     LastName = "Doe",

@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using Grintsys.EasyPOS.CreateUpdateDtos;
-using Grintsys.EasyPOS.Dtos;
-using Grintsys.EasyPOS.Models;
+using Grintsys.EasyPOS.Customer;
+using Grintsys.EasyPOS.Order;
+using Grintsys.EasyPOS.OrderItem;
+using Grintsys.EasyPOS.Product;
 
 namespace Grintsys.EasyPOS
 {
@@ -9,10 +10,16 @@ namespace Grintsys.EasyPOS
     {
         public EasyPOSApplicationAutoMapperProfile()
         {
-            CreateMap<Product, ProductDto>();
-            CreateMap<CreateUpdateProductDto, Product>();
-            CreateMap<Customer, CustomerDto>();
-            CreateMap<CreateUpdateCustomerDto, Customer>();
+            CreateMap<Product.Product, ProductDto>();
+            CreateMap<Product.Product, ProductLookupDto>();
+            CreateMap<CreateUpdateProductDto, Product.Product>();
+            CreateMap<Customer.Customer, CustomerDto>();
+            CreateMap<Customer.Customer, CustomerLookupDto>();
+            CreateMap<CreateUpdateCustomerDto, Customer.Customer>();
+            CreateMap<Order.Order, OrderDto>();
+            CreateMap<CreateUpdateOrderDto, Order.Order>();
+            CreateMap<OrderItem.OrderItem, OrderItemDto>();
+            CreateMap<CreateUpdateOrderItemDto, OrderItem.OrderItem>();
         }
     }
 }

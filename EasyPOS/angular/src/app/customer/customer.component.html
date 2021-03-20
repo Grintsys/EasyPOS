@@ -18,12 +18,34 @@
     </div>
     <div class="card-body">
         <ngx-datatable [rows]="customer.items" [count]="customer.totalCount" [list]="list" default>
-            <ngx-datatable-column [name]="'::Customer:FirstName' | abpLocalization" prop="firstName"></ngx-datatable-column>
-            <ngx-datatable-column [name]="'::Customer:LastName' | abpLocalization" prop="lastName"></ngx-datatable-column>
-            <ngx-datatable-column [name]="'::Customer:IdNumber' | abpLocalization" prop="idNumber"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Actions' | abpLocalization" [maxWidth]="150" [sortable]="false">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    <div ngbDropdown container="body" class="d-inline-block">
+                        <button class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" ngbDropdownToggle>
+                            <i class="fa fa-cog mr-1"></i>{{ '::Actions' | abpLocalization }}
+                        </button>
+                        <div ngbDropdownMenu>
+                            <button ngbDropdownItem (click)="editCustomer(row.id)">
+                                {{ '::Edit' | abpLocalization }}
+                            </button>
+                            <button ngbDropdownItem (click)="delete(row.id)">
+                                {{ '::Delete' | abpLocalization }}
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Customer:FirstName' | abpLocalization" prop="firstName">
+            </ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Customer:LastName' | abpLocalization" prop="lastName">
+            </ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Customer:IdNumber' | abpLocalization" prop="idNumber">
+            </ngx-datatable-column>
             <ngx-datatable-column [name]="'::Customer:RTN' | abpLocalization" prop="rtn"></ngx-datatable-column>
             <ngx-datatable-column [name]="'::Customer:Address' | abpLocalization" prop="address"></ngx-datatable-column>
-            <ngx-datatable-column [name]="'::Customer:PhoneNumber' | abpLocalization" prop="phoneNumber"></ngx-datatable-column>
+            <ngx-datatable-column [name]="'::Customer:PhoneNumber' | abpLocalization" prop="phoneNumber">
+            </ngx-datatable-column>
             <ngx-datatable-column [name]="'::Customer:Status' | abpLocalization" prop="status">
                 <ng-template let-row="row" ngx-datatable-cell-template>
                     {{ '::Enum:CustomerStatus:' + row.status | abpLocalization}}
@@ -55,7 +77,7 @@
                 <label for="idNumber">{{ '::Customer:IdNumber' | abpLocalization }}</label><span> * </span>
                 <input type="text" id="idNumber" class="form-control" formControlName="idNumber" />
             </div>
-            
+
             <div class="form-group">
                 <label for="rtn">{{ '::Customer:Rtn' | abpLocalization }}</label><span> * </span>
                 <input type="text" id="rtn" class="form-control" formControlName="rtn" />
@@ -86,6 +108,10 @@
         </form>
     </ng-template>
 
+    <ng-template #abpHeader>
+        <h3>{{ (selectedCustomer.id ? '::Edit' : '::NewCustomer' ) | abpLocalization }}</h3>
+    </ng-template>
+
     <ng-template #abpFooter>
         <button type="button" class="btn btn-secondary" #abpClose>
             {{ '::Close' | abpLocalization }}
@@ -94,6 +120,6 @@
         <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
             <i class="fa fa-check mr-1"></i>
             {{ '::Save' | abpLocalization }}
-      </button>
+        </button>
     </ng-template>
 </abp-modal>
