@@ -6,6 +6,7 @@ import { orderStatesOptions } from '@proxy/enums/order-states.enum';
 import { CustomerLookupDto, CustomerService } from '@proxy/customer';
 import { Observable } from 'rxjs/internal/Observable';
 import { map } from 'rxjs/operators';
+import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-order',
@@ -24,7 +25,8 @@ export class OrderComponent implements OnInit {
     public readonly list: ListService,
     private orderService: OrderService,
     private customerService: CustomerService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private confirmation: ConfirmationService
   ) { 
     this.customers$ = customerService.getCustomerLookup().pipe(map((r) => r.items));
   }
@@ -46,6 +48,14 @@ export class OrderComponent implements OnInit {
   createOrder() {
     this.buildForm();
     this.isModalOpen = true;
+  }
+
+  delete(id: string) {
+    this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure').subscribe((status) => {
+      if (status === Confirmation.Status.confirm) {
+        this.orderService.delete(id).subscribe(() => this.list.get());
+      }
+    });
   }
 
   save() {
