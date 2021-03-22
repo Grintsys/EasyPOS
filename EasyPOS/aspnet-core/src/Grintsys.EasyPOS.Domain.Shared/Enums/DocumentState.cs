@@ -1,8 +1,9 @@
 ﻿namespace Grintsys.EasyPOS.Enums
 {
-    public enum OrderStates
+    public enum DocumentState
     {
         Created = 1,
-        Cancelled = 2
+        Edited = 2,
+        Cancelled = 3
     }
 }

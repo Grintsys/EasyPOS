@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using Grintsys.EasyPOS.Document;
+﻿using Grintsys.EasyPOS.Document;
+using System.Linq;
 
-namespace Grintsys.EasyPOS.Order
+namespace Grintsys.EasyPOS.DebitNote
 {
-    public class Order : Document<OrderItem>
+    public class DebitNote : Document<DebitNoteItem>
     {
         public override float ISV => Items.Sum(x => x.Taxes * x.SalePrice * x.Quantity);
         public override float Discount => Items.Sum(x => x.Discount * x.SalePrice * x.Quantity);

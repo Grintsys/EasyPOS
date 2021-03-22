@@ -7,7 +7,7 @@ namespace Grintsys.EasyPOS.OrderItem
 {
     public class OrderItemAppService : 
         CrudAppService<
-            OrderItem,
+            Order.OrderItem,
             OrderItemDto,
             Guid,
             PagedAndSortedResultRequestDto,
@@ -15,7 +15,7 @@ namespace Grintsys.EasyPOS.OrderItem
         >,
         IOrderItemAppService
     {
-        public OrderItemAppService(IRepository<OrderItem, Guid> repository) : base(repository)
+        public OrderItemAppService(IRepository<Order.OrderItem, Guid> repository) : base(repository)
         {
         }
     }

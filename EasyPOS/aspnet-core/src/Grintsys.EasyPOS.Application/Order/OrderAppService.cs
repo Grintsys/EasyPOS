@@ -32,7 +32,7 @@ namespace Grintsys.EasyPOS.Order
             var createUpdateDto = new CreateUpdateOrderDto()
             {
                 CustomerId = order.CustomerId,
-                OrderState = OrderStates.Cancelled
+                State = DocumentState.Cancelled
             };
 
             await base.UpdateAsync(id, createUpdateDto);
@@ -50,6 +50,11 @@ namespace Grintsys.EasyPOS.Order
             var orders = await _orderRepository.GetOrdersAsync();
             var orderDto = await MapToGetListOutputDtosAsync(orders);
             return new PagedResultDto<OrderDto>(orders.Count, orderDto);
+        }
+
+        public override Task<OrderDto> CreateAsync(CreateUpdateOrderDto input)
+        {
+            return base.CreateAsync(input);
         }
     }
 }

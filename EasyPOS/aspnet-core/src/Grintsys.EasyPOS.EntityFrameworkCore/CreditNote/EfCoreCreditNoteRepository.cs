@@ -1,22 +1,23 @@
 ﻿using Grintsys.EasyPOS.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace Grintsys.EasyPOS.Order
+namespace Grintsys.EasyPOS.CreditNote
 {
-    public class EfCoreOrderRepository 
-        : EfCoreRepository<EasyPOSDbContext, Order, Guid>,
-            IOrderRepository
+    public class EfCoreCreditNoteRepository
+        : EfCoreRepository<EasyPOSDbContext, CreditNote, Guid>,
+            ICreditNoteRepository
     {
-        public EfCoreOrderRepository(IDbContextProvider<EasyPOSDbContext> dbContextProvider) : base(dbContextProvider)
+        public EfCoreCreditNoteRepository(
+            IDbContextProvider<EasyPOSDbContext> dbContextProvider) : base(dbContextProvider)
         {
         }
 
-        public async Task<List<Order>> GetOrdersAsync()
+        public async Task<List<CreditNote>> GetCreditNotesAsync()
         {
             var data = (await GetQueryableAsync())
                 .Include(x => x.Items)
@@ -24,7 +25,7 @@ namespace Grintsys.EasyPOS.Order
             return await data.ToListAsync();
         }
 
-        public async Task<Order> GetOrdersByIdAsync(Guid id)
+        public async Task<CreditNote> GetCreditNoteByIdAsync(Guid id)
         {
             var data = (await GetQueryableAsync())
                 .Include(x => x.Items)

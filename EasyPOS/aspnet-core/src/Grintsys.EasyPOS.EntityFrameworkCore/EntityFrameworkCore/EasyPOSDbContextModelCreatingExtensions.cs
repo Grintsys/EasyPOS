@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Grintsys.EasyPOS.CreditNote;
+using Grintsys.EasyPOS.DebitNote;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
@@ -33,14 +35,46 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                 b.ToTable(EasyPOSConsts.DbTablePrefix + "Orders", EasyPOSConsts.DbSchema);
                 b.ConfigureByConvention();
 
-                b.HasMany(o => o.OrderItems)
+                b.HasMany(o => o.Items)
                     .WithOne(o => o.Order)
                     .IsRequired();
             });
 
-            builder.Entity<OrderItem.OrderItem>(b =>
+            builder.Entity<Order.OrderItem>(b =>
             {
                 b.ToTable(EasyPOSConsts.DbTablePrefix + "OrderItems", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+            });
+
+            builder.Entity<CreditNote.CreditNote>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "CreditNotes", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+
+                b.HasMany(o => o.Items)
+                    .WithOne(o => o.CreditNote)
+                    .IsRequired();
+            });
+
+            builder.Entity<CreditNoteItem>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "CreditNoteItems", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+            });
+
+            builder.Entity<DebitNote.DebitNote>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "DebitNotes", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+
+                b.HasMany(o => o.Items)
+                    .WithOne(o => o.DebitNote)
+                    .IsRequired();
+            });
+
+            builder.Entity<DebitNoteItem>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "DebitNoteItems", EasyPOSConsts.DbSchema);
                 b.ConfigureByConvention();
             });
         }
