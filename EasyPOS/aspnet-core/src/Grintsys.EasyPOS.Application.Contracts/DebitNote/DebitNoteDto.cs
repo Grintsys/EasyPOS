@@ -5,6 +5,6 @@ namespace Grintsys.EasyPOS.DebitNote
 {
     public class DebitNoteDto : DocumentDto<DebitNoteItemDto>
     {
-        public Guid DebitNoteId { get; set; }
+        public Guid OrderId { get; set; }
     }
 }

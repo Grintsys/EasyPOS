@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using Grintsys.EasyPOS.Document;
+﻿using Grintsys.EasyPOS.Document;
+using System;
 
 namespace Grintsys.EasyPOS.CreditNote
 {
     public class CreditNoteDto : DocumentDto<CreditNoteItemDto>
     {
-        public List<CreditNoteItemDto> CreditNoteItems { get; set; } = new List<CreditNoteItemDto>();
+        public Guid OrderId { get; set; }
     }
 }

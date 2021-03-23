@@ -30,6 +30,12 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                     .IsRequired();
             });
 
+            builder.Entity<PaymentMethod.PaymentMethod>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "PaymentMethods", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+            });
+
             builder.Entity<Order.Order>(b =>
             {
                 b.ToTable(EasyPOSConsts.DbTablePrefix + "Orders", EasyPOSConsts.DbSchema);
@@ -38,7 +44,20 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                 b.HasMany(o => o.Items)
                     .WithOne(o => o.Order)
                     .IsRequired();
+
+                b.HasMany(o => o.DebitNotes)
+                    .WithOne(o => o.Order)
+                    .IsRequired();
+
+                b.HasMany(o => o.CreditNotes)
+                    .WithOne(o => o.Order)
+                    .IsRequired();
+
+                b.HasMany(o => o.PaymentMethods)
+                    .WithOne(o => o.Order)
+                    .IsRequired();
             });
+
 
             builder.Entity<Order.OrderItem>(b =>
             {
