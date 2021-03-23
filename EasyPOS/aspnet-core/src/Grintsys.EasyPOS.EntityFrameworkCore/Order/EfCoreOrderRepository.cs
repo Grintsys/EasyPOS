@@ -1,8 +1,8 @@
 ﻿using Grintsys.EasyPOS.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -20,7 +20,10 @@ namespace Grintsys.EasyPOS.Order
         {
             var data = (await GetQueryableAsync())
                 .Include(x => x.Items)
-                .Include(x => x.Customer);
+                .Include(x => x.Customer)
+                .Include(x => x.DebitNotes)
+                .Include(x => x.CreditNotes)
+                .Include(x => x.PaymentMethods);
             return await data.ToListAsync();
         }
 
