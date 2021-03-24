@@ -8,7 +8,7 @@ namespace Grintsys.EasyPOS.PaymentMethod
     {
         public Guid OrderId { get; set; }
         public Order.Order Order { get; set; }
-        public PaymentMethods Method { get; set; }
+        public string Method { get; set; }
         public float Amount { get; set; }
     }
 }
