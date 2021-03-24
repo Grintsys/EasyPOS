@@ -70,17 +70,12 @@ namespace Grintsys.EasyPOS.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("State")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("AppCreditNotes");
                 });
@@ -286,17 +281,12 @@ namespace Grintsys.EasyPOS.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("State")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("AppDebitNotes");
                 });
@@ -512,68 +502,6 @@ namespace Grintsys.EasyPOS.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("AppOrderItems");
-                });
-
-            modelBuilder.Entity("Grintsys.EasyPOS.PaymentMethod.PaymentMethod", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<float>("Amount")
-                        .HasColumnType("real");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<string>("ExtraProperties")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<int>("Method")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("AppPaymentMethods");
                 });
 
             modelBuilder.Entity("Grintsys.EasyPOS.Product.Product", b =>
@@ -2572,15 +2500,7 @@ namespace Grintsys.EasyPOS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Grintsys.EasyPOS.Order.Order", "Order")
-                        .WithMany("CreditNotes")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Customer");
-
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Grintsys.EasyPOS.CreditNote.CreditNoteItem", b =>
@@ -2602,15 +2522,7 @@ namespace Grintsys.EasyPOS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Grintsys.EasyPOS.Order.Order", "Order")
-                        .WithMany("DebitNotes")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Customer");
-
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Grintsys.EasyPOS.DebitNote.DebitNoteItem", b =>
@@ -2639,17 +2551,6 @@ namespace Grintsys.EasyPOS.Migrations
                 {
                     b.HasOne("Grintsys.EasyPOS.Order.Order", "Order")
                         .WithMany("Items")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("Grintsys.EasyPOS.PaymentMethod.PaymentMethod", b =>
-                {
-                    b.HasOne("Grintsys.EasyPOS.Order.Order", "Order")
-                        .WithMany("PaymentMethods")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2951,13 +2852,7 @@ namespace Grintsys.EasyPOS.Migrations
 
             modelBuilder.Entity("Grintsys.EasyPOS.Order.Order", b =>
                 {
-                    b.Navigation("CreditNotes");
-
-                    b.Navigation("DebitNotes");
-
                     b.Navigation("Items");
-
-                    b.Navigation("PaymentMethods");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
