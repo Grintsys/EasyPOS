@@ -1,7 +1,7 @@
-﻿using Grintsys.EasyPOS.Document;
-using System;
+﻿using System;
+using Grintsys.EasyPOS.Document;
 
-namespace Grintsys.EasyPOS.OrderItem
+namespace Grintsys.EasyPOS.Order
 {
     public class CreateUpdateOrderItemDto : CreateUpdateDocumentItemDto
     {

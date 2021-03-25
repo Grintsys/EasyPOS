@@ -1,9 +1,9 @@
-﻿using System;
-using Volo.Abp.Application.Dtos;
+﻿using Grintsys.EasyPOS.Document;
+using System;
 
-namespace Grintsys.EasyPOS.OrderItem
+namespace Grintsys.EasyPOS.Order
 {
-    public class OrderItemDto : FullAuditedEntityDto<Guid>
+    public class OrderItemDto : DocumentItemDto
     {
         public Guid OrderId { get; set; }
     }
