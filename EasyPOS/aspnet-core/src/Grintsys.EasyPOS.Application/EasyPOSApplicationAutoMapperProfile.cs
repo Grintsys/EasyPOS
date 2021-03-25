@@ -3,7 +3,7 @@ using Grintsys.EasyPOS.CreditNote;
 using Grintsys.EasyPOS.Customer;
 using Grintsys.EasyPOS.DebitNote;
 using Grintsys.EasyPOS.Order;
-using Grintsys.EasyPOS.OrderItem;
+using Grintsys.EasyPOS.PaymentMethod;
 using Grintsys.EasyPOS.Product;
 
 namespace Grintsys.EasyPOS
@@ -40,6 +40,12 @@ namespace Grintsys.EasyPOS
             
             CreateMap<DebitNoteItem, DebitNoteItemDto>();
             CreateMap<CreateUpdateDebitNoteItemDto, DebitNoteItem>();
+
+            CreateMap<PaymentMethod.PaymentMethod, PaymentMethodDto>();
+            CreateMap<CreateUpdatePaymentMethodDto, PaymentMethod.PaymentMethod>();
+
+            CreateMap<PaymentMethodType, PaymentMethodTypeDto>();
+            CreateMap<CreateUpdatePaymentMethodTypeDto, PaymentMethodType>();
         }
     }
 }

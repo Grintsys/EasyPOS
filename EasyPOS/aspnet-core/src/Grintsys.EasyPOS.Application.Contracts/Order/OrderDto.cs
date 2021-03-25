@@ -2,6 +2,7 @@
 using Grintsys.EasyPOS.DebitNote;
 using Grintsys.EasyPOS.Document;
 using System.Collections.Generic;
+using Grintsys.EasyPOS.PaymentMethod;
 
 namespace Grintsys.EasyPOS.Order
 {

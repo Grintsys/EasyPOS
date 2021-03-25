@@ -1,9 +1,8 @@
-﻿using Grintsys.EasyPOS.Order;
-using System;
+﻿using System;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
-namespace Grintsys.EasyPOS.OrderItem
+namespace Grintsys.EasyPOS.Order
 {
     public interface IOrderItemAppService :  
         ICrudAppService<
