@@ -2,7 +2,7 @@
 
 namespace Grintsys.EasyPOS.PaymentMethod
 {
-    public class CreateUpdatePaymentMethod
+    public class CreateUpdatePaymentMethodDto
     {
         public Guid OrderId { get; set; }
         public string Method { get; set; }
