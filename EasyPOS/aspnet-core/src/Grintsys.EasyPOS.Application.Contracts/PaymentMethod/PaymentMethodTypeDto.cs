@@ -5,6 +5,6 @@ namespace Grintsys.EasyPOS.PaymentMethod
 {
     public class PaymentMethodTypeDto : FullAuditedEntityDto<Guid>
     {
-        public string Method { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -51,10 +51,5 @@ namespace Grintsys.EasyPOS.Order
             var orderDto = await MapToGetListOutputDtosAsync(orders);
             return new PagedResultDto<OrderDto>(orders.Count, orderDto);
         }
-
-        public override Task<OrderDto> CreateAsync(CreateUpdateOrderDto input)
-        {
-            return base.CreateAsync(input);
-        }
     }
 }
