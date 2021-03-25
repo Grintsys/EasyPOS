@@ -1,7 +1,6 @@
 ﻿using Grintsys.EasyPOS.Enums;
 using Grintsys.EasyPOS.Order;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
