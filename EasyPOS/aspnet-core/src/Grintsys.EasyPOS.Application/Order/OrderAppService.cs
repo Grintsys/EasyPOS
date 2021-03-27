@@ -37,19 +37,36 @@ namespace Grintsys.EasyPOS.Order
 
             await base.UpdateAsync(id, createUpdateDto);
         }
-
-        public async Task<OrderDto> GetOrderByIdAsync(Guid id)
+        
+        public override async Task<OrderDto> GetAsync(Guid id)
         {
             var order = await _orderRepository.GetOrdersByIdAsync(id);
             var dto = ObjectMapper.Map<Order, OrderDto>(order);
             return dto;
         }
 
-        public async Task<PagedResultDto<OrderDto>> GetAllOrdersAsync()
+        public override async Task<PagedResultDto<OrderDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
+            if (input.Sorting.IsNullOrWhiteSpace())
+            {
+                input.Sorting = nameof(Order.CustomerName);
+            }
+
             var orders = await _orderRepository.GetOrdersAsync();
-            var orderDto = await MapToGetListOutputDtosAsync(orders);
-            return new PagedResultDto<OrderDto>(orders.Count, orderDto);
+
+            //orders = orders
+            //    .OrderBy(x => x.GetType().GetProperty(input.Sorting)?.GetValue(x, null))
+            //    .Skip(input.SkipCount)
+            //    .Take(input.MaxResultCount) as List<DebitNote>;
+
+            var ordersDto = await MapToGetListOutputDtosAsync(orders);
+
+            var totalCount = await Repository.GetCountAsync();
+
+            return new PagedResultDto<OrderDto>(
+                totalCount,
+                ordersDto
+            );
         }
     }
 }

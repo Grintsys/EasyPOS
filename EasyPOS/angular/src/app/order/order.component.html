@@ -18,9 +18,9 @@
     </div>
     <div class="card-body">
         <ngx-datatable [rows]="order.items" [count]="order.totalCount" [list]="list" default>
-            <ngx-datatable-column [name]="'::Order:State' | abpLocalization" prop="orderState">
+            <ngx-datatable-column [name]="'::Order:State' | abpLocalization" prop="state">
                 <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ '::Enum:OrderState:' + row.orderState | abpLocalization}}
+                    {{ '::Enum:OrderState:' + row.state | abpLocalization}}
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column [name]="'::Order:CustomerName' | abpLocalization" prop="customerName">

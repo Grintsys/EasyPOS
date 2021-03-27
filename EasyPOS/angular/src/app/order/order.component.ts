@@ -2,7 +2,7 @@ import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
 import { OrderService, OrderDto } from '@proxy/order';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { orderStatesOptions } from '@proxy/enums/order-states.enum';
+import { documentStateOptions } from '@proxy/enums/document-state.enum';
 import { CustomerLookupDto, CustomerService } from '@proxy/customer';
 import { Observable } from 'rxjs/internal/Observable';
 import { map } from 'rxjs/operators';
@@ -18,7 +18,7 @@ export class OrderComponent implements OnInit {
   order = { items: [], totalCount: 0 } as PagedResultDto<OrderDto>;
   form: FormGroup; // add this line
   isModalOpen = false; // add this line
-  orderStatusTypes = orderStatesOptions;
+  orderStatusTypes = documentStateOptions;
   customers$: Observable<CustomerLookupDto[]>;
 
   constructor(
@@ -32,7 +32,7 @@ export class OrderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const orderStreamCreator = () => this.orderService.getAllOrders();
+    const orderStreamCreator = (query) => this.orderService.getList(query);
 
     this.list.hookToQuery(orderStreamCreator).subscribe((response) => {
       this.order = response;

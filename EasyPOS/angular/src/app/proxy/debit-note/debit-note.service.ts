@@ -1,4 +1,4 @@
-import type { CreateUpdateOrderDto, OrderDto } from './models';
+import type { CreateUpdateDebitNoteDto, DebitNoteDto } from './models';
 import { RestService } from '@abp/ng.core';
 import type { PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
@@ -6,43 +6,50 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class OrderService {
+export class DebitNoteService {
   apiName = 'Default';
 
-  create = (input: CreateUpdateOrderDto) =>
-    this.restService.request<any, OrderDto>({
+  create = (input: CreateUpdateDebitNoteDto) =>
+    this.restService.request<any, DebitNoteDto>({
       method: 'POST',
-      url: `/api/app/order`,
+      url: `/api/app/debit-note`,
       body: input,
+    },
+    { apiName: this.apiName });
+
+  createDebitNote = (orderId: string) =>
+    this.restService.request<any, DebitNoteDto>({
+      method: 'POST',
+      url: `/api/app/debit-note/debit-note/${orderId}`,
     },
     { apiName: this.apiName });
 
   delete = (id: string) =>
     this.restService.request<any, void>({
       method: 'DELETE',
-      url: `/api/app/order/${id}`,
+      url: `/api/app/debit-note/${id}`,
     },
     { apiName: this.apiName });
 
   get = (id: string) =>
-    this.restService.request<any, OrderDto>({
+    this.restService.request<any, DebitNoteDto>({
       method: 'GET',
-      url: `/api/app/order/${id}`,
+      url: `/api/app/debit-note/${id}`,
     },
     { apiName: this.apiName });
 
   getList = (input: PagedAndSortedResultRequestDto) =>
-    this.restService.request<any, PagedResultDto<OrderDto>>({
+    this.restService.request<any, PagedResultDto<DebitNoteDto>>({
       method: 'GET',
-      url: `/api/app/order`,
+      url: `/api/app/debit-note`,
       params: { skipCount: input.skipCount, maxResultCount: input.maxResultCount, sorting: input.sorting },
     },
     { apiName: this.apiName });
 
-  update = (id: string, input: CreateUpdateOrderDto) =>
-    this.restService.request<any, OrderDto>({
+  update = (id: string, input: CreateUpdateDebitNoteDto) =>
+    this.restService.request<any, DebitNoteDto>({
       method: 'PUT',
-      url: `/api/app/order/${id}`,
+      url: `/api/app/debit-note/${id}`,
       body: input,
     },
     { apiName: this.apiName });

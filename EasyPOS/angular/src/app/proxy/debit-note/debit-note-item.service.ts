@@ -1,4 +1,4 @@
-import type { CreateUpdateOrderDto, OrderDto } from './models';
+import type { CreateUpdateDebitNoteItemDto, DebitNoteItemDto } from './models';
 import { RestService } from '@abp/ng.core';
 import type { PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
@@ -6,13 +6,13 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class OrderService {
+export class DebitNoteItemService {
   apiName = 'Default';
 
-  create = (input: CreateUpdateOrderDto) =>
-    this.restService.request<any, OrderDto>({
+  create = (input: CreateUpdateDebitNoteItemDto) =>
+    this.restService.request<any, DebitNoteItemDto>({
       method: 'POST',
-      url: `/api/app/order`,
+      url: `/api/app/debit-note-item`,
       body: input,
     },
     { apiName: this.apiName });
@@ -20,29 +20,29 @@ export class OrderService {
   delete = (id: string) =>
     this.restService.request<any, void>({
       method: 'DELETE',
-      url: `/api/app/order/${id}`,
+      url: `/api/app/debit-note-item/${id}`,
     },
     { apiName: this.apiName });
 
   get = (id: string) =>
-    this.restService.request<any, OrderDto>({
+    this.restService.request<any, DebitNoteItemDto>({
       method: 'GET',
-      url: `/api/app/order/${id}`,
+      url: `/api/app/debit-note-item/${id}`,
     },
     { apiName: this.apiName });
 
   getList = (input: PagedAndSortedResultRequestDto) =>
-    this.restService.request<any, PagedResultDto<OrderDto>>({
+    this.restService.request<any, PagedResultDto<DebitNoteItemDto>>({
       method: 'GET',
-      url: `/api/app/order`,
+      url: `/api/app/debit-note-item`,
       params: { skipCount: input.skipCount, maxResultCount: input.maxResultCount, sorting: input.sorting },
     },
     { apiName: this.apiName });
 
-  update = (id: string, input: CreateUpdateOrderDto) =>
-    this.restService.request<any, OrderDto>({
+  update = (id: string, input: CreateUpdateDebitNoteItemDto) =>
+    this.restService.request<any, DebitNoteItemDto>({
       method: 'PUT',
-      url: `/api/app/order/${id}`,
+      url: `/api/app/debit-note-item/${id}`,
       body: input,
     },
     { apiName: this.apiName });

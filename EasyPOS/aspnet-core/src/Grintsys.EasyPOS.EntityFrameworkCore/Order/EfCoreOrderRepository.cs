@@ -12,7 +12,8 @@ namespace Grintsys.EasyPOS.Order
         : EfCoreRepository<EasyPOSDbContext, Order, Guid>,
             IOrderRepository
     {
-        public EfCoreOrderRepository(IDbContextProvider<EasyPOSDbContext> dbContextProvider) : base(dbContextProvider)
+        public EfCoreOrderRepository(IDbContextProvider<EasyPOSDbContext> dbContextProvider) 
+            : base(dbContextProvider)
         {
         }
 
