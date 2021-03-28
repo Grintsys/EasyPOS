@@ -3,14 +3,14 @@ import { Component } from '@angular/core';
 import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
 
 import { locale as english } from './i18n/en';
-import { locale as turkish } from './i18n/tr';
+import { locale as turkish } from './i18n/es';
 
 @Component({
-    selector   : 'sample',
-    templateUrl: './sample.component.html',
-    styleUrls  : ['./sample.component.scss']
+    selector   : 'pos',
+    templateUrl: './pos.component.html',
+    styleUrls  : ['./pos.component.scss']
 })
-export class SampleComponent
+export class PosComponent
 {
     /**
      * Constructor

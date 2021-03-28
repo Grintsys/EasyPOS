@@ -7,7 +7,7 @@ export const locale = {
                 'TITLE': 'POS'
             },
             'ORDERS'   : {
-                'TITLE': 'Ordenes'
+                'TITLE': 'Órdenes'
             },
             'CUSTOMERS'   : {
                 'TITLE': 'Clientes'
@@ -16,7 +16,7 @@ export const locale = {
                 'TITLE': 'Productos'
             },
             'SYNC'   : {
-                'TITLE': 'Sincronización'
+                'TITLE': 'Sincronizar'
             },
             'CONFIGURATIONS'   : {
                 'TITLE': 'Configuración'

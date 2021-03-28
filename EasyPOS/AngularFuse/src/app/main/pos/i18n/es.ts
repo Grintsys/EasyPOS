@@ -1,8 +1,8 @@
 export const locale = {
     lang: 'es',
     data: {
-        'SAMPLE': {
-            'Hola': 'Bienvenido'
+        'POS': {
+            'HELLO': 'Bienvenido'
         }
     }
 };

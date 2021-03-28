@@ -12,7 +12,7 @@ export const navigation: FuseNavigation[] = [
                 title    : 'pos',
                 translate: 'NAV.POS.TITLE',
                 type     : 'item',
-                icon     : 'email',
+                icon     : 'shopping_cart',
                 url      : '/pos',
             },
             {
@@ -20,7 +20,7 @@ export const navigation: FuseNavigation[] = [
                 title    : 'Orders',
                 translate: 'NAV.ORDERS.TITLE',
                 type     : 'item',
-                icon     : 'email',
+                icon     : 'list_alt',
                 url      : '/orders',
             },
             {
@@ -28,7 +28,7 @@ export const navigation: FuseNavigation[] = [
                 title    : 'Customers',
                 translate: 'NAV.CUSTOMERS.TITLE',
                 type     : 'item',
-                icon     : 'email',
+                icon     : 'person_outline',
                 url      : '/customers',
             },
             {
@@ -36,7 +36,7 @@ export const navigation: FuseNavigation[] = [
                 title    : 'Products',
                 translate: 'NAV.PRODUCTS.TITLE',
                 type     : 'item',
-                icon     : 'email',
+                icon     : 'shopping_basket',
                 url      : '/products',
             },
             {
@@ -44,7 +44,7 @@ export const navigation: FuseNavigation[] = [
                 title    : 'Syncronization',
                 translate: 'NAV.SYNC.TITLE',
                 type     : 'item',
-                icon     : 'email',
+                icon     : 'sync',
                 url      : '/syncronizations',
             },
             {
@@ -52,7 +52,7 @@ export const navigation: FuseNavigation[] = [
                 title    : 'Configuration',
                 translate: 'NAV.CONFIGURATIONS.TITLE',
                 type     : 'item',
-                icon     : 'email',
+                icon     : 'settings',
                 url      : '/configurations',
             },
             {
@@ -60,7 +60,7 @@ export const navigation: FuseNavigation[] = [
                 title    : 'Roles',
                 translate: 'NAV.ROLES.TITLE',
                 type     : 'item',
-                icon     : 'email',
+                icon     : 'person_pin',
                 url      : '/roles',
             }
         ]

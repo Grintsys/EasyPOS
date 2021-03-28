@@ -1,8 +1,8 @@
 <mat-toolbar class="p-0 mat-elevation-z1">
 
-    <div fxFlex fxFill fxLayout="row" fxLayoutAlign="start center">
+    <div fxFlex fxFill fxLayout="row" fxLayoutAlign="end center">
 
-        <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+        <!-- <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
 
             <button mat-icon-button class="navbar-toggle-button"
                     *ngIf="!hiddenNavbar && !rightNavbar" (click)="toggleSidebarOpen('navbar')" fxHide.gt-md>
@@ -13,7 +13,7 @@
 
             <div fxLayout="row" fxLayoutAlign="start center" *ngIf="horizontalNavbar">
                 <div class="logo ml-16">
-                    <img class="logo-icon" src="assets/images/logos/fuse.svg">
+                    <img class="logo-icon" src="assets/images/logos/easypos.svg">
                 </div>
             </div>
 
@@ -21,41 +21,41 @@
                 <fuse-shortcuts [navigation]="navigation"></fuse-shortcuts>
             </div>
 
-        </div>
+        </div> -->
 
         <div class="" fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center">
 
-            <button mat-button [matMenuTriggerFor]="userMenu"
-                    class="user-button">
+            <button mat-button [matMenuTriggerFor]="warehouse" class="user-button">
                 <div fxLayout="row" fxLayoutAlign="center center">
-                    <img class="avatar mr-0 mr-sm-16" src="assets/images/avatars/Velazquez.jpg">
-                    <span class="username mr-12" fxHide fxShow.gt-sm>Charlie Adams</span>
+                    <img class="avatar mr-0 mr-sm-16" src="assets/icons/custom/warehouse.svg">
+                    <span class="username mr-12" fxHide fxShow.gt-sm>Seleccionar bodega</span>
                     <mat-icon class="s-16" fxHide.xs>keyboard_arrow_down</mat-icon>
                 </div>
             </button>
 
-            <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
+            <mat-menu #warehouse="matMenu" [overlapTrigger]="false">
 
                 <button mat-menu-item>
-                    <mat-icon>account_circle</mat-icon>
-                    <span>My Profile</span>
+                    <mat-icon>account_balance_wallet</mat-icon>
+                    <span>Bodega A</span>
                 </button>
 
                 <button mat-menu-item class="">
-                    <mat-icon>mail</mat-icon>
-                    <span>Inbox</span>
+                    <mat-icon>account_balance_wallet</mat-icon>
+                    <span>Bodega B</span>
                 </button>
 
                 <button mat-menu-item class="">
-                    <mat-icon>exit_to_app</mat-icon>
-                    <span>Logout</span>
+                    <mat-icon>account_balance_wallet</mat-icon>
+                    <span>Bodega C</span>
                 </button>
 
             </mat-menu>
 
-            <div class="toolbar-separator"></div>
 
-            <fuse-search-bar (input)="search($event)"></fuse-search-bar>
+            <!-- <div class="toolbar-separator"></div>
+
+            <fuse-search-bar (input)="search($event)"></fuse-search-bar> -->
 
             <div class="toolbar-separator"></div>
 
@@ -81,7 +81,7 @@
 
             <div class="toolbar-separator" fxHide fxShow.gt-xs></div>
 
-            <button mat-icon-button
+            <!-- <button mat-icon-button
                     class="quick-panel-toggle-button"
                     (click)="toggleSidebarOpen('quickPanel')"
                     aria-label="Toggle quick panel">
@@ -93,7 +93,26 @@
             <button mat-icon-button class="navbar-toggle-button"
                     *ngIf="!hiddenNavbar && rightNavbar" (click)="toggleSidebarOpen('navbar')" fxHide.gt-md>
                 <mat-icon class="secondary-text">menu</mat-icon>
+            </button> -->
+
+
+            <button mat-button [matMenuTriggerFor]="userMenu"
+                    class="user-button">
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <img class="avatar mr-0 mr-sm-16" src="assets/images/avatars/Velazquez.jpg">
+                    <span class="username mr-12" fxHide fxShow.gt-sm>Jesús Sarmiento</span>
+                    <mat-icon class="s-16" fxHide.xs>keyboard_arrow_down</mat-icon>
+                </div>
             </button>
+
+            <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
+
+                <button mat-menu-item class="">
+                    <mat-icon>exit_to_app</mat-icon>
+                    <span>Logout</span>
+                </button>
+
+            </mat-menu>
 
         </div>
 

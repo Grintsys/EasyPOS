@@ -12,8 +12,9 @@ toolbar {
 
     .mat-toolbar {
         position: relative;
-        background: inherit !important;
+        background: #FFFFFF !important;
         color: inherit !important;
+        box-shadow: 0px 1px 4px rgb(0 0 0 / 35%) !important;
     }
 
     .logo {
