@@ -14,6 +14,6 @@ namespace Grintsys.EasyPOS.Product
             string filter = null
         );
 
-        Task<Product> GetByIds(List<Guid> id);
+        Task<List<Product>> GetByIds(List<Guid> ids);
     }
 }
