@@ -24,7 +24,13 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
         public DbSet<Customer.Customer> Customers { get; set; }
         public DbSet<Product.Product> Products { get; set; }
         public DbSet<Order.Order> Orders { get; set; }
-        public DbSet<OrderItem.OrderItem> OrderItems { get; set; }
+        public DbSet<CreditNote.CreditNote> CreditNotes { get; set; }
+        public DbSet<DebitNote.DebitNote> DebitNotes { get; set; }
+        public DbSet<Order.OrderItem> OrderItems { get; set; }
+        public DbSet<CreditNote.CreditNoteItem> CreditNoteItems { get; set; }
+        public DbSet<DebitNote.DebitNoteItem> DebitNoteItems { get; set; }
+        public DbSet<PaymentMethod.PaymentMethod> PaymentMethods { get; set; }
+        public DbSet<PaymentMethod.PaymentMethodType> PaymentMethodTypes { get; set; }
 
         /* Add DbSet properties for your Aggregate Roots / Entities here.
          * Also map them inside EasyPOSDbContextModelCreatingExtensions.ConfigureEasyPOS

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Grintsys.EasyPOS.Order;
+using System;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
@@ -7,7 +8,7 @@ namespace Grintsys.EasyPOS.OrderItem
 {
     public class OrderItemAppService : 
         CrudAppService<
-            OrderItem,
+            Order.OrderItem,
             OrderItemDto,
             Guid,
             PagedAndSortedResultRequestDto,
@@ -15,7 +16,7 @@ namespace Grintsys.EasyPOS.OrderItem
         >,
         IOrderItemAppService
     {
-        public OrderItemAppService(IRepository<OrderItem, Guid> repository) : base(repository)
+        public OrderItemAppService(IRepository<Order.OrderItem, Guid> repository) : base(repository)
         {
         }
     }

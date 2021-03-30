@@ -31,25 +31,11 @@ export class OrderService {
     },
     { apiName: this.apiName });
 
-  getAllOrders = () =>
-    this.restService.request<any, PagedResultDto<OrderDto>>({
-      method: 'GET',
-      url: `/api/app/order/orders`,
-    },
-    { apiName: this.apiName });
-
   getList = (input: PagedAndSortedResultRequestDto) =>
     this.restService.request<any, PagedResultDto<OrderDto>>({
       method: 'GET',
       url: `/api/app/order`,
       params: { skipCount: input.skipCount, maxResultCount: input.maxResultCount, sorting: input.sorting },
-    },
-    { apiName: this.apiName });
-
-  getOrderById = (id: string) =>
-    this.restService.request<any, OrderDto>({
-      method: 'GET',
-      url: `/api/app/order/${id}/order-by-id`,
     },
     { apiName: this.apiName });
 

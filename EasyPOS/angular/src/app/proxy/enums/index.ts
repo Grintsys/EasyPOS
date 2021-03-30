@@ -1,2 +1,2 @@
 export * from './customer-status.enum';
-export * from './order-states.enum';
+export * from './document-state.enum';

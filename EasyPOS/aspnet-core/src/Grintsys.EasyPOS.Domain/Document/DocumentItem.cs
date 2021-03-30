@@ -1,11 +1,10 @@
 ﻿using System;
-using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities.Auditing;
 
-namespace Grintsys.EasyPOS.OrderItem
+namespace Grintsys.EasyPOS.Document
 {
-    public class OrderItemDto : FullAuditedEntityDto<Guid>
+    public class DocumentItem : FullAuditedAggregateRoot<Guid>
     {
-        public Guid OrderId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Code { get; set; }
@@ -13,6 +12,6 @@ namespace Grintsys.EasyPOS.OrderItem
         public float Taxes { get; set; }
         public float Discount { get; set; }
         public int Quantity { get; set; }
-        public float TotalItem { get; set; }
+        public float TotalItem => Quantity * SalePrice + (SalePrice * Taxes * Quantity) - (SalePrice * Discount * Quantity);
     }
 }
