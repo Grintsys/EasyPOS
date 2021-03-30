@@ -36,7 +36,9 @@ namespace Grintsys.EasyPOS.Order
                 .Include(x => x.Items)
                 .Include(x => x.Customer)
                 .Include(x => x.DebitNotes)
+                    .ThenInclude(x => x.Items)
                 .Include(x => x.CreditNotes)
+                    .ThenInclude(x => x.Items)
                 .Include(x => x.PaymentMethods)
                 .FirstOrDefaultAsync(x => x.Id == id);
             return await data;
