@@ -2,14 +2,14 @@
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
-namespace Grintsys.EasyPOS.OrderItem
+namespace Grintsys.EasyPOS.PaymentMethod
 {
-    public interface IOrderItemAppService :  
+    public interface IPaymentMethodTypeAppService :
         ICrudAppService<
-            OrderItemDto,
+            PaymentMethodTypeDto,
             Guid,
             PagedAndSortedResultRequestDto,
-            CreateUpdateOrderItemDto
+            CreateUpdatePaymentMethodTypeDto
         >
     {
     }

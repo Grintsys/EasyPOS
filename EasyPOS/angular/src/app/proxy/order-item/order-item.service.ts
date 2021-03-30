@@ -1,7 +1,7 @@
-import type { CreateUpdateOrderItemDto, OrderItemDto } from './models';
 import { RestService } from '@abp/ng.core';
 import type { PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
+import type { CreateUpdateOrderItemDto, OrderItemDto } from '../order/models';
 
 @Injectable({
   providedIn: 'root',

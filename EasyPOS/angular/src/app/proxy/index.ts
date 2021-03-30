@@ -1,6 +1,10 @@
+import * as CreditNote from './credit-note';
 import * as Customer from './customer';
+import * as DebitNote from './debit-note';
+import * as Document from './document';
 import * as Enums from './enums';
 import * as Order from './order';
 import * as OrderItem from './order-item';
+import * as PaymentMethod from './payment-method';
 import * as Product from './product';
-export { Customer, Enums, Order, OrderItem, Product };
+export { CreditNote, Customer, DebitNote, Document, Enums, Order, OrderItem, PaymentMethod, Product };

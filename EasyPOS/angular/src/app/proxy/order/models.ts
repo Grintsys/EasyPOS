@@ -1,20 +1,21 @@
-import type { OrderStates } from '../enums/order-states.enum';
-import type { CreateUpdateOrderItemDto, OrderItemDto } from '../order-item/models';
-import type { FullAuditedEntityDto } from '@abp/ng.core';
+import type { CreateUpdateDocumentDto, CreateUpdateDocumentItemDto, DocumentDto, DocumentItemDto } from '../document/models';
+import type { DebitNoteDto } from '../debit-note/models';
+import type { CreditNoteDto } from '../credit-note/models';
+import type { PaymentMethodDto } from '../payment-method/models';
 
-export interface CreateUpdateOrderDto {
-  customerId?: string;
-  orderState: OrderStates;
-  orderItems: CreateUpdateOrderItemDto[];
+export interface CreateUpdateOrderDto extends CreateUpdateDocumentDto<CreateUpdateOrderItemDto> {
 }
 
-export interface OrderDto extends FullAuditedEntityDto<string> {
-  customerId?: string;
-  customerName?: string;
-  orderState: OrderStates;
-  subTotal: number;
-  isv: number;
-  discount: number;
-  total: number;
-  orderItems: OrderItemDto[];
+export interface CreateUpdateOrderItemDto extends CreateUpdateDocumentItemDto {
+  orderId?: string;
+}
+
+export interface OrderDto extends DocumentDto<OrderItemDto> {
+  debitNotes: DebitNoteDto[];
+  creditNotes: CreditNoteDto[];
+  paymentMethods: PaymentMethodDto[];
+}
+
+export interface OrderItemDto extends DocumentItemDto {
+  orderId?: string;
 }

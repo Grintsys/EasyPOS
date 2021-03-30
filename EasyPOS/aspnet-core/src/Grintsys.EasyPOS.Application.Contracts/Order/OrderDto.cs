@@ -1,20 +1,15 @@
-﻿using System;
+﻿using Grintsys.EasyPOS.CreditNote;
+using Grintsys.EasyPOS.DebitNote;
+using Grintsys.EasyPOS.Document;
 using System.Collections.Generic;
-using Grintsys.EasyPOS.Enums;
-using Grintsys.EasyPOS.OrderItem;
-using Volo.Abp.Application.Dtos;
+using Grintsys.EasyPOS.PaymentMethod;
 
 namespace Grintsys.EasyPOS.Order
 {
-    public class OrderDto : FullAuditedEntityDto<Guid>
+    public class OrderDto : DocumentDto<OrderItemDto>
     {
-        public Guid CustomerId { get; set; }
-        public string CustomerName { get; set; }
-        public OrderStates OrderState { get; set; }
-        public float SubTotal { get; set; }
-        public float ISV { get; set; }
-        public float Discount { get; set; }
-        public float Total { get; set; }
-        public List<OrderItemDto> OrderItems { get; set; } = new List<OrderItemDto>();
+        public List<DebitNoteDto> DebitNotes { get; set; } = new List<DebitNoteDto>();
+        public List<CreditNoteDto> CreditNotes { get; set; } = new List<CreditNoteDto>();
+        public List<PaymentMethodDto> PaymentMethods { get; set; } = new List<PaymentMethodDto>();
     }
 }
