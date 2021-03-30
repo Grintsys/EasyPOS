@@ -17,6 +17,11 @@ import { fuseConfig } from 'app/fuse-config';
 import { AppComponent } from 'app/app.component';
 import { LayoutModule } from 'app/layout/layout.module';
 import { PosModule } from 'app/main/pos/pos.module';
+import { OrdersModule } from 'app/main/orders/orders.module';
+import { CustomersModule } from 'app/main/customers/customers.module';
+import { ProductsModule } from 'app/main/products/products.module';
+import { SyncsModule } from 'app/main/syncs/syncs.module';
+import { ConfigurationsModule } from 'app/main/configurations/configurations.module';
 
 const appRoutes: Routes = [
     {
@@ -27,7 +32,7 @@ const appRoutes: Routes = [
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
     ],
     imports     : [
         BrowserModule,
@@ -49,11 +54,15 @@ const appRoutes: Routes = [
         FuseProgressBarModule,
         FuseSharedModule,
         FuseSidebarModule,
-        // FuseThemeOptionsModule,
 
         // App modules
         LayoutModule,
-        PosModule
+        PosModule,
+        OrdersModule,
+        ProductsModule,
+        CustomersModule,
+        SyncsModule,
+        ConfigurationsModule,
     ],
     bootstrap   : [
         AppComponent

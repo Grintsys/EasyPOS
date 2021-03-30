@@ -45,7 +45,7 @@ export const navigation: FuseNavigation[] = [
                 translate: 'NAV.SYNC.TITLE',
                 type     : 'item',
                 icon     : 'sync',
-                url      : '/syncronizations',
+                url      : '/syncs',
             },
             {
                 id       : 'CONFIG',
