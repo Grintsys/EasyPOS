@@ -62,11 +62,6 @@ namespace Grintsys.EasyPOS.CreditNote
             );
         }
 
-        public override Task<CreditNoteDto> CreateAsync(CreateUpdateCreditNoteDto input)
-        {
-            return base.CreateAsync(input);
-        }
-
         public async Task<CreditNoteDto> CreateCreditNoteAsync(Guid orderId)
         {
             var order = await _orderRepository.GetOrdersByIdAsync(orderId);
@@ -79,7 +74,8 @@ namespace Grintsys.EasyPOS.CreditNote
                     Id = Guid.NewGuid(),
                     CustomerId = order.CustomerId,
                     State = DocumentState.Created,
-                    Items = order.Items.Select(x => Map(x, creditNoteId)).ToList()
+                    Items = order.Items.Select(x => Map(x, creditNoteId)).ToList(),
+                    OrderId = orderId
                 };
 
                 return await base.CreateAsync(createUpdateDto);

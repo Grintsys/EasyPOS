@@ -27,6 +27,7 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
 
                 b.HasMany(c => c.Orders)
                     .WithOne(o => o.Customer)
+                    .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
             });
 
@@ -55,13 +56,15 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                     .WithOne(o => o.Order)
                     .IsRequired();
 
-                //b.HasMany(o => o.DebitNotes)
-                //    .WithOne(o => o.Order)
-                //    .IsRequired();
+                b.HasMany(o => o.DebitNotes)
+                    .WithOne(o => o.Order)
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
 
-                //b.HasMany(o => o.CreditNotes)
-                //    .WithOne(o => o.Order)
-                //    .IsRequired();
+                b.HasMany(o => o.CreditNotes)
+                    .WithOne(o => o.Order)
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
 
                 b.HasMany(o => o.PaymentMethods)
                     .WithOne(o => o.Order)

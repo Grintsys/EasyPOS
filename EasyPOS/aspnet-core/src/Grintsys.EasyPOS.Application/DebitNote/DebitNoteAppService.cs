@@ -72,6 +72,7 @@ namespace Grintsys.EasyPOS.DebitNote
                     Id = Guid.NewGuid(),
                     CustomerId = order.CustomerId,
                     State = DocumentState.Created,
+                    OrderId = orderId,
                     Items = order.Items.Select(x => ObjectMapper.Map<
                         Order.OrderItem, CreateUpdateDebitNoteItemDto>(x)).ToList()
                 };
