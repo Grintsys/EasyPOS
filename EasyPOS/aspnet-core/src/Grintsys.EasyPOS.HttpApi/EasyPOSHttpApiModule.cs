@@ -1,5 +1,7 @@
-﻿using Localization.Resources.AbpUi;
-using Grintsys.EasyPOS.Localization;
+﻿using Grintsys.EasyPOS.Localization;
+using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -23,6 +25,7 @@ namespace Grintsys.EasyPOS
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             ConfigureLocalization();
+            ConfigureIdentityOptions(context);
         }
 
         private void ConfigureLocalization()
@@ -34,6 +37,23 @@ namespace Grintsys.EasyPOS
                     .AddBaseTypes(
                         typeof(AbpUiResource)
                     );
+            });
+        }
+
+        private void ConfigureIdentityOptions(ServiceConfigurationContext context)
+        {
+            context.Services.Configure<IdentityOptions>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = true;
+                options.SignIn.RequireConfirmedEmail = true;
+
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 8;
+
+                options.Lockout.MaxFailedAccessAttempts = 3;
             });
         }
     }
