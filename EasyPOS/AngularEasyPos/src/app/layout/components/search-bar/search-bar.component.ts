@@ -79,14 +79,6 @@ export class FuseSearchBarComponent implements OnInit, OnDestroy
     }
 
     /**
-     * Expand
-     */
-    expand(): void
-    {
-        this.collapsed = false;
-    }
-
-    /**
      * Search
      *
      * @param event

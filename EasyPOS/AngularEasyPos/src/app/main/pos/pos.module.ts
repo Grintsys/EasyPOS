@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-
 import { FuseSharedModule } from '@fuse/shared.module';
-
+import { FuseSearchBarModule } from 'app/layout/components/search-bar/search-bar.module';
 import { PosComponent } from './pos.component';
 
 const routes = [
@@ -19,13 +18,12 @@ const routes = [
     ],
     imports     : [
         RouterModule.forChild(routes),
-
         TranslateModule,
-
-        FuseSharedModule
+        FuseSharedModule,
+        FuseSearchBarModule,
     ],
     exports     : [
-        PosComponent
+        PosComponent,
     ]
 })
 

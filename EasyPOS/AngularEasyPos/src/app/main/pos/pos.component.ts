@@ -23,4 +23,16 @@ export class PosComponent
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
     }
+
+
+    /**
+     * Search
+     *
+     * @param value
+     */
+    search(value): void
+    {
+        // Do your search here...
+        console.log(value);
+    }
 }
