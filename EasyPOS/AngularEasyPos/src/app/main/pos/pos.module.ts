@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseSearchBarModule } from 'app/layout/components/search-bar/search-bar.module';
@@ -21,6 +24,9 @@ const routes = [
         TranslateModule,
         FuseSharedModule,
         FuseSearchBarModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatTableModule,
     ],
     exports     : [
         PosComponent,
