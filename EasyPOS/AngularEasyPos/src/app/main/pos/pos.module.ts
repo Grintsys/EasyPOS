@@ -12,6 +12,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseSearchBarModule } from 'app/layout/components/search-bar/search-bar.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatRippleModule } from '@angular/material/core';
 
 import { PosComponent } from './pos.component';
 import { PosProductsComponent } from './pos-products/pos-products.component';
@@ -43,7 +44,8 @@ const routes = [
         MatChipsModule,
         MatIconModule,
         MatMenuModule,
-        MatDividerModule
+        MatDividerModule,
+        MatRippleModule
     ],
     exports     : [
         PosComponent,

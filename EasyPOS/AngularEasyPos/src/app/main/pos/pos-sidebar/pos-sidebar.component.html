@@ -51,4 +51,20 @@
         </div>
     </div>
 
+    <div class="container-payment-button" fxLayout="column" fxLayoutAlign="center center">
+        <div class="payment-item add-new-payment"
+            matRipple
+            fxLayout="column"
+            fxLayoutAlign="center center"
+            [matRippleCentered]="centered"
+            [matRippleDisabled]="disabled"
+            [matRippleUnbounded]="unbounded"
+            [matRippleRadius]="radius"
+            [matRippleColor]="color"
+            [@animate]="{value:'*',params:{y:'100%'}}">
+            <mat-icon class="s-36">add_circle</mat-icon>
+            <div class="payment-name">Agregar pago</div>
+        </div>
+    </div>
+
 </div>
