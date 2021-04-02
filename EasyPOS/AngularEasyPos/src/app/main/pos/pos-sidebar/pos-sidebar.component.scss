@@ -30,6 +30,7 @@
             background-color: #DDFBFF !important;
             color: #005E6A !important;
             cursor: pointer;
+            font-weight: normal;
             mat-icon {
                 color: #00C6E0;
             }
@@ -121,7 +122,7 @@
     }
 
     .item--paid-out {
-        background-color: #FFEBEF;
+        background-color: #ffebef52;
     }
 
     .item--paid-out h1 {
@@ -134,7 +135,7 @@
     }
 
     .item--exchange {
-        background-color: #DDFBFF;
+        background-color: #ddfbff52;
     }
 
     .item--exchange h1 {
@@ -147,7 +148,7 @@
     }
 
     .container-payment-button {
-        padding: 14px 0;
+        padding: 10px 0;
         .payment-item {
             padding: 24px 0;
             margin: 16px;
@@ -178,6 +179,14 @@
                 box-sizing: border-box;
                 border-radius: 17.7181px;
             }
+        }
+    }
+
+    .container-complete-order-button {
+        .complete-order {
+            color: #FFFFFF;
+            background-color: #FEC001;
+            margin-bottom: 1em !important;
         }
     }
 
