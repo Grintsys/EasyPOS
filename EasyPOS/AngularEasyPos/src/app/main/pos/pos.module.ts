@@ -9,7 +9,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { FuseSearchBarModule } from 'app/layout/components/search-bar/search-bar.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatRippleModule } from '@angular/material/core';
@@ -17,6 +16,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { PosComponent } from './pos.component';
 import { PosProductsComponent } from './pos-products/pos-products.component';
 import { PosSidebarComponent } from './pos-sidebar/pos-sidebar.component';
+import { SearchBarModule } from './search-bar/search-bar.module';
 
 const routes = [
     {
@@ -35,7 +35,7 @@ const routes = [
         RouterModule.forChild(routes),
         TranslateModule,
         FuseSharedModule,
-        FuseSearchBarModule,
+        SearchBarModule,
         MatPaginatorModule,
         MatSortModule,
         MatTableModule,

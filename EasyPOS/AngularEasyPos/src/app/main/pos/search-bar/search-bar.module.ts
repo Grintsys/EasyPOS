@@ -5,11 +5,11 @@ import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { FuseSearchBarComponent } from './search-bar.component';
+import { SearchBarComponent } from './search-bar.component';
 
 @NgModule({
     declarations: [
-        FuseSearchBarComponent
+        SearchBarComponent
     ],
     imports     : [
         CommonModule,
@@ -19,9 +19,9 @@ import { FuseSearchBarComponent } from './search-bar.component';
         MatIconModule
     ],
     exports     : [
-        FuseSearchBarComponent
+        SearchBarComponent
     ]
 })
-export class FuseSearchBarModule
+export class SearchBarModule
 {
 }
