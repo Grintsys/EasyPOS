@@ -7,18 +7,18 @@ import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.
 import { locale as english } from '../i18n/en';
 import { locale as spanish } from '../i18n/es';
 import { MatTableDataSource } from '@angular/material/table';
-import { CartProduct } from './cart-product.model';
+import { PosProduct } from './pos-product.model';
 
 @Component({
-    selector   : 'cart-products',
-    templateUrl: './cart-products.component.html',
-    styleUrls  : ['./cart-products.component.scss'],
+    selector   : 'pos-products',
+    templateUrl: './pos-products.component.html',
+    styleUrls  : ['./pos-products.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class CartProductsComponent
+export class PosProductsComponent
 {
 
-    dataSource = new MatTableDataSource(new CartProduct().getInitialData());
+    dataSource = new MatTableDataSource(new PosProduct().getInitialData());
     displayedColumns: string[] = ['id', 'code', 'name', 'quantity', 'salePrice', 'total', 'options'];
 
     @ViewChild(MatPaginator, {static: true})

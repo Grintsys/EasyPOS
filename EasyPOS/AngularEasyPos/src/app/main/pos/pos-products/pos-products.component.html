@@ -1,0 +1,94 @@
+<!-- CONTENT CARD -->
+<div class="content-card">
+
+    <mat-table class="products-table"
+                #table [dataSource]="dataSource"
+                matSort
+                [@animateStagger]="{value:'50'}"
+                fusePerfectScrollbar>
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                <mat-icon class="s-20">shopping_cart</mat-icon>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let product">
+                <p class="text-truncate">{{product.id}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- NAME Column -->
+        <ng-container matColumnDef="code">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
+            <mat-cell *matCellDef="let product">
+                <p class="text-truncate">{{product.code}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- CODE Column -->
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre del producto</mat-header-cell>
+            <mat-cell *matCellDef="let product">
+                <p class="text-truncate">{{product.name}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- QUANTITY Column -->
+        <ng-container matColumnDef="quantity">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</mat-header-cell>
+            <mat-cell *matCellDef="let product">
+                <p class="text-truncate">{{product.quantity}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- SALEPRICE Column -->
+        <ng-container matColumnDef="salePrice">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Precio de venta</mat-header-cell>
+            <mat-cell *matCellDef="let product">
+                <p class="text-truncate">{{product.salePrice}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- TOTAL Column -->
+        <ng-container matColumnDef="total">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
+            <mat-cell *matCellDef="let product">
+                <p class="text-truncate">{{product.total}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- OPTIONS Column -->
+        <ng-container matColumnDef="options" stickyEnd>
+            <mat-header-cell *matHeaderCellDef>Opciones</mat-header-cell>
+            <mat-cell *matCellDef="let product">
+                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item>
+                        <mat-icon>delete</mat-icon>
+                        <span>Eliminar</span>
+                    </button>
+                </mat-menu>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+        <mat-row *matRowDef="let product; columns: displayedColumns;"
+                    class="product"
+                    matRipple
+                    [routerLink]="'/apps/e-commerce/products/'+product.id+'/'+product.handle">
+        </mat-row>
+
+    </mat-table>
+
+    <mat-paginator #paginator
+                    [length]="dataSource.filteredData.length"
+                    [pageIndex]="0"
+                    [pageSize]="10"
+                    [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+
+</div>
+<!-- / CONTENT CARD -->

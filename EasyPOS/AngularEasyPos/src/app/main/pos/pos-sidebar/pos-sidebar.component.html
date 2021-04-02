@@ -1,0 +1,43 @@
+<div class="blank p-24 pos-sidebar" fusePerfectScrollbar>
+
+    <!-- CONTENT CHIP TOGGLE -->
+    <div class="buttom-chip-toggle">
+        <mat-chip-list aria-label="Fish selection">
+            <mat-chip class="customer-add-mat-chip" selected >
+                <mat-icon class="s-20 mr-8">add_circle</mat-icon>
+                Agregar cliente
+            </mat-chip>
+        </mat-chip-list>
+
+        <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+            <mat-button-toggle value="cash">Contado</mat-button-toggle>
+            <mat-button-toggle value="credit">Crédito</mat-button-toggle>
+        </mat-button-toggle-group>
+
+    </div>
+    <!-- / CONTENT CARD -->
+
+    <mat-divider></mat-divider>
+
+    <table class="simple invoice-table-footer">
+        <tbody>
+            <tr class="subtotal">
+                <td>Subtotal</td>
+                <td>{{39.97 | currency:'HNL':'symbol'}}</td>
+            </tr>
+            <tr class="discount">
+                <td>Descuento</td>
+                <td>-{{10.17 | currency:'HNL':'symbol'}}</td>
+            </tr>
+            <tr class="tax">
+                <td>Impuesto</td>
+                <td>{{77.44 | currency:'HNL':'symbol'}}</td>
+            </tr>
+            <tr class="total">
+                <td>Total a pagar</td>
+                <td>{{73.31 | currency:'HNL':'symbol'}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
