@@ -1,10 +1,12 @@
-import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
 import { fuseAnimations } from '@fuse/animations';
 
 import { locale as english } from '../i18n/en';
 import { locale as spanish } from '../i18n/es';
+import { PaymentMethodsComponent } from '../payment-methods/payment-methods.component';
 
 
 @Component({
@@ -30,11 +32,20 @@ export class PosSidebarComponent
      * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
      */
     constructor(
-        private _fuseTranslationLoaderService: FuseTranslationLoaderService
+        private _fuseTranslationLoaderService: FuseTranslationLoaderService,
+        public dialog: MatDialog
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
         this.color = "rgba(223, 196, 0, 0.11)"
+    }
+
+    openDialog() {
+        const dialogRef = this.dialog.open(PaymentMethodsComponent);
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log(`Dialog result: ${result}`);
+        });
     }
 
 }
