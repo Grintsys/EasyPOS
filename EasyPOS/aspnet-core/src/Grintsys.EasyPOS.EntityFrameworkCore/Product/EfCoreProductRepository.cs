@@ -19,27 +19,19 @@ namespace Grintsys.EasyPOS.Product
 
         }
 
-        public async Task<List<Product>> GetListAsync(
-            int skipCount,
-            int maxResultCount,
-            string sorting,
-            string filter = null)
+        public async Task<List<Product>> GetListAsync()
         {
-            var dbSet = await GetDbSetAsync();
-            return await dbSet
-                .WhereIf(
-                    !filter.IsNullOrWhiteSpace(),
-                    author => author.Name.Contains(filter)
-                )
-                .OrderBy(sorting)
-                .Skip(skipCount)
-                .Take(maxResultCount)
-                .ToListAsync();
+            var dbSet = (await GetQueryableAsync())
+                .Include(x => x.ProductWarehouse)
+                    .ThenInclude(x => x.Warehouse);
+            return await dbSet.ToListAsync();
         }
 
         public async Task<List<Product>> GetByIds(List<Guid> ids)
         {
             var dbSet = (await GetDbSetAsync())
+                .Include(x => x.ProductWarehouse)
+                    .ThenInclude(x => x.Warehouse)
                 .Where(x => ids.Contains(x.Id)).ToListAsync();
             return await dbSet;
         }

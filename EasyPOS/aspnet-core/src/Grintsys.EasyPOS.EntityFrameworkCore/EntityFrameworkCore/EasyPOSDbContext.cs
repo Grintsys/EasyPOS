@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Grintsys.EasyPOS.Users;
+﻿using Grintsys.EasyPOS.Users;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
@@ -23,6 +23,8 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
         public DbSet<AppUser> Users { get; set; }
         public DbSet<Customer.Customer> Customers { get; set; }
         public DbSet<Product.Product> Products { get; set; }
+        public DbSet<Product.Warehouse> Warehouses { get; set; }
+        public DbSet<Product.ProductWarehouse> ProductWarehouses { get; set; }
         public DbSet<Order.Order> Orders { get; set; }
         public DbSet<CreditNote.CreditNote> CreditNotes { get; set; }
         public DbSet<DebitNote.DebitNote> DebitNotes { get; set; }
