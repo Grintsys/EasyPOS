@@ -1,13 +1,72 @@
 
+<div class="dialog-content-wrapper">
+  <mat-toolbar class="mat-accent m-0">
+      <mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayoutAlign="center center">
+          <mat-icon>attach_money</mat-icon>
+          <span class="title dialog-title">Selecciona un método de pago</span>
+        </div>
+        <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+      </mat-toolbar-row>
+  </mat-toolbar>
 
-<h2 mat-dialog-title>Install Angular</h2>
-<mat-dialog-content class="mat-typography">
-  <h3>Develop across all platforms</h3>
-  <p>Learn one way to build applications with Angular and reuse your code and abilities to build
-    apps for any deployment target. For web, mobile web, native mobile and native desktop.</p>
+  <div mat-dialog-content fusePerfectScrollbar>
 
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
-</mat-dialog-actions>
+      <div>
+        <div class="payment-method-list" [@animateStagger]="{value:'50'}">
+              <div class="payment-method-ripple-container"
+                [ngClass]="{'payment-method-selected': payment.isSelected}"
+                matRipple
+                fxLayout="column wrap"
+                fxLayoutAlign="center center"
+                [matRippleCentered]="centered"
+                [matRippleDisabled]="disabled"
+                [matRippleUnbounded]="unbounded"
+                [matRippleRadius]="radius"
+                [matRippleColor]="color"
+                *ngFor="let payment of paymentMethod">
+                <img class="m-8" src="assets/icons/custom/{{payment.icon}}.svg">
+                <span>{{payment.title}}</span>
+            </div>
+        </div>
+      </div>
+
+      <div class="container-to-paid">
+        <div class="item--paid-out">
+            <h1>Po pagar</h1>
+            <h2>{{500.00 | currency:'HNL':'symbol'}}</h2>
+        </div>
+        <div class="item--exchange">
+            <h1>Subtotal <span>{{400.00 | currency:'HNL':'symbol'}}</span></h1>
+            <h1>Descuento <span>{{400.00 | currency:'HNL':'symbol'}}</span></h1>
+            <h1>Impuesto <span>{{400.00 | currency:'HNL':'symbol'}}</span></h1>
+        </div>
+      </div>
+
+      <div class="container-amount">
+        <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+          <mat-label>Monto</mat-label>
+        <input matInput
+          placeholder="Monto"
+          name="amount"
+          formControlName="amount"
+          type="number">
+          <span matPrefix>$&nbsp;</span>
+        </mat-form-field>
+      </div>
+
+  </div>
+
+  <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end end">
+          <button mat-raised-button
+                  color="accent"
+                  (click)="matDialogRef.close(['send'])"
+                  class="save-button"
+                  aria-label="SAVE">
+              <mat-icon>add</mat-icon>
+              Agregar pago
+          </button>
+  </div>
+</div>

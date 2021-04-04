@@ -1,0 +1,140 @@
+.payment-method-dialog {
+    .mat-dialog-container {
+        padding: 0;
+        width: 550px;
+
+        .compose-form {
+
+            .mat-form-field {
+                width: 100%;
+            }
+
+            .attachment-list {
+                font-size: 13px;
+
+                .attachment {
+                    border: 1px solid;
+                    border-radius: 20px;
+                    padding-left: 16px;
+                    margin-top: 8px;
+
+                    .filename {
+                        font-weight: 600;
+                    }
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    .dialog-content-wrapper {
+        background: #FAFCFC;
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+
+        .payment-method-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            column-gap: 1em;
+            margin: 1em 0em;
+            .payment-method-ripple-container {
+                padding: 1em;
+                margin: .5em;
+                background: #FFFFFF;
+                border-radius: 8px;
+                cursor: pointer;
+
+                span {
+                    font-size: 12px;
+                }
+            }
+
+            .payment-method-selected {
+                background: #8ff2ff54;
+            }
+        }
+    }
+}
+
+.mat-dialog-content {
+    padding: 2em;
+    margin: 0;
+}
+
+.container-to-paid {
+    display: grid;
+    grid-template-columns: 50% 1fr;
+    box-shadow: 0px 2.19861px 6.87067px rgba(0, 0, 0, 0.05);
+    border-radius: 13.7413px;
+    margin: 1em 2em;
+
+    [class*="item--"] {
+        padding: 1em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+    [class*="item--"] h1, [class*="item--"] h2 {
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 24px;
+        margin: 0;
+    }
+
+    .item--paid-out {
+        background: #00BCD4;
+        border-radius: 7.83176px 0px 0px 7.83176px;
+    }
+
+    .item--paid-out h1 {
+        color: #FAFCFC;
+    }
+
+    .item--paid-out h2 {
+        font-weight: 500;
+        color: #FAFCFC;
+    }
+
+    .item--exchange {
+        background: #FFFFFF;
+        border-radius: 0px 13.7413px 13.7413px 0px;
+        align-items: start;
+
+        span {
+            font-weight: 400;
+            margin: 0 10px;
+        }
+    }
+
+    .item--exchange h1 {
+        color: #555555;
+        font-size: 14px;
+    }
+
+    .item--exchange h2 {
+        font-weight: 500;
+        color: #555555;
+        font-size: 14px;
+    }
+}
+
+.container-amount {
+    background: #FFFFFF;
+    box-shadow: 0px 2.19861px 6.87067px rgba(0, 0, 0, 0.05);
+    padding: 2em;
+    margin: 0 2em;
+}
+
+.mat-form-field-wrapper {
+    padding: 0;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-prefix, .mat-form-field-appearance-outline .mat-form-field-suffix {
+    top: 0;
+}

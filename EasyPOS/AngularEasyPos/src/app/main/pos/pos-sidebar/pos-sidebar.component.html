@@ -1,7 +1,7 @@
 <div class="blank p-24 pos-sidebar" fusePerfectScrollbar>
 
     <!-- CONTENT CHIP TOGGLE -->
-    <div class="buttom-chip-toggle">
+    <div class="buttom-chip-toggle" fxLayoutAlign="space-between end">
         <mat-chip-list aria-label="Fish selection">
             <mat-chip class="customer-add-mat-chip" selected >
                 <mat-icon class="s-20 mr-8">add_circle</mat-icon>
@@ -61,7 +61,8 @@
             [matRippleUnbounded]="unbounded"
             [matRippleRadius]="radius"
             [matRippleColor]="color"
-            [@animate]="{value:'*',params:{y:'100%'}}">
+            [@animate]="{value:'*',params:{y:'100%'}}"
+            (click)="openDialog()">
             <mat-icon class="s-36">add_circle</mat-icon>
             <div class="payment-name">Agregar pago</div>
         </div>

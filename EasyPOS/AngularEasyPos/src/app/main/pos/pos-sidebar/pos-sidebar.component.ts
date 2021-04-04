@@ -25,6 +25,8 @@ export class PosSidebarComponent
     radius: number;
     color: string;
 
+    dialogRef: any;
+
 
     /**
      * Constructor
@@ -33,19 +35,42 @@ export class PosSidebarComponent
      */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
-        public dialog: MatDialog
+        private _matDialog: MatDialog,
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
         this.color = "rgba(223, 196, 0, 0.11)"
     }
 
-    openDialog() {
-        const dialogRef = this.dialog.open(PaymentMethodsComponent);
-
-        dialogRef.afterClosed().subscribe(result => {
-            console.log(`Dialog result: ${result}`);
+    openDialog(): void
+    {
+        this.dialogRef = this._matDialog.open(PaymentMethodsComponent, {
+            panelClass: 'payment-method-dialog'
         });
+
+        this.dialogRef.afterClosed()
+            .subscribe(response => {
+                if ( !response )
+                {
+                    return;
+                }
+                const actionType: string = response[0];
+                switch ( actionType )
+                {
+                    /**
+                     * Send
+                     */
+                    case 'send':
+                        console.log('new Mail');
+                        break;
+                    /**
+                     * Delete
+                     */
+                    case 'delete':
+                        console.log('delete Mail');
+                        break;
+                }
+            });
     }
 
 }

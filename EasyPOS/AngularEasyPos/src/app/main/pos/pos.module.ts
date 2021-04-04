@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { FuseSharedModule } from '@fuse/shared.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatMenuModule } from '@angular/material/menu';
 
 // ELEMENT UI
@@ -34,6 +35,7 @@ const routes = [
     ],
     imports     : [
         RouterModule.forChild(routes),
+        FlexLayoutModule,
         TranslateModule,
         FuseSharedModule,
         MatMenuModule,
