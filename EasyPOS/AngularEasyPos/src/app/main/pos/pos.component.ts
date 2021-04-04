@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-
 import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
 
 import { locale as english } from './i18n/en';
-import { locale as turkish } from './i18n/es';
+import { locale as spanish } from './i18n/es';
+
 
 @Component({
     selector   : 'pos',
@@ -12,6 +12,7 @@ import { locale as turkish } from './i18n/es';
 })
 export class PosComponent
 {
+
     /**
      * Constructor
      *
@@ -21,6 +22,17 @@ export class PosComponent
         private _fuseTranslationLoaderService: FuseTranslationLoaderService
     )
     {
-        this._fuseTranslationLoaderService.loadTranslations(english, turkish);
+        this._fuseTranslationLoaderService.loadTranslations(english, spanish);
+    }
+
+    /**
+     * Search
+     *
+     * @param value
+     */
+    search(value): void
+    {
+        // Do your search here...
+        console.log(value);
     }
 }

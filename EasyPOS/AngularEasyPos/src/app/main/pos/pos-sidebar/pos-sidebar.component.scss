@@ -1,0 +1,194 @@
+@import "src/@fuse/scss/fuse";
+
+.pos-sidebar {
+    background: #FFFFFF;
+    box-shadow: -10px 0px 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 35%;
+    min-width: 20%;
+    max-width: 35%;
+    z-index: 1000;
+    box-shadow: 0 2px 8px 0 rgb(0 0 0 / 35%);
+    height: calc(100vh - 64px);
+
+    .buttom-chip-toggle {
+        margin-bottom: 1.4em;
+
+        .customer-add-mat-chip {
+            background-color: #DDFBFF !important;
+            color: #005E6A !important;
+            cursor: pointer;
+            font-weight: normal;
+            mat-icon {
+                color: #00C6E0;
+            }
+        }
+
+        .mat-button-toggle-group-appearance-standard {
+            border-radius: 25px;
+            border: solid 1px #FEC001;
+
+        }
+
+        mat-button-toggle {
+            color: #BFA800 !important;
+        }
+
+        .mat-button-toggle-checked {
+            background-color: #FEC001;
+            color: #FFFFFF !important;
+        }
+
+        .mat-button-toggle-label-content {
+            line-height: 30px !important;
+        }
+
+
+
+    }
+
+    .invoice-table-footer {
+        margin: 10px 0 10px 0;
+
+        tr {
+
+            td {
+                text-align: right;
+                font-size: 16px;
+                color: #555555;
+                border-bottom: none !important;
+                padding: 6px;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+
+                &:first-child {
+                    text-align: left;
+                }
+            }
+
+            &.tax {
+
+                td {
+                    padding-bottom: 16px;
+                }
+            }
+
+            &.total {
+
+                td {
+                    padding: 24px 8px;
+                    border-top: 3px dashed rgba(0, 0, 0, 0.12);
+                    border-bottom: 3px dashed rgba(0, 0, 0, 0.12) !important;
+                    color: #555555;
+                    font-weight: 500;
+                    font-size: 20px;
+                    line-height: 14px;
+                }
+            }
+        }
+    }
+
+    .container-paid-exchange {
+        display: grid;
+        grid-template-columns: 50% 1fr;
+        grid-gap: 2rem;
+    }
+
+    [class*="item--"] {
+        padding: 1em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+    [class*="item--"] h1, [class*="item--"] h2 {
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 32px;
+        margin: 0;
+    }
+
+    .item--paid-out {
+        background-color: #ffebef52;
+    }
+
+    .item--paid-out h1 {
+        color: #CE0028;
+    }
+
+    .item--paid-out h2 {
+        font-weight: 500;
+        color: #A50020;
+    }
+
+    .item--exchange {
+        background-color: #ddfbff52;
+    }
+
+    .item--exchange h1 {
+        color: #008D9F;
+    }
+
+    .item--exchange h2 {
+        font-weight: 500;
+        color: #008D9F;
+    }
+
+    .container-payment-button {
+        padding: 10px 0;
+        .payment-item {
+            padding: 24px 0;
+            margin: 16px 0;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.12);
+            transition: box-shadow 150ms ease-in;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            &:hover {
+                box-shadow: 0px 10px 14px 0px rgb(0 203 249 / 8%);
+            }
+
+            .payment-name {
+                padding: 16px 32px 0 32px;
+                font-weight: 300;
+                font-size: 16px;
+                text-align: center;
+            }
+
+            &mat-icon {
+                color: #DFC400;
+            }
+
+            &.add-new-payment {
+                color: #DFC400;
+                background: rgba(254, 192, 1, 0.05);
+                border: 2.36242px dashed rgba(254, 192, 1, 0.5);
+                box-sizing: border-box;
+                border-radius: 17.7181px;
+            }
+        }
+    }
+
+    .container-complete-order-button {
+        .complete-order {
+            color: #FFFFFF;
+            background-color: #FEC001;
+            margin-bottom: 1em !important;
+        }
+    }
+
+
+}

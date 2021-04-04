@@ -1,0 +1,66 @@
+@import "src/@fuse/scss/fuse";
+
+:host {
+
+    .search-bar {
+        display: flex;
+        flex: 0 1 auto;
+        min-width: 64px;
+        height: 64px;
+        font-size: 13px;
+
+        @include media-breakpoint('xs') {
+            height: 56px;
+        }
+
+        .search-bar-content {
+            display: flex;
+            flex: 1 1 auto;
+            align-items: center;
+            justify-content: flex-start;
+
+            .fuse-search-container-icon {
+                padding: 6px 15px;
+
+                @include media-breakpoint('xs') {
+                    height: 56px !important;
+                    line-height: 56px !important;
+                }
+            }
+
+            #search-bar-input {
+                display: none;
+                padding: 0;
+                flex: 1 0 auto;
+                min-height: 64px;
+                font-size: 16px;
+                background-color: transparent;
+                color: currentColor;
+            }
+        }
+
+        &.expanded {
+            background-color: #ffffff;
+            box-shadow: 0px 4px 4px rgb(0 0 0 / 25%), 0px 1px 2px rgb(0 0 0 / 10%);
+            border-radius: 8px;
+
+            .search-bar-content {
+
+                #search-bar-input {
+                    display: flex;
+                }
+
+            }
+        }
+    }
+
+    body {
+
+        &.search-bar-expanded {
+
+            #toolbar {
+                z-index: 999 !important;
+            }
+        }
+    }
+}
