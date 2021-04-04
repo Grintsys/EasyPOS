@@ -1,8 +1,8 @@
 ﻿using Grintsys.EasyPOS.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -22,12 +22,13 @@ namespace Grintsys.EasyPOS.Product
             return await data.ToListAsync();
         }
 
-        public async Task<List<Warehouse>> GetByIds(List<Guid> ids)
+        public async Task<Warehouse> GetAsync(Guid id)
         {
             var data = (await GetQueryableAsync())
                 .Include(x => x.ProductWarehouses)
-                    .ThenInclude(x => x.Product);
-            return await data.ToListAsync();
+                    .ThenInclude(x => x.Product)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            return await data;
         }
     }
 }

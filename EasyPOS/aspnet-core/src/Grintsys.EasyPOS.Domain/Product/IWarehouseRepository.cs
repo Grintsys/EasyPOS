@@ -8,7 +8,6 @@ namespace Grintsys.EasyPOS.Product
     public interface IWarehouseRepository : IRepository<Warehouse, Guid>
     {
         Task<List<Warehouse>> GetListAsync();
-
-        Task<List<Warehouse>> GetByIds(List<Guid> ids);
+        Task<Warehouse> GetAsync(Guid id);
     }
 }
