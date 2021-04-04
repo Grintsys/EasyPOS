@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
 
 namespace Grintsys.EasyPOS.Product
@@ -12,5 +13,6 @@ namespace Grintsys.EasyPOS.Product
         public float Taxes { get; set; }
         public bool IsActive { get; set; }
         public string ImageUrl { get; set; }
+        public List<ProductWarehouseDto> ProductWarehouse { get; set; }
     }
 }

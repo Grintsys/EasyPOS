@@ -24,11 +24,6 @@ namespace Grintsys.EasyPOS.Order
             _orderRepository = orderRepository;
         }
 
-        public override Task<OrderDto> CreateAsync(CreateUpdateOrderDto input)
-        {
-            return base.CreateAsync(input);
-        }
-
         protected override async Task DeleteByIdAsync(Guid id)
         {
             var order = base.GetEntityByIdAsync(id).Result;
