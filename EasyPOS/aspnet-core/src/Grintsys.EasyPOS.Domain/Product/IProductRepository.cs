@@ -9,5 +9,6 @@ namespace Grintsys.EasyPOS.Product
     {
         Task<List<Product>> GetListAsync();
         Task<List<Product>> GetByIds(List<Guid> ids);
+        Task<Product> GetAsync(Guid id);
     }
 }

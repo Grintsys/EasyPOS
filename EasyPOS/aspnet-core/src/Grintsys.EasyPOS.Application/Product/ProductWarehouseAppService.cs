@@ -34,7 +34,7 @@ namespace Grintsys.EasyPOS.Product
         {
             if (input.Sorting.IsNullOrWhiteSpace())
             {
-                input.Sorting = nameof(ProductWarehouseDto.Product.Name);
+                //input.Sorting = nameof(ProductWarehouseDto.Product.Name);
             }
 
             var data = await _productWarehouseRepository.GetListAsync();

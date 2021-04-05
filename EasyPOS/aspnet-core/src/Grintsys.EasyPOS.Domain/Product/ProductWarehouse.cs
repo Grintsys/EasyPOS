@@ -10,5 +10,7 @@ namespace Grintsys.EasyPOS.Product
         public Guid WarehouseId { get; set; }
         public Warehouse Warehouse { get; set; }
         public int Inventory { get; set; }
+        public string ProductName => Product.Name;
+        public string WarehouseName => Warehouse.Name;
     }
 }
