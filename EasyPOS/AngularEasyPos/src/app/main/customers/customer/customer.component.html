@@ -26,7 +26,8 @@
                         Nuevo cliente
                     </div>
                     <div class="subtitle secondary-text">
-                        <span>Completa todos los campos requeridos *</span>
+                        <span *ngIf="pageType ==='new'">Completa todos los campos requeridos *</span>
+                        <span *ngIf="pageType ==='edit'">Detalles del cliente</span>
                     </div>
                 </div>
             </div>
@@ -67,6 +68,7 @@
                                     <input matInput placeholder="Nombre"
                                            name="firstName"
                                            formControlName="firstName"
+                                           [disabled]="pageType === 'edit'"
                                            required>
                                 </mat-form-field>
 

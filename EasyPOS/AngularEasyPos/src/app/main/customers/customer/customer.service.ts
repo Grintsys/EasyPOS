@@ -62,8 +62,8 @@ export class CustomerService implements Resolve<any>
             }
             else
             {
-                this.onCustomerChanged.next(false);
-                resolve(false);
+                this.onCustomerChanged.next(true);
+                resolve(true);
             }
         });
     }

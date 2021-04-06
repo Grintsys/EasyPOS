@@ -62,6 +62,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
                 if ( customer )
                 {
+                    this.customer = new Customer({firstName: 'Nombre1', lastName: 'Apellido1',  identity: '1614-1885-00178',  rtn: '0501-1885-01458', address: 'San Pedro Sula', phone: '8741-8958', status: 'Activo'});
                     this.pageType = 'edit';
                 }
                 else

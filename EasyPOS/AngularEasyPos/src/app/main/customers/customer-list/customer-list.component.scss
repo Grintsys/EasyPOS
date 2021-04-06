@@ -52,6 +52,11 @@ app-customer-list {
                 }
             }
         }
+
+        .mat-stroked-button {
+            border-color: white;
+            color: white;
+        }
     }
 
     .customers-table {
