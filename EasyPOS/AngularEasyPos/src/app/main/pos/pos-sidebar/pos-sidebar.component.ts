@@ -7,6 +7,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { locale as english } from '../i18n/en';
 import { locale as spanish } from '../i18n/es';
 import { PaymentMethodsComponent } from '../payment-methods/payment-methods.component';
+import { CustomerDialogComponent } from 'app/main/customers/customer-dialog/customer-dialog.component';
 
 
 @Component({
@@ -42,10 +43,42 @@ export class PosSidebarComponent
         this.color = "rgba(223, 196, 0, 0.11)"
     }
 
-    openDialog(): void
+    openPaymentMethodDialog(): void
     {
         this.dialogRef = this._matDialog.open(PaymentMethodsComponent, {
             panelClass: 'payment-method-dialog'
+        });
+
+        this.dialogRef.afterClosed()
+            .subscribe(response => {
+                if ( !response )
+                {
+                    return;
+                }
+                const actionType: string = response[0];
+                switch ( actionType )
+                {
+                    /**
+                     * Send
+                     */
+                    case 'send':
+                        console.log('new Mail');
+                        break;
+                    /**
+                     * Delete
+                     */
+                    case 'delete':
+                        console.log('delete Mail');
+                        break;
+                }
+            });
+    }
+
+
+    openDialogToAddCustomer(): void
+    {
+        this.dialogRef = this._matDialog.open(CustomerDialogComponent, {
+            panelClass: 'add-customer-dialog'
         });
 
         this.dialogRef.afterClosed()

@@ -26,6 +26,9 @@ import { CustomerListComponent } from './customer-list/customer-list.component';
 import { CustomerComponent } from './customer/customer.component';
 
 import { CustomerService } from './customer/customer.service';
+import { CustomerDialogComponent } from './customer-dialog/customer-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 const routes = [
     {
@@ -58,7 +61,8 @@ const routes = [
 @NgModule({
     declarations: [
         CustomerListComponent,
-        CustomerComponent
+        CustomerComponent,
+        CustomerDialogComponent
     ],
     imports     : [
         RouterModule.forChild(routes),
@@ -83,10 +87,14 @@ const routes = [
         MatIconModule,
 
         MatDividerModule,
+
+        MatDialogModule,
+        MatToolbarModule,
     ],
     exports     : [
         CustomerListComponent,
-        CustomerComponent
+        CustomerComponent,
+        CustomerDialogComponent
     ],
     providers : [
         CustomerService,

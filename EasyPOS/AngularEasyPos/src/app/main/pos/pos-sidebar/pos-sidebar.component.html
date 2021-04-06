@@ -3,7 +3,7 @@
     <!-- CONTENT CHIP TOGGLE -->
     <div class="buttom-chip-toggle" fxLayoutAlign="space-between end">
         <mat-chip-list aria-label="Fish selection">
-            <mat-chip class="customer-add-mat-chip" selected >
+            <mat-chip class="customer-add-mat-chip" (click)="openDialogToAddCustomer()">
                 <mat-icon class="s-20 mr-8">add_circle</mat-icon>
                 Agregar cliente
             </mat-chip>
@@ -62,7 +62,7 @@
             [matRippleRadius]="radius"
             [matRippleColor]="color"
             [@animate]="{value:'*',params:{y:'100%'}}"
-            (click)="openDialog()">
+            (click)="openPaymentMethodDialog()">
             <mat-icon class="s-36">add_circle</mat-icon>
             <div class="payment-name">Agregar pago</div>
         </div>
