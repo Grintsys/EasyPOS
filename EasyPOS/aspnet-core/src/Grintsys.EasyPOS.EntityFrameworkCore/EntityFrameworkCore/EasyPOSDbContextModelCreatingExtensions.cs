@@ -20,6 +20,24 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                 b.ConfigureByConvention();
             });
 
+            builder.Entity<Product.Warehouse>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "Warehouses", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+            });
+
+            builder.Entity<Product.ProductWarehouse>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "ProductWarehouses", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+
+                b.HasOne(p => p.Product)
+                    .WithMany(p => p.ProductWarehouse);
+
+                b.HasOne(p => p.Warehouse)
+                    .WithMany(p => p.ProductWarehouses);
+            });
+
             builder.Entity<Customer.Customer>(b =>
             {
                 b.ToTable(EasyPOSConsts.DbTablePrefix + "Customers", EasyPOSConsts.DbSchema);
@@ -70,8 +88,7 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                     .WithOne(o => o.Order)
                     .IsRequired();
             });
-
-
+            
             builder.Entity<Order.OrderItem>(b =>
             {
                 b.ToTable(EasyPOSConsts.DbTablePrefix + "OrderItems", EasyPOSConsts.DbSchema);

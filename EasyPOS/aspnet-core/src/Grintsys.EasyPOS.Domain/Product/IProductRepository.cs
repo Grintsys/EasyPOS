@@ -7,13 +7,8 @@ namespace Grintsys.EasyPOS.Product
 {
     public interface IProductRepository : IRepository<Product, Guid>
     {
-        Task<List<Product>> GetListAsync(
-            int skipCount,
-            int maxResultCount,
-            string sorting,
-            string filter = null
-        );
-
+        Task<List<Product>> GetListAsync();
         Task<List<Product>> GetByIds(List<Guid> ids);
+        Task<Product> GetAsync(Guid id);
     }
 }

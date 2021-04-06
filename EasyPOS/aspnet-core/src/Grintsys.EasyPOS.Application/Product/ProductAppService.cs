@@ -46,5 +46,36 @@ namespace Grintsys.EasyPOS.Product
 
             return dto;
         }
+
+        public override async Task<ProductDto> GetAsync(Guid id)
+        {
+            var data = await _productRepository.GetAsync(id);
+            var dto = ObjectMapper.Map<Product, ProductDto>(data);
+            return dto;
+        }
+
+        public override async Task<PagedResultDto<ProductDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        {
+            if (input.Sorting.IsNullOrWhiteSpace())
+            {
+                input.Sorting = nameof(WarehouseDto.Name);
+            }
+
+            var data = await _productRepository.GetListAsync();
+
+            //data = data
+            //    .OrderBy(x => x.GetType().GetProperty(input.Sorting)?.GetValue(x, null))
+            //    .Skip(input.SkipCount)
+            //    .Take(input.MaxResultCount) as List<DebitNote>;
+
+            var dataDto = await MapToGetListOutputDtosAsync(data);
+
+            var totalCount = await Repository.GetCountAsync();
+
+            return new PagedResultDto<ProductDto>(
+                totalCount,
+                dataDto
+            );
+        }
     }
 }
