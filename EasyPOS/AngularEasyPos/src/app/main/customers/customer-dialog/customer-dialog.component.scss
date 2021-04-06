@@ -1,0 +1,41 @@
+
+.add-customer-dialog {
+    .mat-dialog-container {
+        padding: 0;
+        width: 80vw;
+    }
+
+    .dialog-content-wrapper {
+        background: #FAFCFC;
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+
+        .mat-dialog-content {
+            padding: 0;
+            margin: 0;
+        }
+
+        .payment-method-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            column-gap: 1em;
+            margin: 1em 0em;
+            .payment-method-ripple-container {
+                padding: 1em;
+                margin: .5em;
+                background: #FFFFFF;
+                border-radius: 8px;
+                cursor: pointer;
+
+                span {
+                    font-size: 12px;
+                }
+            }
+
+            .payment-method-selected {
+                background: #8ff2ff54;
+            }
+        }
+    }
+}

@@ -1,0 +1,29 @@
+
+<div class="dialog-content-wrapper">
+  <mat-toolbar class="mat-accent m-0">
+      <mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayoutAlign="center center">
+          <mat-icon>person</mat-icon>
+          <span class="title dialog-title">Selecciona un cliente</span>
+        </div>
+        <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+      </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div mat-dialog-content fusePerfectScrollbar>
+    <app-customer-list></app-customer-list>
+  </div>
+
+  <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end end">
+    <button mat-raised-button
+            color="accent"
+            (click)="matDialogRef.close(['send'])"
+            class="save-button"
+            aria-label="SAVE">
+        <mat-icon>add</mat-icon>
+        Agregar pago
+    </button>
+  </div>
+</div>
