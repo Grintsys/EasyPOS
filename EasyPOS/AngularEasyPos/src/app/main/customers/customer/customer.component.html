@@ -1,0 +1,132 @@
+<div id="customer" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/customer-list'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div fxLayout="column" fxLayoutAlign="start start"
+                    [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    <div class="h2" *ngIf="pageType ==='edit'">
+                        {{customer.firstName}}
+                    </div>
+                    <div class="h2" *ngIf="pageType ==='new'">
+                        Nuevo cliente
+                    </div>
+                    <div class="subtitle secondary-text">
+                        <span>Completa todos los campos requeridos *</span>
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+            <button mat-raised-button
+                    class="save-customer-button"
+                    [disabled]="customerForm.invalid"
+                    *ngIf="pageType ==='new'" (click)="addcustomer()">
+                <span>Guardar cambios</span>
+            </button>
+
+            <button mat-raised-button
+                    class="save-customer-button"
+                    [disabled]="customerForm.invalid || customerForm.pristine"
+                    *ngIf="pageType ==='edit'" (click)="savecustomer()">
+                <span>Actualizar cambios</span>
+            </button>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+                <form name="customerForm" [formGroup]="customerForm" class="customer w-100-p" fxLayout="column" fxFlex>
+
+                    <mat-tab-group>
+
+                        <mat-tab label="Información del cliente">
+
+                            <div class="tab-content p-24" fusePerfectScrollbar>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Nombre</mat-label>
+                                    <input matInput placeholder="Nombre"
+                                           name="firstName"
+                                           formControlName="firstName"
+                                           required>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Apellido</mat-label>
+                                    <input matInput placeholder="Apellido"
+                                           name="lastName"
+                                           formControlName="lastName" required>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Identidad</mat-label>
+                                    <input matInput placeholder="Identidad"
+                                           name="identity"
+                                           formControlName="identity" required>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>RTN</mat-label>
+                                    <input matInput placeholder="RTN"
+                                           name="rtn"
+                                           formControlName="rtn">
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Dirección</mat-label>
+                                    <input matInput placeholder="Dirección"
+                                           name="address"
+                                           formControlName="address">
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Teléfono</mat-label>
+                                    <input matInput placeholder="Teléfono"
+                                           name="phone"
+                                           formControlName="phone">
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Estatus</mat-label>
+                                    <input matInput placeholder="Estatus"
+                                           name="status"
+                                           formControlName="status">
+                                </mat-form-field>
+
+                            </div>
+
+                        </mat-tab>
+
+                    </mat-tab-group>
+
+                </form>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+
+</div>

@@ -29,7 +29,7 @@ export const navigation: FuseNavigation[] = [
                 translate: 'NAV.CUSTOMERS.TITLE',
                 type     : 'item',
                 icon     : 'person_outline',
-                url      : '/customers',
+                url      : '/customer-list',
             },
             {
                 id       : 'PRODUCTS',
