@@ -1,0 +1,101 @@
+<div id="product" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/product-list'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div fxLayout="column" fxLayoutAlign="start start"
+                    [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    <div class="h2">
+                        {{product.productName}}
+                    </div>
+                    <div class="subtitle secondary-text">
+                        <span>Detalles del producto</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+                <form name="productForm" [formGroup]="productForm" class="product w-100-p" fxLayout="column" fxFlex>
+
+                    <mat-tab-group>
+
+                        <mat-tab label="Información del cliente">
+
+                            <div class="tab-content p-24" fusePerfectScrollbar>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Nombre producto</mat-label>
+                                    <input matInput placeholder="Nombre producto"
+                                           name="productName"
+                                           formControlName="productName"
+                                           disabled
+                                           required>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Descripción</mat-label>
+                                    <input matInput placeholder="Descripción"
+                                           name="description"
+                                           formControlName="description" disabled>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Precio venta</mat-label>
+                                    <input matInput placeholder="Precio venta"
+                                           name="salePrice"
+                                           formControlName="salePrice" disabled>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Impuesto</mat-label>
+                                    <input matInput placeholder="Impuesto"
+                                           name="tax"
+                                           formControlName="tax" disabled>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Inventario</mat-label>
+                                    <input matInput placeholder="Inventario"
+                                           name="inventory"
+                                           formControlName="inventory">
+                                </mat-form-field>
+
+                            </div>
+
+                        </mat-tab>
+
+                    </mat-tab-group>
+
+                </form>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+
+</div>
