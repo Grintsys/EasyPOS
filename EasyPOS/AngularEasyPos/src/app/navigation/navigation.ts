@@ -37,7 +37,7 @@ export const navigation: FuseNavigation[] = [
                 translate: 'NAV.PRODUCTS.TITLE',
                 type     : 'item',
                 icon     : 'shopping_basket',
-                url      : '/products',
+                url      : '/product-list',
             },
             {
                 id       : 'SYNC',
@@ -45,7 +45,7 @@ export const navigation: FuseNavigation[] = [
                 translate: 'NAV.SYNC.TITLE',
                 type     : 'item',
                 icon     : 'sync',
-                url      : '/syncs',
+                url      : '/sync-list',
             },
             {
                 id       : 'CONFIG',
@@ -53,7 +53,7 @@ export const navigation: FuseNavigation[] = [
                 translate: 'NAV.CONFIGURATIONS.TITLE',
                 type     : 'item',
                 icon     : 'settings',
-                url      : '/configurations',
+                url      : '/configuration-list',
             },
             {
                 id       : 'ROLES',

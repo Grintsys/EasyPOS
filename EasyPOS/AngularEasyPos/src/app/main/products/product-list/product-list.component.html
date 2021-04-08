@@ -1,0 +1,112 @@
+<div id="products" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-md-0"
+                fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    shopping_basket
+                </mat-icon>
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Productos
+                </span>
+            </div>
+            <!-- / APP TITLE -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- SEARCH -->
+        <search-bar (input)="search($event)"></search-bar>
+        <!-- / SEARCH -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+
+            <mat-table class="products-table"
+                        #table [dataSource]="dataSource"
+                        matSort
+                        fusePerfectScrollbar>
+
+                <!-- CODE Column -->
+                <ng-container matColumnDef="code">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
+                    <mat-cell *matCellDef="let product">
+                        <p class="text-truncate">{{product.code}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- NAME Column -->
+                <ng-container matColumnDef="productName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre del producto</mat-header-cell>
+                    <mat-cell *matCellDef="let product">
+                        <p class="text-truncate">{{product.productName}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- DESCRIPTION Column -->
+                <ng-container matColumnDef="description">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</mat-header-cell>
+                    <mat-cell *matCellDef="let product">
+                        <p class="text-truncate">{{product.description}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- SALEPRICE Column -->
+                <ng-container matColumnDef="salePrice">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Precio venta</mat-header-cell>
+                    <mat-cell *matCellDef="let product">
+                        <p class="text-truncate">{{product.salePrice}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- TAX Column -->
+                <ng-container matColumnDef="tax">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Impuesto</mat-header-cell>
+                    <mat-cell *matCellDef="let product">
+                        <p class="text-truncate">{{product.tax}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- INVENTORY Column -->
+                <ng-container matColumnDef="inventory">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Inventario</mat-header-cell>
+                    <mat-cell *matCellDef="let product">
+                        <p class="text-truncate">{{product.inventory}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+                <mat-row *matRowDef="let product; columns: displayedColumns;"
+                            class="product"
+                            matRipple
+                            [routerLink]="'/product/'+product.code+'/'+product.firstName">
+                </mat-row>
+
+            </mat-table>
+
+            <mat-paginator #paginator
+                            [length]="dataSource.filteredData.length"
+                            [pageIndex]="0"
+                            [pageSize]="10"
+                            [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator>
+
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>
