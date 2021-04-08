@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,6 +9,7 @@ import { Subject } from 'rxjs';
 
 import { locale as english } from '../i18n/en';
 import { locale as spanish } from '../i18n/es';
+import { SyncDialogComponent } from '../sync-dialog/sync-dialog.component';
 import { SyncDown, SyncUp } from '../sync/sync.module';
 
 @Component({
@@ -34,6 +36,8 @@ export class SyncListComponent {
   @ViewChild('filter', {static: true})
   filter: ElementRef;
 
+  dialogRef: any;
+
 
   // Private
   private _unsubscribeAll: Subject<any>;
@@ -44,7 +48,8 @@ export class SyncListComponent {
   * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
   */
   constructor(
-    private _fuseTranslationLoaderService: FuseTranslationLoaderService
+    private _fuseTranslationLoaderService: FuseTranslationLoaderService,
+    private _matDialog: MatDialog,
   )
   {
     this._fuseTranslationLoaderService.loadTranslations(english, spanish);
@@ -73,5 +78,36 @@ export class SyncListComponent {
     {
         // Do your search here...
         console.log(value);
+    }
+
+  openDialogToEditJSON(): void
+    {
+        this.dialogRef = this._matDialog.open(SyncDialogComponent, {
+            panelClass: 'edit-JSON-dialog'
+        });
+
+        this.dialogRef.afterClosed()
+            .subscribe(response => {
+                if ( !response )
+                {
+                    return;
+                }
+                const actionType: string = response[0];
+                switch ( actionType )
+                {
+                    /**
+                     * Send
+                     */
+                    case 'send':
+                        console.log('new Mail');
+                        break;
+                    /**
+                     * Delete
+                     */
+                    case 'delete':
+                        console.log('delete Mail');
+                        break;
+                }
+            });
     }
 }

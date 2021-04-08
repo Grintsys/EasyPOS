@@ -20,6 +20,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { SyncListComponent } from './sync-list/sync-list.component';
+import { SyncDialogComponent } from './sync-dialog/sync-dialog.component';
 
 const routes = [
     {
@@ -30,7 +31,8 @@ const routes = [
 
 @NgModule({
     declarations: [
-        SyncListComponent
+        SyncListComponent,
+        SyncDialogComponent
     ],
     imports     : [
         RouterModule.forChild(routes),
@@ -60,7 +62,8 @@ const routes = [
         MatToolbarModule,
     ],
     exports     : [
-        SyncListComponent
+        SyncListComponent,
+        SyncDialogComponent
     ]
 })
 

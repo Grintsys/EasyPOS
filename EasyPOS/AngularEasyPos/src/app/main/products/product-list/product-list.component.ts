@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -17,7 +17,7 @@ import { locale as spanish } from '../i18n/es';
   animations   : fuseAnimations,
   encapsulation: ViewEncapsulation.None
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent {
 
   dataSource = new MatTableDataSource(new Product().getInitialData());
   displayedColumns: string[] = ['code', 'productName', 'description', 'salePrice', 'tax', 'inventory'];
@@ -48,9 +48,6 @@ export class ProductListComponent implements OnInit {
 
       // Set the private defaults
       this._unsubscribeAll = new Subject();
-  }
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
   }
 
   /**

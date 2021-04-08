@@ -94,11 +94,11 @@ export class ProductComponent implements OnInit, OnDestroy {
      createProductForm(): FormGroup
     {
     return this._formBuilder.group({
-        productName   : [this.product.productName],
-        description   : [this.product.description],
-        salePrice     : [this.product.salePrice],
-        tax           : [this.product.tax],
-        inventory     : [this.product.inventory]
+        productName   : [{value: this.product.productName, disabled: true}],
+        description   : [{value: this.product.description, disabled: true} ],
+        salePrice     : [{value: this.product.salePrice, disabled: true}],
+        tax           : [{value: this.product.tax, disabled: true}],
+        inventory     : [{value: this.product.inventory, disabled: true}]
     });
     }
 

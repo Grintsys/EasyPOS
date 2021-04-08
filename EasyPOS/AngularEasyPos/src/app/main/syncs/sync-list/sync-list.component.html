@@ -52,7 +52,7 @@
                             Descargas
                         </ng-template>
                         <!-- CONTENT TAB -->
-                        <div class="tab-content p-24" fusePerfectScrollbar>
+                        <div class="tab-content" fusePerfectScrollbar>
 
                             <mat-table class="sincronization-table"
                                         #table [dataSource]="dataSourceSyncDown"
@@ -87,7 +87,7 @@
                                 <ng-container matColumnDef="options" stickyEnd>
                                     <mat-header-cell *matHeaderCellDef>Opciones</mat-header-cell>
                                     <mat-cell *matCellDef="let SyncDown">
-                                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                                        <button mat-icon-button  aria-label="icon-button with a menu">
                                             <mat-icon>more_vert</mat-icon>
                                         </button>
                                     </mat-cell>
@@ -119,7 +119,7 @@
                             Subidas
                         </ng-template>
                         <!-- CONTENT TAB -->
-                        <div class="tab-content p-24" fusePerfectScrollbar>
+                        <div class="tab-content" fusePerfectScrollbar>
 
                             <mat-table class="sincronization-table"
                                         #table [dataSource]="dataSourceSyncUp"
@@ -187,7 +187,7 @@
                                                 <span>Sincronizar documento</span>
                                             </button>
                                             <mat-divider></mat-divider>
-                                            <button mat-menu-item>
+                                            <button mat-menu-item (click)="openDialogToEditJSON()">
                                                 <mat-icon>edit</mat-icon>
                                                 <span>Editar (JSON)</span>
                                             </button>
