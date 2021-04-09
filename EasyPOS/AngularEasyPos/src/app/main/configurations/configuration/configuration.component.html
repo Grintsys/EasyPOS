@@ -1,0 +1,99 @@
+<div id="configuration" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/configuration-list'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div fxLayout="column" fxLayoutAlign="start start"
+                    [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    <div class="h2" *ngIf="pageType ==='edit'">
+                        {{configuration.value}}
+                    </div>
+                    <div class="h2" *ngIf="pageType ==='new'">
+                        Nueva configuración
+                    </div>
+                    <div class="subtitle secondary-text">
+                        <span *ngIf="pageType ==='new'">Completa todos los campos requeridos *</span>
+                        <span *ngIf="pageType ==='edit'">Detalle de la configuración</span>
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+            <button mat-raised-button
+                    class="save-configuration-button"
+                    [disabled]="configurationForm.invalid"
+                    *ngIf="pageType ==='new'" (click)="addConfiguration()">
+                <span>Guardar cambios</span>
+            </button>
+
+            <button mat-raised-button
+                    class="save-configuration-button"
+                    [disabled]="configurationForm.invalid || configurationForm.pristine"
+                    *ngIf="pageType ==='edit'" (click)="saveConfiguration()">
+                <span>Actualizar cambios</span>
+            </button>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+                <form name="configurationForm" [formGroup]="configurationForm" class="configuration w-100-p" fxLayout="column" fxFlex>
+
+                    <mat-tab-group>
+
+                        <mat-tab label="Configuración">
+
+                            <div class="tab-content p-24" fusePerfectScrollbar>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Llave</mat-label>
+                                    <input matInput placeholder="Llave"
+                                           name="key"
+                                           formControlName="key"
+                                           disabled
+                                           required>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Valor</mat-label>
+                                    <input matInput placeholder="Valor"
+                                           name="value"
+                                           formControlName="value">
+                                </mat-form-field>
+
+                            </div>
+
+                        </mat-tab>
+
+                    </mat-tab-group>
+
+                </form>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+
+</div>

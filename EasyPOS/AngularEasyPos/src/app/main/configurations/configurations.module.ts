@@ -4,7 +4,6 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { FuseSharedModule } from '@fuse/shared.module';
 
-import { ConfigurationListComponent } from './configuration-list/configuration-list.component';
 import { SearchBarModule } from '../pos/search-bar/search-bar.module';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
@@ -20,16 +19,42 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
+import { ConfigurationListComponent } from './configuration-list/configuration-list.component';
+import { ConfigurationComponent } from './configuration/configuration.component';
+import { ConfigurationService } from './configuration/configuration.service';
+
 const routes = [
     {
-        path     : 'configurations-list',
+        path     : 'configuration-list',
         component: ConfigurationListComponent
-    }
+    },
+    {
+        path     : 'configuration',
+        component: ConfigurationComponent,
+        resolve  : {
+            data: ConfigurationService
+        }
+    },
+    {
+        path     : 'configuration/:id',
+        component: ConfigurationComponent,
+        resolve  : {
+            data: ConfigurationService
+        }
+    },
+    {
+        path     : 'configuration/:id/:handle',
+        component: ConfigurationComponent,
+        resolve  : {
+            data: ConfigurationService
+        }
+    },
 ];
 
 @NgModule({
     declarations: [
-        ConfigurationListComponent
+        ConfigurationListComponent,
+        ConfigurationComponent
     ],
     imports     : [
         RouterModule.forChild(routes),
@@ -59,7 +84,11 @@ const routes = [
         MatToolbarModule,
     ],
     exports     : [
-        ConfigurationListComponent
+        ConfigurationListComponent,
+        ConfigurationComponent
+    ],
+    providers : [
+        ConfigurationService,
     ]
 })
 
