@@ -1,0 +1,133 @@
+<div id="orders" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-md-0"
+                 fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    list_alt
+                </mat-icon>
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Ordenes
+                </span>
+            </div>
+            <!-- / APP TITLE -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- SEARCH -->
+        <search-bar (input)="search($event)"></search-bar>
+        <!-- / SEARCH -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+
+            <mat-table class="orders-table"
+                        #table [dataSource]="dataSource"
+                        matSort
+                        fusePerfectScrollbar>
+        
+                <!-- CODE Column -->
+                <ng-container matColumnDef="code">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
+                    <mat-cell *matCellDef="let order"
+                    [routerLink]="'/order/'+order.code+'/'+order.code">
+                        <p class="text-truncate">{{order.code}}</p>
+                    </mat-cell>
+                </ng-container>
+        
+                <!-- CUSTOMER_CODE Column -->
+                <ng-container matColumnDef="customerCode">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Código del cliente</mat-header-cell>
+                    <mat-cell *matCellDef="let order"
+                    [routerLink]="'/order/'+order.code+'/'+order.code">
+                        <p class="text-truncate">{{order.customerCode}}</p>
+                    </mat-cell>
+                </ng-container>
+        
+                <!-- CUSTOMER_NAME Column -->
+                <ng-container matColumnDef="customerName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre del cliente</mat-header-cell>
+                    <mat-cell *matCellDef="let order"
+                    [routerLink]="'/order/'+order.code+'/'+order.code">
+                        <p class="text-truncate">{{order.customerName}}</p>
+                    </mat-cell>
+                </ng-container>
+        
+                <!-- TOTAL Column -->
+                <ng-container matColumnDef="total">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
+                    <mat-cell *matCellDef="let order"
+                    [routerLink]="'/order/'+order.code+'/'+order.code">
+                        <p class="text-truncate">{{order.total}}</p>
+                    </mat-cell>
+                </ng-container>
+        
+                <!-- DOCUMENT_TYPE Column -->
+                <ng-container matColumnDef="documentType">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de documento</mat-header-cell>
+                    <mat-cell *matCellDef="let order"
+                    [routerLink]="'/order/'+order.code+'/'+order.code">
+                        <p class="text-truncate">{{order.documentType}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- STATUS Column -->
+                <ng-container matColumnDef="status">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+                    <mat-cell *matCellDef="let order"
+                    [routerLink]="'/order/'+order.code+'/'+order.code">
+                        <p class="text-truncate">{{order.status}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- OPTIONS Column -->
+                <ng-container matColumnDef="options" stickyEnd>
+                    <mat-header-cell *matHeaderCellDef>Opciones</mat-header-cell>
+                    <mat-cell *matCellDef="let order">
+                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item>
+                                <mat-icon>cancel</mat-icon>
+                                <span>Cancelar orden</span>
+                            </button>
+                        </mat-menu>
+                    </mat-cell>
+                </ng-container>
+        
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+        
+                <mat-row *matRowDef="let order; columns: displayedColumns;"
+                            class="order"
+                            matRipple>
+                </mat-row>
+        
+            </mat-table>
+        
+            <mat-paginator #paginator
+                            [length]="dataSource.filteredData.length"
+                            [pageIndex]="0"
+                            [pageSize]="10"
+                            [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator>
+        
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>
