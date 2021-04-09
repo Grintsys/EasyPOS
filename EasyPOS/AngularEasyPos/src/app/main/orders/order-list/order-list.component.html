@@ -44,7 +44,7 @@
                 <ng-container matColumnDef="code">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
                     <mat-cell *matCellDef="let order"
-                    [routerLink]="'/order/'+order.code+'/'+order.code">
+                    [routerLink]="'/order/'+order.code+'/'+order.customerName">
                         <p class="text-truncate">{{order.code}}</p>
                     </mat-cell>
                 </ng-container>
@@ -53,7 +53,7 @@
                 <ng-container matColumnDef="customerCode">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Código del cliente</mat-header-cell>
                     <mat-cell *matCellDef="let order"
-                    [routerLink]="'/order/'+order.code+'/'+order.code">
+                    [routerLink]="'/order/'+order.code+'/'+order.customerName">
                         <p class="text-truncate">{{order.customerCode}}</p>
                     </mat-cell>
                 </ng-container>
@@ -62,7 +62,7 @@
                 <ng-container matColumnDef="customerName">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre del cliente</mat-header-cell>
                     <mat-cell *matCellDef="let order"
-                    [routerLink]="'/order/'+order.code+'/'+order.code">
+                    [routerLink]="'/order/'+order.code+'/'+order.customerName">
                         <p class="text-truncate">{{order.customerName}}</p>
                     </mat-cell>
                 </ng-container>
@@ -71,7 +71,7 @@
                 <ng-container matColumnDef="total">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
                     <mat-cell *matCellDef="let order"
-                    [routerLink]="'/order/'+order.code+'/'+order.code">
+                    [routerLink]="'/order/'+order.code+'/'+order.customerName">
                         <p class="text-truncate">{{order.total}}</p>
                     </mat-cell>
                 </ng-container>
@@ -80,7 +80,7 @@
                 <ng-container matColumnDef="documentType">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de documento</mat-header-cell>
                     <mat-cell *matCellDef="let order"
-                    [routerLink]="'/order/'+order.code+'/'+order.code">
+                    [routerLink]="'/order/'+order.code+'/'+order.customerName">
                         <p class="text-truncate">{{order.documentType}}</p>
                     </mat-cell>
                 </ng-container>
@@ -89,7 +89,7 @@
                 <ng-container matColumnDef="status">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
                     <mat-cell *matCellDef="let order"
-                    [routerLink]="'/order/'+order.code+'/'+order.code">
+                    [routerLink]="'/order/'+order.code+'/'+order.customerName">
                         <p class="text-truncate">{{order.status}}</p>
                     </mat-cell>
                 </ng-container>

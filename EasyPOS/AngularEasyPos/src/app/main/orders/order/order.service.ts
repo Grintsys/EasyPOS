@@ -55,7 +55,7 @@ export class OrderService implements Resolve<any>
     getOrder(): Promise<any>
     {
         return new Promise((resolve, reject) => {
-            if ( this.routeParams.id === 'new' )
+            if ( this.routeParams.id === 'detail' )
             {
                 this.onOrderChanged.next(false);
                 resolve(false);

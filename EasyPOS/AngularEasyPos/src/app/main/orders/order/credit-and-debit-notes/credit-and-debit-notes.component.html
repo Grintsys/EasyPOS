@@ -1,5 +1,91 @@
-<div class="page-layout blank p-24" fusePerfectScrollbar>
+<!-- CONTENT CARD -->
+<div class="content-card">
 
-    <h2>{{'ORDERS.HELLO' | translate}}</h2>
+    <mat-table class="products-table"
+                #table [dataSource]="dataSource"
+                matSort
+                fusePerfectScrollbar>
+
+        <!-- CODE Column -->
+        <ng-container matColumnDef="code">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
+            <mat-cell *matCellDef="let product">
+                <p class="text-truncate">{{product.code}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- CUSTOMER_CODE Column -->
+        <ng-container matColumnDef="customerCode">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Código del cliente</mat-header-cell>
+            <mat-cell *matCellDef="let product">
+                <p class="text-truncate">{{product.customerCode}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- CUTOMER_NAME Column -->
+        <ng-container matColumnDef="customerName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre del cliente</mat-header-cell>
+            <mat-cell *matCellDef="let product">
+                <p class="text-truncate">{{product.customerName}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- TOTAL Column -->
+        <ng-container matColumnDef="total">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
+            <mat-cell *matCellDef="let product">
+                <p class="text-truncate">{{product.total}}</p>
+            </mat-cell>
+        </ng-container>
+
+
+        <!-- DOCUMENT_TYPE Column -->
+        <ng-container matColumnDef="documentType">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de documento</mat-header-cell>
+            <mat-cell *matCellDef="let product">
+                <p class="text-truncate">{{product.documentType}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- STATUS Column -->
+        <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+            <mat-cell *matCellDef="let product">
+                <p class="text-truncate">{{product.status}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- OPTIONS Column -->
+        <ng-container matColumnDef="options" stickyEnd>
+            <mat-header-cell *matHeaderCellDef>Opciones</mat-header-cell>
+            <mat-cell *matCellDef="let order">
+                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item>
+                        <mat-icon>cancel</mat-icon>
+                        <span>Cancelar</span>
+                    </button>
+                </mat-menu>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+        <mat-row *matRowDef="let product; columns: displayedColumns;"
+                    class="product"
+                    matRipple>
+        </mat-row>
+
+    </mat-table>
+
+    <mat-paginator #paginator
+                    [length]="dataSource.filteredData.length"
+                    [pageIndex]="0"
+                    [pageSize]="10"
+                    [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
 
 </div>
+<!-- / CONTENT CARD -->
