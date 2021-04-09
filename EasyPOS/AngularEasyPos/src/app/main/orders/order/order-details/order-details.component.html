@@ -1,0 +1,49 @@
+<form name="orderForm" [formGroup]="orderForm" class="order w-100-p" fxLayout="column" fxFlex>
+    <div class="tab-content p-24" fusePerfectScrollbar>
+
+        <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+            <mat-label>Subtotal</mat-label>
+            <input matInput placeholder="subtotal"
+                    name="subtotal"
+                    formControlName="subtotal"
+                    disabled
+                    required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+            <mat-label>Descuento</mat-label>
+            <input matInput placeholder="Descuento"
+                    name="discount"
+                    formControlName="discount" disabled>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+            <mat-label>Impuesto</mat-label>
+            <input matInput placeholder="Impuesto"
+                    name="tax"
+                    formControlName="tax" disabled>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+            <mat-label>Total</mat-label>
+            <input matInput placeholder="Total"
+                    name="total"
+                    formControlName="total" disabled>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+            <mat-label>Pago</mat-label>
+            <input matInput placeholder="Pago"
+                    name="toPay"
+                    formControlName="toPay">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+            <mat-label>Cambio</mat-label>
+            <input matInput placeholder="Cambio"
+                    name="exchange"
+                    formControlName="exchange">
+        </mat-form-field>
+
+    </div>
+</form>

@@ -21,7 +21,7 @@ export const navigation: FuseNavigation[] = [
                 translate: 'NAV.ORDERS.TITLE',
                 type     : 'item',
                 icon     : 'list_alt',
-                url      : '/orders',
+                url      : '/order-list',
             },
             {
                 id       : 'CUSTOMERS',

@@ -19,7 +19,7 @@ import { locale as spanish } from '../i18n/es';
 })
 export class ProductComponent implements OnInit, OnDestroy {
 
-  product: Product;
+    product: Product;
     pageType: string;
     productForm: FormGroup;
 
