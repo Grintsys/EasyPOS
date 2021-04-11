@@ -25,20 +25,20 @@ namespace Grintsys.EasyPOS.Product
             _productRepository = productRepository;
         }
 
-        public async Task<ProductDto> GetProduct(Guid id, Guid? warehouseId)
+        public async Task<ProductDto> GetProduct(Guid id)
         {
             var data = await _productRepository.GetAsync(id);
             var dto = ObjectMapper.Map<Product, ProductDto>(data);
 
-            if (warehouseId.HasValue && dto != null)
-            {
-                dto.ProductWarehouse = dto.ProductWarehouse.Where(x => x.WarehouseId == warehouseId).ToList();
-            }
+            //if (warehouseId.HasValue && dto != null)
+            //{
+            //    dto.ProductWarehouse = dto.ProductWarehouse.Where(x => x.WarehouseId == warehouseId).ToList();
+            //}
 
             return dto;
         }
 
-        public async Task<List<ProductDto>> GetProductList(string filter, Guid? warehouseId)
+        public async Task<List<ProductDto>> GetProductList(string filter)
         {
             var products = await _productRepository.GetListAsync();
             var dto = new List<ProductDto>(ObjectMapper.Map<List<Product>, List<ProductDto>>(products));
@@ -52,10 +52,10 @@ namespace Grintsys.EasyPOS.Product
                          .OrderBy(x => x.Name).ToList();
             }
 
-            if(warehouseId.HasValue && dto.Any())
-            {
-                dto = dto.Where(x => x.ProductWarehouse.Select(x => x.WarehouseId == warehouseId).Any()).ToList();
-            }
+            //if(warehouseId.HasValue && dto.Any())
+            //{
+            //    dto = dto.Where(x => x.ProductWarehouse.Select(x => x.WarehouseId == warehouseId).Any()).ToList();
+            //}
 
             return dto;
         }

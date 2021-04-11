@@ -46,9 +46,11 @@ namespace Grintsys.EasyPOS.Customer
                 dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), 
                     x => x.FirstName.ToLower().Contains(filter) 
                     || x.LastName.ToLower().Contains(filter)
+                    || x.FullName.ToLower().Contains(filter)
                     || x.RTN.ToLower().Contains(filter)
                     || x.IdNumber.ToLower().Contains(filter)
                     || x.PhoneNumber.ToLower().Contains(filter)
+                    || x.Address.ToLower().Contains(filter)
                     || x.Code.ToLower().Contains(filter))
                     .OrderBy(x => x.FirstName).ToList();
                 return dto;

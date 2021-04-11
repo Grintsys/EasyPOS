@@ -14,5 +14,6 @@ namespace Grintsys.EasyPOS.Customer
         public string PhoneNumber { get; set; }
         public CustomerStatus Status { get; set; }
         public string Code { get; set; }
+        public string FullName => FirstName + " " + LastName;
     }
 }
