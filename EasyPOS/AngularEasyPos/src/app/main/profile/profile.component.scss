@@ -1,0 +1,58 @@
+@import "src/@fuse/scss/fuse";
+
+#profile {
+
+    .header {
+        height: 320px;
+        min-height: 320px;
+        max-height: 320px;
+        background: url('/assets/images/backgrounds/profile-banner.svg') no-repeat 0 45%;
+        background-size: cover;
+        box-shadow: inset 0px -10px 20px 0px #0578b187;
+
+        .profile-image {
+            margin-right: 24px;
+            border: solid .2em #8FF2FF;
+
+            @include media-breakpoint('sm') {
+                margin: 0 0 16px 0;
+            }
+        }
+
+        .name {
+            font-size: 34px;
+            color: #FFFFFF;
+
+            @include media-breakpoint('sm') {
+                margin-bottom: 32px;
+            }
+        }
+
+        .actions {
+
+            button {
+                text-transform: none;
+                padding: 0 16px;
+                margin: 0 0 0 8px;
+            }
+        }
+
+        .user-profile {
+            font-size: 14px;
+            margin: 1em 0;
+            display: flex;
+        }
+    }
+
+    .content {
+        flex: 1;
+
+        mat-tab-group {
+            height: 100%;
+
+            .mat-tab-body-wrapper {
+                flex-grow: 1;
+            }
+        }
+    }
+}
