@@ -22,11 +22,12 @@ import { CustomersModule } from 'app/main/customers/customers.module';
 import { ProductsModule } from 'app/main/products/products.module';
 import { SyncsModule } from 'app/main/syncs/syncs.module';
 import { ConfigurationsModule } from 'app/main/configurations/configurations.module';
+import { LoginModule } from './main/login/login.module';
 
 const appRoutes: Routes = [
     {
         path      : '**',
-        redirectTo: 'pos'
+        redirectTo: 'login'
     }
 ];
 
@@ -56,6 +57,7 @@ const appRoutes: Routes = [
         FuseSidebarModule,
 
         // App modules
+        LoginModule,
         LayoutModule,
         PosModule,
         OrdersModule,

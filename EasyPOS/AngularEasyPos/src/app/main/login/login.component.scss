@@ -1,0 +1,262 @@
+@import "src/@fuse/scss/fuse";
+
+app-login {
+
+    #login {
+        width: 100%;
+
+        #login-intro {
+            padding: 128px;
+
+            @include media-breakpoint('sm') {
+                padding: 128px 64px;
+            }
+
+            .logo {
+                width: 128px;
+                margin-bottom: 32px;
+            }
+
+            .title {
+                font-size: 42px;
+                font-weight: 300;
+                line-height: 1;
+            }
+
+            .description {
+                padding-top: 16px;
+                font-size: 14px;
+                max-width: 600px;
+            }
+        }
+
+        #login-form-wrapper {
+            width: 50%;
+            padding: 0 10%;
+
+            @include media-breakpoint('sm') {
+                width: 360px;
+                min-width: 360px;
+                max-width: 360px;
+            }
+
+            @include media-breakpoint('xs') {
+                width: 100%;
+                min-width: 100%;
+                max-width: 100%;
+            }
+
+            #login-form {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+                @include media-breakpoint('xs') {
+                    text-align: center;
+                    padding: 24px;
+                }
+
+                .logo {
+                    width: 100%;
+                    margin: 2em 0;
+                }
+
+                .title {
+                    font-size: 21px;
+                    font-weight: 700;
+                }
+
+                .description {
+                    font-size: 20px;
+                    font-weight: 400;
+                    margin: 8px 0;
+                }
+
+                form {
+                    width: 100%;
+                    margin: 2em 0;
+
+                    mat-form-field {
+                        width: 100%;
+
+                        @include media-breakpoint('xs') {
+                            width: 80%;
+                        }
+                    }
+
+                    mat-checkbox {
+                        margin: 0;
+                    }
+
+                    .remember-forgot-password {
+                        font-size: 13px;
+                        margin-top: 8px;
+
+                        .remember-me {
+                            margin-bottom: 16px
+                        }
+
+                        .forgot-password {
+                            font-size: 13px;
+                            font-weight: 600;
+                            margin-bottom: 16px
+                        }
+                    }
+
+                    .submit-button {
+                        width: 50%;
+                        margin: 16px auto;
+                        padding: .3em;
+                        display: block;
+
+                        @include media-breakpoint('xs') {
+                            width: 80%;
+                        }
+                    }
+                }
+
+                .separator {
+                    font-size: 15px;
+                    font-weight: 600;
+                    margin: 24px auto;
+                    position: relative;
+                    overflow: hidden;
+                    width: 100px;
+                    text-align: center;
+
+                    .text {
+                        display: inline-flex;
+                        position: relative;
+                        padding: 0 8px;
+                        z-index: 9999;
+
+                        &:before,
+                        &:after {
+                            content: '';
+                            display: block;
+                            width: 30px;
+                            position: absolute;
+                            top: 10px;
+                            border-top: 1px solid;
+                        }
+
+                        &:before {
+                            right: 100%;
+                        }
+
+                        &:after {
+                            left: 100%;
+                        }
+                    }
+                }
+
+                button {
+
+                    &.google,
+                    &.facebook {
+                        width: 70%;
+                        text-transform: none;
+                        color: #FFFFFF;
+                        font-size: 13px;
+
+                        @include media-breakpoint('xs') {
+                            width: 60%;
+                        }
+
+                        mat-icon {
+                            color: #FFFFFF;
+                            margin: 0 8px 0 0;
+                        }
+                    }
+
+                    &.google {
+                        background-color: #D73D32;
+                        margin-bottom: 8px;
+                    }
+
+                    &.facebook {
+                        background-color: rgb(63, 92, 154);
+                    }
+                }
+
+                .register {
+                    margin: 32px auto 24px auto;
+                    width: 250px;
+                    font-weight: 600;
+
+                    .text {
+                        margin-right: 8px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+$primary-color: #8123ce;
+$secondary-color: #3a54c6;
+$third-color: #46a7dc;
+
+.background-login {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    display: block;
+    overflow: hidden;
+    background: url(/assets/images/backgrounds/skype.svg) no-repeat;
+    background-size: 100vh;
+    .inner-container {
+        width: 55%;
+    }
+}
+
+.shape {
+    margin: 0 auto;
+    position: relative;
+    opacity: 0.7;
+}
+
+.random-shape:after {
+    font-family: material-outline-icons;
+    content: "\e9b4";
+}
+
+$circle-size: 100px;
+$colors: #45ffdc, #ffef96, #ff94a1, #cda1ff, #31b4ff, #4800c0, #9300c9;
+$shapes: '\e91d', '\e9bd', '\eb6a', '\ebb1', '\e9e8',  '\ebb1', '\ec58', '\ec4e';
+$shape-count: 80;
+
+
+@for $i from 1 through $shape-count {
+    $shape-size: 0.7 + random(10);
+
+    $rotation: random(360);
+    $speed: 40 + random(30);
+    $color-key: random( length($colors) );
+    $shape-color: nth( $colors, $color-key );
+    $shape-key: random( length($shapes) );
+    $shape-type: nth( $shapes, $shape-key );
+    $text: random(10);
+
+    @keyframes shape-#{$i} {
+        0% {
+            transform: translate3d(0,0,0) rotate(#{$rotation + 0}deg);
+        }
+        100% {
+            transform: translate3d(0,0,0) rotate(#{$rotation + 360}deg);
+        }
+    }
+
+    .shape-container--#{$i} {
+        animation: shape-#{$i} #{$speed}s linear infinite;
+
+        .random-shape:after {
+            margin: #{$shape-size}rem;
+            color: $shape-color;
+            font-size: #{$shape-size * 0.2}rem;
+            content: $shape-type;
+        }
+    }
+}
