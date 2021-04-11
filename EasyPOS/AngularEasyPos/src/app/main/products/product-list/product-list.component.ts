@@ -57,7 +57,6 @@ export class ProductListComponent {
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _productService: ProductService
     ) {
-        this.getProductList();
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
 
         // Set the private defaults
@@ -68,8 +67,7 @@ export class ProductListComponent {
      * On ngAfterViewInit
      */
     ngAfterViewInit() {
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.getProductList('');
     }
 
     /**
@@ -78,20 +76,15 @@ export class ProductListComponent {
      * @param value
      */
     search(value): void {
-        this._productService.getList(value.target.value, '').then(
-        (d) => {
-            this.dataSource = new MatTableDataSource(d);
-        },
-        (error) => {
-            console.log("Promise rejected with " + JSON.stringify(error));
-        }
-    );
+        this.getProductList(value.target.value);
     }
 
-    getProductList() {
-        this._productService.getList('','').then(
+    getProductList(filter: string) {
+        this._productService.getList(filter).then(
             (d) => {
                 this.dataSource = new MatTableDataSource(d);
+                this.dataSource.paginator = this.paginator;
+                this.dataSource.sort = this.sort;
             },
             (error) => {
                 console.log("Promise rejected with " + JSON.stringify(error));

@@ -51,14 +51,12 @@ export class ProductComponent implements OnInit, OnDestroy {
         // Subscribe to update product on changes
         this._productService.onProductChanged
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((productId) => {
-                if (productId != '') {
-                    this.getProductById(productId);
-                    this.pageType = "edit";
-                } else {
-                    this.pageType = "new";
+            .subscribe((data) => {
+                if (data.Type == 'view') {
+                    this.getProductById(data.Id);
+                    this.pageType = 'view';
+                    this.productForm = this.createProductForm();
                 }
-                this.productForm = this.createProductForm();
             });
     }
 
@@ -92,7 +90,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
 
     getProductById(id: string) {
-        this._productService.get(id, '').then(
+        this._productService.get(id).then(
             (product) => {
                 this.product = product;
             },

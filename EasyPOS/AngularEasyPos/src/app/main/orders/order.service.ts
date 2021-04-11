@@ -9,7 +9,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 
 @Injectable()
 export class OrderService implements Resolve<any> {
-    baseUrl: string = '/api/app/order';
+    baseUrl: string = 'https://localhost:44339/api/app/order';
     routeParams: any;
     order: any;
     onOrderChanged: BehaviorSubject<any>;

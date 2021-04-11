@@ -10,7 +10,7 @@ import { CreateUpdateProductDto, ProductDto } from "./product.model";
 
 @Injectable()
 export class ProductService implements Resolve<any> {
-    baseUrl: string = "/api/app/product";
+    baseUrl: string = "https://localhost:44339/api/app/product";
     routeParams: any;
     product: any;
     onProductChanged: BehaviorSubject<any>;
@@ -59,13 +59,12 @@ export class ProductService implements Resolve<any> {
      */
     getProduct(): Promise<any> {
         return new Promise((resolve, reject) => {
-            if (this.routeParams.id === "new") {
-                this.onProductChanged.next(false);
-                resolve(false);
-            } else {
-                this.onProductChanged.next(true);
-                resolve(true);
-            }
+            var data = {
+                Id: this.routeParams.id,
+                Type: 'view',
+            };
+            this.onProductChanged.next(data);
+            resolve(data);
         });
     }
     
@@ -74,14 +73,20 @@ export class ProductService implements Resolve<any> {
         return promise;
     }
     
-    public get(productId: string, warehouseId: string): Promise<any> {
-        var url = `${this.baseUrl}/${productId}/product/${warehouseId}`
+    public get(productId: string): Promise<any> {
+        var url = `${this.baseUrl}/${productId}/product`
         const promise = this._httpClient.get<ProductDto>(url, this.httpOptions).toPromise();
         return promise;
     }
     
-    public getList(filter: string, warehouseId: string): Promise<any> {
-        var url = `${this.baseUrl}/product-list/${warehouseId}?filter=${filter}`
+    public getList(filter: string): Promise<any> {
+        var url = `${this.baseUrl}/product-list${filter != `` ? `?filter=${filter}` : ``}`;
+        const promise = this._httpClient.get<ProductDto[]>(url, this.httpOptions).toPromise();
+        return promise;
+    }
+
+    public getListByWarehouse(wareHouseId: string): Promise<any> {
+        var url = `${this.baseUrl}/product-list-by-warehouse/${wareHouseId}`
         const promise = this._httpClient.get<ProductDto[]>(url, this.httpOptions).toPromise();
         return promise;
     }

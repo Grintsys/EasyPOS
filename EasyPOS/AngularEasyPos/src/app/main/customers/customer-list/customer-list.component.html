@@ -75,7 +75,7 @@
                 </ng-container>
         
                 <!-- IDENTITY Column -->
-                <ng-container matColumnDef="identity">
+                <ng-container matColumnDef="idNumber">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Identidad</mat-header-cell>
                     <mat-cell *matCellDef="let customer"
                     [routerLink]="'/customer/'+customer.id+'/view'">
@@ -102,7 +102,7 @@
                 </ng-container>
 
                 <!-- PHONE Column -->
-                <ng-container matColumnDef="phone">
+                <ng-container matColumnDef="phoneNumber">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Teléfono</mat-header-cell>
                     <mat-cell *matCellDef="let customer"
                         [routerLink]="'/customer/'+customer.id+'/view'">
@@ -151,20 +151,12 @@
         
             </mat-table>
         
-            <!-- <mat-paginator #paginator
+            <mat-paginator #paginator
                             [length]="dataSource.filteredData.length"
                             [pageIndex]="0"
                             [pageSize]="10"
                             [pageSizeOptions]="[5, 10, 25, 100]">
-            </mat-paginator> -->
-            
-            <mat-paginator #paginator
-                            [length]="10"
-                            [pageIndex]="0"
-                            [pageSize]="10"
-                            [pageSizeOptions]="[5, 10, 25, 100]">
             </mat-paginator>
-        
         </div>
         <!-- / CONTENT CARD -->
     </div>

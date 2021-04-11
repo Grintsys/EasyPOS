@@ -37,15 +37,15 @@ export class CustomerListComponent {
     @ViewChild("filter", { static: true })
     filter: ElementRef;
 
-    dataSource: any;
+    dataSource = new MatTableDataSource();
     displayedColumns: string[] = [
         "code",
         "firstName",
         "lastName",
-        "identity",
+        "idNumber",
         "rtn",
         "address",
-        "phone",
+        "phoneNumber",
         "status",
         "options",
     ];
@@ -74,8 +74,6 @@ export class CustomerListComponent {
      */
     ngAfterViewInit() {
         this.getCustomerList('');
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
     }
 
     /**
@@ -91,6 +89,8 @@ export class CustomerListComponent {
         this._customerService.getList(filter).then(
             (d) => {
                 this.dataSource = new MatTableDataSource(d);
+                this.dataSource.paginator = this.paginator;
+                this.dataSource.sort = this.sort;
             },
             (error) => {
                 console.log("Promise rejected with " + JSON.stringify(error));

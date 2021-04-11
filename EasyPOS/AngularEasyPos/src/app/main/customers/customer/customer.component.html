@@ -110,7 +110,6 @@
                                         value="{{ customer.firstName }}"
                                         formControlName="firstName"
                                         [attr.disabled]="pageType === 'view'"
-                                        isRequired = "pageType === 'new'"
                                     />
                                 </mat-form-field>
 
@@ -126,7 +125,6 @@
                                         name="lastName"
                                         value="{{ customer.lastName }}"
                                         formControlName="lastName"
-                                        isRequired = "true"
                                     />
                                 </mat-form-field>
 
@@ -142,7 +140,6 @@
                                         name="idNumber"
                                         value="{{ customer.idNumber }}"
                                         formControlName="idNumber"
-                                        isRequired = "pageType === 'new'"
                                     />
                                 </mat-form-field>
 

@@ -10,7 +10,7 @@ import { CreateUpdateCustomerDto, CustomerDto } from "./customer.model";
 
 @Injectable()
 export class CustomerService implements Resolve<any> {
-    baseUrl: string = '/api/app/customer';
+    baseUrl: string = 'https://localhost:44339/api/app/customer';
     routeParams: any;
     customer: any;
     onCustomerChanged: BehaviorSubject<any>;
@@ -58,13 +58,12 @@ export class CustomerService implements Resolve<any> {
      */
     getcustomer(): Promise<any> {
         return new Promise((resolve, reject) => {
-            if (this.routeParams.id === "new") {
-                this.onCustomerChanged.next(false);
-                resolve(false);
-            } else {
-                this.onCustomerChanged.next(true);
-                resolve(true);
-            }
+            var data = {
+                Id: this.routeParams.id,
+                Type: this.routeParams.handle,
+            };
+            this.onCustomerChanged.next(data);
+            resolve(data);
         });
     }
 
@@ -81,7 +80,7 @@ export class CustomerService implements Resolve<any> {
     
     public delete(customerId: string): Promise<any> {
         var url = `${this.baseUrl}/${customerId}`
-        const promise = this._httpClient.put<CustomerDto>(url, this.httpOptions).toPromise();
+        const promise = this._httpClient.delete<CustomerDto>(url, this.httpOptions).toPromise();
         return promise;
     }
 
@@ -92,7 +91,7 @@ export class CustomerService implements Resolve<any> {
     }
     
     public getList(filter: string): Promise<any> {
-        var url = `${this.baseUrl}/customer-list?filter=${filter}`
+        var url = `${this.baseUrl}/customer-list${filter != `` ? `?filter=${filter}` : ``}`;
         const promise = this._httpClient.get<CustomerDto[]>(url, this.httpOptions).toPromise();
         return promise;
     }
