@@ -34,15 +34,20 @@ namespace Grintsys.EasyPOS.Product
             );
         }
 
+
         public async Task<List<ProductDto>> GetProductFilteredQueryAsync(string input)
         {
             var products = await _productRepository.GetListAsync();
+            var dto = new List<ProductDto>(ObjectMapper.Map<List<Product>, List<ProductDto>>(products));
 
-            var dto = new List<ProductDto>(
-                ObjectMapper.Map<List<Product>, List<ProductDto>>(products))
-                .WhereIf(!input.IsNullOrWhiteSpace(), x=> x.Name.Contains(input)
-                || x.Description.Contains(input) || x.Code.Contains(input))
-                .OrderBy(x => x.Name).ToList();
+            if (!input.IsNullOrWhiteSpace())
+            {
+                input = input.ToLower();
+                return dto.WhereIf(!input.IsNullOrWhiteSpace(), x => x.Name.ToLower().Contains(input) 
+                        || x.Description.ToLower().Contains(input) 
+                        || x.Code.ToLower().Contains(input))
+                    .OrderBy(x => x.Name).ToList();
+            }
 
             return dto;
         }
@@ -54,28 +59,24 @@ namespace Grintsys.EasyPOS.Product
             return dto;
         }
 
-        public override async Task<PagedResultDto<ProductDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public async Task<List<ProductDto>> GetProductListAsync()
         {
-            if (input.Sorting.IsNullOrWhiteSpace())
-            {
-                input.Sorting = nameof(WarehouseDto.Name);
-            }
-
             var data = await _productRepository.GetListAsync();
-
-            //data = data
-            //    .OrderBy(x => x.GetType().GetProperty(input.Sorting)?.GetValue(x, null))
-            //    .Skip(input.SkipCount)
-            //    .Take(input.MaxResultCount) as List<DebitNote>;
 
             var dataDto = await MapToGetListOutputDtosAsync(data);
 
-            var totalCount = await Repository.GetCountAsync();
-
-            return new PagedResultDto<ProductDto>(
-                totalCount,
-                dataDto
-            );
+            return dataDto;
         }
+
+        public async Task<List<ProductDto>> GetProductListByWarehouseAsync(Guid wareHouseId)
+        {
+            var data = await _productRepository.GetListAsync();
+
+            var dataDto = await MapToGetListOutputDtosAsync(data);
+            dataDto = dataDto.Where(x => x.ProductWarehouse.Select(x => x.WarehouseId == wareHouseId).Any()).ToList();
+
+            return dataDto;
+        }
+
     }
 }

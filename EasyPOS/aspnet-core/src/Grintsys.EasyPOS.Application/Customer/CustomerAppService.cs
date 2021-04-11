@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -25,13 +26,35 @@ namespace Grintsys.EasyPOS.Customer
             _customerRepository = customerRepository;
         }
 
-        public async Task<ListResultDto<CustomerLookupDto>> GetCustomerLookupAsync()
+        public async Task<List<CustomerLookupDto>> GetCustomerLookupAsync()
         {
             var customers = await _customerRepository.GetListAsync();
 
-            return new ListResultDto<CustomerLookupDto>(
+            return new List<CustomerLookupDto>(
                 ObjectMapper.Map<List<Customer>, List<CustomerLookupDto>>(customers)
             );
+        }
+
+        public async Task<List<CustomerDto>> GetCustomersAsync(string filter)
+        {
+            var customers = await _customerRepository.GetListAsync();
+            var dto = new List<CustomerDto>(ObjectMapper.Map<List<Customer>, List<CustomerDto>>(customers));
+
+            if (!filter.IsNullOrWhiteSpace())
+            {
+                filter = filter.ToLower();
+                dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), 
+                    x => x.FirstName.ToLower().Contains(filter) 
+                    || x.LastName.ToLower().Contains(filter)
+                    || x.RTN.ToLower().Contains(filter)
+                    || x.IdNumber.ToLower().Contains(filter)
+                    || x.PhoneNumber.ToLower().Contains(filter)
+                    || x.Code.ToLower().Contains(filter))
+                    .OrderBy(x => x.FirstName).ToList();
+                return dto;
+            }
+
+            return dto;
         }
     }
 }

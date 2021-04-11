@@ -7,12 +7,7 @@ namespace Grintsys.EasyPOS.Customer
 {
     public interface ICustomerRepository : IRepository<Customer, Guid>
     {
-        Task<List<Customer>> GetListAsync(
-            int skipCount,
-            int maxResultCount,
-            string sorting,
-            string filter = null
-        );
+        Task<List<Customer>> GetListAsync();
 
     }
 }

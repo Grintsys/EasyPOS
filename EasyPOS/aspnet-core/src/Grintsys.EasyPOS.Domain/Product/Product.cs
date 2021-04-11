@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Grintsys.EasyPOS.Product
@@ -13,6 +14,7 @@ namespace Grintsys.EasyPOS.Product
         public float Taxes { get; set; }
         public bool IsActive { get; set; }
         public string ImageUrl { get; set; }
-        public List<ProductWarehouse> ProductWarehouse { get; set; }
+        public int Inventory => ProductWarehouse.Sum(x => x.Inventory);
+        public List<ProductWarehouse> ProductWarehouse { get; set; } = new List<ProductWarehouse>();
     }
 }

@@ -15,5 +15,7 @@ namespace Grintsys.EasyPOS.Product
     {
         Task<ListResultDto<ProductLookupDto>> GetProductLookupAsync();
         Task<List<ProductDto>> GetProductFilteredQueryAsync(string input);
+        Task<List<ProductDto>> GetProductListAsync();
+        Task<List<ProductDto>> GetProductListByWarehouseAsync(Guid wareHouseId);
     }
 }
