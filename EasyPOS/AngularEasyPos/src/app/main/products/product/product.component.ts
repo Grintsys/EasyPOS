@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
 import { Subject } from 'rxjs';
@@ -93,13 +93,13 @@ export class ProductComponent implements OnInit, OnDestroy {
     */
      createProductForm(): FormGroup
     {
-    return this._formBuilder.group({
-        productName   : [{value: this.product.productName, disabled: true}],
-        description   : [{value: this.product.description, disabled: true} ],
-        salePrice     : [{value: this.product.salePrice, disabled: true}],
-        tax           : [{value: this.product.tax, disabled: true}],
-        inventory     : [{value: this.product.inventory, disabled: true}]
-    });
+        return this._formBuilder.group({
+            productName   : new FormControl({value: this.product.productName, disabled: true}),
+            description   : new FormControl({value: this.product.description, disabled: true}),
+            salePrice     : new FormControl({value: this.product.salePrice, disabled: true}),
+            tax           : new FormControl({value: this.product.tax, disabled: true}),
+            inventory     : new FormControl({value: this.product.inventory, disabled: true})
+        });
     }
 
 }

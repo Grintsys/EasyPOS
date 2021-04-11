@@ -26,12 +26,14 @@
           Salir de aqui
       </button>
     </div>
-    <div class="m-24">
+
+    <form name="formatJsonForm" [formGroup]="formatJsonForm" class="m-24">
       <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
         <mat-label>Formato JSON</mat-label>
         <textarea matInput placeholder="json format here" name="jsonFormat" formControlName="jsonFormat"></textarea>
       </mat-form-field>
-    </div>
+    </form>
+
   </div>
 
   <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end end">
