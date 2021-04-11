@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
 import { locale as english } from '../i18n/en';
 import { locale as spanish } from '../i18n/es';
 
-import { Order } from '../order/order.model';
+import { Order } from '../order.model';
 
 @Component({
   selector: 'app-order-list',

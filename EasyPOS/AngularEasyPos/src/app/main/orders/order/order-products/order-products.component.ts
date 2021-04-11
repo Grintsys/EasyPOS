@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
 import { Subject } from 'rxjs';
-import { OrderProduct } from '../order.model';
+import { OrderProduct } from '../../order.model';
 
 import { locale as english } from '../../i18n/en';
 import { locale as spanish } from '../../i18n/es';

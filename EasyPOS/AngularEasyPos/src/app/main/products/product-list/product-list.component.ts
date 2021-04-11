@@ -78,7 +78,7 @@ export class ProductListComponent {
      * @param value
      */
     search(value): void {
-        this._productService.getProductListFiltered(value.target.value).then(
+        this._productService.getList(value.target.value, '').then(
         (d) => {
             this.dataSource = new MatTableDataSource(d);
         },
@@ -89,7 +89,7 @@ export class ProductListComponent {
     }
 
     getProductList() {
-        this._productService.getList().then(
+        this._productService.getList('','').then(
             (d) => {
                 this.dataSource = new MatTableDataSource(d);
             },

@@ -1,3 +1,4 @@
+import { CLASS_NAME } from '@angular/flex-layout';
 import { FuseUtils } from '@fuse/utils';
 
 export class Order {
@@ -184,4 +185,121 @@ export class CreditDebitNote {
     }
 }
 
+export enum DocumentState {
+    Created = 1,
+    Edited = 2,
+    Transferred = 3,
+    Cancelled = 3,
+}
 
+export class CreateUpdateDocumentDto<T> {
+    id?: string;
+    customerId?: string;
+    state: DocumentState;
+    items: T[];
+}
+
+export class CreateUpdateDocumentItemDto {
+    name?: string;
+    description?: string;
+    code?: string;
+    salePrice: number;
+    taxes: number;
+    quantity: number;
+    discount: number;
+    totalItem: number;
+}
+
+export class DocumentDto<T> {
+    id?: string;
+    customerId?: string;
+    customerName?: string;
+    state: DocumentState;
+    subTotal: number;
+    isv: number;
+    discount: number;
+    total: number;
+    items: T[];
+}
+
+export class DocumentItemDto {
+    id?: string;
+    name?: string;
+    description?: string;
+    code?: string;
+    salePrice: number;
+    taxes: number;
+    discount: number;
+    quantity: number;
+    totalItem: number;
+}
+
+export class CreateUpdateOrderDto extends CreateUpdateDocumentDto<CreateUpdateOrderItemDto> {}
+
+export class CreateUpdateOrderItemDto extends CreateUpdateDocumentItemDto {
+    orderId?: string;
+}
+
+export class OrderDto extends DocumentDto<OrderItemDto> {
+    debitNotes: DebitNoteDto[];
+    creditNotes: CreditNoteDto[];
+    paymentMethods: PaymentMethodDto[];
+}
+
+export class OrderItemDto extends DocumentItemDto {
+    orderId?: string;
+}
+
+export class CreateUpdateDebitNoteDto extends CreateUpdateDocumentDto<CreateUpdateDebitNoteItemDto> {
+    orderId?: string;
+}
+
+export class CreateUpdateDebitNoteItemDto extends CreateUpdateDocumentItemDto {
+    debitNoteId?: string;
+}
+
+export class DebitNoteDto extends DocumentDto<DebitNoteItemDto> {
+    orderId?: string;
+}
+
+export class DebitNoteItemDto extends DocumentItemDto {
+    debitNoteId?: string;
+}
+
+export class CreateUpdateCreditNoteDto extends CreateUpdateDocumentDto<CreateUpdateCreditNoteItemDto> {
+    orderId?: string;
+}
+
+export class CreateUpdateCreditNoteItemDto extends CreateUpdateDocumentItemDto {
+    creditNoteId?: string;
+}
+
+export class CreditNoteDto extends DocumentDto<CreditNoteItemDto> {
+    orderId?: string;
+}
+
+export class CreditNoteItemDto extends DocumentItemDto {
+    creditNoteId?: string;
+}
+export class CreateUpdatePaymentMethodDto {
+    orderId?: string;
+    paymentMethodTypeId?: string;
+    amount: number;
+}
+
+export class CreateUpdatePaymentMethodTypeDto {
+    name?: string;
+}
+
+export class PaymentMethodDto {
+    id?: string;
+    orderId?: string;
+    paymentMethodTypeId?: string;
+    paymentMethodTypeName?: string;
+    amount: number;
+}
+
+export class PaymentMethodTypeDto {
+    id?: string;
+    name?: string;
+}

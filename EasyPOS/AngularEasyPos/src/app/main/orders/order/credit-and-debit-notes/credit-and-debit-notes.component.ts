@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
 
 import { locale as english } from '../../i18n/en';
 import { locale as spanish } from '../../i18n/es';
-import { CreditDebitNote } from '../order.model';
+import { CreditDebitNote } from '../../order.model';
 
 @Component({
   selector: 'app-credit-and-debit-notes',

@@ -4,7 +4,7 @@ import { fuseAnimations } from "@fuse/animations";
 import { FuseTranslationLoaderService } from "@fuse/services/translation-loader.service";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { CreateUpdateProductDto, Product, ProductDto } from "../product.model";
+import { ProductDto } from "../product.model";
 import { ProductService } from "../product.service";
 
 import { locale as english } from "../i18n/en";
@@ -92,7 +92,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
 
     getProductById(id: string) {
-        this._productService.get(id).then(
+        this._productService.get(id, '').then(
             (product) => {
                 this.product = product;
             },
