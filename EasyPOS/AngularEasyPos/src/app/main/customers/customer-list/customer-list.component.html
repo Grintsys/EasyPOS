@@ -9,12 +9,12 @@
 
         <!-- HEADER -->
         <div class="header accent"
-             fxLayout="column" fxLayoutAlign="center center"
-             fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+            fxLayout="column" fxLayoutAlign="center center"
+            fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
 
             <!-- APP TITLE -->
             <div class="logo mb-24 mb-md-0"
-                 fxLayout="row" fxLayoutAlign="start center">
+                fxLayout="row" fxLayoutAlign="start center">
                 <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
                     person
                 </mat-icon>
@@ -42,8 +42,6 @@
 
         <!-- CONTENT CARD -->
         <div class="content-card">
-
-
             <mat-table class="customers-table"
                         #table [dataSource]="dataSource"
                         matSort
@@ -53,7 +51,7 @@
                 <ng-container matColumnDef="code">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
                     <mat-cell *matCellDef="let customer"
-                    [routerLink]="'/customer/'+customer.code+'/'+customer.firstName">
+                    [routerLink]="'/customer/'+customer.id+'/view'">
                         <p class="text-truncate">{{customer.code}}</p>
                     </mat-cell>
                 </ng-container>
@@ -62,7 +60,7 @@
                 <ng-container matColumnDef="firstName">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
                     <mat-cell *matCellDef="let customer"
-                    [routerLink]="'/customer/'+customer.code+'/'+customer.firstName">
+                    [routerLink]="'/customer/'+customer.id+'/view'">
                         <p class="text-truncate">{{customer.firstName}}</p>
                     </mat-cell>
                 </ng-container>
@@ -71,7 +69,7 @@
                 <ng-container matColumnDef="lastName">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Apellido</mat-header-cell>
                     <mat-cell *matCellDef="let customer"
-                    [routerLink]="'/customer/'+customer.code+'/'+customer.firstName">
+                    [routerLink]="'/customer/'+customer.id+'/view'">
                         <p class="text-truncate">{{customer.lastName}}</p>
                     </mat-cell>
                 </ng-container>
@@ -80,8 +78,8 @@
                 <ng-container matColumnDef="identity">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Identidad</mat-header-cell>
                     <mat-cell *matCellDef="let customer"
-                    [routerLink]="'/customer/'+customer.code+'/'+customer.firstName">
-                        <p class="text-truncate">{{customer.identity}}</p>
+                    [routerLink]="'/customer/'+customer.id+'/view'">
+                        <p class="text-truncate">{{customer.idNumber}}</p>
                     </mat-cell>
                 </ng-container>
         
@@ -89,7 +87,7 @@
                 <ng-container matColumnDef="rtn">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>RTN</mat-header-cell>
                     <mat-cell *matCellDef="let customer"
-                    [routerLink]="'/customer/'+customer.code+'/'+customer.firstName">
+                    [routerLink]="'/customer/'+customer.id+'/view'">
                         <p class="text-truncate">{{customer.rtn}}</p>
                     </mat-cell>
                 </ng-container>
@@ -98,7 +96,7 @@
                 <ng-container matColumnDef="address">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Dirección</mat-header-cell>
                     <mat-cell *matCellDef="let customer"
-                    [routerLink]="'/customer/'+customer.code+'/'+customer.firstName">
+                        [routerLink]="'/customer/'+customer.id+'/view'">
                         <p class="text-truncate">{{customer.address}}</p>
                     </mat-cell>
                 </ng-container>
@@ -107,8 +105,8 @@
                 <ng-container matColumnDef="phone">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Teléfono</mat-header-cell>
                     <mat-cell *matCellDef="let customer"
-                    [routerLink]="'/customer/'+customer.code+'/'+customer.firstName">
-                        <p class="text-truncate">{{customer.phone}}</p>
+                        [routerLink]="'/customer/'+customer.id+'/view'">
+                        <p class="text-truncate">{{customer.phoneNumber}}</p>
                     </mat-cell>
                 </ng-container>
 
@@ -116,7 +114,7 @@
                 <ng-container matColumnDef="status">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Estatus</mat-header-cell>
                     <mat-cell *matCellDef="let customer"
-                    [routerLink]="'/customer/'+customer.code+'/'+customer.firstName">
+                    [routerLink]="'/customer/'+customer.id+'/view'">
                         <p class="text-truncate">{{customer.status}}</p>
                     </mat-cell>
                 </ng-container>
@@ -129,12 +127,14 @@
                             <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #menu="matMenu">
-                            <button mat-menu-item>
+                            <button mat-menu-item
+                                [routerLink]="'/customer/'+customer.id+'/edit'">
                                 <mat-icon>edit</mat-icon>
                                 <span>Editar</span>
                             </button>
                             <mat-divider></mat-divider>
-                            <button mat-menu-item>
+                            <button mat-menu-item
+                                (click)="deleteCustomer(customer.id)">
                                 <mat-icon>delete</mat-icon>
                                 <span>Eliminar</span>
                             </button>
@@ -151,8 +151,15 @@
         
             </mat-table>
         
-            <mat-paginator #paginator
+            <!-- <mat-paginator #paginator
                             [length]="dataSource.filteredData.length"
+                            [pageIndex]="0"
+                            [pageSize]="10"
+                            [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator> -->
+            
+            <mat-paginator #paginator
+                            [length]="10"
                             [pageIndex]="0"
                             [pageSize]="10"
                             [pageSizeOptions]="[5, 10, 25, 100]">
