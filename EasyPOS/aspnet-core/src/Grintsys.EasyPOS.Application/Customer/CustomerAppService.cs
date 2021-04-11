@@ -35,7 +35,7 @@ namespace Grintsys.EasyPOS.Customer
             );
         }
 
-        public async Task<List<CustomerDto>> GetCustomersAsync(string filter)
+        public async Task<List<CustomerDto>> GetCustomerList(string filter)
         {
             var customers = await _customerRepository.GetListAsync();
             var dto = new List<CustomerDto>(ObjectMapper.Map<List<Customer>, List<CustomerDto>>(customers));

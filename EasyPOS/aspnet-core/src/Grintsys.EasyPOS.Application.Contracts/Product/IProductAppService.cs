@@ -7,15 +7,15 @@ using Volo.Abp.Application.Services;
 namespace Grintsys.EasyPOS.Product
 {
     public interface IProductAppService :
-        ICrudAppService< 
+        ICrudAppService<
             ProductDto,
             Guid,
             PagedAndSortedResultRequestDto,
             CreateUpdateProductDto>
     {
-        Task<ListResultDto<ProductLookupDto>> GetProductLookupAsync();
-        Task<List<ProductDto>> GetProductFilteredQueryAsync(string input);
-        Task<List<ProductDto>> GetProductListAsync();
+        Task<List<ProductLookupDto>> GetProductLookupAsync();
+        Task<ProductDto> GetProduct(Guid id, Guid? warehouseId);
+        Task<List<ProductDto>> GetProductList(string filter, Guid? warehouseId);
         Task<List<ProductDto>> GetProductListByWarehouseAsync(Guid wareHouseId);
     }
 }

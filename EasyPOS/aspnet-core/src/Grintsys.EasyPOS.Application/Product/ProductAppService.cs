@@ -25,47 +25,48 @@ namespace Grintsys.EasyPOS.Product
             _productRepository = productRepository;
         }
 
-        public async Task<ListResultDto<ProductLookupDto>> GetProductLookupAsync()
+        public async Task<ProductDto> GetProduct(Guid id, Guid? warehouseId)
         {
-            var products = await _productRepository.GetListAsync();
+            var data = await _productRepository.GetAsync(id);
+            var dto = ObjectMapper.Map<Product, ProductDto>(data);
 
-            return new ListResultDto<ProductLookupDto>(
-                ObjectMapper.Map<List<Product>, List<ProductLookupDto>>(products)
-            );
-        }
-
-
-        public async Task<List<ProductDto>> GetProductFilteredQueryAsync(string input)
-        {
-            var products = await _productRepository.GetListAsync();
-            var dto = new List<ProductDto>(ObjectMapper.Map<List<Product>, List<ProductDto>>(products));
-
-            if (!input.IsNullOrWhiteSpace())
+            if (warehouseId.HasValue && dto != null)
             {
-                input = input.ToLower();
-                return dto.WhereIf(!input.IsNullOrWhiteSpace(), x => x.Name.ToLower().Contains(input) 
-                        || x.Description.ToLower().Contains(input) 
-                        || x.Code.ToLower().Contains(input))
-                    .OrderBy(x => x.Name).ToList();
+                dto.ProductWarehouse = dto.ProductWarehouse.Where(x => x.WarehouseId == warehouseId).ToList();
             }
 
             return dto;
         }
 
-        public override async Task<ProductDto> GetAsync(Guid id)
+        public async Task<List<ProductDto>> GetProductList(string filter, Guid? warehouseId)
         {
-            var data = await _productRepository.GetAsync(id);
-            var dto = ObjectMapper.Map<Product, ProductDto>(data);
+            var products = await _productRepository.GetListAsync();
+            var dto = new List<ProductDto>(ObjectMapper.Map<List<Product>, List<ProductDto>>(products));
+
+            if (!filter.IsNullOrWhiteSpace())
+            {
+                filter = filter.ToLower();
+                dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.ToLower().Contains(filter)
+                            || x.Description.ToLower().Contains(filter)
+                            || x.Code.ToLower().Contains(filter))
+                         .OrderBy(x => x.Name).ToList();
+            }
+
+            if(warehouseId.HasValue && dto.Any())
+            {
+                dto = dto.Where(x => x.ProductWarehouse.Select(x => x.WarehouseId == warehouseId).Any()).ToList();
+            }
+
             return dto;
         }
 
-        public async Task<List<ProductDto>> GetProductListAsync()
+        public async Task<List<ProductLookupDto>> GetProductLookupAsync()
         {
-            var data = await _productRepository.GetListAsync();
+            var products = await _productRepository.GetListAsync();
 
-            var dataDto = await MapToGetListOutputDtosAsync(data);
-
-            return dataDto;
+            return new List<ProductLookupDto>(
+                ObjectMapper.Map<List<Product>, List<ProductLookupDto>>(products)
+            );
         }
 
         public async Task<List<ProductDto>> GetProductListByWarehouseAsync(Guid wareHouseId)

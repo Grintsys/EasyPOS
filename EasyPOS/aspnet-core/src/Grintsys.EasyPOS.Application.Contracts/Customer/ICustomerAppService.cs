@@ -14,6 +14,6 @@ namespace Grintsys.EasyPOS.Customer
             CreateUpdateCustomerDto>
     {
         Task<List<CustomerLookupDto>> GetCustomerLookupAsync();
-        Task<List<CustomerDto>> GetCustomersAsync(string filter);
+        Task<List<CustomerDto>> GetCustomerList(string filter);
     }
 }
