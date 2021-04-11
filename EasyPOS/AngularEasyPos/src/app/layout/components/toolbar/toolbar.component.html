@@ -92,9 +92,14 @@
 
             <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
 
+                <button mat-menu-item [routerLink]="'/profile'">
+                    <mat-icon>sentiment_satisfied</mat-icon>
+                    <span>Perfil</span>
+                </button>
+
                 <button mat-menu-item [routerLink]="'/login'">
                     <mat-icon>exit_to_app</mat-icon>
-                    <span>Logout</span>
+                    <span>Cerrar sesión</span>
                 </button>
 
             </mat-menu>
