@@ -11,7 +11,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 
-import { SearchBarModule } from '../pos/search-bar/search-bar.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 
@@ -29,6 +28,7 @@ import { CustomerService } from './customer/customer.service';
 import { CustomerDialogComponent } from './customer-dialog/customer-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { SearchModule } from 'app/layout/components/search/search.module';
 
 const routes = [
     {
@@ -71,7 +71,7 @@ const routes = [
 
         FuseSharedModule,
 
-        SearchBarModule,
+        SearchModule,
 
         MatTableModule,
         MatSortModule,

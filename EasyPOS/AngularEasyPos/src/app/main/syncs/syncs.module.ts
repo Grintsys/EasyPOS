@@ -4,7 +4,6 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { FuseSharedModule } from '@fuse/shared.module';
 
-import { SearchBarModule } from '../pos/search-bar/search-bar.module';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -21,6 +20,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { SyncListComponent } from './sync-list/sync-list.component';
 import { SyncDialogComponent } from './sync-dialog/sync-dialog.component';
+import { SearchModule } from 'app/layout/components/search/search.module';
 
 const routes = [
     {
@@ -41,7 +41,7 @@ const routes = [
 
         FuseSharedModule,
 
-        SearchBarModule,
+        SearchModule,
 
         MatTableModule,
         MatSortModule,
