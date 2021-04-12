@@ -23,6 +23,7 @@ import { ProductsModule } from 'app/main/products/products.module';
 import { SyncsModule } from 'app/main/syncs/syncs.module';
 import { ConfigurationsModule } from 'app/main/configurations/configurations.module';
 import { LoginModule } from './main/login/login.module';
+import { ProfileModule } from './main/profile/profile.module';
 
 const appRoutes: Routes = [
     {
@@ -65,6 +66,7 @@ const appRoutes: Routes = [
         CustomersModule,
         SyncsModule,
         ConfigurationsModule,
+        ProfileModule,
     ],
     bootstrap   : [
         AppComponent
