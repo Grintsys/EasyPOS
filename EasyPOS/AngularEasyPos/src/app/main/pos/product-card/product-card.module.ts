@@ -4,14 +4,12 @@ import { RouterModule } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { ProductCardComponent } from './product-card.component';
 
-import { SearchBarComponent } from './search-bar.component';
-import { ProductCardModule } from '../product-card/product-card.module';
-import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
     declarations: [
-        SearchBarComponent
+        ProductCardComponent
     ],
     imports     : [
         CommonModule,
@@ -19,15 +17,11 @@ import { MatMenuModule } from '@angular/material/menu';
 
         MatButtonModule,
         MatIconModule,
-
-        MatMenuModule,
-
-        ProductCardModule,
     ],
     exports     : [
-        SearchBarComponent
+        ProductCardComponent
     ]
 })
-export class SearchBarModule
+export class ProductCardModule
 {
 }
