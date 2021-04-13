@@ -10,7 +10,6 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { LoginComponent } from './login.component';
 import { MatSelectModule } from '@angular/material/select';
 
-
 const routes = [
     {
         path     : 'login',
@@ -38,6 +37,5 @@ const routes = [
         LoginComponent
     ],
 })
-export class LoginModule
-{
+export class LoginModule {   
 }

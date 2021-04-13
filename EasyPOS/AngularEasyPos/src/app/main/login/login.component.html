@@ -47,9 +47,9 @@
                 <mat-form-field appearance="fill">
                     <mat-label>Compañia</mat-label>
                     <mat-select name="company">
-                      <mat-option value="A">Compañia A</mat-option>
-                      <mat-option value="A">Compañia B</mat-option>
-                      <mat-option value="A">Compañia C</mat-option>
+                      <mat-option value="A">Compania A</mat-option>
+                      <mat-option value="B">Compania B</mat-option>
+                      <mat-option value="C">Compania C</mat-option>
                     </mat-select>
                   </mat-form-field>
 
@@ -64,8 +64,8 @@
                     </a>
                 </div>
 
-                <button mat-raised-button color="accent" class="submit-button" aria-label="LOGIN"
-                        [disabled]="loginForm.invalid" [routerLink]="'/pos'">
+                <button mat-raised-button color="accent" class="submit-button" aria-label="LOGIN" (click)="doLogin()"
+                        [disabled]="loginForm.invalid">
                     INICIAR SESIÓN
                 </button>
 
