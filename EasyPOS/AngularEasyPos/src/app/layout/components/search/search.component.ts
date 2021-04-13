@@ -5,11 +5,11 @@ import { takeUntil } from 'rxjs/operators';
 import { FuseConfigService } from '@fuse/services/config.service';
 
 @Component({
-    selector   : 'search-bar',
-    templateUrl: './search-bar.component.html',
-    styleUrls  : ['./search-bar.component.scss']
+    selector   : 'search',
+    templateUrl: './search.component.html',
+    styleUrls  : ['./search.component.scss']
 })
-export class SearchBarComponent implements OnInit, OnDestroy
+export class SearchComponent implements OnInit, OnDestroy
 {
     collapsed: boolean;
     fuseConfig: any;

@@ -28,14 +28,17 @@
                 </div>
             </div>
             <div>
-                <button mat-raised-button class="save-order-button mr-8" [routerLink]="'/pos'">
+
+                <button mat-stroked-button [routerLink]="'/pos'">
+                    <mat-icon mat-icon>sync</mat-icon>
                     <span>Nota de crédito</span>
                 </button>
 
-                <button mat-raised-button class="save-order-button" [routerLink]="'/pos'">
-                    <!-- (click)="savecustomer()" -->
+                <button mat-stroked-button [routerLink]="'/pos'">
+                    <mat-icon mat-icon>sync</mat-icon>
                     <span>Nota de débito</span>
                 </button>
+
             </div>
         </div>
         <!-- / HEADER -->

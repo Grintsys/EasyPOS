@@ -1,4 +1,66 @@
 .container-pos-product {
     height: calc(100vh - 64px);
     width: 65%;
+
+    .container-searchs {
+        position: relative;
+    }
+}
+
+
+/* ESTILO CARD PARA FILTROS */
+.tooltip-content {
+    border-radius: 0.5rem;
+    min-width: 30rem;
+    top: 0;
+    color: #53575a;
+    box-shadow: 0 4px 8px 0 rgba(40, 45, 49, 0.2);
+    position: absolute;
+    // padding: 1rem;
+    white-space: nowrap;
+    Transform: translateY(0.5rem) scaleY(0);
+    transform-origin: center top;
+    transition: transform 0.2s ease;
+    border: 1px solid #e0e1e1;
+    background-color: #fff;
+    width: 100%;
+}
+
+.transform-right  {
+    Transform: translateX(0.5rem) scaleX(0);
+}
+
+
+.tooltip-content.active{
+    transform: translateY(0.5rem) scaleY(1);
+    transition: transform 0.25s cubic-bezier(0.17, 0.67, 0.62, 1.6);
+    visibility: inherit;
+}
+
+.bottom {
+    margin-top: 5em;
+}
+
+.s-z-tooltip {
+    z-index: 1000;
+}
+
+.tooltip-content.right::before {
+    left: 1rem;
+    right: auto;
+}
+
+.tooltip-content::before {
+    --size: 0.75rem;
+    content: '';
+    display: block;
+    position: absolute;
+    top: -0.5rem;
+    left: 1rem;
+    width: var(--size);
+    height: var(--size);
+    transform: rotate(45deg);
+    background-color: inherit;
+    border: 1px solid;
+    border-color: #ccc transparent transparent #ccc;
 }
