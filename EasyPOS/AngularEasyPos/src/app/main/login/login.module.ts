@@ -9,6 +9,8 @@ import { MatInputModule } from '@angular/material/input';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { LoginComponent } from './login.component';
 import { MatSelectModule } from '@angular/material/select';
+import { LoginService } from './login.service';
+import { AppSettingsService } from 'app/app-settings/app-settings.service';
 
 const routes = [
     {
@@ -36,6 +38,10 @@ const routes = [
     exports     : [
         LoginComponent
     ],
+    providers : [
+        LoginService,
+        AppSettingsService,
+    ]
 })
 export class LoginModule {   
 }

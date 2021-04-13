@@ -1,22 +1,27 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Injectable } from "@angular/core";
 import { AppSettings } from "../../app-settings/app-settings.model";
 import { AppSettingsService } from "../../app-settings/app-settings.service";
 import { LoginInput } from "./login.input";
 import { LoginModel } from "./login.model";
 
+@Injectable()
 export class LoginService{
 
     baseUrl: string;
     settings: AppSettings;
-     /**
+    /**
      * Constructor
      *
      * @param {HttpClient} _httpClient
      */
     constructor(private _httpClient: HttpClient, private _appSettingService: AppSettingsService) {
         //TODO: cleanUp here
-        _appSettingService.getSettings().then(response => this.settings = response);
-        this.baseUrl = `${this.settings.API_URL}/connect/token`;
+        _appSettingService.getSettings().then(response => {
+            this.settings = response;
+            this.baseUrl = `${this.settings.API_URL}/connect/token`;
+        });
+        
     }
 
     public authorize(data: LoginInput): Promise<any> {

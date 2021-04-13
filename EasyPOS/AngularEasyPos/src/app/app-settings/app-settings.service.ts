@@ -3,9 +3,9 @@ import 'rxjs/operators';
 
 import { HttpClient } from '@angular/common/http';
 import { exception } from 'console';
-import { AppSettings } from './app-settings.model'
+import { AppSettings } from './app-settings.model';
 
-const SETTINGS_LOCATION = "../assets/appsettings.json";
+const SETTINGS_LOCATION = "../../assets/appsettings.json";
 
 @Injectable()
 export class AppSettingsService {
@@ -22,7 +22,7 @@ export class AppSettingsService {
             },
             (error) => {
                 console.log("Promise rejected with " + JSON.stringify(error));
-                throw new exception("Error")
+                //throw new exception("Error")
             }
         );
 
