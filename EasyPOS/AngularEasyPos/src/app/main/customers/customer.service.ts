@@ -7,10 +7,11 @@ import {
 } from "@angular/router";
 import { BehaviorSubject, Observable } from "rxjs";
 import { CreateUpdateCustomerDto, CustomerDto } from "./customer.model";
+import { AppSettingsService } from "../../app-settings/app-settings.service"
 
 @Injectable()
 export class CustomerService implements Resolve<any> {
-    baseUrl: string = 'https://localhost:44339/api/app/customer';
+    baseUrl: string;
     routeParams: any;
     customer: any;
     onCustomerChanged: BehaviorSubject<any>;
@@ -26,9 +27,11 @@ export class CustomerService implements Resolve<any> {
      *
      * @param {HttpClient} _httpClient
      */
-    constructor(private _httpClient: HttpClient) {
+    constructor(private _httpClient: HttpClient, private _appSettingService: AppSettingsService) {
         // Set the defaults
         this.onCustomerChanged = new BehaviorSubject({});
+        //TODO: cleanUp here
+        this.baseUrl = `${_appSettingService.getSettings().then(response => response.API_URL)}/app/customer`;
     }
 
     /**
