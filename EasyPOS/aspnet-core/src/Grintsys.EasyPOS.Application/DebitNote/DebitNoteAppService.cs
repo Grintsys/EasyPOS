@@ -1,6 +1,7 @@
 ﻿using Grintsys.EasyPOS.Enums;
 using Grintsys.EasyPOS.Order;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
@@ -37,28 +38,20 @@ namespace Grintsys.EasyPOS.DebitNote
             return dto;
         }
 
-        public override async Task<PagedResultDto<DebitNoteDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public async Task<List<DebitNoteDto>> GetDebiteNoteList(string filter)
         {
-            if (input.Sorting.IsNullOrWhiteSpace())
+            var notes = await _debitNoteRepository.GetDebitNotesAsync();
+            var dto = new List<DebitNoteDto>(ObjectMapper.Map<List<DebitNote>, List<DebitNoteDto>>(notes));
+
+            if (!filter.IsNullOrWhiteSpace())
             {
-                input.Sorting = nameof(DebitNote.CustomerName);
+                filter = filter.ToLower();
+                dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(),
+                    x => x.CustomerName.ToLower().Contains(filter))
+                    .OrderBy(x => x.CustomerName).ToList();
             }
 
-            var debitNotes = await _debitNoteRepository.GetDebitNotesAsync();
-            
-            //debitNotes = debitNotes
-            //    .OrderBy(x => x.GetType().GetProperty(input.Sorting)?.GetValue(x, null))
-            //    .Skip(input.SkipCount)
-            //    .Take(input.MaxResultCount) as List<DebitNote>;
-
-            var debitNoteDto = await MapToGetListOutputDtosAsync(debitNotes);
-
-            var totalCount = await Repository.GetCountAsync();
-
-            return new PagedResultDto<DebitNoteDto>(
-                totalCount,
-                debitNoteDto
-            );
+            return dto;
         }
 
         public async Task<DebitNoteDto> CreateDebitNoteAsync(Guid orderId)

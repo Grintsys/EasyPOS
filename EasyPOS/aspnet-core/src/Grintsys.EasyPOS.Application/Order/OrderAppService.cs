@@ -1,5 +1,7 @@
 ﻿using Grintsys.EasyPOS.Enums;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -30,11 +32,19 @@ namespace Grintsys.EasyPOS.Order
 
             var createUpdateDto = new CreateUpdateOrderDto()
             {
+                Id = id,
                 CustomerId = order.CustomerId,
                 State = DocumentState.Cancelled
             };
 
-            await base.UpdateAsync(id, createUpdateDto);
+            try
+            {
+                await base.UpdateAsync(id, createUpdateDto);
+            }
+            catch(Exception e)
+            {
+                await base.UpdateAsync(id, createUpdateDto);
+            }
         }
         
         public override async Task<OrderDto> GetAsync(Guid id)
@@ -44,28 +54,20 @@ namespace Grintsys.EasyPOS.Order
             return dto;
         }
 
-        public override async Task<PagedResultDto<OrderDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public async Task<List<OrderDto>> GetOrderList(string filter)
         {
-            if (input.Sorting.IsNullOrWhiteSpace())
+            var orders = await _orderRepository.GetOrdersAsync();
+            var dto = new List<OrderDto>(ObjectMapper.Map<List<Order>, List<OrderDto>>(orders));
+
+            if (!filter.IsNullOrWhiteSpace())
             {
-                input.Sorting = nameof(Order.CustomerName);
+                filter = filter.ToLower();
+                dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(),
+                    x => x.CustomerName.ToLower().Contains(filter))
+                    .OrderBy(x => x.CustomerName).ToList();
             }
 
-            var orders = await _orderRepository.GetOrdersAsync();
-
-            //orders = orders
-            //    .OrderBy(x => x.GetType().GetProperty(input.Sorting)?.GetValue(x, null))
-            //    .Skip(input.SkipCount)
-            //    .Take(input.MaxResultCount) as List<DebitNote>;
-
-            var ordersDto = await MapToGetListOutputDtosAsync(orders);
-
-            var totalCount = await Repository.GetCountAsync();
-
-            return new PagedResultDto<OrderDto>(
-                totalCount,
-                ordersDto
-            );
+            return dto;
         }
     }
 }

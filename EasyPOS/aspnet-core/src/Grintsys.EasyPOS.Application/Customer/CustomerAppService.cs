@@ -53,7 +53,6 @@ namespace Grintsys.EasyPOS.Customer
                     || x.Address.ToLower().Contains(filter)
                     || x.Code.ToLower().Contains(filter))
                     .OrderBy(x => x.FirstName).ToList();
-                return dto;
             }
 
             return dto;
