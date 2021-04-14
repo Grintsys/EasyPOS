@@ -25,16 +25,20 @@ export class LoginService{
     }
 
     public authorize(data: LoginInput): Promise<any> {
+        var body = {
+            'client_id': this.settings.CLIENT_ID,
+            'client_secret': this.settings.CLIENT_SECRET,
+            'grant_type': this.settings.GRANT_TYPE,
+            'username': data.username,
+            'password': data.password
+        }
         var httpOptions = {
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
-                "client_id": this.settings.CLIENT_ID,
-                "client_secret": this.settings.CLIENT_SECRET,
-                "grant_type": this.settings.GRANT_TYPE,
+                "Content-Type": "application/x-www-form-urlencoded",
             }),
         };
 
-        const promise = this._httpClient.post<LoginModel>(this.baseUrl, data, httpOptions).toPromise();
+        const promise = this._httpClient.post<LoginModel>(this.baseUrl, body, httpOptions).toPromise();
 
         return promise.then(response => 
         {
