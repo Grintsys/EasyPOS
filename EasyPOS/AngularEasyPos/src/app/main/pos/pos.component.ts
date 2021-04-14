@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
 
 import { locale as english } from './i18n/en';
@@ -13,12 +13,16 @@ import { locale as spanish } from './i18n/es';
 export class PosComponent
 {
 
+    @ViewChild("searchResults") searchResults: ElementRef;
+    @ViewChild("products") products: ElementRef;
+
     /**
      * Constructor
      *
      * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
      */
     constructor(
+        private renderer: Renderer2,
         private _fuseTranslationLoaderService: FuseTranslationLoaderService
     )
     {
@@ -34,5 +38,6 @@ export class PosComponent
     {
         // Do your search here...
         console.log(value);
+        this.searchResults.nativeElement.classList.toggle("active");
     }
 }

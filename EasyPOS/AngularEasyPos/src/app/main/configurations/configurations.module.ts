@@ -4,7 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { FuseSharedModule } from '@fuse/shared.module';
 
-import { SearchBarModule } from '../pos/search-bar/search-bar.module';
+import { SearchModule } from 'app/layout/components/search/search.module';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -63,7 +63,7 @@ const routes = [
 
         FuseSharedModule,
 
-        SearchBarModule,
+        SearchModule,
 
         MatTableModule,
         MatSortModule,

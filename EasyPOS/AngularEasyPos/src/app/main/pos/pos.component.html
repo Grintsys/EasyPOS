@@ -1,9 +1,15 @@
 <div class="page-layout blank">
 
     <div class="container-pos-product pr-24 pl-24 pb-24 pt-12" fusePerfectScrollbar>
-        <search-bar (input)="search($event)"></search-bar>
-        <pos-products></pos-products>
+        <div class="container-searchs">
+            <search (click)="search($event)"></search>
+            <div #searchResults class="tooltip-content bottom s-z-tooltip">
+                <search-results></search-results>
+            </div>
+        </div>
+        <div #products>
+            <pos-products></pos-products>
+        </div>
     </div>
     <pos-sidebar></pos-sidebar>
-
 </div>

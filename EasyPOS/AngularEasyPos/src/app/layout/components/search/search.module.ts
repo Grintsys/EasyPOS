@@ -5,23 +5,23 @@ import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { SearchBarComponent } from './search-bar.component';
+import { SearchComponent } from './search.component';
 
 @NgModule({
     declarations: [
-        SearchBarComponent
+        SearchComponent
     ],
     imports     : [
         CommonModule,
         RouterModule,
 
         MatButtonModule,
-        MatIconModule
+        MatIconModule,
     ],
     exports     : [
-        SearchBarComponent
+        SearchComponent
     ]
 })
-export class SearchBarModule
+export class SearchModule
 {
 }
