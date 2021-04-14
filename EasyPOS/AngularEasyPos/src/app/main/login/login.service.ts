@@ -24,21 +24,25 @@ export class LoginService{
         
     }
 
-    public authorize(data: LoginInput): Promise<any> {
-        var body = {
-            'client_id': this.settings.CLIENT_ID,
-            'client_secret': this.settings.CLIENT_SECRET,
-            'grant_type': this.settings.GRANT_TYPE,
-            'username': data.username,
-            'password': data.password
-        }
+    public authorize(input: LoginInput): Promise<any> {
+
+        let params = new URLSearchParams();   
+        params.append('grant_type', this.settings.GRANT_TYPE);
+        params.append('client_id', this.settings.CLIENT_ID);
+        params.append('client_secret', this.settings.CLIENT_SECRET);
+        //params.append('redirect_uri', this.redirectUri);
+        params.append('username', input.username);
+        params.append('password', input.password);
+
         var httpOptions = {
             headers: new HttpHeaders({
-                "Content-Type": "application/x-www-form-urlencoded",
+                "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
             }),
         };
 
-        const promise = this._httpClient.post<LoginModel>(this.baseUrl, body, httpOptions).toPromise();
+        console.log(params.toString());
+
+        const promise = this._httpClient.post<LoginModel>(this.baseUrl, params.toString(), httpOptions).toPromise();
 
         return promise.then(response => 
         {
