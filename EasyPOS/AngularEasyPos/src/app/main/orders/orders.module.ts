@@ -18,7 +18,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { OrderService } from './order/order.service';
+import { OrderService } from './order.service';
 import { OrderDetailsComponent } from './order/order-details/order-details.component';
 import { CreditAndDebitNotesComponent } from './order/credit-and-debit-notes/credit-and-debit-notes.component';
 import { OrderComponent } from './order/order.component';

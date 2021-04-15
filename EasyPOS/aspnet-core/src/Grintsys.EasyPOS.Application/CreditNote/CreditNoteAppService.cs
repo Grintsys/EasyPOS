@@ -2,6 +2,7 @@
 using Grintsys.EasyPOS.Enums;
 using Grintsys.EasyPOS.Order;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
@@ -38,28 +39,20 @@ namespace Grintsys.EasyPOS.CreditNote
             return dto;
         }
 
-        public override async Task<PagedResultDto<CreditNoteDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public async Task<List<CreditNoteDto>> GetCreditNoteList(string filter)
         {
-            if (input.Sorting.IsNullOrWhiteSpace())
+            var notes = await _creditNoteRepository.GetCreditNotesAsync();
+            var dto = new List<CreditNoteDto>(ObjectMapper.Map<List<CreditNote>, List<CreditNoteDto>>(notes));
+
+            if (!filter.IsNullOrWhiteSpace())
             {
-                input.Sorting = nameof(CreditNote.CustomerName);
+                filter = filter.ToLower();
+                dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(),
+                    x => x.CustomerName.ToLower().Contains(filter))
+                    .OrderBy(x => x.CustomerName).ToList();
             }
 
-            var creditNotes = await _creditNoteRepository.GetCreditNotesAsync();
-
-            //creditNotes = creditNotes
-                //.OrderBy(x => x.GetType().GetProperty(input.Sorting)?.GetValue(x, null)) 
-                //.Skip(input.SkipCount)
-                //.Take(input.MaxResultCount) as List<CreditNote>; //TODO
-
-            var creditNoteDto = await MapToGetListOutputDtosAsync(creditNotes);
-
-            var totalCount = await Repository.GetCountAsync();
-
-            return new PagedResultDto<CreditNoteDto>(
-                totalCount,
-                creditNoteDto
-            );
+            return dto;
         }
 
         public async Task<CreditNoteDto> CreateCreditNoteAsync(Guid orderId)

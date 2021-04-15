@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { FuseConfigService } from '@fuse/services/config.service';
 import { fuseAnimations } from '@fuse/animations';
+import { LoginService } from './login.service';
+import { LoginInput } from './login.input';
+import { Router } from "@angular/router";
 
 @Component({
     selector     : 'app-login',
@@ -23,7 +26,9 @@ export class LoginComponent implements OnInit
      */
     constructor(
         private _fuseConfigService: FuseConfigService,
-        private _formBuilder: FormBuilder
+        private _formBuilder: FormBuilder,
+        private _loginService: LoginService,
+        private router: Router
     )
     {
         // Configure the layout
@@ -55,7 +60,7 @@ export class LoginComponent implements OnInit
     ngOnInit(): void
     {
         this.loginForm = this._formBuilder.group({
-            email   : ['', [Validators.required, Validators.email]],
+            email   : ['', [Validators.required]],
             password: ['', Validators.required]
         });
 
@@ -69,5 +74,21 @@ export class LoginComponent implements OnInit
             html += '<div class="shape-container--'+i+' shape-animation"><div class="random-shape"></div></div>';
         }
         document.querySelector('.shape').innerHTML += html;
+    }
+
+    doLogin() {
+        const email = this.loginForm.get("email").value;
+        const password = this.loginForm.get("password").value;
+
+        const loginInput = new LoginInput(email, password);
+
+        this._loginService.authorize(loginInput).then(
+            () => {
+                this.router.navigate(["/pos"]);
+            },
+            (error) => {
+                console.log("Promise rejected with " + JSON.stringify(error));
+            }
+        );
     }
 }

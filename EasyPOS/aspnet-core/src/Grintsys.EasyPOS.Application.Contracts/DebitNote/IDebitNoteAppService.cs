@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -14,5 +15,6 @@ namespace Grintsys.EasyPOS.DebitNote
         >
     {
         Task<DebitNoteDto> CreateDebitNoteAsync(Guid orderId);
+        Task<List<DebitNoteDto>> GetDebiteNoteList(string filter);
     }
 }

@@ -3,8 +3,8 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Order } from '../order.model';
-import { OrderService } from '../order.service';
+import { Order } from '../../order.model';
+import { OrderService } from '../../order.service';
 
 import { locale as english } from '../../i18n/en';
 import { locale as spanish } from '../../i18n/es';
