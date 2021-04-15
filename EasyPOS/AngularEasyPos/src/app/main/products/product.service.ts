@@ -10,7 +10,8 @@ import { CreateUpdateProductDto, ProductDto } from "./product.model";
 
 @Injectable()
 export class ProductService implements Resolve<any> {
-    baseUrl: string = "https://localhost:44339/api/app/product";
+    baseUrl: string;
+    authToken: string;
     routeParams: any;
     product: any;
     onProductChanged: BehaviorSubject<any>;
@@ -30,6 +31,8 @@ export class ProductService implements Resolve<any> {
     constructor(private _httpClient: HttpClient) {
         // Set the defaults
         this.onProductChanged = new BehaviorSubject({});
+        this.baseUrl = `${localStorage.getItem('baseUrl')}/api/app/product`;
+        this.authToken = localStorage.getItem('token');
     }
 
     /**
@@ -69,25 +72,34 @@ export class ProductService implements Resolve<any> {
     }
     
     public getProductLookup(): Promise<any> {
-        const promise = this._httpClient.get<ProductDto[]>(this.baseUrl, this.httpOptions).toPromise();
+        const promise = this._httpClient.get<ProductDto[]>(this.baseUrl, this.getHttpOptions()).toPromise();
         return promise;
     }
     
     public get(productId: string): Promise<any> {
         var url = `${this.baseUrl}/${productId}/product`
-        const promise = this._httpClient.get<ProductDto>(url, this.httpOptions).toPromise();
+        const promise = this._httpClient.get<ProductDto>(url, this.getHttpOptions()).toPromise();
         return promise;
     }
     
     public getList(filter: string): Promise<any> {
         var url = `${this.baseUrl}/product-list${filter != `` ? `?filter=${filter}` : ``}`;
-        const promise = this._httpClient.get<ProductDto[]>(url, this.httpOptions).toPromise();
+        const promise = this._httpClient.get<ProductDto[]>(url, this.getHttpOptions()).toPromise();
         return promise;
     }
 
     public getListByWarehouse(wareHouseId: string): Promise<any> {
         var url = `${this.baseUrl}/product-list-by-warehouse/${wareHouseId}`
-        const promise = this._httpClient.get<ProductDto[]>(url, this.httpOptions).toPromise();
+        const promise = this._httpClient.get<ProductDto[]>(url, this.getHttpOptions()).toPromise();
         return promise;
+    }
+
+    private getHttpOptions(){
+        return {
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                Authorization: this.authToken,
+            }),
+        };
     }
 }

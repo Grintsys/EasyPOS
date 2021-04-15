@@ -46,7 +46,8 @@ export class LoginService{
 
         return promise.then(response => 
         {
-            localStorage.setItem("token", response.access_token)
+            localStorage.setItem("token", response.access_token);
+            localStorage.setItem("baseUrl", this.settings.API_URL);
         });
     }
 }
