@@ -2,4 +2,26 @@
     /* Border */
     border: 1px solid #CFE0E3;
     box-sizing: border-box;
+
+    .mat-icon-button {
+        padding: 0;
+        min-width: 0;
+        width: 30px;
+        height: 30px;
+        flex-shrink: 0;
+        line-height: 20px;
+        border-radius: 50%;
+    }
+
+    .buttoms {
+        background-color: #E3FCFF;
+        border-radius: 18px;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+
+        button {
+            color: #00BCD4;
+        }
+    }
 }

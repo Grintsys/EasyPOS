@@ -36,7 +36,19 @@
         <ng-container matColumnDef="quantity">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</mat-header-cell>
             <mat-cell *matCellDef="let product">
-                <p class="text-truncate">{{product.quantity}}</p>
+                <div class="buttoms">
+                    <div>
+                        <button mat-icon-button>
+                            <mat-icon class="s-16">remove</mat-icon>
+                        </button>
+                    </div>
+                    <span class="text-truncate">{{product.quantity}}</span>
+                    <div>
+                        <button mat-icon-button>
+                            <mat-icon class="s-16">add_circle</mat-icon>
+                        </button>
+                    </div>
+                </div>
             </mat-cell>
         </ng-container>
 
