@@ -19,6 +19,7 @@ namespace Grintsys.EasyPOS.OrderItem
         IOrderItemAppService
     {
         private readonly IOrderItemRepository _orderItemRepository;
+
         public OrderItemAppService(IRepository<Order.OrderItem, Guid> repository, IOrderItemRepository orderItemRepository) : base(repository)
         {
             _orderItemRepository = orderItemRepository;
