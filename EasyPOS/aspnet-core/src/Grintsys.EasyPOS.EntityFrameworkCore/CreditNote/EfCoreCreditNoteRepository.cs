@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -22,6 +23,15 @@ namespace Grintsys.EasyPOS.CreditNote
             var data = (await GetQueryableAsync())
                 .Include(x => x.Items)
                 .Include(x => x.Customer);
+            return await data.ToListAsync();
+        }
+
+        public async Task<List<CreditNote>> GetCreditNotesByOrderAsync(Guid orderId)
+        {
+            var data = (await GetQueryableAsync())
+                .Include(x => x.Items)
+                .Include(x => x.Customer)
+                .Where(x => x.OrderId == orderId);
             return await data.ToListAsync();
         }
 

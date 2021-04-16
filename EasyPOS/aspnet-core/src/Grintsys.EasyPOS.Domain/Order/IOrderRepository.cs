@@ -7,6 +7,7 @@ namespace Grintsys.EasyPOS.Order
 {
     public interface IOrderRepository : IRepository<Order, Guid>
     {
+        Task<Order> GetByIdAsync(Guid id);
         Task<List<Order>> GetOrdersAsync();
         Task<Order> GetOrdersByIdAsync(Guid id);
     }

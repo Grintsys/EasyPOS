@@ -25,27 +25,6 @@ namespace Grintsys.EasyPOS.Order
         {
             _orderRepository = orderRepository;
         }
-
-        protected override async Task DeleteByIdAsync(Guid id)
-        {
-            var order = base.GetEntityByIdAsync(id).Result;
-
-            var createUpdateDto = new CreateUpdateOrderDto()
-            {
-                Id = id,
-                CustomerId = order.CustomerId,
-                State = DocumentState.Cancelled
-            };
-
-            try
-            {
-                await base.UpdateAsync(id, createUpdateDto);
-            }
-            catch(Exception e)
-            {
-                await base.UpdateAsync(id, createUpdateDto);
-            }
-        }
         
         public override async Task<OrderDto> GetAsync(Guid id)
         {
@@ -54,6 +33,13 @@ namespace Grintsys.EasyPOS.Order
             return dto;
         }
 
+        public async Task<OrderDto> GetByIdAsync(Guid id)
+        {
+            var order = await _orderRepository.GetByIdAsync(id);
+            var dto = ObjectMapper.Map<Order, OrderDto>(order);
+            return dto;
+        }
+                
         public async Task<List<OrderDto>> GetOrderList(string filter)
         {
             var orders = await _orderRepository.GetOrdersAsync();
@@ -68,6 +54,34 @@ namespace Grintsys.EasyPOS.Order
             }
 
             return dto;
+        }
+        
+        protected override async Task DeleteByIdAsync(Guid id)
+        {
+            var order = base.GetEntityByIdAsync(id).Result;
+
+            var createUpdateDto = new CreateUpdateOrderDto()
+            {
+                Id = id,
+                CustomerId = order.CustomerId,
+                State = DocumentState.Cancelled
+            };
+
+            await base.UpdateAsync(id, createUpdateDto);
+        }
+        
+        public async Task<OrderDocumentDto> GetOrderDocuments(Guid orderId)
+        {
+            var order = await _orderRepository.GetOrdersByIdAsync(orderId);
+            var dto = ObjectMapper.Map<Order, OrderDto>(order);
+
+            var documents = new OrderDocumentDto()
+            {
+                DebitNotes = dto.DebitNotes,
+                CreditNotes = dto.CreditNotes
+            };
+            
+            return documents;
         }
     }
 }

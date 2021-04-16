@@ -55,6 +55,22 @@ namespace Grintsys.EasyPOS.CreditNote
             return dto;
         }
 
+        public async Task<List<CreditNoteDto>> GetCreditNoteListByOrder(string filter, Guid orderId)
+        {
+            var notes = await _creditNoteRepository.GetCreditNotesByOrderAsync(orderId);
+            var dto = new List<CreditNoteDto>(ObjectMapper.Map<List<CreditNote>, List<CreditNoteDto>>(notes));
+
+            if (!filter.IsNullOrWhiteSpace())
+            {
+                filter = filter.ToLower();
+                dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(),
+                    x => x.CustomerName.ToLower().Contains(filter))
+                    .OrderBy(x => x.CustomerName).ToList();
+            }
+
+            return dto;
+        }
+
         public async Task<CreditNoteDto> CreateCreditNoteAsync(Guid orderId)
         {
             var order = await _orderRepository.GetOrdersByIdAsync(orderId);
@@ -92,6 +108,20 @@ namespace Grintsys.EasyPOS.CreditNote
                 TotalItem = item.TotalItem,
                 CreditNoteId = creditNoteId
             };
+        }
+        
+        protected override async Task DeleteByIdAsync(Guid id)
+        {
+            var order = base.GetEntityByIdAsync(id).Result;
+
+            var createUpdateDto = new CreateUpdateCreditNoteDto()
+            {
+                Id = id,
+                CustomerId = order.CustomerId,
+                State = DocumentState.Cancelled
+            };
+
+            await base.UpdateAsync(id, createUpdateDto);
         }
     }
 }

@@ -16,5 +16,6 @@ namespace Grintsys.EasyPOS.CreditNote
     {
         Task<CreditNoteDto> CreateCreditNoteAsync(Guid orderId);
         Task<List<CreditNoteDto>> GetCreditNoteList(string filter);
+        Task<List<CreditNoteDto>> GetCreditNoteListByOrder(string filter, Guid orderId);
     }
 }

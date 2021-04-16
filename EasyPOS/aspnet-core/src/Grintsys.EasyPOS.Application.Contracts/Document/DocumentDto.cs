@@ -9,6 +9,7 @@ namespace Grintsys.EasyPOS.Document
     {
         public Guid CustomerId { get; set; }
         public string CustomerName { get; set; }
+        public string CustomerCode { get; set; }
         public DocumentState State { get; set; }
         public float SubTotal { get; set; }
         public float ISV { get; set; }
