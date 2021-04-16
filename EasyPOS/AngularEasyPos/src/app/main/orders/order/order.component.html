@@ -20,7 +20,7 @@
                 <div fxLayout="column" fxLayoutAlign="start start"
                     [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
                     <div class="h2">
-                        Orden {{order.code}}
+                        Orden {{order.customerName}}
                     </div>
                     <div class="subtitle secondary-text">
                         <span>Contado</span>
@@ -47,17 +47,17 @@
         <div class="content-card">
 
             <!-- CONTENT -->
-            <div class="content">
+            <div *ngIf="isDataAvailable" class="content">
 
                 <mat-tab-group>
                     <mat-tab label="Detalles de la orden">
-                        <app-order-details></app-order-details>
+                        <app-order-details [order]= "order"></app-order-details>
                     </mat-tab>
-                    <mat-tab label="(3) productos">
-                        <app-order-products></app-order-products>
+                    <mat-tab label="({{order.items.length}}) productos">
+                        <app-order-products [order]= "order"></app-order-products>
                     </mat-tab>
-                    <mat-tab label="(2) Notas de crédito / débito">
-                        <app-credit-and-debit-notes></app-credit-and-debit-notes>
+                    <mat-tab label="({{order.creditNotes.length + order.debitNotes.length}}) Notas de crédito / débito">
+                        <app-credit-and-debit-notes [order]= "order"></app-credit-and-debit-notes>
                     </mat-tab>
                 </mat-tab-group>
 

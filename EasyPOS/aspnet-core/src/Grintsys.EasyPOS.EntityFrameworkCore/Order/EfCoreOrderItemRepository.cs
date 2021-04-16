@@ -19,7 +19,7 @@ namespace Grintsys.EasyPOS.Order
                 
         public async Task<List<OrderItem>> GetByOrderIdAsync(Guid orderId){
             var data = (await GetQueryableAsync())
-                .Where(x => x.Id == orderId).ToListAsync();
+                .Where(x => x.OrderId == orderId).ToListAsync();
             return await data;
         }
     }

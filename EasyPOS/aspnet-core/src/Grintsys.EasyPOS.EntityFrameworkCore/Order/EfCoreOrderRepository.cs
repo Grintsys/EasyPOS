@@ -47,6 +47,7 @@ namespace Grintsys.EasyPOS.Order
         public async Task<Order> GetByIdAsync(Guid id)
         {
             var data = (await GetQueryableAsync())
+                .Include(x => x.Items)
                 .Include(x => x.Customer)
                 .Include(x => x.PaymentMethods)
                 .FirstOrDefaultAsync(x => x.Id == id);

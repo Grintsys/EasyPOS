@@ -6,6 +6,7 @@
             <input matInput placeholder="subtotal"
                     name="subtotal"
                     formControlName="subtotal"
+                    value="{{ order.subTotal }}"
                     disabled
                     required>
         </mat-form-field>
@@ -14,6 +15,7 @@
             <mat-label>Descuento</mat-label>
             <input matInput placeholder="Descuento"
                     name="discount"
+                    value="{{ order.discount }}"
                     formControlName="discount" disabled>
         </mat-form-field>
 
@@ -21,6 +23,7 @@
             <mat-label>Impuesto</mat-label>
             <input matInput placeholder="Impuesto"
                     name="tax"
+                    value="{{ order.isv }}"
                     formControlName="tax" disabled>
         </mat-form-field>
 
@@ -28,6 +31,7 @@
             <mat-label>Total</mat-label>
             <input matInput placeholder="Total"
                     name="total"
+                    value="{{ order.total }}"
                     formControlName="total" disabled>
         </mat-form-field>
 

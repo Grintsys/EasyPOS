@@ -99,12 +99,13 @@ namespace Grintsys.EasyPOS.DebitNote
         
         protected override async Task DeleteByIdAsync(Guid id)
         {
-            var order = base.GetEntityByIdAsync(id).Result;
+            var data = base.GetEntityByIdAsync(id).Result;
 
             var createUpdateDto = new CreateUpdateDebitNoteDto()
             {
+                OrderId = data.OrderId,
                 Id = id,
-                CustomerId = order.CustomerId,
+                CustomerId = data.CustomerId,
                 State = DocumentState.Cancelled
             };
 

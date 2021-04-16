@@ -122,15 +122,15 @@ export class OrderProduct {
      *
      * @param orderProduct
     */
-     constructor(orderProduct?)
-     {
+    constructor(orderProduct?)
+    {
         orderProduct = orderProduct || {};
         this.code = orderProduct.code || FuseUtils.generateGUID();
         this.productName = orderProduct.productName || '';
         this.quantity = orderProduct.quantity || 0;
         this.salePrice = orderProduct.salePrice || 0;
         this.total = orderProduct.total || 0;
-     }
+    }
 
     /**
     * Get data temp
@@ -153,23 +153,23 @@ export class CreditDebitNote {
     customerName: string;
     total: number;
     documentType: string;
-    status: string;
+    state: string;
 
     /**
      * Constructor
      *
      * @param creditDebitNote
     */
-     constructor(creditDebitNote?)
-     {
+    constructor(creditDebitNote?)
+    {
         creditDebitNote = creditDebitNote || {};
-        this.code = creditDebitNote.code || FuseUtils.generateGUID();
+        this.code = creditDebitNote.id || FuseUtils.generateGUID();
         this.customerCode = creditDebitNote.customerCode || '';
         this.customerName = creditDebitNote.customerName || '';
         this.total = creditDebitNote.total || 0;
         this.documentType = creditDebitNote.documentType || '';
-        this.status = creditDebitNote.status || '';
-     }
+        this.state = creditDebitNote.state || '';
+    }
 
     /**
     * Get data temp
@@ -214,12 +214,13 @@ export class DocumentDto<T> {
     id?: string;
     customerId?: string;
     customerName?: string;
+    customerCode?: string;
     state: DocumentState;
     subTotal: number;
     isv: number;
     discount: number;
     total: number;
-    items: T[];
+    items: T[] = [];
 }
 
 export class DocumentItemDto {
@@ -241,9 +242,28 @@ export class CreateUpdateOrderItemDto extends CreateUpdateDocumentItemDto {
 }
 
 export class OrderDto extends DocumentDto<OrderItemDto> {
-    debitNotes: DebitNoteDto[];
-    creditNotes: CreditNoteDto[];
-    paymentMethods: PaymentMethodDto[];
+    debitNotes: DebitNoteDto[] = [];
+    creditNotes: CreditNoteDto[] = [];
+    paymentMethods: PaymentMethodDto[] = [];
+    paymentAmount: number;
+
+    // constructor(order){
+    //     super();
+    //     order = order || {};
+    //     this.id = order.id || FuseUtils.generateGUID();
+    //     this.customerId = order.customerId || FuseUtils.generateGUID();
+    //     this.customerName = order.customerName || '';
+    //     this.customerCode = order.customerCode || '';
+    //     this.state = order.state || '';
+    //     this.subTotal = order.subTotal || '';
+    //     this.isv = order.isv || '';
+    //     this.discount = order.discount || '';
+    //     this.total = order.total || '';
+    //     this.items = order.items || [];
+    //     this.debitNotes = order.debitNotes || [];
+    //     this.creditNotes = order.creditNotes || [];
+    //     this.paymentMethods = order.paymentMethods || [];
+    // }
 }
 
 export class OrderItemDto extends DocumentItemDto {

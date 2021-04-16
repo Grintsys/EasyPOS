@@ -51,19 +51,20 @@
         <ng-container matColumnDef="status">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
             <mat-cell *matCellDef="let product">
-                <p class="text-truncate">{{product.status}}</p>
+                <p class="text-truncate">{{product.state}}</p>
             </mat-cell>
         </ng-container>
 
         <!-- OPTIONS Column -->
         <ng-container matColumnDef="options" stickyEnd>
             <mat-header-cell *matHeaderCellDef>Opciones</mat-header-cell>
-            <mat-cell *matCellDef="let order">
+            <mat-cell *matCellDef="let product">
                 <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
                     <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item>
+                    <button mat-menu-item
+                        (click)="delete(product.code, product.documentType)">
                         <mat-icon>cancel</mat-icon>
                         <span>Cancelar</span>
                     </button>
