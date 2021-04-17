@@ -18,7 +18,7 @@
         <ng-container matColumnDef="productName">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre del producto</mat-header-cell>
             <mat-cell *matCellDef="let product">
-                <p class="text-truncate">{{product.productName}}</p>
+                <p class="text-truncate">{{product.name}}</p>
             </mat-cell>
         </ng-container>
 
@@ -38,12 +38,27 @@
             </mat-cell>
         </ng-container>
 
+        <!-- DISCOUNT Column -->
+        <ng-container matColumnDef="discount">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Descuento</mat-header-cell>
+            <mat-cell *matCellDef="let product">
+                <p class="text-truncate">{{product.discount}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- DISCOUNT Column -->
+        <ng-container matColumnDef="isv">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>ISV</mat-header-cell>
+            <mat-cell *matCellDef="let product">
+                <p class="text-truncate">{{product.taxes}}</p>
+            </mat-cell>
+        </ng-container>
 
         <!-- TOTAL Column -->
         <ng-container matColumnDef="total">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
             <mat-cell *matCellDef="let product">
-                <p class="text-truncate">{{product.total}}</p>
+                <p class="text-truncate">{{product.totalItem}}</p>
             </mat-cell>
         </ng-container>
 

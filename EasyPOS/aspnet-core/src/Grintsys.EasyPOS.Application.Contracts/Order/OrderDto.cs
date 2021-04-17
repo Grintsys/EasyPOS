@@ -11,5 +11,6 @@ namespace Grintsys.EasyPOS.Order
         public List<DebitNoteDto> DebitNotes { get; set; } = new List<DebitNoteDto>();
         public List<CreditNoteDto> CreditNotes { get; set; } = new List<CreditNoteDto>();
         public List<PaymentMethodDto> PaymentMethods { get; set; } = new List<PaymentMethodDto>();
+        public float PaymentAmount { get; set; }
     }
 }

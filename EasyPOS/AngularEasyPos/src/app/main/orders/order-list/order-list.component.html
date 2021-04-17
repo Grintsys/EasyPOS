@@ -9,12 +9,12 @@
 
         <!-- HEADER -->
         <div class="header accent"
-             fxLayout="column" fxLayoutAlign="center center"
-             fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+            fxLayout="column" fxLayoutAlign="center center"
+            fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
 
             <!-- APP TITLE -->
             <div class="logo mb-24 mb-md-0"
-                 fxLayout="row" fxLayoutAlign="start center">
+                fxLayout="row" fxLayoutAlign="start center">
                 <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
                     list_alt
                 </mat-icon>
@@ -33,64 +33,71 @@
 
         <!-- CONTENT CARD -->
         <div class="content-card">
-
-
             <mat-table class="orders-table"
                         #table [dataSource]="dataSource"
                         matSort
                         fusePerfectScrollbar>
         
-                <!-- CODE Column -->
-                <ng-container matColumnDef="code">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
-                    <mat-cell *matCellDef="let order"
-                    [routerLink]="'/order/'+order.code+'/'+order.customerName">
-                        <p class="text-truncate">{{order.code}}</p>
-                    </mat-cell>
-                </ng-container>
-        
                 <!-- CUSTOMER_CODE Column -->
                 <ng-container matColumnDef="customerCode">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Código del cliente</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Código del Cliente</mat-header-cell>
                     <mat-cell *matCellDef="let order"
-                    [routerLink]="'/order/'+order.code+'/'+order.customerName">
+                    [routerLink]="'/order/'+order.id+'/view'">
                         <p class="text-truncate">{{order.customerCode}}</p>
                     </mat-cell>
                 </ng-container>
         
                 <!-- CUSTOMER_NAME Column -->
                 <ng-container matColumnDef="customerName">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre del cliente</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre del Cliente</mat-header-cell>
                     <mat-cell *matCellDef="let order"
-                    [routerLink]="'/order/'+order.code+'/'+order.customerName">
+                    [routerLink]="'/order/'+order.id+'/view'">
                         <p class="text-truncate">{{order.customerName}}</p>
                     </mat-cell>
                 </ng-container>
         
+                <!-- SUB_TOTAL Column -->
+                <ng-container matColumnDef="subTotal">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Subtotal</mat-header-cell>
+                    <mat-cell *matCellDef="let order"
+                    [routerLink]="'/order/'+order.id+'/view'">
+                        <p class="text-truncate">{{order.subTotal}}</p>
+                    </mat-cell>
+                </ng-container>
+        
+                <!-- ISV Column -->
+                <ng-container matColumnDef="isv">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>ISV</mat-header-cell>
+                    <mat-cell *matCellDef="let order"
+                    [routerLink]="'/order/'+order.id+'/view'">
+                        <p class="text-truncate">{{order.isv}}</p>
+                    </mat-cell>
+                </ng-container>
+        
+                <!-- DISCOUNT Column -->
+                <ng-container matColumnDef="discount">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Descuento</mat-header-cell>
+                    <mat-cell *matCellDef="let order"
+                    [routerLink]="'/order/'+order.id+'/view'">
+                        <p class="text-truncate">{{order.discount}}</p>
+                    </mat-cell>
+                </ng-container>
+
                 <!-- TOTAL Column -->
                 <ng-container matColumnDef="total">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
                     <mat-cell *matCellDef="let order"
-                    [routerLink]="'/order/'+order.code+'/'+order.customerName">
+                    [routerLink]="'/order/'+order.id+'/view'">
                         <p class="text-truncate">{{order.total}}</p>
-                    </mat-cell>
-                </ng-container>
-        
-                <!-- DOCUMENT_TYPE Column -->
-                <ng-container matColumnDef="documentType">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de documento</mat-header-cell>
-                    <mat-cell *matCellDef="let order"
-                    [routerLink]="'/order/'+order.code+'/'+order.customerName">
-                        <p class="text-truncate">{{order.documentType}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <!-- STATUS Column -->
-                <ng-container matColumnDef="status">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+                <ng-container matColumnDef="state">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
                     <mat-cell *matCellDef="let order"
-                    [routerLink]="'/order/'+order.code+'/'+order.customerName">
-                        <p class="text-truncate">{{order.status}}</p>
+                    [routerLink]="'/order/'+order.id+'/view'">
+                        <p class="text-truncate">{{order.state}}</p>
                     </mat-cell>
                 </ng-container>
 
@@ -102,7 +109,8 @@
                             <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #menu="matMenu">
-                            <button mat-menu-item>
+                            <button mat-menu-item
+                            (click)="deleteOrder(order.id)">
                                 <mat-icon>cancel</mat-icon>
                                 <span>Cancelar orden</span>
                             </button>

@@ -38,9 +38,25 @@ namespace Grintsys.EasyPOS.DebitNote
             return dto;
         }
 
-        public async Task<List<DebitNoteDto>> GetDebiteNoteList(string filter)
+        public async Task<List<DebitNoteDto>> GetDebitNoteList(string filter)
         {
             var notes = await _debitNoteRepository.GetDebitNotesAsync();
+            var dto = new List<DebitNoteDto>(ObjectMapper.Map<List<DebitNote>, List<DebitNoteDto>>(notes));
+
+            if (!filter.IsNullOrWhiteSpace())
+            {
+                filter = filter.ToLower();
+                dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(),
+                    x => x.CustomerName.ToLower().Contains(filter))
+                    .OrderBy(x => x.CustomerName).ToList();
+            }
+
+            return dto;
+        }
+
+        public async Task<List<DebitNoteDto>> GetDebitNoteListByOrder(string filter, Guid orderId)
+        {
+            var notes = await _debitNoteRepository.GetDebitNotesByOrderAsync(orderId);
             var dto = new List<DebitNoteDto>(ObjectMapper.Map<List<DebitNote>, List<DebitNoteDto>>(notes));
 
             if (!filter.IsNullOrWhiteSpace())
@@ -79,6 +95,21 @@ namespace Grintsys.EasyPOS.DebitNote
             }
 
             return null;
+        }
+        
+        protected override async Task DeleteByIdAsync(Guid id)
+        {
+            var data = base.GetEntityByIdAsync(id).Result;
+
+            var createUpdateDto = new CreateUpdateDebitNoteDto()
+            {
+                OrderId = data.OrderId,
+                Id = id,
+                CustomerId = data.CustomerId,
+                State = DocumentState.Cancelled
+            };
+
+            await base.UpdateAsync(id, createUpdateDto);
         }
     }
 }

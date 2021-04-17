@@ -1,15 +1,17 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import {
     ActivatedRouteSnapshot,
     Resolve,
     RouterStateSnapshot,
 } from "@angular/router";
 import { BehaviorSubject, Observable } from "rxjs";
+import { CreateUpdateOrderDto, OrderDto } from "./order.model";
 
 @Injectable()
 export class OrderService implements Resolve<any> {
-    baseUrl: string = 'https://localhost:44339/api/app/order';
+    baseUrl: string;
+    authToken: string;
     routeParams: any;
     order: any;
     onOrderChanged: BehaviorSubject<any>;
@@ -22,6 +24,8 @@ export class OrderService implements Resolve<any> {
     constructor(private _httpClient: HttpClient) {
         // Set the defaults
         this.onOrderChanged = new BehaviorSubject({});
+        this.baseUrl = `${localStorage.getItem('baseUrl')}/api/app/`;
+        this.authToken = localStorage.getItem('token');
     }
 
     /**
@@ -51,17 +55,75 @@ export class OrderService implements Resolve<any> {
      */
     getOrder(): Promise<any> {
         return new Promise((resolve, reject) => {
-            if (this.routeParams.id === "detail") {
-                this.onOrderChanged.next(false);
-                resolve(false);
-            } else {
-                this.onOrderChanged.next(true);
-                resolve(true);
-            }
+            var data = {
+                Id: this.routeParams.id,
+                Type: this.routeParams.handle,
+            };
+            this.onOrderChanged.next(data);
+            resolve(data);
         });
     }
 
-    private fetchData(){
-        const promise = this._httpClient.get(this.baseUrl).toPromise();
+    public create(data: CreateUpdateOrderDto): Promise<any> {
+        var url = `${this.baseUrl}order`
+        const promise = this._httpClient.post<OrderDto>(url, data, this.getHttpOptions()).toPromise();
+        return promise;
+    }
+
+    public update(orderId: string, data: CreateUpdateOrderDto): Promise<any> {
+        var url = `${this.baseUrl}order/${orderId}`
+        const promise = this._httpClient.put<OrderDto>(url, data, this.getHttpOptions()).toPromise();
+        return promise;
+    } 
+    
+    public delete(orderId: string): Promise<any> {
+        var url = `${this.baseUrl}order/${orderId}`
+        const promise = this._httpClient.delete<OrderDto>(url, this.getHttpOptions()).toPromise();
+        return promise;
+    }
+
+    public deleteCreditNote(id: string): Promise<any> {
+        var url = `${this.baseUrl}credit-note/${id}`
+        const promise = this._httpClient.delete<OrderDto>(url, this.getHttpOptions()).toPromise();
+        return promise;
+    }
+
+    public deleteDebitNote(id: string): Promise<any> {
+        var url = `${this.baseUrl}debit-note/${id}`
+        const promise = this._httpClient.delete<OrderDto>(url, this.getHttpOptions()).toPromise();
+        return promise;
+    }
+
+    public get(orderId: string): Promise<any> {
+        var url = `${this.baseUrl}order/${orderId}`
+        const promise = this._httpClient.get<OrderDto>(url, this.getHttpOptions()).toPromise();
+        return promise;
+    }
+    
+    public getList(filter: string): Promise<any> {
+        var url = `${this.baseUrl}order/order-list${filter != `` ? `?filter=${filter}` : ``}`;
+        const promise = this._httpClient.get<OrderDto[]>(url, this.getHttpOptions()).toPromise();
+        return promise;
+    }
+    
+    public getOrderItemsByOrderId(orderId: string): Promise<any> {
+        var url = `${this.baseUrl}order-item/order-items-by-order-id/${orderId}`;
+        const promise = this._httpClient.get<OrderDto[]>(url, this.getHttpOptions()).toPromise();
+        return promise;
+    } 
+    
+    public getOrderDocumentsByOrderId(orderId: string): Promise<any> {
+        var url = `${this.baseUrl}order/order-documents/${orderId}`;
+        const promise = this._httpClient.get<OrderDto[]>(url, this.getHttpOptions()).toPromise();
+        return promise;
+    }
+
+    private getHttpOptions(){
+        return {
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                Authorization: this.authToken,
+            }),
+        };
     }
 }

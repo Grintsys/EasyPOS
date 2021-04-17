@@ -15,5 +15,6 @@ namespace Grintsys.EasyPOS.Order
         >
     {
         Task<List<OrderDto>> GetOrderList(string filter);
+        Task<OrderDocumentDto> GetOrderDocuments(Guid orderId);
     }
 }
