@@ -58,12 +58,17 @@ export class OrderComponent implements OnInit {
                         },
                         (error) => {
                             console.log(
-                                "Promise rejected with " + JSON.stringify(error)
+                                "Get Order Faild: " + JSON.stringify(error)
                             );
                         }
                     );
                 }
             });
+    }
+
+    refreshOrder(order: OrderDto){
+        console.log("HOla");
+        this.order = order;
     }
 
     /**

@@ -5,7 +5,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { FuseTranslationLoaderService } from "@fuse/services/translation-loader.service";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-
+import { Output, EventEmitter } from '@angular/core';
 import { locale as english } from "../../i18n/en";
 import { locale as spanish } from "../../i18n/es";
 import { CreditDebitNote, OrderDto } from "../../order.model";
@@ -27,6 +27,8 @@ export class CreditAndDebitNotesComponent {
         "status",
         "options",
     ];
+
+    @Output() orderEvent = new EventEmitter<OrderDto>();
 
     @ViewChild(MatPaginator, { static: true })
     paginator: MatPaginator;
@@ -81,6 +83,7 @@ export class CreditAndDebitNotesComponent {
     }
 
     setDataSource() {
+        this.notes = [];
         this.order.creditNotes.forEach((cn) => {
             var creditNote = new CreditDebitNote(cn);
             creditNote.documentType = "Note de Credito";
@@ -102,22 +105,37 @@ export class CreditAndDebitNotesComponent {
         if(type === 'Note de Debito'){
             this._orderService.deleteDebitNote(id).then(
                 (d) => {
-                    
+                    this.get();
                 },
                 (error) => {
-                    console.log("Promise rejected with " + JSON.stringify(error));
+                    console.log("Delete Debit Note Failed: " + JSON.stringify(error));
                 }
             );
         }
         else if(type == 'Note de Credito'){
             this._orderService.deleteCreditNote(id).then(
                 (d) => {
-                    
+                    this.get();
                 },
                 (error) => {
-                    console.log("Promise rejected with " + JSON.stringify(error));
+                    console.log("Delete Credit Note Failed: " + JSON.stringify(error));
                 }
             );
         }
+    }
+
+    get(){
+        this._orderService.get(this.order.id).then(
+            (order) => {
+                this.order = order;
+                this.setDataSource();
+                this.orderEvent.emit(order);
+            },
+            (error) => {
+                console.log(
+                    "Get Order Faild: " + JSON.stringify(error)
+                );
+            }
+        );
     }
 }
