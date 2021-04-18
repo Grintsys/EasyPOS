@@ -1,5 +1,6 @@
 import { CLASS_NAME } from '@angular/flex-layout';
 import { FuseUtils } from '@fuse/utils';
+import { ProductDto } from '../products/product.model';
 
 export class Order {
     code: number;
@@ -224,7 +225,7 @@ export class DocumentDto<T> {
 }
 
 export class DocumentItemDto {
-    id?: string;
+    productId?: string;
     name?: string;
     description?: string;
     code?: string;
@@ -268,6 +269,20 @@ export class OrderDto extends DocumentDto<OrderItemDto> {
 
 export class OrderItemDto extends DocumentItemDto {
     orderId?: string;
+
+    constructor(product: ProductDto){
+        super();
+        product = product || new ProductDto,
+        this.productId = product.id || '',
+        this.name = product.name || '',
+        this.description = product.description || '',
+        this.code = product.code || '',
+        this.salePrice = product.salePrice || 0,
+        this.taxes = product.taxes || 0,
+        this.discount = product.taxes || 0,
+        this.quantity = 0,
+        this.totalItem = this.quantity * this.salePrice
+    }
 }
 
 export class CreateUpdateDebitNoteDto extends CreateUpdateDocumentDto<CreateUpdateDebitNoteItemDto> {

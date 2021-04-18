@@ -18,6 +18,7 @@ import { PosSidebarModule } from './pos-sidebar/pos-sidebar.module';
 
 // COMPONENT UI
 import { PosComponent } from './pos.component';
+import { PosService } from './pos.service';
 import { PosProductsComponent } from './pos-products/pos-products.component';
 import { SearchModule } from 'app/layout/components/search/search.module';
 import { SearchResultsModule } from './search-results/search-results.module';
@@ -55,6 +56,9 @@ const routes = [
     ],
     exports     : [
         PosComponent,
+    ],
+    providers : [
+        PosService,
     ]
 })
 

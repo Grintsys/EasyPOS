@@ -8,6 +8,7 @@ import {
 import { BehaviorSubject, Observable } from "rxjs";
 import { CreateUpdateCustomerDto, CustomerDto } from "./customer.model";
 import { AppSettingsService } from "../../app-settings/app-settings.service"
+import { Router } from "@angular/router";
 
 @Injectable()
 export class CustomerService implements Resolve<any> {
@@ -22,12 +23,10 @@ export class CustomerService implements Resolve<any> {
      *
      * @param {HttpClient} _httpClient
      */
-    constructor(private _httpClient: HttpClient, private _appSettingService: AppSettingsService) {
+    constructor(private _httpClient: HttpClient, private router: Router) {
         // Set the defaults
         this.onCustomerChanged = new BehaviorSubject({});
-        this.baseUrl = `${localStorage.getItem('baseUrl')}/api/app/customer`;
-        this.authToken = localStorage.getItem('token');
-        
+        this.checkSession();
     }
 
     /**
@@ -42,7 +41,6 @@ export class CustomerService implements Resolve<any> {
         state: RouterStateSnapshot
     ): Observable<any> | Promise<any> | any {
         this.routeParams = route.params;
-
         return new Promise<void>((resolve, reject) => {
             Promise.all([this.getcustomer()]).then(() => {
                 resolve();
@@ -102,5 +100,14 @@ export class CustomerService implements Resolve<any> {
                 Authorization: this.authToken,
             }),
         };
+    }
+
+    private checkSession() {
+        this.baseUrl = `${localStorage.getItem("baseUrl")}/api/app/product`;
+        this.authToken = localStorage.getItem("token");
+
+        if (this.authToken == null || this.baseUrl == null) {
+            this.router.navigate(["/login"]);
+        }
     }
 }

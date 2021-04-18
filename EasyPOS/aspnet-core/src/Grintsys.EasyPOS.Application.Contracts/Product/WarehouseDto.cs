@@ -8,6 +8,6 @@ namespace Grintsys.EasyPOS.Product
     {
         public string Name { get; set; }
         public string Address { get; set; }
-        public List<ProductWarehouseDto> ProductWarehouses { get; set; }
+        public List<ProductWarehouseDto> ProductWarehouses { get; set; } = new List<ProductWarehouseDto>();
     }
 }

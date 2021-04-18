@@ -8,6 +8,8 @@ import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
 import { navigation } from 'app/navigation/navigation';
+import { ToolbarService } from './toolbar.service';
+import { WarehouseDto } from 'app/main/products/product.model';
 
 @Component({
     selector     : 'toolbar',
@@ -25,6 +27,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
     navigation: any;
     selectedLanguage: any;
     userStatusOptions: any[];
+    warehouses: WarehouseDto[];
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -39,7 +42,8 @@ export class ToolbarComponent implements OnInit, OnDestroy
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _fuseSidebarService: FuseSidebarService,
-        private _translateService: TranslateService
+        private _translateService: TranslateService,
+        private _toolbarService: ToolbarService
     )
     {
         // Set the defaults
@@ -88,6 +92,8 @@ export class ToolbarComponent implements OnInit, OnDestroy
 
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+
+        this.warehouses = [];
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -110,6 +116,8 @@ export class ToolbarComponent implements OnInit, OnDestroy
 
         // Set the selected language from default languages
         this.selectedLanguage = _.find(this.languages, {id: this._translateService.currentLang});
+
+        this.getWarehouses('');
     }
 
     /**
@@ -159,5 +167,26 @@ export class ToolbarComponent implements OnInit, OnDestroy
 
         // Use the selected language for translations
         this._translateService.use(lang.id);
+    }
+
+    logOut(){
+        localStorage.clear();
+    }
+
+    getWarehouses(filter: string){
+        this._toolbarService.getWarehouseList(filter).then(
+            (data) => {
+                this.warehouses = data;
+            },
+            (error) => {
+                console.log("Toolbar-Component: Error Getting Warehouses List " + 
+                    JSON.stringify(error)
+                );
+            }
+        );
+    }
+
+    selectWarehouse(warehouseId: string){
+        localStorage.setItem("warehouseId", warehouseId);
     }
 }

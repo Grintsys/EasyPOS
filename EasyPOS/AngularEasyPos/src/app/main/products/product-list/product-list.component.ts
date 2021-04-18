@@ -75,7 +75,7 @@ export class ProductListComponent {
      *
      * @param value
      */
-    search(value): void {
+    search(value: any): void {
         this.getProductList(value.target.value);
     }
 

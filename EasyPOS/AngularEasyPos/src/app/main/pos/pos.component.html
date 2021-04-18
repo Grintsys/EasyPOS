@@ -4,11 +4,11 @@
         <div class="container-searchs">
             <search (click)="search($event)"></search>
             <div #searchResults class="tooltip-content bottom s-z-tooltip">
-                <search-results></search-results>
+                <search-results (newOrderItemEvent)="addItem($event)"></search-results>
             </div>
         </div>
         <div #products>
-            <pos-products></pos-products>
+            <pos-products [orderItems]="order.items"></pos-products>
         </div>
     </div>
     <pos-sidebar></pos-sidebar>

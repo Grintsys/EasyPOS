@@ -1,7 +1,9 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { FuseConfigService } from '@fuse/services/config.service';
+import { ProductDto } from 'app/main/products/product.model';
+import { OrderItemDto } from 'app/main/orders/order.model';
 
 @Component({
     selector   : 'app-product-card',
@@ -10,10 +12,12 @@ import { FuseConfigService } from '@fuse/services/config.service';
 })
 export class ProductCardComponent implements OnInit, OnDestroy
 {
-
-
     // Private
     private _unsubscribeAll: Subject<any>;
+    @Input() product: ProductDto;
+    @Output() newOrderItemEvent = new EventEmitter<OrderItemDto>();
+
+    quantity: number;
 
     /**
      * Constructor
@@ -26,6 +30,7 @@ export class ProductCardComponent implements OnInit, OnDestroy
     {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+        this.quantity = 0;
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -48,6 +53,21 @@ export class ProductCardComponent implements OnInit, OnDestroy
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
+    }
+
+    increaseOrderItem(){
+        this.quantity++;
+    }
+
+    decreaseOrderItem(){
+        this.quantity > 0 ? this.quantity-- : 0;  
+    }
+
+    addOrderItem(){
+        var orderItem = new OrderItemDto(this.product);
+        orderItem.quantity = this.quantity;
+        orderItem.totalItem = orderItem.quantity * orderItem.salePrice;
+        this.newOrderItemEvent.emit(orderItem);
     }
 
 }

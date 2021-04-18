@@ -8,13 +8,16 @@ $padding: 1em 1em 0 1em;;
         border-radius: 8px;
         border: 1px solid #e4e4e4;
 
-        .header {
+        .card-header {
             padding: $padding;
+        }
+
+        .card-text{
+            white-space: initial;
         }
 
         .body {
             padding: $padding;
-
             .price {
                 font-weight: 700;
                 font-size: 22px;

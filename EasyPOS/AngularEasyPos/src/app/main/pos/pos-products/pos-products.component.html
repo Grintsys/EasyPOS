@@ -39,13 +39,13 @@
                 <div class="buttoms">
                     <div>
                         <button mat-icon-button>
-                            <mat-icon class="s-16">remove</mat-icon>
+                            <mat-icon (click)="decreaseOrderItem(product.productId)" class="s-16">remove</mat-icon>
                         </button>
                     </div>
                     <span class="text-truncate">{{product.quantity}}</span>
                     <div>
                         <button mat-icon-button>
-                            <mat-icon class="s-16">add_circle</mat-icon>
+                            <mat-icon (click)="increaseOrderItem(product.productId)" class="s-16">add_circle</mat-icon>
                         </button>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
         <ng-container matColumnDef="total">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
             <mat-cell *matCellDef="let product">
-                <p class="text-truncate">{{product.total}}</p>
+                <p class="text-truncate">{{product.totalItem}}</p>
             </mat-cell>
         </ng-container>
 
@@ -76,7 +76,7 @@
                     <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item>
+                    <button (click)="removeOrderItem(product.productId)"mat-menu-item>
                         <mat-icon>delete</mat-icon>
                         <span>Eliminar</span>
                     </button>

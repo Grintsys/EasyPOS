@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -29,28 +31,29 @@ namespace Grintsys.EasyPOS.Product
             return dto;
         }
 
-        public override async Task<PagedResultDto<WarehouseDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public async Task<List<WarehouseDto>> GetWarehouseList(string filter)
         {
-            if (input.Sorting.IsNullOrWhiteSpace())
+            var data = await _warehouseRepository.GetWarehousesAsync();
+            try
             {
-                input.Sorting = nameof(WarehouseDto.Name);
+                var dto = new List<WarehouseDto>(ObjectMapper.Map<List<Warehouse>, List<WarehouseDto>>(data));
+                if (!filter.IsNullOrWhiteSpace())
+                {
+                    filter = filter.ToLower();
+                    dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), 
+                            x => x.Name.ToLower().Contains(filter) ||
+                                 x.Address.ToLower().Contains(filter))
+                        .OrderBy(x => x.Name).ToList();
+                }
+                return dto;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
 
-            var data = await _warehouseRepository.GetListAsync();
-
-            //data = data
-            //    .OrderBy(x => x.GetType().GetProperty(input.Sorting)?.GetValue(x, null))
-            //    .Skip(input.SkipCount)
-            //    .Take(input.MaxResultCount) as List<DebitNote>;
-
-            var dataDto = await MapToGetListOutputDtosAsync(data);
-
-            var totalCount = await Repository.GetCountAsync();
-
-            return new PagedResultDto<WarehouseDto>(
-                totalCount,
-                dataDto
-            );
+            
         }
     }
 }
