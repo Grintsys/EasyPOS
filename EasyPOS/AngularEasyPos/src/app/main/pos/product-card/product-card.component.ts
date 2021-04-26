@@ -1,17 +1,23 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Subject } from 'rxjs';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+} from "@angular/core";
+import { Subject } from "rxjs";
 
-import { FuseConfigService } from '@fuse/services/config.service';
-import { ProductDto } from 'app/main/products/product.model';
-import { OrderItemDto } from 'app/main/orders/order.model';
+import { FuseConfigService } from "@fuse/services/config.service";
+import { ProductDto } from "app/main/products/product.model";
+import { OrderItemDto } from "app/main/orders/order.model";
 
 @Component({
-    selector   : 'app-product-card',
-    templateUrl: './product-card.component.html',
-    styleUrls  : ['./product-card.component.scss']
+    selector: "app-product-card",
+    templateUrl: "./product-card.component.html",
+    styleUrls: ["./product-card.component.scss"],
 })
-export class ProductCardComponent implements OnInit, OnDestroy
-{
+export class ProductCardComponent implements OnInit, OnDestroy {
     // Private
     private _unsubscribeAll: Subject<any>;
     @Input() product: ProductDto;
@@ -19,55 +25,35 @@ export class ProductCardComponent implements OnInit, OnDestroy
 
     quantity: number;
 
-    /**
-     * Constructor
-     *
-     * @param {FuseConfigService} _fuseConfigService
-     */
-    constructor(
-        private _fuseConfigService: FuseConfigService
-    )
-    {
+    constructor(private _fuseConfigService: FuseConfigService) {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
         this.quantity = 0;
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
+    ngOnInit(): void {}
 
-    /**
-     * On init
-     */
-    ngOnInit(): void
-    {
-
-    }
-
-    /**
-     * On destroy
-     */
-    ngOnDestroy(): void
-    {
+    ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
     }
 
-    increaseOrderItem(){
+    increaseOrderItem() {
         this.quantity++;
     }
 
-    decreaseOrderItem(){
-        this.quantity > 0 ? this.quantity-- : 0;  
+    decreaseOrderItem() {
+        this.quantity > 0 ? this.quantity-- : 0;
     }
 
-    addOrderItem(){
-        var orderItem = new OrderItemDto(this.product);
-        orderItem.quantity = this.quantity;
-        orderItem.totalItem = orderItem.quantity * orderItem.salePrice;
-        this.newOrderItemEvent.emit(orderItem);
+    addOrderItem() {
+        if (this.quantity > 0) {
+            var orderItem = new OrderItemDto(this.product);
+            orderItem.quantity = this.quantity;
+            orderItem.totalItem = orderItem.quantity * orderItem.salePrice;
+            this.quantity = 0;
+            this.newOrderItemEvent.emit(orderItem);
+        }
     }
-
 }

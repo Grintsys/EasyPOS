@@ -5,13 +5,14 @@ import {
     OnInit,
     Output,
 } from "@angular/core";
-import { Subject } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
 import { FuseConfigService } from "@fuse/services/config.service";
 import { ProductDto } from "app/main/products/product.model";
 import { PosService } from "../pos.service";
 import { OrderItemDto } from "app/main/orders/order.model";
+import { SharedService } from "app/shared.service";
 
 @Component({
     selector: "search-results",
@@ -19,46 +20,39 @@ import { OrderItemDto } from "app/main/orders/order.model";
     styleUrls: ["./search-results.component.scss"],
 })
 export class SearchResultsComponent implements OnInit, OnDestroy {
-    collapsed: boolean;
-    fuseConfig: any;
-
     @Output()
     input: EventEmitter<any>;
 
-    @Output() 
+    @Output()
     newOrderItemEvent = new EventEmitter<OrderItemDto>();
 
+    fuseConfig: any;
+    collapsed: boolean;
+    selectedWarehouseId: string;
     productList: ProductDto[];
-    
-    // Private
+    subscription: Subscription;
+
     private _unsubscribeAll: Subject<any>;
 
-    /**
-     * Constructor
-     *
-     * @param {FuseConfigService} _fuseConfigService
-     */
     constructor(
         private _fuseConfigService: FuseConfigService,
-        private _posService: PosService
+        private _posService: PosService,
+        private _sharedService: SharedService
     ) {
-        // Set the defaults
-        this.input = new EventEmitter();
-        this.collapsed = true;
-
-        // Set the private defaults
         this._unsubscribeAll = new Subject();
 
+        this.input = new EventEmitter();
+        
+        this.collapsed = true;
         this.productList = [];
+
+        this.subscription = _sharedService.selectedWarehouseId$.subscribe(
+            id => {
+                this.getProductList("");
+            }
+        );
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
     ngOnInit(): void {
         // Subscribe to config changes
         this._fuseConfigService.config
@@ -70,31 +64,16 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         this.getProductList("");
     }
 
-    /**
-     * On destroy
-     */
     ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Collapse
-     */
     collapse(): void {
         this.collapsed = true;
     }
 
-    /**
-     * Search
-     *
-     * @param event
-     */
     search(event: any): void {
         // this.input.emit(event.target.value);
         this.getProductList(event.target.value);
@@ -106,7 +85,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
                 this.productList = data;
             },
             (error) => {
-                console.log("Search-Results-Component: Error Getting Product List " + 
+                console.log("Search-Results-Component: Error Getting Product List " +
                     JSON.stringify(error)
                 );
             }

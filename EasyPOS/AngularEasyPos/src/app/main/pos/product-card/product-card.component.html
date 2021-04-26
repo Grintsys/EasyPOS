@@ -17,11 +17,7 @@
         </div>
 
         <div class="inventory">
-            <div class="h5 mb-4 secondary-text">Inventario por bodega</div>
-            <div class="totals">
-                <div class="h6 secondary-text"> <span>Actual:</span>250</div>
-                <div class="h6 secondary-text"> <span>Todas:</span>{{product.inventory}}</div>
-            </div>
+            <div class="h5 mb-4 secondary-text">Inventario: {{product.inventory}}</div>
         </div>
     </div>
 
@@ -39,7 +35,7 @@
                 </button>
             </div>
         </div>
-        <button mat-button color="warn" (click)="addOrderItem()">Agregar</button>
+        <button mat-button color="warn" [disabled]="quantity < 1" (click)="addOrderItem()">Agregar</button>
     </div>
 </div>
 <!-- / CARD  -->

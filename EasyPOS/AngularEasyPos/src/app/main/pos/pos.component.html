@@ -8,8 +8,8 @@
             </div>
         </div>
         <div #products>
-            <pos-products [orderItems]="order.items"></pos-products>
+            <pos-products (newOrderItemsEvent)="updateOrderItems($event)" [orderItems]="order.items"></pos-products>
         </div>
     </div>
-    <pos-sidebar></pos-sidebar>
+    <pos-sidebar (newOrderEvent)="resetOrder($event)" [order]="order"></pos-sidebar>
 </div>

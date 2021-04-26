@@ -3,9 +3,11 @@ import {
     ElementRef,
     Input,
     OnChanges,
+    Output,
     SimpleChanges,
     ViewChild,
     ViewEncapsulation,
+    EventEmitter
 } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
@@ -26,11 +28,12 @@ import { OrderItemDto } from "app/main/orders/order.model";
 export class PosProductsComponent implements OnChanges {
     dataSource = new MatTableDataSource();
     displayedColumns: string[] = [
-        "id",
         "code",
         "name",
         "quantity",
         "salePrice",
+        "tax",
+        "discount",
         "total",
         "options",
     ];
@@ -45,12 +48,8 @@ export class PosProductsComponent implements OnChanges {
     filter: ElementRef;
 
     @Input() orderItems: OrderItemDto[];
+    @Output() newOrderItemsEvent = new EventEmitter<OrderItemDto[]>();
 
-    /**
-     * Constructor
-     *
-     * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
-     */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService
     ) {
@@ -59,43 +58,45 @@ export class PosProductsComponent implements OnChanges {
         this.orderItems = [];
     }
 
-    /**
-     * On ngAfterViewInit
-     */
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.orderItems && changes.orderItems.currentValue) 
-        {
+        if (changes.orderItems && changes.orderItems.currentValue) {
             this.dataSource = new MatTableDataSource(changes.orderItems.currentValue);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
         }
     }
 
-    increaseOrderItem(orderItemId: string){
+    increaseOrderItem(orderItemId: string) {
         this.orderItems.map(x => {
-            if(x.productId == orderItemId){
-                console.log(x.name);
-                x.quantity++; 
+            if (x.productId == orderItemId) {
+                x.quantity++;
+                x.totalItem = x.quantity * x.salePrice + (x.quantity * x.salePrice * x.taxes) - (x.quantity * x.salePrice * x.discount);
             }
         });
+
+        this.newOrderItemsEvent.emit(this.orderItems);
     }
 
-    decreaseOrderItem(orderItemId: string){
+    decreaseOrderItem(orderItemId: string) {
         this.orderItems.map(x => {
-            if(x.productId == orderItemId && x.quantity > 1){
-                console.log(x.name);
-                x.quantity--; 
+            if (x.productId == orderItemId && x.quantity > 1) {
+                x.quantity--;
+                x.totalItem = x.quantity * x.salePrice + (x.quantity * x.salePrice * x.taxes) - (x.quantity * x.salePrice * x.discount);
             }
         });
+
+        this.newOrderItemsEvent.emit(this.orderItems);
     }
 
-    removeOrderItem(orderItemId: string){
+    removeOrderItem(orderItemId: string) {
         this.orderItems = this.orderItems.filter(x => x.productId != orderItemId);
         this.dataSource = new MatTableDataSource(this.orderItems);
+
+        this.newOrderItemsEvent.emit(this.orderItems);
     }
 }

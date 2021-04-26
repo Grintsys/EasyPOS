@@ -10,6 +10,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 
 import { ToolbarComponent } from 'app/layout/components/toolbar/toolbar.component';
 import { ToolbarService } from './toolbar.service';
+import { SharedService } from 'app/shared.service';
 
 @NgModule({
     declarations: [
@@ -30,6 +31,7 @@ import { ToolbarService } from './toolbar.service';
     ],
     providers : [
         ToolbarService,
+        SharedService
     ]
 })
 export class ToolbarModule

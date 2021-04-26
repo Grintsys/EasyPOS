@@ -9,12 +9,13 @@ import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { fuseAnimations } from "@fuse/animations";
 import { FuseTranslationLoaderService } from "@fuse/services/translation-loader.service";
-import { Subject } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 
 import { locale as english } from "../i18n/en";
 import { locale as spanish } from "../i18n/es";
 import { ProductService } from "../product.service";
 import { ProductDto } from "../product.model";
+import { SharedService } from "app/shared.service";
 
 @Component({
     selector: "app-product-list",
@@ -44,7 +45,8 @@ export class ProductListComponent {
     ];
 
     product: ProductDto;
-
+    subscription: Subscription;
+    selectedWarehouseId: string;
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -55,12 +57,20 @@ export class ProductListComponent {
      */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
-        private _productService: ProductService
+        private _productService: ProductService,
+        private _sharedService: SharedService
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
 
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+
+        this.subscription = _sharedService.selectedWarehouseId$.subscribe(
+            id => {
+                this.selectedWarehouseId = id;
+                this.getProductList("");
+            }
+        );
     }
 
     /**

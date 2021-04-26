@@ -10,6 +10,7 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { navigation } from 'app/navigation/navigation';
 import { ToolbarService } from './toolbar.service';
 import { WarehouseDto } from 'app/main/products/product.model';
+import { SharedService } from 'app/shared.service';
 
 @Component({
     selector     : 'toolbar',
@@ -28,6 +29,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
     selectedLanguage: any;
     userStatusOptions: any[];
     warehouses: WarehouseDto[];
+    selectedWarehouse: string;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -43,66 +45,23 @@ export class ToolbarComponent implements OnInit, OnDestroy
         private _fuseConfigService: FuseConfigService,
         private _fuseSidebarService: FuseSidebarService,
         private _translateService: TranslateService,
-        private _toolbarService: ToolbarService
+        private _toolbarService: ToolbarService,
+        private _sharedService: SharedService
     )
     {
-        // Set the defaults
-        this.userStatusOptions = [
-            {
-                title: 'Online',
-                icon : 'icon-checkbox-marked-circle',
-                color: '#4CAF50'
-            },
-            {
-                title: 'Away',
-                icon : 'icon-clock',
-                color: '#FFC107'
-            },
-            {
-                title: 'Do not Disturb',
-                icon : 'icon-minus-circle',
-                color: '#F44336'
-            },
-            {
-                title: 'Invisible',
-                icon : 'icon-checkbox-blank-circle-outline',
-                color: '#BDBDBD'
-            },
-            {
-                title: 'Offline',
-                icon : 'icon-checkbox-blank-circle-outline',
-                color: '#616161'
-            }
-        ];
-
-        this.languages = [
-            {
-                id   : 'es',
-                title: 'Español',
-                flag : 'es'
-            },
-            {
-                id   : 'en',
-                title: 'English',
-                flag : 'us'
-            }
-        ];
-
         this.navigation = navigation;
 
         // Set the private defaults
         this._unsubscribeAll = new Subject();
 
         this.warehouses = [];
+        this.selectedWarehouse = '';
     }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
 
-    /**
-     * On init
-     */
     ngOnInit(): void
     {
         // Subscribe to the config changes
@@ -120,9 +79,6 @@ export class ToolbarComponent implements OnInit, OnDestroy
         this.getWarehouses('');
     }
 
-    /**
-     * On destroy
-     */
     ngOnDestroy(): void
     {
         // Unsubscribe from all subscriptions
@@ -130,43 +86,14 @@ export class ToolbarComponent implements OnInit, OnDestroy
         this._unsubscribeAll.complete();
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Toggle sidebar open
-     *
-     * @param key
-     */
     toggleSidebarOpen(key): void
     {
         this._fuseSidebarService.getSidebar(key).toggleOpen();
     }
 
-    /**
-     * Search
-     *
-     * @param value
-     */
     search(value): void
     {
-        // Do your search here...
         console.log(value);
-    }
-
-    /**
-     * Set the language
-     *
-     * @param lang
-     */
-    setLanguage(lang): void
-    {
-        // Set the selected language for the toolbar
-        this.selectedLanguage = lang;
-
-        // Use the selected language for translations
-        this._translateService.use(lang.id);
     }
 
     logOut(){
@@ -177,6 +104,9 @@ export class ToolbarComponent implements OnInit, OnDestroy
         this._toolbarService.getWarehouseList(filter).then(
             (data) => {
                 this.warehouses = data;
+                if(this.warehouses.length > 0){
+                    this.selectedWarehouse = this.warehouses[0].name;
+                }
             },
             (error) => {
                 console.log("Toolbar-Component: Error Getting Warehouses List " + 
@@ -187,6 +117,9 @@ export class ToolbarComponent implements OnInit, OnDestroy
     }
 
     selectWarehouse(warehouseId: string){
+        this.selectedWarehouse = this.warehouses.find(x => x.id == warehouseId).name;
         localStorage.setItem("warehouseId", warehouseId);
+
+        this._sharedService.updateWarehouse(warehouseId);
     }
 }

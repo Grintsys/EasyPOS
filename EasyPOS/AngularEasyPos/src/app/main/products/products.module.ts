@@ -20,6 +20,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { SearchModule } from 'app/layout/components/search/search.module';
+import { SharedService } from 'app/shared.service';
 
 
 const routes = [
@@ -88,6 +89,7 @@ const routes = [
     ],
     providers : [
         ProductService,
+        SharedService
     ]
 })
 

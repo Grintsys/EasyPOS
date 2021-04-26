@@ -71,7 +71,8 @@ export class ProductService implements Resolve<any> {
     }
 
     public get(productId: string): Promise<any> {
-        var url = `${this.baseUrl}/${productId}/product`;
+        var warehouseId = localStorage.getItem('warehouseId');
+        var url = `${this.baseUrl}/${productId}/product/${warehouseId}`;
         const promise = this._httpClient
             .get<ProductDto>(url, this.getHttpOptions())
             .toPromise();
@@ -79,7 +80,8 @@ export class ProductService implements Resolve<any> {
     }
 
     public getList(filter: string): Promise<any> {
-        var url = `${this.baseUrl}/product-list${
+        var warehouseId = localStorage.getItem('warehouseId');
+        var url = `${this.baseUrl}/product-list/${warehouseId}${
             filter != `` ? `?filter=${filter}` : ``
         }`;
         const promise = this._httpClient

@@ -103,7 +103,7 @@ export class CustomerService implements Resolve<any> {
     }
 
     private checkSession() {
-        this.baseUrl = `${localStorage.getItem("baseUrl")}/api/app/product`;
+        this.baseUrl = `${localStorage.getItem("baseUrl")}/api/app/customer`;
         this.authToken = localStorage.getItem("token");
 
         if (this.authToken == null || this.baseUrl == null) {
