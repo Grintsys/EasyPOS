@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -30,28 +32,20 @@ namespace Grintsys.EasyPOS.PaymentMethod
             return dto;
         }
 
-        public override async Task<PagedResultDto<PaymentMethodDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public async Task<List<PaymentMethodDto>> GetListPaymentMethodsAsync(string filter)
         {
-            if (input.Sorting.IsNullOrWhiteSpace())
+            var paymentMethods = await _paymentMethodRepository.GetPaymentMethodsAsync();
+            var dto = await MapToGetListOutputDtosAsync(paymentMethods);
+
+            if (!filter.IsNullOrWhiteSpace())
             {
-                input.Sorting = nameof(PaymentMethod.PaymentMethodTypeName);
+                filter = filter.ToLower();
+                dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), 
+                        x => x.PaymentMethodTypeName.ToLower().Contains(filter))
+                    .OrderBy(x => x.PaymentMethodTypeName).ToList();
             }
 
-            var paymentMethods = await _paymentMethodRepository.GetPaymentMethodsAsync();
-
-            //paymentMethods = paymentMethods
-            //    .OrderBy(x => x.GetType().GetProperty(input.Sorting)?.GetValue(x, null))
-            //    .Skip(input.SkipCount)
-            //    .Take(input.MaxResultCount) as List<DebitNote>;
-
-            var paymentMethodDto = await MapToGetListOutputDtosAsync(paymentMethods);
-
-            var totalCount = await Repository.GetCountAsync();
-
-            return new PagedResultDto<PaymentMethodDto>(
-                totalCount,
-                paymentMethodDto
-            );
+            return dto;
         }
     }
 }

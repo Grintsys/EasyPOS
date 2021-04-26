@@ -32,7 +32,7 @@ namespace Grintsys.EasyPOS.Order
             var dto = ObjectMapper.Map<Order, OrderDto>(order);
             return dto;
         }
-        
+
         public async Task<List<OrderDto>> GetOrderList(string filter)
         {
             var orders = await _orderRepository.GetOrdersAsync();
@@ -42,7 +42,7 @@ namespace Grintsys.EasyPOS.Order
             {
                 filter = filter.ToLower();
                 dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), 
-                    x => x.CustomerName.ToLower().Contains(filter))
+                        x => x.CustomerName.ToLower().Contains(filter))
                     .OrderBy(x => x.CustomerName).ToList();
             }
 

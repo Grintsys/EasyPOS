@@ -14,7 +14,6 @@ namespace Grintsys.EasyPOS.Product
         public float Taxes { get; set; }
         public bool IsActive { get; set; }
         public string ImageUrl { get; set; }
-        public int Inventory => ProductWarehouse.Sum(x => x.Inventory);
         public List<ProductWarehouse> ProductWarehouse { get; set; } = new List<ProductWarehouse>();
     }
 }

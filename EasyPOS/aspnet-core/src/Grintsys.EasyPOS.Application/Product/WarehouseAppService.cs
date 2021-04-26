@@ -34,26 +34,17 @@ namespace Grintsys.EasyPOS.Product
         public async Task<List<WarehouseDto>> GetWarehouseList(string filter)
         {
             var data = await _warehouseRepository.GetWarehousesAsync();
-            try
-            {
-                var dto = new List<WarehouseDto>(ObjectMapper.Map<List<Warehouse>, List<WarehouseDto>>(data));
-                if (!filter.IsNullOrWhiteSpace())
-                {
-                    filter = filter.ToLower();
-                    dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), 
-                            x => x.Name.ToLower().Contains(filter) ||
-                                 x.Address.ToLower().Contains(filter))
-                        .OrderBy(x => x.Name).ToList();
-                }
-                return dto;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
 
-            
+            var dto = new List<WarehouseDto>(ObjectMapper.Map<List<Warehouse>, List<WarehouseDto>>(data));
+            if (!filter.IsNullOrWhiteSpace())
+            {
+                filter = filter.ToLower();
+                dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), 
+                        x => x.Name.ToLower().Contains(filter) ||
+                             x.Address.ToLower().Contains(filter))
+                    .OrderBy(x => x.Name).ToList();
+            }
+            return dto;
         }
     }
 }

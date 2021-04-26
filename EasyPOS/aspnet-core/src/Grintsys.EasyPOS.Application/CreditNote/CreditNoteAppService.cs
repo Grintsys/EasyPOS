@@ -77,37 +77,20 @@ namespace Grintsys.EasyPOS.CreditNote
 
             if (order != null)
             {
-                var creditNoteId = Guid.NewGuid();
                 var createUpdateDto = new CreateUpdateCreditNoteDto()
                 {
                     Id = Guid.NewGuid(),
                     CustomerId = order.CustomerId,
                     State = DocumentState.Created,
-                    Items = order.Items.Select(x => Map(x, creditNoteId)).ToList(),
-                    OrderId = orderId
+                    OrderId = orderId,
+                    Items = order.Items.Select(x => ObjectMapper.Map<
+                        Order.OrderItem, CreateUpdateCreditNoteItemDto>(x)).ToList()
                 };
 
                 return await base.CreateAsync(createUpdateDto);
             }
 
             return null;
-        }
-
-
-        private static CreateUpdateCreditNoteItemDto Map(DocumentItem item, Guid creditNoteId)
-        {
-            return new()
-            {
-                Name = item.Name,
-                Description = item.Description,
-                Code = item.Code,
-                SalePrice = item.SalePrice,
-                Taxes = item.Taxes,
-                Quantity = item.Quantity,
-                Discount = item.Discount,
-                TotalItem = item.TotalItem,
-                CreditNoteId = creditNoteId
-            };
         }
         
         protected override async Task DeleteByIdAsync(Guid id)

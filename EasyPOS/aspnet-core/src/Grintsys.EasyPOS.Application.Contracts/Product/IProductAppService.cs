@@ -14,8 +14,8 @@ namespace Grintsys.EasyPOS.Product
             CreateUpdateProductDto>
     {
         Task<List<ProductLookupDto>> GetProductLookupAsync();
-        Task<ProductDto> GetProduct(Guid id);
-        Task<List<ProductDto>> GetProductList(string filter);
+        Task<ProductDto> GetProduct(Guid id, Guid wareHouseId);
+        Task<List<ProductDto>> GetProductList(string filter, Guid wareHouseId);
         Task<List<ProductDto>> GetProductListByWarehouseAsync(Guid wareHouseId);
     }
 }
