@@ -50,18 +50,5 @@ namespace Grintsys.EasyPOS.Product
             return dto;
 
         }
-
-        public override Task<ProductWarehouseDto> CreateAsync(CreateUpdateProductWarehouseDto input)
-        {
-            try
-            {
-                return base.CreateAsync(input);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
     }
 }
