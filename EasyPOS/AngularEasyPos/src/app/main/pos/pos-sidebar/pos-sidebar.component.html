@@ -1,11 +1,12 @@
 <div class="blank p-24 pos-sidebar" fusePerfectScrollbar>
 
     <!-- CONTENT CHIP TOGGLE -->
-    <div class="buttom-chip-toggle" fxLayoutAlign="space-between end">
+    <div *ngIf="pageType=='Orden'" class="buttom-chip-toggle" fxLayoutAlign="space-between end">
         <mat-chip-list aria-label="Fish selection">
             <mat-chip class="customer-add-mat-chip" (click)="openDialogToAddCustomer()">
                 <mat-icon class="s-20 mr-8">add_circle</mat-icon>
-                Agregar cliente
+                {{customer.firstName != undefined && customer.lastName != undefined 
+                    ? customer.firstName +  ' ' + customer.lastName : 'Agregar cliente'}}
             </mat-chip>
         </mat-chip-list>
 
@@ -15,6 +16,11 @@
         </mat-button-toggle-group>
 
     </div>
+
+    <div *ngIf="pageType != 'Orden'">
+        <h2>{{pageType}}</h2>
+        <h3>{{'Cliente: ' + order.customerName}}</h3>
+    </div>
     <!-- / CONTENT CARD -->
 
     <mat-divider></mat-divider>
@@ -23,19 +29,19 @@
         <tbody>
             <tr class="subtotal">
                 <td>Subtotal</td>
-                <td>{{39.97 | currency:'HNL':'symbol'}}</td>
+                <td>{{ order.subTotal | currency:'HNL':'symbol'}}</td>
             </tr>
             <tr class="discount">
                 <td>Descuento</td>
-                <td>-{{10.17 | currency:'HNL':'symbol'}}</td>
+                <td>-{{order.discount | currency:'HNL':'symbol'}}</td>
             </tr>
             <tr class="tax">
                 <td>Impuesto</td>
-                <td>{{77.44 | currency:'HNL':'symbol'}}</td>
+                <td>{{order.isv | currency:'HNL':'symbol'}}</td>
             </tr>
             <tr class="total">
                 <td>Total a pagar</td>
-                <td>{{73.31 | currency:'HNL':'symbol'}}</td>
+                <td>{{order.total | currency:'HNL':'symbol'}}</td>
             </tr>
         </tbody>
     </table>
@@ -43,15 +49,15 @@
     <div class="container-paid-exchange">
         <div class="item--paid-out">
             <h1>Pagado</h1>
-            <h2>{{500.00 | currency:'HNL':'symbol'}}</h2>
+            <h2>{{order.paymentAmount | currency:'HNL':'symbol'}}</h2>
         </div>
         <div class="item--exchange">
             <h1>Cambio</h1>
-            <h2>{{400.00 | currency:'HNL':'symbol'}}</h2>
+            <h2>{{order.paymentAmount - order.total | currency:'HNL':'symbol'}}</h2>
         </div>
     </div>
 
-    <div class="container-payment-button" fxLayout="column" fxLayoutAlign="center center">
+    <div *ngIf="pageType=='Orden'" class="container-payment-button" fxLayout="column" fxLayoutAlign="center center">
         <div class="payment-item add-new-payment"
             matRipple
             fxLayout="column"
@@ -69,8 +75,12 @@
     </div>
 
     <div class="container-complete-order-button">
-        <button mat-raised-button class="complete-order w-100-p p-4 mb-4">Completar orden</button>
-        <button mat-stroked-button color="warn" class="mt-4">
+        <br>
+        <button mat-raised-button class="complete-order w-100-p p-4 mb-4" 
+            (click)="create()" [disabled]="!isOrderReady">{{'Completar ' + pageType}}
+        </button>
+        <button mat-stroked-button color="warn" class="mt-4"
+            (click)="resetOrder()">
             <mat-icon class="s-24">cancel</mat-icon>
             Cancelar orden
         </button>

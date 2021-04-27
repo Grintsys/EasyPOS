@@ -1,5 +1,6 @@
 import { CLASS_NAME } from '@angular/flex-layout';
 import { FuseUtils } from '@fuse/utils';
+import { ProductDto } from '../products/product.model';
 
 export class Order {
     code: number;
@@ -196,10 +197,11 @@ export class CreateUpdateDocumentDto<T> {
     id?: string;
     customerId?: string;
     state: DocumentState;
-    items: T[];
+    items: T[] = [];
 }
 
 export class CreateUpdateDocumentItemDto {
+    productId: string;
     name?: string;
     description?: string;
     code?: string;
@@ -216,15 +218,15 @@ export class DocumentDto<T> {
     customerName?: string;
     customerCode?: string;
     state: DocumentState;
-    subTotal: number;
-    isv: number;
-    discount: number;
-    total: number;
+    subTotal: number = 0;
+    isv: number = 0;
+    discount: number = 0;
+    total: number = 0;
     items: T[] = [];
 }
 
 export class DocumentItemDto {
-    id?: string;
+    productId?: string;
     name?: string;
     description?: string;
     code?: string;
@@ -235,7 +237,9 @@ export class DocumentItemDto {
     totalItem: number;
 }
 
-export class CreateUpdateOrderDto extends CreateUpdateDocumentDto<CreateUpdateOrderItemDto> {}
+export class CreateUpdateOrderDto extends CreateUpdateDocumentDto<CreateUpdateOrderItemDto> {
+    paymentMethods: PaymentMethodDto[];
+}
 
 export class CreateUpdateOrderItemDto extends CreateUpdateDocumentItemDto {
     orderId?: string;
@@ -245,7 +249,7 @@ export class OrderDto extends DocumentDto<OrderItemDto> {
     debitNotes: DebitNoteDto[] = [];
     creditNotes: CreditNoteDto[] = [];
     paymentMethods: PaymentMethodDto[] = [];
-    paymentAmount: number;
+    paymentAmount: number = 0;
 
     // constructor(order){
     //     super();
@@ -268,6 +272,20 @@ export class OrderDto extends DocumentDto<OrderItemDto> {
 
 export class OrderItemDto extends DocumentItemDto {
     orderId?: string;
+
+    constructor(product: ProductDto){
+        super();
+        product = product || new ProductDto,
+        this.productId = product.id || '',
+        this.name = product.name || '',
+        this.description = product.description || '',
+        this.code = product.code || '',
+        this.salePrice = product.salePrice || 0,
+        this.taxes = product.taxes || 0,
+        this.discount = product.taxes || 0, //TODO
+        this.quantity = 0,
+        this.totalItem = this.quantity * this.salePrice
+    }
 }
 
 export class CreateUpdateDebitNoteDto extends CreateUpdateDocumentDto<CreateUpdateDebitNoteItemDto> {
@@ -322,4 +340,5 @@ export class PaymentMethodDto {
 export class PaymentMethodTypeDto {
     id?: string;
     name?: string;
+    icon?: string;
 }

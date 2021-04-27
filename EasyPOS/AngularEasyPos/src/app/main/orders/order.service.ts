@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import {
     ActivatedRouteSnapshot,
     Resolve,
+    Router,
     RouterStateSnapshot,
 } from "@angular/router";
 import { BehaviorSubject, Observable } from "rxjs";
@@ -21,11 +22,10 @@ export class OrderService implements Resolve<any> {
      *
      * @param {HttpClient} _httpClient
      */
-    constructor(private _httpClient: HttpClient) {
+    constructor(private _httpClient: HttpClient, private router: Router) {
         // Set the defaults
         this.onOrderChanged = new BehaviorSubject({});
-        this.baseUrl = `${localStorage.getItem('baseUrl')}/api/app/`;
-        this.authToken = localStorage.getItem('token');
+        this.checkSession();
     }
 
     /**
@@ -65,65 +65,94 @@ export class OrderService implements Resolve<any> {
     }
 
     public create(data: CreateUpdateOrderDto): Promise<any> {
-        var url = `${this.baseUrl}order`
-        const promise = this._httpClient.post<OrderDto>(url, data, this.getHttpOptions()).toPromise();
+        var url = `${this.baseUrl}order`;
+        const promise = this._httpClient
+            .post<OrderDto>(url, data, this.getHttpOptions())
+            .toPromise();
         return promise;
     }
 
     public update(orderId: string, data: CreateUpdateOrderDto): Promise<any> {
-        var url = `${this.baseUrl}order/${orderId}`
-        const promise = this._httpClient.put<OrderDto>(url, data, this.getHttpOptions()).toPromise();
+        var url = `${this.baseUrl}order/${orderId}`;
+        const promise = this._httpClient
+            .put<OrderDto>(url, data, this.getHttpOptions())
+            .toPromise();
         return promise;
-    } 
-    
+    }
+
     public delete(orderId: string): Promise<any> {
-        var url = `${this.baseUrl}order/${orderId}`
-        const promise = this._httpClient.delete<OrderDto>(url, this.getHttpOptions()).toPromise();
+        var url = `${this.baseUrl}order/${orderId}`;
+        const promise = this._httpClient
+            .delete<OrderDto>(url, this.getHttpOptions())
+            .toPromise();
         return promise;
     }
 
     public deleteCreditNote(id: string): Promise<any> {
-        var url = `${this.baseUrl}credit-note/${id}`
-        const promise = this._httpClient.delete<OrderDto>(url, this.getHttpOptions()).toPromise();
+        var url = `${this.baseUrl}credit-note/${id}`;
+        const promise = this._httpClient
+            .delete<OrderDto>(url, this.getHttpOptions())
+            .toPromise();
         return promise;
     }
 
     public deleteDebitNote(id: string): Promise<any> {
-        var url = `${this.baseUrl}debit-note/${id}`
-        const promise = this._httpClient.delete<OrderDto>(url, this.getHttpOptions()).toPromise();
+        var url = `${this.baseUrl}debit-note/${id}`;
+        const promise = this._httpClient
+            .delete<OrderDto>(url, this.getHttpOptions())
+            .toPromise();
         return promise;
     }
 
     public get(orderId: string): Promise<any> {
-        var url = `${this.baseUrl}order/${orderId}`
-        const promise = this._httpClient.get<OrderDto>(url, this.getHttpOptions()).toPromise();
-        return promise;
-    }
-    
-    public getList(filter: string): Promise<any> {
-        var url = `${this.baseUrl}order/order-list${filter != `` ? `?filter=${filter}` : ``}`;
-        const promise = this._httpClient.get<OrderDto[]>(url, this.getHttpOptions()).toPromise();
-        return promise;
-    }
-    
-    public getOrderItemsByOrderId(orderId: string): Promise<any> {
-        var url = `${this.baseUrl}order-item/order-items-by-order-id/${orderId}`;
-        const promise = this._httpClient.get<OrderDto[]>(url, this.getHttpOptions()).toPromise();
-        return promise;
-    } 
-    
-    public getOrderDocumentsByOrderId(orderId: string): Promise<any> {
-        var url = `${this.baseUrl}order/order-documents/${orderId}`;
-        const promise = this._httpClient.get<OrderDto[]>(url, this.getHttpOptions()).toPromise();
+        var url = `${this.baseUrl}order/${orderId}`;
+        const promise = this._httpClient
+            .get<OrderDto>(url, this.getHttpOptions())
+            .toPromise();
         return promise;
     }
 
-    private getHttpOptions(){
+    public getList(filter: string): Promise<any> {
+        var url = `${this.baseUrl}order/order-list${
+            filter != `` ? `?filter=${filter}` : ``
+        }`;
+        const promise = this._httpClient
+            .get<OrderDto[]>(url, this.getHttpOptions())
+            .toPromise();
+        return promise;
+    }
+
+    public getOrderItemsByOrderId(orderId: string): Promise<any> {
+        var url = `${this.baseUrl}order-item/order-items-by-order-id/${orderId}`;
+        const promise = this._httpClient
+            .get<OrderDto[]>(url, this.getHttpOptions())
+            .toPromise();
+        return promise;
+    }
+
+    public getOrderDocumentsByOrderId(orderId: string): Promise<any> {
+        var url = `${this.baseUrl}order/order-documents/${orderId}`;
+        const promise = this._httpClient
+            .get<OrderDto[]>(url, this.getHttpOptions())
+            .toPromise();
+        return promise;
+    }
+
+    private getHttpOptions() {
         return {
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
                 Authorization: this.authToken,
             }),
         };
+    }
+
+    private checkSession() {
+        this.baseUrl = `${localStorage.getItem("baseUrl")}/api/app/`;
+        this.authToken = localStorage.getItem("token");
+
+        if (this.authToken == null || this.baseUrl == null) {
+            this.router.navigate(["/login"]);
+        }
     }
 }

@@ -18,14 +18,30 @@ import { PosSidebarModule } from './pos-sidebar/pos-sidebar.module';
 
 // COMPONENT UI
 import { PosComponent } from './pos.component';
+import { PosService } from './pos.service';
 import { PosProductsComponent } from './pos-products/pos-products.component';
 import { SearchModule } from 'app/layout/components/search/search.module';
 import { SearchResultsModule } from './search-results/search-results.module';
+import { SharedService } from 'app/shared.service';
 
 const routes = [
     {
         path     : 'pos',
         component: PosComponent
+    },
+    {
+        path     : 'pos/:id/:handle',
+        component: PosComponent,
+        resolve  : {
+            data: PosService
+        }
+    },
+    {
+        path     : 'pos/:id/:handle',
+        component: PosComponent,
+        resolve  : {
+            data: PosService
+        }
     }
 ];
 
@@ -55,6 +71,10 @@ const routes = [
     ],
     exports     : [
         PosComponent,
+    ],
+    providers : [
+        PosService,
+        SharedService
     ]
 })
 

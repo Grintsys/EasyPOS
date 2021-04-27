@@ -9,6 +9,7 @@ import { locale as spanish } from "../i18n/es";
 
 import { OrderService } from "../order.service";
 import { fuseAnimations } from "@fuse/animations";
+import { Router } from "@angular/router";
 
 @Component({
     selector: "app-order",
@@ -32,7 +33,8 @@ export class OrderComponent implements OnInit {
      */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
-        private _orderService: OrderService
+        private _orderService: OrderService,
+        private router: Router
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
         this.order = new OrderDto();
@@ -58,7 +60,7 @@ export class OrderComponent implements OnInit {
                         },
                         (error) => {
                             console.log(
-                                "Get Order Faild: " + JSON.stringify(error)
+                                "Get Order Failed: " + JSON.stringify(error)
                             );
                         }
                     );
@@ -67,7 +69,6 @@ export class OrderComponent implements OnInit {
     }
 
     refreshOrder(order: OrderDto){
-        console.log("HOla");
         this.order = order;
     }
 

@@ -25,20 +25,20 @@ namespace Grintsys.EasyPOS.Product
             _productRepository = productRepository;
         }
 
-        public async Task<ProductDto> GetProduct(Guid id)
+        public async Task<ProductDto> GetProduct(Guid id, Guid warehouseId)
         {
             var data = await _productRepository.GetAsync(id);
             var dto = ObjectMapper.Map<Product, ProductDto>(data);
 
-            //if (warehouseId.HasValue && dto != null)
-            //{
-            //    dto.ProductWarehouse = dto.ProductWarehouse.Where(x => x.WarehouseId == warehouseId).ToList();
-            //}
+            if (warehouseId != Guid.Empty)
+            {
+                dto.ProductWarehouse = dto.ProductWarehouse.Where(x => x.WarehouseId == warehouseId).ToList();
+            }
 
             return dto;
         }
 
-        public async Task<List<ProductDto>> GetProductList(string filter)
+        public async Task<List<ProductDto>> GetProductList(string filter, Guid warehouseId)
         {
             var products = await _productRepository.GetListAsync();
             var dto = new List<ProductDto>(ObjectMapper.Map<List<Product>, List<ProductDto>>(products));
@@ -52,10 +52,17 @@ namespace Grintsys.EasyPOS.Product
                          .OrderBy(x => x.Name).ToList();
             }
 
-            //if(warehouseId.HasValue && dto.Any())
-            //{
-            //    dto = dto.Where(x => x.ProductWarehouse.Select(x => x.WarehouseId == warehouseId).Any()).ToList();
-            //}
+            if (warehouseId != Guid.Empty)
+            {
+                dto.ForEach(product =>
+                {
+                    product.ProductWarehouse = product.ProductWarehouse.Where(x => x.WarehouseId == warehouseId).ToList();
+                });
+                
+                dto = dto.Where(x => x.ProductWarehouse.Any()).ToList();
+                
+                dto.ForEach(product => product.Inventory = product.ProductWarehouse.Sum(x => x.Inventory));
+            }
 
             return dto;
         }

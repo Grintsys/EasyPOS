@@ -3,7 +3,8 @@ import {
     ElementRef,
     ViewChild,
     ViewEncapsulation,
-    OnInit,
+    Inject,
+    Optional,
 } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
@@ -19,6 +20,7 @@ import { CustomerDto } from "../customer.model";
 import { CustomerService } from "../customer.service";
 
 import { Subject } from "rxjs";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 @Component({
     selector: "app-customer-list",
@@ -49,38 +51,31 @@ export class CustomerListComponent {
         "status",
         "options",
     ];
-    customer: CustomerDto;
-    // Private
+    customerList: CustomerDto[];
+    isDialog: boolean;   
+
     private _unsubscribeAll: Subject<any>;
 
-    /**
-     * Constructor
-     *
-     * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
-     */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
-        private _customerService: CustomerService
+        private _customerService: CustomerService,
+        @Optional() public matDialogRef: MatDialogRef<CustomerListComponent>,
+        @Optional() @Inject(MAT_DIALOG_DATA) private _data: any
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
 
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+        this.customerList = [];
+        this.isDialog = _data != null ? _data.isDialog : false;
     }
 
     ngOnInit(): void {}
-    /**
-     * On ngAfterViewInit
-     */
+
     ngAfterViewInit() {
         this.getCustomerList('');
     }
 
-    /**
-     * Search
-     *
-     * @param value
-     */
     search(value): void {
         this.getCustomerList(value.target.value);
     }
@@ -88,6 +83,7 @@ export class CustomerListComponent {
     getCustomerList(filter: string) {
         this._customerService.getList(filter).then(
             (d) => {
+                this.customerList = d;
                 this.dataSource = new MatTableDataSource(d);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
@@ -107,5 +103,12 @@ export class CustomerListComponent {
                 console.log("Promise rejected with " + JSON.stringify(error));
             }
         );
+    }
+
+    selectCustomer(id: String){
+        if(this.isDialog){
+            var selectedCustomer = this.customerList.find(x => x.id == id);
+            this.matDialogRef.close(selectedCustomer);
+        }
     }
 }

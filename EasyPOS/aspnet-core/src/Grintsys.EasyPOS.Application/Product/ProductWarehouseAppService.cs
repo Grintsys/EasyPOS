@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -30,28 +32,36 @@ namespace Grintsys.EasyPOS.Product
             return dto;
         }
 
-        public override async Task<PagedResultDto<ProductWarehouseDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public async Task<List<ProductWarehouseDto>> GetProductWarehouseListAsync(string filter)
         {
-            if (input.Sorting.IsNullOrWhiteSpace())
+            var data = await _productWarehouseRepository.GetListAsync();
+            
+            var dto = await MapToGetListOutputDtosAsync(data);
+
+            if (!filter.IsNullOrWhiteSpace())
             {
-                input.Sorting = nameof(ProductWarehouseDto.ProductName);
+                filter = filter.ToLower();
+                dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), 
+                        x => x.ProductName.ToLower().Contains(filter)
+                        || x.WarehouseName.ToLower().Contains(filter))
+                    .OrderBy(x => x.ProductName).ToList();
             }
 
-            var data = await _productWarehouseRepository.GetListAsync();
+            return dto;
 
-            //data = data
-            //    .OrderBy(x => x.GetType().GetProperty(input.Sorting)?.GetValue(x, null))
-            //    .Skip(input.SkipCount)
-            //    .Take(input.MaxResultCount) as List<DebitNote>;
+        }
 
-            var dataDto = await MapToGetListOutputDtosAsync(data);
-
-            var totalCount = await Repository.GetCountAsync();
-
-            return new PagedResultDto<ProductWarehouseDto>(
-                totalCount,
-                dataDto
-            );
+        public override Task<ProductWarehouseDto> CreateAsync(CreateUpdateProductWarehouseDto input)
+        {
+            try
+            {
+                return base.CreateAsync(input);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

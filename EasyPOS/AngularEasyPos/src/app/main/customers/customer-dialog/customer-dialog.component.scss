@@ -1,20 +1,18 @@
 
 .add-customer-dialog {
-    .mat-dialog-container {
-        padding: 0;
-        width: 80vw;
-    }
+    
 
     .dialog-content-wrapper {
         background: #FAFCFC;
         max-height: 85vh;
         display: flex;
+        width: 65vh;
         flex-direction: column;
 
         .mat-dialog-content {
             padding: 0;
             margin: 0;
-        }
+        }       
 
         .payment-method-list {
             display: grid;
@@ -33,9 +31,14 @@
                 }
             }
 
-            .payment-method-selected {
+            .customer-selected {
                 background: #8ff2ff54;
             }
         }
     }
+}
+
+.mat-dialog-container {
+    padding: 0;
+    width: 65vw;
 }

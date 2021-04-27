@@ -22,6 +22,12 @@ namespace Grintsys.EasyPOS.Product
             return await data.ToListAsync();
         }
 
+        public async Task<List<Warehouse>> GetWarehousesAsync()
+        {
+            var data = (await GetQueryableAsync());
+            return await data.ToListAsync();
+        }
+
         public async Task<Warehouse> GetAsync(Guid id)
         {
             var data = (await GetQueryableAsync())

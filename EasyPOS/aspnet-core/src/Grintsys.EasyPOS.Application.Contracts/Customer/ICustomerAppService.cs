@@ -13,7 +13,6 @@ namespace Grintsys.EasyPOS.Customer
             PagedAndSortedResultRequestDto,
             CreateUpdateCustomerDto>
     {
-        Task<List<CustomerLookupDto>> GetCustomerLookupAsync();
         Task<List<CustomerDto>> GetCustomerList(string filter);
     }
 }

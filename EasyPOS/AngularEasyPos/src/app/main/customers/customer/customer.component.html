@@ -6,29 +6,17 @@
     <!-- CENTER -->
     <div class="center">
         <!-- HEADER -->
-        <div
-            class="header accent"
-            fxLayout="row"
-            fxLayoutAlign="space-between center"
-        >
+        <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
             <!-- APP TITLE -->
             <div fxLayout="row" fxLayoutAlign="start center">
-                <button
-                    mat-icon-button
-                    class="mr-0 mr-sm-16"
-                    [routerLink]="'/customer-list'"
-                >
+                <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/customer-list'">
                     <mat-icon>arrow_back</mat-icon>
                 </button>
 
-                <div
-                    fxLayout="column"
-                    fxLayoutAlign="start start"
-                    [@animate]="{
+                <div fxLayout="column" fxLayoutAlign="start start" [@animate]="{
                         value: '*',
                         params: { delay: '100ms', x: '-25px' }
-                    }"
-                >
+                    }">
                     <div class="h2" *ngIf="pageType !== 'new'">
                         {{ customer.firstName + " " + customer.lastName }}
                     </div>
@@ -36,34 +24,21 @@
                         Nuevo cliente
                     </div>
                     <div class="subtitle secondary-text">
-                        <span *ngIf="pageType === 'new'"
-                            >Completa todos los campos requeridos *</span
-                        >
-                        <span *ngIf="pageType === 'edit'"
-                            >Detalles del cliente</span
-                        >
+                        <span *ngIf="pageType === 'new'">Completa todos los campos requeridos *</span>
+                        <span *ngIf="pageType === 'edit'">Detalles del cliente</span>
                     </div>
                 </div>
             </div>
             <!-- / APP TITLE -->
 
-            <button
-                mat-raised-button
-                class="save-customer-button"
-                [disabled]="customerForm.invalid"
-                *ngIf="pageType === 'new'"
-                (click)="addcustomer()"
-            >
+            <button mat-raised-button class="save-customer-button" [disabled]="customerForm.invalid"
+                *ngIf="pageType === 'new'" (click)="addcustomer()">
                 <span>Guardar cambios</span>
             </button>
 
-            <button
-                mat-raised-button
-                class="save-customer-button"
-                [disabled]="customerForm.invalid || customerForm.pristine"
-                *ngIf="pageType === 'edit'"
-                (click)="savecustomer()"
-            >
+            <button mat-raised-button class="save-customer-button"
+                [disabled]="customerForm.invalid || customerForm.pristine" *ngIf="pageType === 'edit'"
+                (click)="savecustomer()">
                 <span>Actualizar cambios</span>
             </button>
         </div>
@@ -73,119 +48,50 @@
         <div class="content-card">
             <!-- CONTENT -->
             <div class="content">
-                <form
-                    name="customerForm"
-                    [formGroup]="customerForm"
-                    class="customer w-100-p"
-                    fxLayout="column"
-                    fxFlex
-                >
+                <form name="customerForm" [formGroup]="customerForm" class="customer w-100-p" fxLayout="column" fxFlex>
                     <mat-tab-group>
                         <mat-tab label="Información del cliente">
                             <div class="tab-content p-24" fusePerfectScrollbar>
-                                <mat-form-field
-                                    appearance="outline"
-                                    floatLabel="always"
-                                    class="w-100-p"
-                                >
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                     <mat-label>Code</mat-label>
-                                    <input
-                                        matInput
-                                        placeholder="Code"
-                                        name="code"
-                                        value="{{ customer.code }}"
-                                        formControlName="code"
-                                    />
+                                    <input matInput placeholder="Code" name="code" value="{{ customer.code }}"
+                                        formControlName="code" />
                                 </mat-form-field>
-                                <mat-form-field
-                                    appearance="outline"
-                                    floatLabel="always"
-                                    class="w-100-p"
-                                >
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                     <mat-label>Nombre</mat-label>
-                                    <input
-                                        matInput
-                                        placeholder="Nombre"
-                                        name="firstName"
-                                        value="{{ customer.firstName }}"
-                                        formControlName="firstName"
-                                        [attr.disabled]="pageType === 'view'"
-                                    />
+                                    <input matInput placeholder="Nombre" name="firstName"
+                                        value="{{ customer.firstName }}" formControlName="firstName"
+                                        [attr.disabled]="pageType === 'view'" />
                                 </mat-form-field>
 
-                                <mat-form-field
-                                    appearance="outline"
-                                    floatLabel="always"
-                                    class="w-100-p"
-                                >
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                     <mat-label>Apellido</mat-label>
-                                    <input
-                                        matInput
-                                        placeholder="Apellido"
-                                        name="lastName"
-                                        value="{{ customer.lastName }}"
-                                        formControlName="lastName"
-                                    />
+                                    <input matInput placeholder="Apellido" name="lastName"
+                                        value="{{ customer.lastName }}" formControlName="lastName" />
                                 </mat-form-field>
 
-                                <mat-form-field
-                                    appearance="outline"
-                                    floatLabel="always"
-                                    class="w-100-p"
-                                >
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                     <mat-label>Identidad</mat-label>
-                                    <input
-                                        matInput
-                                        placeholder="Identidad"
-                                        name="idNumber"
-                                        value="{{ customer.idNumber }}"
-                                        formControlName="idNumber"
-                                    />
+                                    <input matInput placeholder="Identidad" name="idNumber"
+                                        value="{{ customer.idNumber }}" formControlName="idNumber" />
                                 </mat-form-field>
 
-                                <mat-form-field
-                                    appearance="outline"
-                                    floatLabel="always"
-                                    class="w-100-p"
-                                >
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                     <mat-label>RTN</mat-label>
-                                    <input
-                                        matInput
-                                        placeholder="RTN"
-                                        name="rtn"
-                                        value="{{ customer.rtn }}"
-                                        formControlName="rtn"
-                                    />
+                                    <input matInput placeholder="RTN" name="rtn" value="{{ customer.rtn }}"
+                                        formControlName="rtn" />
                                 </mat-form-field>
 
-                                <mat-form-field
-                                    appearance="outline"
-                                    floatLabel="always"
-                                    class="w-100-p"
-                                >
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                     <mat-label>Dirección</mat-label>
-                                    <input
-                                        matInput
-                                        placeholder="Dirección"
-                                        name="address"
-                                        value="{{ customer.address }}"
-                                        formControlName="address"
-                                    />
+                                    <input matInput placeholder="Dirección" name="address"
+                                        value="{{ customer.address }}" formControlName="address" />
                                 </mat-form-field>
 
-                                <mat-form-field
-                                    appearance="outline"
-                                    floatLabel="always"
-                                    class="w-100-p"
-                                >
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                     <mat-label>Teléfono</mat-label>
-                                    <input
-                                        matInput
-                                        placeholder="Teléfono"
-                                        name="phoneNumber"
-                                        value="{{ customer.phoneNumber }}"
-                                        formControlName="phoneNumber"
-                                    />ck
+                                    <input matInput placeholder="Teléfono" name="phoneNumber"
+                                        value="{{ customer.phoneNumber }}" formControlName="phoneNumber" />
                                 </mat-form-field>
                             </div>
                         </mat-tab>
