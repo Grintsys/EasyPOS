@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Grintsys.EasyPOS.Enums;
+using Grintsys.EasyPOS.PaymentMethod;
+using Grintsys.EasyPOS.Product;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
@@ -11,162 +13,470 @@ namespace Grintsys.EasyPOS.Seed
     {
         private readonly IRepository<Customer.Customer, Guid> _customerRepository;
         private readonly IRepository<Product.Product, Guid> _productRepository;
+        private readonly IRepository<PaymentMethodType, Guid> _paymentMethodTypeRepository;
+        private readonly IRepository<PaymentMethod.PaymentMethod, Guid> _paymentMethodRepository;
+        private readonly IRepository<Warehouse, Guid> _warehouseRepository;
+        private readonly IRepository<ProductWarehouse, Guid> _productWarehousesRepository;
 
         public EasyPOSDataSeederContributor(
             IRepository<Customer.Customer, Guid> customerRepository, 
-            IRepository<Product.Product, Guid> productRepository)
+            IRepository<Product.Product, Guid> productRepository, 
+            IRepository<PaymentMethodType, Guid> paymentMethodTypeRepository, 
+            IRepository<PaymentMethod.PaymentMethod, Guid> paymentMethodRepository, 
+            IRepository<Warehouse, Guid> warehouseRepository, 
+            IRepository<ProductWarehouse, Guid> productWarehousesRepository)
         {
             _customerRepository = customerRepository;
             _productRepository = productRepository;
+            _paymentMethodTypeRepository = paymentMethodTypeRepository;
+            _paymentMethodRepository = paymentMethodRepository;
+            _warehouseRepository = warehouseRepository;
+            _productWarehousesRepository = productWarehousesRepository;
         }
 
         public async Task SeedAsync(DataSeedContext context)
         {
-            //await _productRepository.InsertAsync(
-            //    new Product.Product()
-            //    {
-            //        Name = "Coca Cola 12oz",
-            //        Description = "The Coca-Cola - Classic 12oz cans",
-            //        Code = "Code1",
-            //        SalePrice = 1.36f,
-            //        Taxes = 0.0f,
-            //        IsActive = true,
-            //        ImageUrl = "http://cdn.shopify.com/s/files/1/0358/4714/3560/products/COKECAN_1200x1200.jpg?v=1584912010"
-            //    });
+            /*await _productRepository.InsertAsync(
+                new Product.Product()
+                {
+                    Name = "Coca Cola 12oz",
+                    Description = "The Coca-Cola - Classic 12oz cans",
+                    Code = "Code1",
+                    SalePrice = 1.36f,
+                    Taxes = 0.0f,
+                    IsActive = true,
+                    ImageUrl = "http:cdn.shopify.com/s/files/1/0358/4714/3560/products/COKECAN_1200x1200.jpg?v=1584912010"
+                });
 
-            //await _productRepository.InsertAsync(
-            //    new Product.Product()
-            //    {
-            //        Name = "Doritos Flamin' Hot 9.75oz",
-            //        Description = "Doritos Tortilla Chips, Flamin' Hot flavor, 9.75 Ounce (Pack of 1)",
-            //        Code = "Code2",
-            //        SalePrice = 8.86f,
-            //        Taxes = 0.0f,
-            //        IsActive = true,
-            //        ImageUrl = "https://images-na.ssl-images-amazon.com/images/I/81H-aEOo09L._SL1500_.jpg"
-            //    });
+            await _productRepository.InsertAsync(
+                new Product.Product()
+                {
+                    Name = "Doritos Flamin' Hot 9.75oz",
+                    Description = "Doritos Tortilla Chips, Flamin' Hot flavor, 9.75 Ounce (Pack of 1)",
+                    Code = "Code2",
+                    SalePrice = 8.86f,
+                    Taxes = 0.0f,
+                    IsActive = true,
+                    ImageUrl = "https:images-na.ssl-images-amazon.com/images/I/81H-aEOo09L._SL1500_.jpg"
+                });
 
-            //await _productRepository.InsertAsync(
-            //    new Product.Product()
-            //    {
-            //        Name = "Cheetos Flamin' Hot 1oz",
-            //        Description = "Cheetos Crunchy Flamin' Hot Cheese Flavored Snacks, 1 Ounce (Pack of 40)",
-            //        Code = "Code3",
-            //        SalePrice = 16.98f,
-            //        Taxes = 0.0f,
-            //        IsActive = true,
-            //        ImageUrl = "https://http2.mlstatic.com/D_NQ_NP_681966-MCO32215719280_092019-O.jpg"
-            //    });
+            await _productRepository.InsertAsync(
+                new Product.Product()
+                {
+                    Name = "Cheetos Flamin' Hot 1oz",
+                    Description = "Cheetos Crunchy Flamin' Hot Cheese Flavored Snacks, 1 Ounce (Pack of 40)",
+                    Code = "Code3",
+                    SalePrice = 16.98f,
+                    Taxes = 0.0f,
+                    IsActive = true,
+                    ImageUrl = "https:http2.mlstatic.com/D_NQ_NP_681966-MCO32215719280_092019-O.jpg"
+                });
 
-            //await _productRepository.InsertAsync(
-            //    new Product.Product()
-            //    {
-            //        Name = "Coca Cola 12oz",
-            //        Description = "The Coca-Cola - Classic 12oz cans (Pack of 18)",
-            //        Code = "Code4",
-            //        SalePrice = 20.50f,
-            //        Taxes = 0.0f,
-            //        IsActive = true,
-            //        ImageUrl = "https://images-na.ssl-images-amazon.com/images/I/81GsS1XFEZL._AC_SX569_.jpg"
-            //    });
+            await _productRepository.InsertAsync(
+                new Product.Product()
+                {
+                    Name = "Coca Cola 12oz",
+                    Description = "The Coca-Cola - Classic 12oz cans (Pack of 18)",
+                    Code = "Code4",
+                    SalePrice = 20.50f,
+                    Taxes = 0.0f,
+                    IsActive = true,
+                    ImageUrl = "https:images-na.ssl-images-amazon.com/images/I/81GsS1XFEZL._AC_SX569_.jpg"
+                });
 
-            //await _productRepository.InsertAsync(
-            //    new Product.Product()
-            //    {
-            //        Name = "Sprite, Lemon-Lime Soda 12oz",
-            //        Description = "Lemon-Lime Soda, 100% Natural Flavors 12oz cans (Pack of 18)",
-            //        Code = "Code5",
-            //        SalePrice = 19.01f,
-            //        Taxes = 0.0f,
-            //        IsActive = true,
-            //        ImageUrl = "https://m.media-amazon.com/images/I/519okNpItHL.jpg"
-            //    });
+            await _productRepository.InsertAsync(
+                new Product.Product()
+                {
+                    Name = "Sprite, Lemon-Lime Soda 12oz",
+                    Description = "Lemon-Lime Soda, 100% Natural Flavors 12oz cans (Pack of 18)",
+                    Code = "Code5",
+                    SalePrice = 19.01f,
+                    Taxes = 0.0f,
+                    IsActive = true,
+                    ImageUrl = "https:m.media-amazon.com/images/I/519okNpItHL.jpg"
+                });
 
-            //await _productRepository.InsertAsync(
-            //    new Product.Product()
-            //    {
-            //        Name = "Sprite, Lemon-Lime Soda 12oz",
-            //        Description = "Lemon-Lime Soda, 100% Natural Flavors 12oz cans",
-            //        Code = "Code6",
-            //        SalePrice = 1.35f,
-            //        Taxes = 0.0f,
-            //        IsActive = true,
-            //        ImageUrl = "https://5.imimg.com/data5/GT/UV/HS/SELLER-65134076/355ml-sprite-can-500x500.jpg"
-            //    });
+            await _productRepository.InsertAsync(
+                new Product.Product()
+                {
+                    Name = "Sprite, Lemon-Lime Soda 12oz",
+                    Description = "Lemon-Lime Soda, 100% Natural Flavors 12oz cans",
+                    Code = "Code6",
+                    SalePrice = 1.35f,
+                    Taxes = 0.0f,
+                    IsActive = true,
+                    ImageUrl = "https:5.imimg.com/data5/GT/UV/HS/SELLER-65134076/355ml-sprite-can-500x500.jpg"
+                });
 
-            //await _productRepository.InsertAsync(
-            //    new Product.Product()
-            //    {
-            //        Name = "3 Musketeers Chocolate Candy Bar",
-            //        Description = "Made with a fluffy, whipped chocolate center and covered in milk chocolate (Pack 24)",
-            //        Code = "Code7",
-            //        SalePrice = 35.52f,
-            //        Taxes = 0.0f,
-            //        IsActive = true,
-            //        ImageUrl = "https://i5.walmartimages.com/asr/e8d9a5d0-411a-4658-a396-d9a9ac59e9f5.7e3ba4a3152ab82b2337ad232656f358.jpeg"
-            //    });
+            await _productRepository.InsertAsync(
+                new Product.Product()
+                {
+                    Name = "3 Musketeers Chocolate Candy Bar",
+                    Description = "Made with a fluffy, whipped chocolate center and covered in milk chocolate (Pack 24)",
+                    Code = "Code7",
+                    SalePrice = 35.52f,
+                    Taxes = 0.0f,
+                    IsActive = true,
+                    ImageUrl = "https:i5.walmartimages.com/asr/e8d9a5d0-411a-4658-a396-d9a9ac59e9f5.7e3ba4a3152ab82b2337ad232656f358.jpeg"
+                });
 
-            //await _productRepository.InsertAsync(
-            //    new Product.Product()
-            //    {
-            //        Name = "Kit Kat Dark Chocolate Wafer Candy",
-            //        Description = "Fill snack drawers, lunch boxes and candy displays all year long with dark chocolate and wafer KIT KAT candy bars (Pack 24)",
-            //        Code = "Code8",
-            //        SalePrice = 20.40f,
-            //        Taxes = 0.0f,
-            //        IsActive = true,
-            //        ImageUrl = "https://www.hersheys.com/content/dam/smartlabelproductsimage/kitkat/00034000000463-0013.png"
-            //    });
+            await _productRepository.InsertAsync(
+                new Product.Product()
+                {
+                    Name = "Kit Kat Dark Chocolate Wafer Candy",
+                    Description = "Fill snack drawers, lunch boxes and candy displays all year long with dark chocolate and wafer KIT KAT candy bars (Pack 24)",
+                    Code = "Code8",
+                    SalePrice = 20.40f,
+                    Taxes = 0.0f,
+                    IsActive = true,
+                    ImageUrl = "https:www.hersheys.com/content/dam/smartlabelproductsimage/kitkat/00034000000463-0013.png"
+                });
 
-            //await _productRepository.InsertAsync(
-            //    new Product.Product()
-            //    {
-            //        Name = "M&M'S Peanut Chocolate Candy Singles ,1.74 Ounce (Pack of 48)",
-            //        Description = "Made with roasted peanuts and real milk chocolate surrounded by a colorful candy shell (Pack of 48)",
-            //        Code = "Code9",
-            //        SalePrice = 34.99f,
-            //        Taxes = 0.0f,
-            //        IsActive = true,
-            //        ImageUrl = "https://cdn11.bigcommerce.com/s-2fq65jrvsu/images/stencil/1280x1280/products/817/1986/c-m_m-pea__82865.1592026178.jpg?c=1"
-            //    });
+            await _productRepository.InsertAsync(
+                new Product.Product()
+                {
+                    Name = "M&M'S Peanut Chocolate Candy Singles ,1.74 Ounce (Pack of 48)",
+                    Description = "Made with roasted peanuts and real milk chocolate surrounded by a colorful candy shell (Pack of 48)",
+                    Code = "Code9",
+                    SalePrice = 34.99f,
+                    Taxes = 0.0f,
+                    IsActive = true,
+                    ImageUrl = "https:cdn11.bigcommerce.com/s-2fq65jrvsu/images/stencil/1280x1280/products/817/1986/c-m_m-pea__82865.1592026178.jpg?c=1"
+                });
+            
+            await _productRepository.InsertAsync(
+                new Product.Product()
+                {
+                    Name = "Milky Way Candy Bars",
+                    Description = "MILKY WAY Candy Bars feature creamy caramel and smooth nougat enrobed in rich milk chocolate (Pack 36)",
+                    Code = "Code10",
+                    SalePrice = 23.35f,
+                    Taxes = 0.0f,
+                    IsActive = true,
+                    ImageUrl = "https:resources.sears.com.mx/medios-plazavip/fotos/productos_sears1/original/3125678.jpg"
+                });
 
-            //await _productRepository.InsertAsync(
-            //    new Product.Product()
-            //    {
-            //        Name = "Milky Way Candy Bars",
-            //        Description = "MILKY WAY Candy Bars feature creamy caramel and smooth nougat enrobed in rich milk chocolate (Pack 36)",
-            //        Code = "Code10",
-            //        SalePrice = 23.35f,
-            //        Taxes = 0.0f,
-            //        IsActive = true,
-            //        ImageUrl = "https://resources.sears.com.mx/medios-plazavip/fotos/productos_sears1/original/3125678.jpg"
-            //    });
+            await _customerRepository.InsertAsync(
+                new Customer.Customer()
+                {
+                    FirstName = "Jane",
+                    LastName = "Doe",
+                    IdNumber = "1618199791312",
+                    RTN = "16181997913120",
+                    Address = "San Pedro Sula, Colonia Los Alamos",
+                    PhoneNumber = "(504)2659-8380",
+                    Status = CustomerStatus.Created,
+                    Code = "Customer1"
+                });
 
-            //await _customerRepository.InsertAsync(
-            //    new Customer.Customer()
-            //    {
-            //        FirstName = "Jane",
-            //        LastName = "Doe",
-            //        IdNumber = "1618199791312",
-            //        RTN = "16181997913120",
-            //        Address = "San Pedro Sula, Colonia Los Alamos",
-            //        PhoneNumber = "(504)2659-8380",
-            //        Status = CustomerStatus.Created,
-            //        Code = "Customer1"
-            //    });
+            await _customerRepository.InsertAsync(
+                new Customer.Customer()
+                {
+                    FirstName = "John",
+                    LastName = "Doe",
+                    IdNumber = "1618199791332",
+                    RTN = "16181997913130",
+                    Address = "San Pedro Sula, Colonia Los Alamos",
+                    PhoneNumber = "(504)2659-8360",
+                    Status = CustomerStatus.Created,
+                    Code = "Customer2"
+                });*/
 
-            //await _customerRepository.InsertAsync(
-            //    new Customer.Customer()
-            //    {
-            //        FirstName = "John",
-            //        LastName = "Doe",
-            //        IdNumber = "1618199791332",
-            //        RTN = "16181997913130",
-            //        Address = "San Pedro Sula, Colonia Los Alamos",
-            //        PhoneNumber = "(504)2659-8360",
-            //        Status = CustomerStatus.Created,
-            //        Code = "Customer2"
-            //    });
+            /*await _paymentMethodTypeRepository.InsertAsync(
+                new PaymentMethodType()
+                {
+                    Name = "Efectivo",
+                    ImageUrl = "https://www.svgrepo.com/show/293511/cash.svg"
+                });
+            
+            await _paymentMethodTypeRepository.InsertAsync(
+                new PaymentMethodType()
+                {
+                    Name = "Tarjeta de Credito",
+                    ImageUrl = "https://www.svgrepo.com/show/9862/payment-methods.svg"
+                });
+            
+            await _paymentMethodTypeRepository.InsertAsync(
+                new PaymentMethodType()
+                {
+                    Name = "Tarjeta de Debito",
+                    ImageUrl = "https://www.svgrepo.com/show/17830/payment-method.svg"
+                });
+            
+            await _paymentMethodTypeRepository.InsertAsync(
+                new PaymentMethodType()
+                {
+                    Name = "Cheque",
+                    ImageUrl = "https://www.svgrepo.com/show/74980/commercial-payment-tools-pen-signing-a-check.svg"
+                });
+            
+            await _paymentMethodTypeRepository.InsertAsync(
+                new PaymentMethodType()
+                {
+                    Name = "Transferencia",
+                    ImageUrl = "https://www.svgrepo.com/show/75253/payment-method.svg"
+                });
+
+            await _warehouseRepository.InsertAsync(
+                new Warehouse()
+                {
+                    Address = "San Pedro Sula",
+                    Name = "Bodega 1"
+                });
+            
+            await _warehouseRepository.InsertAsync(
+                new Warehouse()
+                {
+                    Address = "La Ceiba",
+                    Name = "Bodega 2"
+                });
+            
+            await _warehouseRepository.InsertAsync(
+                new Warehouse()
+                {
+                    Address = "Tegucigalpa",
+                    Name = "Bodega 3"
+                });*/
+
+            /* await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("6e2a84f8-ab37-f848-672b-39fc28437740"),
+                    WarehouseId = new Guid("a927334a-583a-3dc2-2eb9-39fc28516891"),
+                    Inventory = 50
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("6e2a84f8-ab37-f848-672b-39fc28437740"),
+                    WarehouseId = new Guid("59418c96-4432-e74e-3b83-39fc285168ab"),
+                    Inventory = 75
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("6e2a84f8-ab37-f848-672b-39fc28437740"),
+                    WarehouseId = new Guid("bd45e66e-a283-6f06-2ceb-39fc285168ab"),
+                    Inventory = 100
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("ddc03ce6-71a7-7a9f-0799-39fc284377c9"),
+                    WarehouseId = new Guid("a927334a-583a-3dc2-2eb9-39fc28516891"),
+                    Inventory = 50
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("ddc03ce6-71a7-7a9f-0799-39fc284377c9"),
+                    WarehouseId = new Guid("59418c96-4432-e74e-3b83-39fc285168ab"),
+                    Inventory = 75
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("ddc03ce6-71a7-7a9f-0799-39fc284377c9"),
+                    WarehouseId = new Guid("bd45e66e-a283-6f06-2ceb-39fc285168ab"),
+                    Inventory = 100
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("afb1c05f-a916-b6d0-2598-39fc284377c9"),
+                    WarehouseId = new Guid("a927334a-583a-3dc2-2eb9-39fc28516891"),
+                    Inventory = 50
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("afb1c05f-a916-b6d0-2598-39fc284377c9"),
+                    WarehouseId = new Guid("59418c96-4432-e74e-3b83-39fc285168ab"),
+                    Inventory = 75
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("afb1c05f-a916-b6d0-2598-39fc284377c9"),
+                    WarehouseId = new Guid("bd45e66e-a283-6f06-2ceb-39fc285168ab"),
+                    Inventory = 100
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("a4eee542-d983-127a-35b6-39fc284377c9"),
+                    WarehouseId = new Guid("a927334a-583a-3dc2-2eb9-39fc28516891"),
+                    Inventory = 50
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("a4eee542-d983-127a-35b6-39fc284377c9"),
+                    WarehouseId = new Guid("59418c96-4432-e74e-3b83-39fc285168ab"),
+                    Inventory = 75
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("a4eee542-d983-127a-35b6-39fc284377c9"),
+                    WarehouseId = new Guid("bd45e66e-a283-6f06-2ceb-39fc285168ab"),
+                    Inventory = 100
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("152432f9-e535-ff22-50bd-39fc284377c9"),
+                    WarehouseId = new Guid("a927334a-583a-3dc2-2eb9-39fc28516891"),
+                    Inventory = 50
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("152432f9-e535-ff22-50bd-39fc284377c9"),
+                    WarehouseId = new Guid("59418c96-4432-e74e-3b83-39fc285168ab"),
+                    Inventory = 75
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("152432f9-e535-ff22-50bd-39fc284377c9"),
+                    WarehouseId = new Guid("bd45e66e-a283-6f06-2ceb-39fc285168ab"),
+                    Inventory = 100
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("61432ac0-8bc4-788c-57da-39fc284377c9"),
+                    WarehouseId = new Guid("a927334a-583a-3dc2-2eb9-39fc28516891"),
+                    Inventory = 50
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("61432ac0-8bc4-788c-57da-39fc284377c9"),
+                    WarehouseId = new Guid("59418c96-4432-e74e-3b83-39fc285168ab"),
+                    Inventory = 75
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("61432ac0-8bc4-788c-57da-39fc284377c9"),
+                    WarehouseId = new Guid("bd45e66e-a283-6f06-2ceb-39fc285168ab"),
+                    Inventory = 100
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("ccf15dee-0059-d58a-593e-39fc284377c9"),
+                    WarehouseId = new Guid("a927334a-583a-3dc2-2eb9-39fc28516891"),
+                    Inventory = 50
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("ccf15dee-0059-d58a-593e-39fc284377c9"),
+                    WarehouseId = new Guid("59418c96-4432-e74e-3b83-39fc285168ab"),
+                    Inventory = 75
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("ccf15dee-0059-d58a-593e-39fc284377c9"),
+                    WarehouseId = new Guid("bd45e66e-a283-6f06-2ceb-39fc285168ab"),
+                    Inventory = 100
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("049d4273-15bf-bc27-d2be-39fc284377c9"),
+                    WarehouseId = new Guid("a927334a-583a-3dc2-2eb9-39fc28516891"),
+                    Inventory = 50
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("049d4273-15bf-bc27-d2be-39fc284377c9"),
+                    WarehouseId = new Guid("59418c96-4432-e74e-3b83-39fc285168ab"),
+                    Inventory = 75
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("049d4273-15bf-bc27-d2be-39fc284377c9"),
+                    WarehouseId = new Guid("bd45e66e-a283-6f06-2ceb-39fc285168ab"),
+                    Inventory = 100
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("d22e887e-0975-29c2-eca6-39fc284377c9"),
+                    WarehouseId = new Guid("a927334a-583a-3dc2-2eb9-39fc28516891"),
+                    Inventory = 50
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("d22e887e-0975-29c2-eca6-39fc284377c9"),
+                    WarehouseId = new Guid("59418c96-4432-e74e-3b83-39fc285168ab"),
+                    Inventory = 75
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("d22e887e-0975-29c2-eca6-39fc284377c9"),
+                    WarehouseId = new Guid("bd45e66e-a283-6f06-2ceb-39fc285168ab"),
+                    Inventory = 100
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("b981ffd2-0b23-4793-f6dc-39fc284377ca"),
+                    WarehouseId = new Guid("a927334a-583a-3dc2-2eb9-39fc28516891"),
+                    Inventory = 50
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("b981ffd2-0b23-4793-f6dc-39fc284377ca"),
+                    WarehouseId = new Guid("59418c96-4432-e74e-3b83-39fc285168ab"),
+                    Inventory = 75
+                });
+            
+            await _productWarehousesRepository.InsertAsync(
+                new ProductWarehouse()
+                {
+                    ProductId = new Guid("b981ffd2-0b23-4793-f6dc-39fc284377ca"),
+                    WarehouseId = new Guid("bd45e66e-a283-6f06-2ceb-39fc285168ab"),
+                    Inventory = 100
+                }); */
         }
     }
 }
