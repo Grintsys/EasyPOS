@@ -13,6 +13,6 @@ namespace Grintsys.EasyPOS.Document
         public float Taxes { get; set; }
         public float Discount { get; set; }
         public int Quantity { get; set; }
-        public float TotalItem => Quantity * SalePrice + (SalePrice * Taxes * Quantity) - (SalePrice * Discount * Quantity);
+        public float TotalItem => Quantity * SalePrice + (SalePrice * Taxes * Quantity) - (SalePrice * (Discount / 100) * Quantity);
     }
 }
