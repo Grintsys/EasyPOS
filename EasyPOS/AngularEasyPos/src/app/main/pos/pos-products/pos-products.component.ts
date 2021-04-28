@@ -9,6 +9,7 @@ import {
     ViewEncapsulation,
     EventEmitter
 } from "@angular/core";
+
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 
@@ -18,6 +19,8 @@ import { locale as english } from "../i18n/en";
 import { locale as spanish } from "../i18n/es";
 import { MatTableDataSource } from "@angular/material/table";
 import { OrderItemDto } from "app/main/orders/order.model";
+import { SharedService } from "app/shared.service";
+import { Subscription } from "rxjs";
 
 @Component({
     selector: "pos-products",
@@ -50,12 +53,21 @@ export class PosProductsComponent implements OnChanges {
     @Input() orderItems: OrderItemDto[];
     @Output() newOrderItemsEvent = new EventEmitter<OrderItemDto[]>();
 
+    subscription: Subscription;
+    pageType: string;
     constructor(
-        private _fuseTranslationLoaderService: FuseTranslationLoaderService
+        private _fuseTranslationLoaderService: FuseTranslationLoaderService,
+        private _sharedService: SharedService,
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
         this.dataSource = new MatTableDataSource();
         this.orderItems = [];
+
+        this.subscription = _sharedService.posPageType$.subscribe(
+            type => {
+                this.pageType = type;
+            }
+        );
     }
 
     ngAfterViewInit() {
@@ -75,7 +87,7 @@ export class PosProductsComponent implements OnChanges {
         this.orderItems.map(x => {
             if (x.productId == orderItemId) {
                 x.quantity++;
-                x.totalItem = x.quantity * x.salePrice + (x.quantity * x.salePrice * x.taxes) - (x.quantity * x.salePrice * x.discount);
+                x.totalItem = x.quantity * x.salePrice + (x.quantity * x.salePrice * x.taxes) - (x.quantity * x.salePrice * (x.discount / 100));
             }
         });
 
@@ -86,7 +98,7 @@ export class PosProductsComponent implements OnChanges {
         this.orderItems.map(x => {
             if (x.productId == orderItemId && x.quantity > 1) {
                 x.quantity--;
-                x.totalItem = x.quantity * x.salePrice + (x.quantity * x.salePrice * x.taxes) - (x.quantity * x.salePrice * x.discount);
+                x.totalItem = x.quantity * x.salePrice + (x.quantity * x.salePrice * x.taxes) - (x.quantity * x.salePrice * (x.discount / 100));
             }
         });
 
@@ -96,6 +108,17 @@ export class PosProductsComponent implements OnChanges {
     removeOrderItem(orderItemId: string) {
         this.orderItems = this.orderItems.filter(x => x.productId != orderItemId);
         this.dataSource = new MatTableDataSource(this.orderItems);
+
+        this.newOrderItemsEvent.emit(this.orderItems);
+    }
+
+    changeDiscount(discount: string, orderItemId: string){
+        this.orderItems.map(x => {
+            if (x.productId == orderItemId && x.quantity > 1) {
+                x.discount = Number(discount);
+                x.totalItem = x.quantity * x.salePrice + (x.quantity * x.salePrice * x.taxes) - (x.quantity * x.salePrice * (x.discount / 100));
+            }
+        });
 
         this.newOrderItemsEvent.emit(this.orderItems);
     }

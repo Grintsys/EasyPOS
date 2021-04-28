@@ -11,8 +11,8 @@
         </mat-chip-list>
 
         <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-            <mat-button-toggle value="cash">Contado</mat-button-toggle>
-            <mat-button-toggle value="credit">Crédito</mat-button-toggle>
+            <mat-button-toggle (click)="setOrderType('Contado')" value="cash">Contado</mat-button-toggle>
+            <mat-button-toggle (click)="setOrderType('Credito')" value="credit">Crédito</mat-button-toggle>
         </mat-button-toggle-group>
 
     </div>
@@ -46,7 +46,7 @@
         </tbody>
     </table>
 
-    <div class="container-paid-exchange">
+    <div class="container-paid-exchange" *ngIf="orderType != 1">
         <div class="item--paid-out">
             <h1>Pagado</h1>
             <h2>{{order.paymentAmount | currency:'HNL':'symbol'}}</h2>
@@ -57,7 +57,17 @@
         </div>
     </div>
 
-    <div *ngIf="pageType=='Orden'" class="container-payment-button" fxLayout="column" fxLayoutAlign="center center">
+    <div *ngIf="pageType=='Orden' && orderType != 1" 
+        class="buttom-chip-toggle payment-methods" fxLayoutAlign="space-between end">
+        <mat-chip-list *ngFor="let payment of order.paymentMethods" aria-label="Fish selection">
+            <mat-chip class="customer-add-mat-chip" (click)="removePaymentMethod(payment.paymentMethodTypeId)">
+                <mat-icon class="s-20 mr-8">remove_circle</mat-icon>
+                {{payment.paymentMethodTypeName +': ' + (payment.amount | currency:'HNL':'symbol')}}
+            </mat-chip>
+        </mat-chip-list>
+    </div>
+
+    <div *ngIf="pageType=='Orden' && orderType != 1" class="container-payment-button" fxLayout="column" fxLayoutAlign="center center">        
         <div class="payment-item add-new-payment"
             matRipple
             fxLayout="column"
@@ -80,6 +90,7 @@
             (click)="create()" [disabled]="!isOrderReady">{{'Completar ' + pageType}}
         </button>
         <button mat-stroked-button color="warn" class="mt-4"
+            [routerLink]="'/pos'"
             (click)="resetOrder()">
             <mat-icon class="s-24">cancel</mat-icon>
             Cancelar orden

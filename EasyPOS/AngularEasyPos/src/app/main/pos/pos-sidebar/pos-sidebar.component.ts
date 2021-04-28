@@ -22,7 +22,7 @@ import {
     CreateUpdateOrderDto,
     CreateUpdatePaymentMethodDto,
     DocumentState,
-    OrderDto, OrderItemDto, PaymentMethodDto, PaymentMethodTypeDto,
+    OrderDto, OrderItemDto, OrderType, PaymentMethodDto, PaymentMethodTypeDto,
 } from "app/main/orders/order.model";
 import { PosService } from "../pos.service";
 import { CustomerDto } from "app/main/customers/customer.model";
@@ -30,6 +30,7 @@ import { takeUntil } from "rxjs/operators";
 import { Subject, Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import { SharedService } from "app/shared.service";
+import { CreateUpdateProductWarehouseDto } from "app/main/products/product.model";
 
 @Component({
     selector: "pos-sidebar",
@@ -53,8 +54,9 @@ export class PosSidebarComponent {
 
     customer: CustomerDto;
     isOrderReady: boolean;
+    orderType: OrderType;
     pageType: string;
-    
+
     private _unsubscribeAll: Subject<any>;
 
     constructor(
@@ -64,11 +66,12 @@ export class PosSidebarComponent {
         private router: Router
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
+        this._unsubscribeAll = new Subject();
         this.color = "rgba(223, 196, 0, 0.11)";
         this.order = new OrderDto();
         this.customer = new CustomerDto();
         this.isOrderReady = false;
-        this._unsubscribeAll = new Subject();
+        this.orderType = OrderType.Ninguno;
     }
 
     ngOnInit(): void {
@@ -82,6 +85,7 @@ export class PosSidebarComponent {
                     this.pageType = "Nota de Debito";
                 } else {
                     this.pageType = "Orden";
+                    this.validateOrder();
                 }
             });
     }
@@ -106,10 +110,18 @@ export class PosSidebarComponent {
 
         this.dialogRef = this._matDialog.open(PaymentMethodsComponent, dialogConfig);
 
-        this.dialogRef.afterClosed().subscribe((response) => {
-            if (response != undefined) {
-                this.order.paymentMethods.push(response);
-                this.order.paymentAmount += response.amount;
+        this.dialogRef.afterClosed().subscribe((paymentMethod) => {
+            if (paymentMethod != undefined) {
+                paymentMethod.amount = Number(paymentMethod.amount);
+                var index = this.order.paymentMethods.findIndex(x => x.paymentMethodTypeId == paymentMethod.paymentMethodTypeId);
+
+                if (index != -1) {
+                    this.order.paymentMethods[index].amount += paymentMethod.amount;
+                }
+                else {
+                    this.order.paymentMethods.push(paymentMethod);
+                    this.order.paymentAmount += paymentMethod.amount;
+                }
             }
             this.validateOrder();
         });
@@ -139,7 +151,7 @@ export class PosSidebarComponent {
                 return a + value.salePrice * value.quantity;
             }, 0);
             this.order.discount = this.order.items.reduce(function (a, value) {
-                return a + (value.salePrice * value.quantity) * value.discount;
+                return a + (value.salePrice * value.quantity) * (value.discount / 100);
             }, 0);
             this.order.isv = this.order.items.reduce(function (a, value) {
                 return a + (value.salePrice * value.quantity) * value.taxes;
@@ -151,11 +163,18 @@ export class PosSidebarComponent {
     }
 
     validateOrder() {
-        if (this.order.customerId != undefined && this.order.items.length > 0
-            && this.order.paymentMethods.length > 0) {
+        if (this.orderType == OrderType.Contado && this.order.customerId != undefined
+            && this.order.items.length > 0 && this.order.paymentMethods.length > 0) {
             this.isOrderReady = true;
         }
-        else if(this.pageType != 'Orden'){
+        else if (this.orderType == OrderType.Credito && this.order.customerId != undefined
+            && this.order.items.length > 0) {
+            this.isOrderReady = true;
+        }
+        else if (this.orderType == OrderType.Ninguno && this.pageType == 'Orden') {
+            this.isOrderReady = false;
+        }
+        else if (this.pageType != 'Orden') {
             this.isOrderReady = true;
         }
         else {
@@ -166,27 +185,33 @@ export class PosSidebarComponent {
     resetOrder() {
         this.order = new OrderDto();
         this.customer = new CustomerDto();
-        
-        if(this.pageType != 'Orden'){
-            this.pageType = 'Orden';
-            this.router.navigate(["/pos"]);
+        this.newOrderEvent.emit(this.order);
+    }
+
+    create() {
+        if (this.pageType == 'Orden') {
+            this.createOrder();
+        } else if (this.pageType == 'Nota de Credito') {
+            this.createCreditNote();
+        } else if (this.pageType == 'Nota de Debito') {
+            this.createDebitNote();
         }
     }
 
-    create(){
-        if(this.pageType == 'Orden'){
-            this.createOrder();
-        } else if(this.pageType == 'Nota de Credito'){
-            this.createCreditNote();
-        } else if(this.pageType == 'Nota de Debito'){
-            this.createDebitNote();
+    setOrderType(orderType: string) {
+        if (orderType == 'Contado') {
+            this.orderType = OrderType.Contado;
+        } else if (orderType == 'Credito') {
+            this.orderType = OrderType.Credito;
         }
+        this.validateOrder();
     }
 
     createOrder() {
         var createUpdateOrder = new CreateUpdateOrderDto();
         createUpdateOrder.customerId = this.order.customerId;
-        createUpdateOrder.state = DocumentState.Created;
+        createUpdateOrder.state = DocumentState.Creada;
+        createUpdateOrder.orderType = this.orderType;
         createUpdateOrder.items = this.order.items.map(x => {
             return this.mapDocumentItem(x);
         });
@@ -197,6 +222,7 @@ export class PosSidebarComponent {
 
         this._posService.createOrder(createUpdateOrder).then(
             (data) => {
+                this.updateInventory();
                 this.resetOrder();
             },
             (error) => {
@@ -205,6 +231,27 @@ export class PosSidebarComponent {
                 );
             }
         )
+    }
+
+    updateInventory() {
+        this.order.items.forEach(
+            x => {
+                var dto = new CreateUpdateProductWarehouseDto();
+                dto.productId = x.productId;
+                dto.warehouseId = localStorage.getItem("warehouseId");
+                dto.inventory = x.quantity;
+                
+                this._posService.updateInventory(dto).then(
+                    (d) => {
+                    },
+                    (error) => {
+                        console.log("Error: pos-sidebar-component->UpdateInventory: " +
+                            JSON.stringify(error)
+                        );
+                    }
+                );
+            }
+        );
     }
 
     mapDocumentItem(orderItem: OrderItemDto) {
@@ -217,7 +264,7 @@ export class PosSidebarComponent {
             dto.taxes = orderItem.taxes || 0,
             dto.discount = orderItem.discount || 0,
             dto.quantity = orderItem.quantity || 0,
-            dto.totalItem = (orderItem.quantity * orderItem.salePrice) + (orderItem.quantity * orderItem.salePrice * orderItem.taxes) - (orderItem.quantity * orderItem.salePrice * orderItem.discount) || 0;
+            dto.totalItem = (orderItem.quantity * orderItem.salePrice) + (orderItem.quantity * orderItem.salePrice * orderItem.taxes) - (orderItem.quantity * orderItem.salePrice * (orderItem.discount / 100)) || 0;
 
         return dto;
     }
@@ -233,7 +280,7 @@ export class PosSidebarComponent {
     createCreditNote() {
         var dto = new CreateUpdateCreditNoteDto();
         dto.orderId = this.order.id;
-        dto.state = DocumentState.Created;
+        dto.state = DocumentState.Creada;
         dto.customerId = this.order.customerId;
         dto.items = this.order.items.map(x => {
             return this.mapDocumentItem(x);
@@ -254,7 +301,7 @@ export class PosSidebarComponent {
     createDebitNote() {
         var dto = new CreateUpdateDebitNoteDto();
         dto.orderId = this.order.id;
-        dto.state = DocumentState.Created;
+        dto.state = DocumentState.Creada;
         dto.customerId = this.order.customerId;
         dto.items = this.order.items.map(x => {
             return this.mapDocumentItem(x);
@@ -270,5 +317,9 @@ export class PosSidebarComponent {
                 );
             }
         )
+    }
+
+    removePaymentMethod(id: string) {
+        this.order.paymentMethods = this.order.paymentMethods.filter(x => x.paymentMethodTypeId != id);
     }
 }

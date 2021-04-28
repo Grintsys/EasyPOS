@@ -53,7 +53,7 @@ namespace Grintsys.EasyPOS.Product
         public async Task<ProductWarehouseDto> UpdateByProductAndWarehouseId(CreateUpdateProductWarehouseDto dto)
         {
             var data = await _productWarehouseRepository.GetByProductAndWarehouseAsync(dto.ProductId, dto.WarehouseId);
-            data.Inventory -= dto.Inventory;
+            dto.Inventory = data.Inventory - dto.Inventory;
             
             return await base.UpdateAsync(data.Id, dto);
         }
