@@ -86,6 +86,7 @@ export class PaymentMethodsComponent implements OnInit {
     addPayment() {
         this.paymentMethodDto.paymentMethodTypeId = this.selectedPaymentMethodType.id;
         this.paymentMethodDto.amount = this.amount;
+        this.paymentMethodDto.paymentMethodTypeName = this.selectedPaymentMethodType.name;
         this.matDialogRef.close(this.paymentMethodDto);
     }
 }

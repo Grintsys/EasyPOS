@@ -116,7 +116,7 @@
                     <mat-cell *matCellDef="let customer"
                         [routerLink]="!isDialog ? '/customer/'+customer.id+'/view' : null"
                         (click)="selectCustomer(customer.id)">
-                        <p class="text-truncate">{{customer.status}}</p>
+                        <p class="text-truncate">{{getCustomerStatus(customer.status)}}</p>
                     </mat-cell>
                 </ng-container>
 

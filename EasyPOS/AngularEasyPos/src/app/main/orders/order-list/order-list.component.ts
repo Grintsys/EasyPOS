@@ -13,7 +13,7 @@ import { FuseTranslationLoaderService } from "@fuse/services/translation-loader.
 import { Subject } from "rxjs";
 import { locale as english } from "../i18n/en";
 import { locale as spanish } from "../i18n/es";
-import { OrderDto } from "../order.model";
+import { DocumentState, OrderDto, OrderType } from "../order.model";
 import { OrderService } from "../order.service";
 
 @Component({
@@ -42,6 +42,7 @@ export class OrderListComponent {
         "discount",
         "total",
         "state",
+        "orderType",
         "options",
     ];
     orders: OrderDto[];
@@ -76,7 +77,7 @@ export class OrderListComponent {
      * @param value
      */
     search(value): void {
-      this.getOrderList(value.target.value);
+        this.getOrderList(value.target.value);
     }
 
     getOrderList(filter: string) {
@@ -95,14 +96,22 @@ export class OrderListComponent {
         );
     }
 
-    deleteOrder(id: string){
-      this._orderService.delete(id).then(
-          (d) => {
-              this.getOrderList('');
-          },
-          (error) => {
-              console.log("Promise rejected with " + JSON.stringify(error));
-          }
-      );
-  }
+    deleteOrder(id: string) {
+        this._orderService.delete(id).then(
+            (d) => {
+                this.getOrderList('');
+            },
+            (error) => {
+                console.log("Promise rejected with " + JSON.stringify(error));
+            }
+        );
+    }
+
+    getOrderType(orderType: OrderType){
+        return OrderType[orderType];
+    }
+
+    getDocumentState(documentState: DocumentState){
+        return DocumentState[documentState];
+    }
 }

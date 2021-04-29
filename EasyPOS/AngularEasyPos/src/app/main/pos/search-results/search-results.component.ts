@@ -47,7 +47,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         this.productList = [];
 
         this.subscription = _sharedService.selectedWarehouseId$.subscribe(
-            id => {
+            () => {
                 this.getProductList("");
             }
         );
@@ -83,6 +83,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         this._posService.getProductList(filter).then(
             (data) => {
                 this.productList = data;
+                this._sharedService.setProductList(this.productList);
             },
             (error) => {
                 console.log("Search-Results-Component: Error Getting Product List " +

@@ -40,7 +40,8 @@ export class ProductCardComponent implements OnInit, OnDestroy {
     }
 
     increaseOrderItem() {
-        this.quantity++;
+        if(this.product.inventory > this.quantity)
+            this.quantity++;
     }
 
     decreaseOrderItem() {

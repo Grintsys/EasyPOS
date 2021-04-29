@@ -33,5 +33,14 @@ namespace Grintsys.EasyPOS.Product
                 .FirstOrDefaultAsync(x => x.Id == id);
             return await dbSet;
         }
+
+        public async Task<ProductWarehouse> GetByProductAndWarehouseAsync(Guid productId, Guid warehouseId)
+        {
+            var dbSet = (await GetQueryableAsync())
+                .Include(x => x.Warehouse)
+                .Include(x => x.Product)
+                .FirstOrDefaultAsync(x => x.ProductId == productId && x.WarehouseId == warehouseId);
+            return await dbSet;
+        }
     }
 }

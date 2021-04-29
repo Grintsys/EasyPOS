@@ -17,19 +17,19 @@
             </div>
 
             <div class="title" [@animate]="{value:'*',params:{delay:'50ms',y:'25px'}}">Comienza iniciando sesión</div>
-            <p class="description" [@animate]="{value:'*',params:{delay:'100ms',y:'25px'}}">Ingresa tus datos de acceso para ingresar al sistema.</p>
+            <p class="description" [@animate]="{value:'*',params:{delay:'100ms',y:'25px'}}">Ingresa tus datos de acceso
+                para ingresar al sistema.</p>
 
             <form name="loginForm" [formGroup]="loginForm" novalidate>
 
                 <mat-form-field appearance="outline">
-                    <mat-label>Correo electrónico</mat-label>
+                    <mat-label>Correo electrónico / Usuario</mat-label>
                     <input matInput formControlName="email">
                     <mat-icon matSuffix class="secondary-text">mail</mat-icon>
                     <mat-error *ngIf="loginForm.get('email').hasError('required')">
-                        Correo electrónico es requerido
+                        Correo electrónico / Usuario es requerido
                     </mat-error>
-                    <mat-error
-                        *ngIf="!loginForm.get('email').hasError('required') &&
+                    <mat-error *ngIf="!loginForm.get('email').hasError('required') &&
                                 loginForm.get('email').hasError('email')">
                         Por favor ingresa un correo válido
                     </mat-error>
@@ -43,30 +43,24 @@
                         Contraseña es requerida
                     </mat-error>
                 </mat-form-field>
-
+                <br/>
+                <mat-error *ngIf="invalidPassword != ''">
+                    {{invalidPassword}}
+                </mat-error>
+                <br/>
                 <mat-form-field appearance="fill">
                     <mat-label>Compañia</mat-label>
                     <mat-select name="company">
-                      <mat-option value="A">Compania A</mat-option>
-                      <mat-option value="B">Compania B</mat-option>
-                      <mat-option value="C">Compania C</mat-option>
+                        <mat-option value="A">Compania A</mat-option>
+                        <mat-option value="B">Compania B</mat-option>
+                        <mat-option value="C">Compania C</mat-option>
                     </mat-select>
-                  </mat-form-field>
-
-                <div class="remember-forgot-password" fxLayout="row" fxLayout.xs="column"
-                     fxLayoutAlign="space-between center">
-                    <mat-checkbox class="remember-me" aria-label="Remember Me">
-                        Recordar contraseña
-                    </mat-checkbox>
-
-                    <a class="forgot-password">
-                        Olvidaste tu contraseña?
-                    </a>
-                </div>
-
-                <button mat-raised-button color="accent" class="submit-button" aria-label="LOGIN" (click)="doLogin()"
-                        [disabled]="loginForm.invalid">
-                    INICIAR SESIÓN
+                </mat-form-field>
+                
+                <button mat-raised-button color="accent" class="submit-button" aria-label="LOGIN" 
+                    (click)="doLogin()" [disabled]="loginInProgress">
+                    <p *ngIf="!loginInProgress">Iniciar Sesion</p>
+                    <mat-spinner *ngIf="loginInProgress" diameter="30" style="margin:0 auto; font-size: small;"></mat-spinner>
                 </button>
 
             </form>

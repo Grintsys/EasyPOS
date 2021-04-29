@@ -56,12 +56,16 @@ namespace Grintsys.EasyPOS.Product
             {
                 dto.ForEach(product =>
                 {
-                    product.ProductWarehouse = product.ProductWarehouse.Where(x => x.WarehouseId == warehouseId).ToList();
+                    product.ProductWarehouse = product.ProductWarehouse.Where(x => 
+                        x.WarehouseId == warehouseId).ToList();
                 });
                 
                 dto = dto.Where(x => x.ProductWarehouse.Any()).ToList();
                 
-                dto.ForEach(product => product.Inventory = product.ProductWarehouse.Sum(x => x.Inventory));
+                dto.ForEach(product => 
+                        product.Inventory = product.ProductWarehouse.Sum(x => x.Inventory));
+
+                return dto.Where(p => p.Inventory > 0).ToList();
             }
 
             return dto;

@@ -9,6 +9,7 @@ import {
     ViewEncapsulation,
     EventEmitter
 } from "@angular/core";
+
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 
@@ -18,6 +19,9 @@ import { locale as english } from "../i18n/en";
 import { locale as spanish } from "../i18n/es";
 import { MatTableDataSource } from "@angular/material/table";
 import { OrderItemDto } from "app/main/orders/order.model";
+import { SharedService } from "app/shared.service";
+import { Subscription } from "rxjs";
+import { ProductDto } from "app/main/products/product.model";
 
 @Component({
     selector: "pos-products",
@@ -50,12 +54,30 @@ export class PosProductsComponent implements OnChanges {
     @Input() orderItems: OrderItemDto[];
     @Output() newOrderItemsEvent = new EventEmitter<OrderItemDto[]>();
 
+    subscription: Subscription;
+    productList: ProductDto[];
+    pageType: string;
+
+
     constructor(
-        private _fuseTranslationLoaderService: FuseTranslationLoaderService
+        private _fuseTranslationLoaderService: FuseTranslationLoaderService,
+        private _sharedService: SharedService,
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
         this.dataSource = new MatTableDataSource();
         this.orderItems = [];
+
+        this.subscription = _sharedService.posPageType$.subscribe(
+            type => {
+                this.pageType = type;
+            }
+        );
+
+        this.subscription = _sharedService.productList$.subscribe(
+            list => {
+                this.productList = list;
+            }
+        );
     }
 
     ngAfterViewInit() {
@@ -72,12 +94,13 @@ export class PosProductsComponent implements OnChanges {
     }
 
     increaseOrderItem(orderItemId: string) {
-        this.orderItems.map(x => {
-            if (x.productId == orderItemId) {
-                x.quantity++;
-                x.totalItem = x.quantity * x.salePrice + (x.quantity * x.salePrice * x.taxes) - (x.quantity * x.salePrice * x.discount);
-            }
-        });
+        var index = this.productList.findIndex(x => x.id == orderItemId);
+        var orderItemIndex = this.orderItems.findIndex(x => x.productId == orderItemId);
+
+        if(this.productList[index].inventory > this.orderItems[orderItemIndex].quantity){
+            this.orderItems[orderItemIndex].quantity++;
+            this.orderItems[orderItemIndex].totalItem = this.calculateTotalItem(this.orderItems[orderItemIndex]);
+        }
 
         this.newOrderItemsEvent.emit(this.orderItems);
     }
@@ -86,7 +109,7 @@ export class PosProductsComponent implements OnChanges {
         this.orderItems.map(x => {
             if (x.productId == orderItemId && x.quantity > 1) {
                 x.quantity--;
-                x.totalItem = x.quantity * x.salePrice + (x.quantity * x.salePrice * x.taxes) - (x.quantity * x.salePrice * x.discount);
+                x.totalItem = this.calculateTotalItem(x);
             }
         });
 
@@ -98,5 +121,42 @@ export class PosProductsComponent implements OnChanges {
         this.dataSource = new MatTableDataSource(this.orderItems);
 
         this.newOrderItemsEvent.emit(this.orderItems);
+    }
+
+    changeDiscount(discount: string, orderItemId: string){
+        this.orderItems.map(x => {
+            if (x.productId == orderItemId && x.quantity > 1) {
+                x.discount = Number(discount);
+                x.totalItem = this.calculateTotalItem(x);
+            }
+        });
+
+        this.newOrderItemsEvent.emit(this.orderItems);
+    }
+
+    changeQuantity(quantity: string, orderItemId: string){
+        var index = this.productList.findIndex(x => x.id == orderItemId);
+        var orderItemIndex = this.orderItems.findIndex(x => x.productId == orderItemId);
+
+        if(Number(quantity) > 0 && this.productList[index].inventory >= Number(quantity)){
+            this.orderItems[orderItemIndex].quantity = Number(quantity);
+            this.orderItems[orderItemIndex].totalItem = this.calculateTotalItem(this.orderItems[orderItemIndex]);
+        }
+
+        this.newOrderItemsEvent.emit(this.orderItems);
+    }
+
+    changeTotal(total: string, orderItemId: string){
+        var orderItemIndex = this.orderItems.findIndex(x => x.productId == orderItemId);
+
+        if(Number(total)){
+            this.orderItems[orderItemIndex].totalItem = Number(total);
+        }
+
+        this.newOrderItemsEvent.emit(this.orderItems);
+    }
+
+    calculateTotalItem(x: OrderItemDto){
+        return x.quantity * x.salePrice + (x.quantity * x.salePrice * x.taxes) - (x.quantity * x.salePrice * (x.discount / 100));
     }
 }

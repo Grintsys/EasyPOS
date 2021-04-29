@@ -187,10 +187,16 @@ export class CreditDebitNote {
 }
 
 export enum DocumentState {
-    Created = 1,
-    Edited = 2,
-    Transferred = 3,
-    Cancelled = 3,
+    Creada = 1,
+    Editada = 2,
+    Transferida = 3,
+    Cancelada = 3,
+}
+
+export enum OrderType {
+    Ninguno = 0,
+    Credito = 1,
+    Contado = 2
 }
 
 export class CreateUpdateDocumentDto<T> {
@@ -239,6 +245,7 @@ export class DocumentItemDto {
 
 export class CreateUpdateOrderDto extends CreateUpdateDocumentDto<CreateUpdateOrderItemDto> {
     paymentMethods: PaymentMethodDto[];
+    orderType: OrderType;
 }
 
 export class CreateUpdateOrderItemDto extends CreateUpdateDocumentItemDto {
@@ -250,6 +257,7 @@ export class OrderDto extends DocumentDto<OrderItemDto> {
     creditNotes: CreditNoteDto[] = [];
     paymentMethods: PaymentMethodDto[] = [];
     paymentAmount: number = 0;
+    orderType: OrderType;
 
     // constructor(order){
     //     super();
@@ -327,6 +335,7 @@ export class CreateUpdatePaymentMethodDto {
 
 export class CreateUpdatePaymentMethodTypeDto {
     name?: string;
+    imageUrl: string;
 }
 
 export class PaymentMethodDto {
@@ -340,5 +349,5 @@ export class PaymentMethodDto {
 export class PaymentMethodTypeDto {
     id?: string;
     name?: string;
-    icon?: string;
+    imageUrl?: string;
 }

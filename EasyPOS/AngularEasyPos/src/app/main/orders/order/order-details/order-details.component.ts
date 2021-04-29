@@ -85,8 +85,6 @@ export class OrderDetailsComponent implements OnInit {
             tax: [{ value: this.order.isv, disabled: true }],
             total: [{ value: this.order.total, disabled: true }],
             toPay: [{ value: this.order.paymentAmount, disabled: true }],
-            exchange: [{ value: 0, disabled: true }],
-            paymentType: [{ value: 0, disabled: true }],
             customerCode: [{ value: this.order.customerCode, disabled: true }],
             customerName: [{ value: this.order.customerName, disabled: true }],
             // identity          : [{value: this.order.identity, disabled: true} ],

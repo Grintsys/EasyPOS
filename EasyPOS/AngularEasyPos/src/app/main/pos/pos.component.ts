@@ -1,5 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from "@angular/core";
+import { Router } from "@angular/router";
 import { FuseTranslationLoaderService } from "@fuse/services/translation-loader.service";
+import { SharedService } from "app/shared.service";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import {
@@ -19,16 +21,18 @@ import { PosService } from "./pos.service";
 export class PosComponent implements OnInit, OnDestroy {
     @ViewChild("searchResults") searchResults: ElementRef;
     @ViewChild("products") products: ElementRef;
-    
+
     private _unsubscribeAll: Subject<any>;
-    
+
     order: OrderDto;
     pageType: string;
 
     constructor(
         private renderer: Renderer2,
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
-        private _posService: PosService
+        private _posService: PosService,
+        private _sharedService: SharedService,
+        private router: Router
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
         this.order = new OrderDto();
@@ -42,16 +46,19 @@ export class PosComponent implements OnInit, OnDestroy {
         this._posService.onPosChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
+                
                 if (data.Type == "creditNote") {
                     this.getOrder(data.Id);
                     this.pageType = "Nota de Credito";
                 } else if (data.Type == "debitNote") {
                     this.getOrder(data.Id);
                     this.pageType = "Nota de Debito";
-                } else{
+                } else {
                     this.pageType = "Orden";
                     this.order = new OrderDto();
                 }
+
+                this._sharedService.updateposPageType(this.pageType);
             });
     }
 

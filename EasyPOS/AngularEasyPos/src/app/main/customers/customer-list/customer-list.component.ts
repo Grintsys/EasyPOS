@@ -16,7 +16,7 @@ import { FuseTranslationLoaderService } from "@fuse/services/translation-loader.
 import { locale as english } from "../i18n/en";
 import { locale as spanish } from "../i18n/es";
 
-import { CustomerDto } from "../customer.model";
+import { CustomerDto, CustomerStatus } from "../customer.model";
 import { CustomerService } from "../customer.service";
 
 import { Subject } from "rxjs";
@@ -110,5 +110,9 @@ export class CustomerListComponent {
             var selectedCustomer = this.customerList.find(x => x.id == id);
             this.matDialogRef.close(selectedCustomer);
         }
+    }
+
+    getCustomerStatus(status: CustomerStatus){
+        return CustomerStatus[status];
     }
 }
