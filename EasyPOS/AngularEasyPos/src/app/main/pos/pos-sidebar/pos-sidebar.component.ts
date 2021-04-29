@@ -63,6 +63,7 @@ export class PosSidebarComponent {
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _matDialog: MatDialog,
         public _posService: PosService,
+        public _sharedService: SharedService,
         private router: Router
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
@@ -234,21 +235,26 @@ export class PosSidebarComponent {
     }
 
     updateInventory() {
+        var productWarehouseList: CreateUpdateProductWarehouseDto[] = [];
+
         this.order.items.forEach(
             x => {
                 var dto = new CreateUpdateProductWarehouseDto();
                 dto.productId = x.productId;
                 dto.warehouseId = localStorage.getItem("warehouseId");
                 dto.inventory = x.quantity;
-                
-                this._posService.updateInventory(dto).then(
-                    (d) => {
-                    },
-                    (error) => {
-                        console.log("Error: pos-sidebar-component->UpdateInventory: " +
-                            JSON.stringify(error)
-                        );
-                    }
+                productWarehouseList.push(dto);
+            }
+        );
+
+        this._posService.updateInventory(productWarehouseList).then(
+            () => {
+                //Hacemos esto para actualizar la lista de prouductos despues de actualizar el inventario
+                this._sharedService.updateWarehouse(localStorage.getItem("warehouseId"));
+            },
+            (error) => {
+                console.log("Error: pos-sidebar-component->UpdateInventory: " +
+                    JSON.stringify(error)
                 );
             }
         );

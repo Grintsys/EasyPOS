@@ -98,7 +98,7 @@ export class PosService implements Resolve<any>{
         return promise;
     }
 
-    public updateInventory(dto: CreateUpdateProductWarehouseDto): Promise<any>{
+    public updateInventory(dto: CreateUpdateProductWarehouseDto[]): Promise<any>{
         var url = `${this.baseUrl}/product-warehouse/by-product-and-warehouse-id`;
         const promise = this._httpClient
             .put<CreateUpdateProductWarehouseDto>(url, dto, this.getHttpOptions()).toPromise();

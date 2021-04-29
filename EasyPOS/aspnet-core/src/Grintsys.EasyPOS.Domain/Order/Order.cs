@@ -11,7 +11,7 @@ namespace Grintsys.EasyPOS.Order
         public List<CreditNote.CreditNote> CreditNotes { get; set; } = new List<CreditNote.CreditNote>();
         public List<PaymentMethod.PaymentMethod> PaymentMethods { get; set; } = new List<PaymentMethod.PaymentMethod>();
         public override float ISV => Items.Sum(x => x.Taxes * x.SalePrice * x.Quantity);
-        public override float Discount => Items.Sum(x => x.Discount * x.SalePrice * x.Quantity);
+        public override float Discount => Items.Sum(x => (x.Discount /100) * x.SalePrice * x.Quantity);
         public override float SubTotal => Items.Sum(x => x.TotalItem);
         public float PaymentAmount => PaymentMethods.Sum(x => x.Amount);
     }

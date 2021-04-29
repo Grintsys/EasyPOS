@@ -21,7 +21,7 @@
           fxLayout="column wrap" fxLayoutAlign="center center" [matRippleCentered]="centered"
           [matRippleDisabled]="disabled" [matRippleUnbounded]="unbounded" [matRippleRadius]="radius"
           [matRippleColor]="color" (click)="setSelectedPaymentMethod(payment.id)">
-          <img class="m-8" src="assets/icons/custom/cash.svg">
+          <img class="m-8" src={{payment.imageUrl}}>
           <span>{{payment.name}}</span>
         </div>
       </div>
