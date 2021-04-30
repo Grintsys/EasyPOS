@@ -2,7 +2,7 @@
 
     <div class="container-pos-product pr-24 pl-24 pb-24 pt-12" fusePerfectScrollbar>
         <div class="container-searchs">
-            <search (click)="search($event)"></search>
+            <search *ngIf="pageType == 'Orden'" (click)="openProductList()" (input)="search($event)"></search>
             <div #searchResults class="tooltip-content bottom s-z-tooltip">
                 <search-results (newOrderItemEvent)="addItem($event)"></search-results>
             </div>

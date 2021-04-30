@@ -9,12 +9,14 @@ export class SharedService {
     private order = new Subject<OrderDto>();
     private posPageType = new Subject<string>();
     private productList = new Subject<ProductDto[]>();
+    private posProductsSearch = new Subject<string>();
 
     // Observable string streams
     selectedWarehouseId$ = this.selectedWarehouseId.asObservable();
     order$ = this.order.asObservable();
     posPageType$ = this.posPageType.asObservable();
     productList$ = this.productList.asObservable();
+    posProductsSearch$ = this.posProductsSearch.asObservable();
 
     // Service message commands
     updateWarehouse(warehouseId: string) {
@@ -31,5 +33,9 @@ export class SharedService {
 
     setProductList(list: ProductDto[]) {
         this.productList.next(list);
+    }
+
+    setPosProductsSearch(filter: string){
+        this.posProductsSearch.next(filter);
     }
 }

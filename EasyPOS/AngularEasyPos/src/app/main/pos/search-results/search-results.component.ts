@@ -31,6 +31,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     selectedWarehouseId: string;
     productList: ProductDto[];
     subscription: Subscription;
+    searchFilter: string;
 
     private _unsubscribeAll: Subject<any>;
 
@@ -42,13 +43,20 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         this._unsubscribeAll = new Subject();
 
         this.input = new EventEmitter();
-        
+
         this.collapsed = true;
         this.productList = [];
 
         this.subscription = _sharedService.selectedWarehouseId$.subscribe(
             () => {
                 this.getProductList("");
+            }
+        );
+
+        this.subscription = _sharedService.posProductsSearch$.subscribe(
+            data => {
+                data != undefined ? this.searchFilter = data : this.searchFilter = '';
+                this.getProductList(this.searchFilter);
             }
         );
     }

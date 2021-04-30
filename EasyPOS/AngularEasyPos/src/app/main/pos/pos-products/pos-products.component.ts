@@ -22,6 +22,7 @@ import { OrderItemDto } from "app/main/orders/order.model";
 import { SharedService } from "app/shared.service";
 import { Subscription } from "rxjs";
 import { ProductDto } from "app/main/products/product.model";
+import { Router } from "@angular/router";
 
 @Component({
     selector: "pos-products",
@@ -58,10 +59,9 @@ export class PosProductsComponent implements OnChanges {
     productList: ProductDto[];
     pageType: string;
 
-
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
-        private _sharedService: SharedService,
+        private _sharedService: SharedService
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
         this.dataSource = new MatTableDataSource();
@@ -124,14 +124,16 @@ export class PosProductsComponent implements OnChanges {
     }
 
     changeDiscount(discount: string, orderItemId: string){
-        this.orderItems.map(x => {
-            if (x.productId == orderItemId && x.quantity > 1) {
-                x.discount = Number(discount);
-                x.totalItem = this.calculateTotalItem(x);
-            }
-        });
-
-        this.newOrderItemsEvent.emit(this.orderItems);
+        if(Number(discount) > 0 && Number(discount) <= 100){
+            this.orderItems.map(x => {
+                if (x.productId == orderItemId && x.quantity > 1) {
+                    x.discount = Number(discount);
+                    x.totalItem = this.calculateTotalItem(x);
+                }
+            });
+    
+            this.newOrderItemsEvent.emit(this.orderItems);
+        }
     }
 
     changeQuantity(quantity: string, orderItemId: string){
@@ -149,7 +151,7 @@ export class PosProductsComponent implements OnChanges {
     changeTotal(total: string, orderItemId: string){
         var orderItemIndex = this.orderItems.findIndex(x => x.productId == orderItemId);
 
-        if(Number(total)){
+        if(Number(total) >= 0){
             this.orderItems[orderItemIndex].totalItem = Number(total);
         }
 

@@ -32,10 +32,29 @@
         border: none;
         width: 50%;
         text-align: left;
+        margin-left: -1em;
+        margin-right: -1em;
     }
 
     .text-right{
         text-align: left;
         width: 100%;
+        color: black;
+        margin-left: -1em;
+    }
+
+    .products-table{
+        .mat-column-quantity{
+            flex: 0 1 120px;
+            margin-right: 1.5em;
+        }
+
+        .mat-column-name{
+            flex: 0 1 240px;
+        }
+
+        .mat-column-options{
+            flex: 0 1 60px;
+        }
     }
 }
