@@ -24,7 +24,7 @@ import { MatInputModule } from '@angular/material/input';
         PaymentMethodsComponent,
         PosSidebarComponent
     ],
-    imports     : [
+    imports: [
         CommonModule,
         RouterModule,
         TranslateModule,
@@ -43,10 +43,9 @@ import { MatInputModule } from '@angular/material/input';
         MatInputModule,
 
     ],
-    exports     : [
+    exports: [
         PosSidebarComponent
     ]
 })
-export class PosSidebarModule
-{
+export class PosSidebarModule {
 }

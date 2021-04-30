@@ -1,10 +1,7 @@
 <!-- CONTENT CARD -->
 <div class="content-card">
 
-    <mat-table class="products-table"
-                #table [dataSource]="dataSource"
-                matSort
-                fusePerfectScrollbar>
+    <mat-table class="products-table" #table [dataSource]="dataSource" matSort fusePerfectScrollbar>
 
         <!-- ID Column -->
         <ng-container matColumnDef="id">
@@ -44,7 +41,8 @@
                     </div>
                     <!-- <span class="text-truncate">{{product.quantity}}</span> -->
                     <span *ngIf="pageType != 'Orden'" class="text-truncate">{{product.quantity}}</span>
-                    <input class="list-input" *ngIf="pageType == 'Orden'" matInput [(ngModel)]="product.quantity" (change)="changeDiscount(product.quantity, product.productId)" placeholder="%">
+                    <input class="list-input" *ngIf="pageType == 'Orden'" matInput [(ngModel)]="product.quantity"
+                        (change)="changeDiscount(product.quantity, product.productId)" placeholder="%">
                     <div>
                         <button mat-icon-button>
                             <mat-icon (click)="increaseOrderItem(product.productId)" class="s-16">add_circle</mat-icon>
@@ -75,7 +73,8 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header>Descuento</mat-header-cell>
             <mat-cell *matCellDef="let product">
                 <p *ngIf="pageType != 'Orden'" class="text-truncate">{{product.discount + '%'}}</p>
-                <input class="text-right" *ngIf="pageType == 'Orden'" matInput [(ngModel)]="product.discount" (change)="changeDiscount(product.discount, product.productId)" placeholder="%">
+                <input class="text-right" *ngIf="pageType == 'Orden'" matInput [(ngModel)]="product.discount"
+                    (change)="changeDiscount(product.discount, product.productId)" placeholder="%">
             </mat-cell>
         </ng-container>
 
@@ -83,8 +82,10 @@
         <ng-container matColumnDef="total">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
             <mat-cell *matCellDef="let product">
-                <p *ngIf="pageType == 'Orden'" class="text-truncate">{{product.totalItem | currency:'HNL ':'symbol'}}</p>
-                <input class="text-right" *ngIf="pageType != 'Orden'" matInput [(ngModel)]="product.totalItem" (change)="changeTotal(product.totalItem, product.productId)" placeholder="%"> 
+                <p *ngIf="pageType == 'Orden'" class="text-truncate">{{product.totalItem | currency:'HNL ':'symbol'}}
+                </p>
+                <input class="text-right" *ngIf="pageType != 'Orden'" matInput [(ngModel)]="product.totalItem"
+                    (change)="changeTotal(product.totalItem, product.productId)" placeholder="%">
             </mat-cell>
         </ng-container>
 
@@ -96,7 +97,7 @@
                     <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                    <button (click)="removeOrderItem(product.productId)"mat-menu-item>
+                    <button (click)="removeOrderItem(product.productId)" mat-menu-item>
                         <mat-icon>delete</mat-icon>
                         <span>Eliminar</span>
                     </button>
@@ -106,18 +107,13 @@
 
         <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
-        <mat-row *matRowDef="let product; columns: displayedColumns;"
-                    class="product"
-                    matRipple>
+        <mat-row *matRowDef="let product; columns: displayedColumns;" class="product" matRipple>
         </mat-row>
 
     </mat-table>
 
-    <mat-paginator #paginator
-                    [length]="dataSource.filteredData.length"
-                    [pageIndex]="0"
-                    [pageSize]="10"
-                    [pageSizeOptions]="[5, 10, 25, 100]">
+    <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+        [pageSizeOptions]="[5, 10, 25, 100]">
     </mat-paginator>
 
 </div>

@@ -8,14 +8,13 @@ import { LoginInput } from './login.input';
 import { Router } from "@angular/router";
 
 @Component({
-    selector     : 'app-login',
-    templateUrl  : './login.component.html',
-    styleUrls    : ['./login.component.scss'],
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
     encapsulation: ViewEncapsulation.None,
-    animations   : fuseAnimations
+    animations: fuseAnimations
 })
-export class LoginComponent implements OnInit
-{
+export class LoginComponent implements OnInit {
     loginForm: FormGroup;
     invalidPassword: string;
     loginInProgress: Boolean;
@@ -25,18 +24,17 @@ export class LoginComponent implements OnInit
         private _formBuilder: FormBuilder,
         private _loginService: LoginService,
         private router: Router
-    )
-    {
+    ) {
         // Configure the layout
         this._fuseConfigService.config = {
             layout: {
-                navbar   : {
+                navbar: {
                     hidden: true
                 },
-                toolbar  : {
+                toolbar: {
                     hidden: true
                 },
-                footer   : {
+                footer: {
                     hidden: true
                 },
                 sidepanel: {
@@ -56,21 +54,19 @@ export class LoginComponent implements OnInit
     /**
      * On init
      */
-    ngOnInit(): void
-    {
+    ngOnInit(): void {
         this.loginForm = this._formBuilder.group({
-            email   : ['', [Validators.required]],
+            email: ['', [Validators.required]],
             password: ['', Validators.required]
         });
 
         this.animateShapes();
     }
 
-    animateShapes(): void
-    {
+    animateShapes(): void {
         var html = '';
-        for (var i = 1; i <= 50; i ++) {
-            html += '<div class="shape-container--'+i+' shape-animation"><div class="random-shape"></div></div>';
+        for (var i = 1; i <= 50; i++) {
+            html += '<div class="shape-container--' + i + ' shape-animation"><div class="random-shape"></div></div>';
         }
         document.querySelector('.shape').innerHTML += html;
     }

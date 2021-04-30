@@ -49,11 +49,6 @@ export class OrderListComponent {
     // Private
     private _unsubscribeAll: Subject<any>;
 
-    /**
-     * Constructor
-     *
-     * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
-     */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _orderService: OrderService
@@ -64,18 +59,10 @@ export class OrderListComponent {
         this._unsubscribeAll = new Subject();
     }
 
-    /**
-     * On ngAfterViewInit
-     */
     ngAfterViewInit() {
         this.getOrderList('');
     }
 
-    /**
-     * Search
-     *
-     * @param value
-     */
     search(value): void {
         this.getOrderList(value.target.value);
     }

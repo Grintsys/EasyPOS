@@ -46,10 +46,10 @@ export class PosComponent implements OnInit, OnDestroy {
         this._posService.onPosChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
-                if(this.router.url == "/pos"){
+                if (this.router.url == "/pos") {
                     this.pageType = "Orden";
                     this.order = new OrderDto();
-                }  else if (data.Type == "nota-credito") {
+                } else if (data.Type == "nota-credito") {
                     this.getOrder(data.Id);
                     this.pageType = "Nota de Credito";
                 } else if (data.Type == "nota-debito") {
@@ -95,7 +95,7 @@ export class PosComponent implements OnInit, OnDestroy {
         }
     }
 
-    openProductList(){
+    openProductList() {
         this.searchResults.nativeElement.classList.toggle("active");
     }
 

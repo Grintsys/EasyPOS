@@ -42,8 +42,8 @@
     <div class="container-amount">
       <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
         <mat-label>Monto</mat-label>
-        <input matInput placeholder="Monto" (change)='amount=$event.target.value' [value]="amount" name="amount" formControlName="amount"
-          type="number">
+        <input matInput placeholder="Monto" (change)='amount=$event.target.value' [value]="amount" name="amount"
+          formControlName="amount" type="number">
         <span matPrefix>$&nbsp;</span>
       </mat-form-field>
     </div>
@@ -51,7 +51,7 @@
   </div>
 
   <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end end">
-    <button mat-raised-button color="accent"  [disabled]="selectedPaymentMethodType?.id == undefined || amount == 0"
+    <button mat-raised-button color="accent" [disabled]="selectedPaymentMethodType?.id == undefined || amount == 0"
       (click)="addPayment()" class="save-button" aria-label="SAVE">
       <mat-icon>add</mat-icon>
       Agregar pago

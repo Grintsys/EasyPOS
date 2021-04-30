@@ -22,13 +22,6 @@ export class OrderDetailsComponent implements OnInit {
     // Private
     private _unsubscribeAll: Subject<any>;
 
-    /**
-     * Constructor
-     *
-     * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
-     * @param {FuseTranslationLoaderService} _orderService
-     * @param {FormBuilder} _formBuilder
-     */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _orderService: OrderService,
@@ -43,9 +36,6 @@ export class OrderDetailsComponent implements OnInit {
         this._unsubscribeAll = new Subject();
     }
 
-    /**
-     * On init
-     */
     ngOnInit(): void {
         // Subscribe to update order on changes
         this._orderService.onOrderChanged
@@ -60,24 +50,12 @@ export class OrderDetailsComponent implements OnInit {
             });
     }
 
-    /**
-     * On destroy
-     */
     ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Create order form
-     *
-     * @returns {FormGroup}
-     */
     createorderForm(): FormGroup {
         return this._formBuilder.group({
             subtotal: [{ value: 'HNL ' + this.order.subTotal, disabled: true }],

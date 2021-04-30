@@ -12,7 +12,7 @@ namespace Grintsys.EasyPOS.Document
         public virtual float ISV { get; }
         public virtual float Discount { get; }
         public virtual float SubTotal { get; }
-        public float Total => SubTotal + ISV - Discount;
+        public virtual float Total { get; }
         public Guid CustomerId { get; set; }
         public Customer.Customer Customer { get; set; }
         public string CustomerName => Customer?.FirstName + " " + Customer?.LastName;

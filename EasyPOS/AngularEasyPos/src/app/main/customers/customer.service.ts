@@ -18,11 +18,6 @@ export class CustomerService implements Resolve<any> {
     customer: any;
     onCustomerChanged: BehaviorSubject<any>;
 
-    /**
-     * Constructor
-     *
-     * @param {HttpClient} _httpClient
-     */
     constructor(private _httpClient: HttpClient, private router: Router) {
         // Set the defaults
         this.onCustomerChanged = new BehaviorSubject({});
@@ -48,11 +43,6 @@ export class CustomerService implements Resolve<any> {
         });
     }
 
-    /**
-     * Get customer
-     *
-     * @returns {Promise<any>}
-     */
     getcustomer(): Promise<any> {
         return new Promise((resolve, reject) => {
             var data = {

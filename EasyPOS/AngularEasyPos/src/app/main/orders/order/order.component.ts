@@ -25,12 +25,6 @@ export class OrderComponent implements OnInit {
     // Private
     private _unsubscribeAll: Subject<any>;
 
-    /**
-     * Constructor
-     *
-     * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
-     * @param {FuseTranslationLoaderService} _orderService
-     */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _orderService: OrderService,
@@ -44,9 +38,6 @@ export class OrderComponent implements OnInit {
         this._unsubscribeAll = new Subject();
     }
 
-    /**
-     * On init
-     */
     ngOnInit(): void {
         this._orderService.onOrderChanged
             .pipe(takeUntil(this._unsubscribeAll))
@@ -72,9 +63,6 @@ export class OrderComponent implements OnInit {
         this.order = order;
     }
 
-    /**
-     * On destroy
-     */
     ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();

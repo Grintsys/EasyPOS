@@ -51,13 +51,14 @@
 
                 <mat-tab-group>
                     <mat-tab label="Detalles de la orden">
-                        <app-order-details [order]= "order"></app-order-details>
+                        <app-order-details [order]="order"></app-order-details>
                     </mat-tab>
                     <mat-tab label="({{order.items.length}}) productos">
-                        <app-order-products [order]= "order"></app-order-products>
+                        <app-order-products [order]="order"></app-order-products>
                     </mat-tab>
                     <mat-tab label="({{order.creditNotes.length + order.debitNotes.length}}) Notas de crédito / débito">
-                        <app-credit-and-debit-notes (orderEvent)="refreshOrder($event)" [order]= "order"></app-credit-and-debit-notes>
+                        <app-credit-and-debit-notes (orderEvent)="refreshOrder($event)" [order]="order">
+                        </app-credit-and-debit-notes>
                     </mat-tab>
                 </mat-tab-group>
 
