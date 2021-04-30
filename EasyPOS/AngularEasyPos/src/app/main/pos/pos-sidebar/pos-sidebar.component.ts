@@ -64,7 +64,7 @@ export class PosSidebarComponent {
         private _matDialog: MatDialog,
         public _posService: PosService,
         public _sharedService: SharedService,
-        private router: Router
+        private _router: Router
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
         this._unsubscribeAll = new Subject();
@@ -80,13 +80,13 @@ export class PosSidebarComponent {
         this._posService.onPosChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
-                if (data.Type == "creditNote") {
-                    this.pageType = "Nota de Credito";
-                } else if (data.Type == "debitNote") {
-                    this.pageType = "Nota de Debito";
-                } else {
+                if(this._router.url == "/pos"){
                     this.pageType = "Orden";
                     this.validateOrder();
+                }  else if (data.Type == "nota-credito") {
+                    this.pageType = "Nota de Credito";
+                } else if (data.Type == "nota-debito") {
+                    this.pageType = "Nota de Debito";
                 }
             });
     }
@@ -158,7 +158,9 @@ export class PosSidebarComponent {
                 return a + (value.salePrice * value.quantity) * value.taxes;
             }, 0);
 
-            this.order.total = this.order.subTotal + this.order.isv - this.order.discount;
+            this.order.total = this.order.items.reduce(function (a, value) {
+                return a + value.totalItem;
+            }, 0);
             this.validateOrder();
         }
     }
@@ -184,6 +186,11 @@ export class PosSidebarComponent {
     }
 
     resetOrder() {
+        if(this.pageType != 'Orden'){
+            this.pageType = 'Orden';
+            this._router.navigate([`/order/${this.order.id}/view`]);
+
+        }
         this.order = new OrderDto();
         this.customer = new CustomerDto();
         this.newOrderEvent.emit(this.order);
@@ -270,7 +277,7 @@ export class PosSidebarComponent {
             dto.taxes = orderItem.taxes || 0,
             dto.discount = orderItem.discount || 0,
             dto.quantity = orderItem.quantity || 0,
-            dto.totalItem = (orderItem.quantity * orderItem.salePrice) + (orderItem.quantity * orderItem.salePrice * orderItem.taxes) - (orderItem.quantity * orderItem.salePrice * (orderItem.discount / 100)) || 0;
+            dto.totalItem = orderItem.totalItem || 0
 
         return dto;
     }

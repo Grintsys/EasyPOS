@@ -80,16 +80,13 @@ export class OrderDetailsComponent implements OnInit {
      */
     createorderForm(): FormGroup {
         return this._formBuilder.group({
-            subtotal: [{ value: this.order.subTotal, disabled: true }],
-            discount: [{ value: this.order.discount, disabled: true }],
+            subtotal: [{ value: 'HNL ' + this.order.subTotal, disabled: true }],
+            discount: [{ value: 'HNL ' + this.order.discount, disabled: true }],
             tax: [{ value: this.order.isv, disabled: true }],
-            total: [{ value: this.order.total, disabled: true }],
-            toPay: [{ value: this.order.paymentAmount, disabled: true }],
+            total: [{ value: 'HNL ' + this.order.total, disabled: true }],
+            toPay: [{ value: 'HNL ' + this.order.paymentAmount, disabled: true }],
             customerCode: [{ value: this.order.customerCode, disabled: true }],
-            customerName: [{ value: this.order.customerName, disabled: true }],
-            // identity          : [{value: this.order.identity, disabled: true} ],
-            // RTN               : [{value: this.order.RTN, disabled: true} ],
-            // address           : [{value: this.order.address, disabled: true} ],
+            customerName: [{ value: this.order.customerName, disabled: true }]
         });
     }
 }

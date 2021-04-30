@@ -46,16 +46,15 @@ export class PosComponent implements OnInit, OnDestroy {
         this._posService.onPosChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
-                
-                if (data.Type == "creditNote") {
-                    this.getOrder(data.Id);
-                    this.pageType = "Nota de Credito";
-                } else if (data.Type == "debitNote") {
-                    this.getOrder(data.Id);
-                    this.pageType = "Nota de Debito";
-                } else {
+                if(this.router.url == "/pos"){
                     this.pageType = "Orden";
                     this.order = new OrderDto();
+                }  else if (data.Type == "nota-credito") {
+                    this.getOrder(data.Id);
+                    this.pageType = "Nota de Credito";
+                } else if (data.Type == "nota-debito") {
+                    this.getOrder(data.Id);
+                    this.pageType = "Nota de Debito";
                 }
 
                 this._sharedService.updateposPageType(this.pageType);
@@ -69,9 +68,7 @@ export class PosComponent implements OnInit, OnDestroy {
     }
 
     search(value): void {
-        // Do your search here...
-        console.log(value);
-        this.searchResults.nativeElement.classList.toggle("active");
+        this._sharedService.setPosProductsSearch(value.target.value);
     }
 
     getOrder(orderId: string) {
@@ -96,6 +93,10 @@ export class PosComponent implements OnInit, OnDestroy {
             newArray.push(...this.order.items, newItem);
             this.order = { ...this.order, items: newArray };
         }
+    }
+
+    openProductList(){
+        this.searchResults.nativeElement.classList.toggle("active");
     }
 
     updateOrderItems(items: OrderItemDto[]) {
