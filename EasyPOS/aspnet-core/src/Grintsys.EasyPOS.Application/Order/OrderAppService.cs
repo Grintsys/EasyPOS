@@ -57,7 +57,9 @@ namespace Grintsys.EasyPOS.Order
             {
                 Id = id,
                 CustomerId = order.CustomerId,
-                State = DocumentState.Cancelled
+                State = DocumentState.Cancelled,
+                OrderType = order.OrderType
+                
             };
 
             await base.UpdateAsync(id, createUpdateDto);
