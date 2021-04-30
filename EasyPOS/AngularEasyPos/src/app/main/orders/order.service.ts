@@ -17,24 +17,12 @@ export class OrderService implements Resolve<any> {
     order: any;
     onOrderChanged: BehaviorSubject<any>;
 
-    /**
-     * Constructor
-     *
-     * @param {HttpClient} _httpClient
-     */
     constructor(private _httpClient: HttpClient, private router: Router) {
         // Set the defaults
         this.onOrderChanged = new BehaviorSubject({});
         this.checkSession();
     }
 
-    /**
-     * Resolver
-     *
-     * @param {ActivatedRouteSnapshot} route
-     * @param {RouterStateSnapshot} state
-     * @returns {Observable<any> | Promise<any> | any}
-     */
     resolve(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
@@ -48,11 +36,6 @@ export class OrderService implements Resolve<any> {
         });
     }
 
-    /**
-     * Get Order
-     *
-     * @returns {Promise<any>}
-     */
     getOrder(): Promise<any> {
         return new Promise((resolve, reject) => {
             var data = {
@@ -113,9 +96,8 @@ export class OrderService implements Resolve<any> {
     }
 
     public getList(filter: string): Promise<any> {
-        var url = `${this.baseUrl}order/order-list${
-            filter != `` ? `?filter=${filter}` : ``
-        }`;
+        var url = `${this.baseUrl}order/order-list${filter != `` ? `?filter=${filter}` : ``
+            }`;
         const promise = this._httpClient
             .get<OrderDto[]>(url, this.getHttpOptions())
             .toPromise();

@@ -80,10 +80,10 @@ export class PosSidebarComponent {
         this._posService.onPosChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
-                if(this._router.url == "/pos"){
+                if (this._router.url == "/pos") {
                     this.pageType = "Orden";
                     this.validateOrder();
-                }  else if (data.Type == "nota-credito") {
+                } else if (data.Type == "nota-credito") {
                     this.pageType = "Nota de Credito";
                 } else if (data.Type == "nota-debito") {
                     this.pageType = "Nota de Debito";
@@ -186,13 +186,14 @@ export class PosSidebarComponent {
     }
 
     resetOrder() {
-        if(this.pageType != 'Orden'){
+        if (this.pageType != 'Orden') {
             this.pageType = 'Orden';
             this._router.navigate([`/order/${this.order.id}/view`]);
 
         }
         this.order = new OrderDto();
         this.customer = new CustomerDto();
+        this.orderType = OrderType.Ninguno;
         this.newOrderEvent.emit(this.order);
     }
 
@@ -267,29 +268,6 @@ export class PosSidebarComponent {
         );
     }
 
-    mapDocumentItem(orderItem: OrderItemDto) {
-        var dto = new CreateUpdateDocumentItemDto();
-        dto.productId = orderItem.productId || '',
-            dto.name = orderItem.name || '',
-            dto.description = orderItem.description || '',
-            dto.code = orderItem.code || '',
-            dto.salePrice = orderItem.salePrice || 0,
-            dto.taxes = orderItem.taxes || 0,
-            dto.discount = orderItem.discount || 0,
-            dto.quantity = orderItem.quantity || 0,
-            dto.totalItem = orderItem.totalItem || 0
-
-        return dto;
-    }
-
-    mapPaymentMethod(payment: PaymentMethodDto) {
-        var dto = new CreateUpdatePaymentMethodDto();
-        dto.amount = payment.amount;
-        dto.paymentMethodTypeId = payment.paymentMethodTypeId;
-
-        return dto;
-    }
-
     createCreditNote() {
         var dto = new CreateUpdateCreditNoteDto();
         dto.orderId = this.order.id;
@@ -334,5 +312,29 @@ export class PosSidebarComponent {
 
     removePaymentMethod(id: string) {
         this.order.paymentMethods = this.order.paymentMethods.filter(x => x.paymentMethodTypeId != id);
+    }
+
+    
+    mapDocumentItem(orderItem: OrderItemDto) {
+        var dto = new CreateUpdateDocumentItemDto();
+        dto.productId = orderItem.productId || '',
+            dto.name = orderItem.name || '',
+            dto.description = orderItem.description || '',
+            dto.code = orderItem.code || '',
+            dto.salePrice = orderItem.salePrice || 0,
+            dto.taxes = orderItem.taxes || 0,
+            dto.discount = orderItem.discount || 0,
+            dto.quantity = orderItem.quantity || 0,
+            dto.totalItem = orderItem.totalItem || 0
+
+        return dto;
+    }
+
+    mapPaymentMethod(payment: PaymentMethodDto) {
+        var dto = new CreateUpdatePaymentMethodDto();
+        dto.amount = payment.amount;
+        dto.paymentMethodTypeId = payment.paymentMethodTypeId;
+
+        return dto;
     }
 }

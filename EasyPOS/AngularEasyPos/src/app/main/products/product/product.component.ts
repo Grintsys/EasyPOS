@@ -25,13 +25,6 @@ export class ProductComponent implements OnInit, OnDestroy {
     // Private
     private _unsubscribeAll: Subject<any>;
 
-    /**
-     * Constructor
-     *
-     * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
-     * @param {FuseTranslationLoaderService} _productService
-     * @param {FormBuilder} _formBuilder
-     */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _productService: ProductService,
@@ -44,9 +37,6 @@ export class ProductComponent implements OnInit, OnDestroy {
         this._unsubscribeAll = new Subject();
     }
 
-    /**
-     * On init
-     */
     ngOnInit(): void {
         // Subscribe to update product on changes
         this._productService.onProductChanged
@@ -60,24 +50,12 @@ export class ProductComponent implements OnInit, OnDestroy {
             });
     }
 
-    /**
-     * On destroy
-     */
     ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Create product form
-     *
-     * @returns {FormGroup}
-     */
     createProductForm(): FormGroup {
         return this._formBuilder.group({
             code: [{ value: this.product.code, disabled: true }],

@@ -50,11 +50,6 @@ export class ProductListComponent {
     // Private
     private _unsubscribeAll: Subject<any>;
 
-    /**
-     * Constructor
-     *
-     * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
-     */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _productService: ProductService,
@@ -73,18 +68,10 @@ export class ProductListComponent {
         );
     }
 
-    /**
-     * On ngAfterViewInit
-     */
     ngAfterViewInit() {
         this.getProductList('');
     }
 
-    /**
-     * Search
-     *
-     * @param value
-     */
     search(value: any): void {
         this.getProductList(value.target.value);
     }

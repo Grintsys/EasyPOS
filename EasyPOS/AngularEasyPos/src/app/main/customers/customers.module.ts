@@ -32,27 +32,27 @@ import { SearchModule } from 'app/layout/components/search/search.module';
 
 const routes = [
     {
-        path     : 'customer-list',
+        path: 'customer-list',
         component: CustomerListComponent
     },
     {
-        path     : 'customer',
+        path: 'customer',
         component: CustomerComponent,
-        resolve  : {
+        resolve: {
             data: CustomerService
         }
     },
     {
-        path     : 'customer/:id',
+        path: 'customer/:id',
         component: CustomerComponent,
-        resolve  : {
+        resolve: {
             data: CustomerService
         }
     },
     {
-        path     : 'customer/:id/:handle',
+        path: 'customer/:id/:handle',
         component: CustomerComponent,
-        resolve  : {
+        resolve: {
             data: CustomerService
         }
     },
@@ -64,7 +64,7 @@ const routes = [
         CustomerComponent,
         CustomerDialogComponent
     ],
-    imports     : [
+    imports: [
         RouterModule.forChild(routes),
 
         TranslateModule,
@@ -91,16 +91,15 @@ const routes = [
         MatDialogModule,
         MatToolbarModule,
     ],
-    exports     : [
+    exports: [
         CustomerListComponent,
         CustomerComponent,
         CustomerDialogComponent
     ],
-    providers : [
+    providers: [
         CustomerService,
     ]
 })
 
-export class CustomersModule
-{
+export class CustomersModule {
 }

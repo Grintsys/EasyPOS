@@ -3,43 +3,31 @@
 
         <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
             <mat-label>Subtotal</mat-label>
-            <input matInput placeholder="subtotal"
-                    name="subtotal"
-                    formControlName="subtotal"
-                    value="{{ order.subTotal }}"
-                    [attr.disabled]="true"
-                    required>
+            <input matInput placeholder="subtotal" name="subtotal" formControlName="subtotal"
+                value="{{ order.subTotal }}" [attr.disabled]="true" required>
         </mat-form-field>
 
         <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
             <mat-label>Descuento</mat-label>
-            <input matInput placeholder="Descuento"
-                    name="discount"
-                    value="{{ order.discount }}"
-                    formControlName="discount" [attr.disabled]="true">
+            <input matInput placeholder="Descuento" name="discount" value="{{ order.discount }}"
+                formControlName="discount" [attr.disabled]="true">
         </mat-form-field>
 
         <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
             <mat-label>Impuesto</mat-label>
-            <input matInput placeholder="Impuesto"
-                    name="tax"
-                    value="{{ order.isv }}"
-                    formControlName="tax" [attr.disabled]="true">
+            <input matInput placeholder="Impuesto" name="tax" value="{{ order.isv }}" formControlName="tax"
+                [attr.disabled]="true">
         </mat-form-field>
 
         <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
             <mat-label>Total</mat-label>
-            <input matInput placeholder="Total"
-                    name="total"
-                    value="{{ order.total }}"
-                    formControlName="total" [attr.disabled]="true">
+            <input matInput placeholder="Total" name="total" value="{{ order.total }}" formControlName="total"
+                [attr.disabled]="true">
         </mat-form-field>
 
         <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
             <mat-label>Pago</mat-label>
-            <input matInput placeholder="Pago"
-                    name="toPay"
-                    formControlName="toPay">
+            <input matInput placeholder="Pago" name="toPay" formControlName="toPay">
         </mat-form-field>
     </div>
 </form>

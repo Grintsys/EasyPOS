@@ -8,7 +8,7 @@ import { takeUntil } from "rxjs/operators";
 import { Output, EventEmitter } from '@angular/core';
 import { locale as english } from "../../i18n/en";
 import { locale as spanish } from "../../i18n/es";
-import { CreditDebitNote, OrderDto } from "../../order.model";
+import { CreditDebitNote, DocumentState, OrderDto } from "../../order.model";
 import { OrderService } from "../../order.service";
 
 @Component({
@@ -46,11 +46,6 @@ export class CreditAndDebitNotesComponent {
     // Private
     private _unsubscribeAll: Subject<any>;
 
-    /**
-     * Constructor
-     *
-     * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
-     */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _orderService: OrderService
@@ -58,13 +53,9 @@ export class CreditAndDebitNotesComponent {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
         this.order = new OrderDto();
         this.notes = [];
-        // Set the private defaults
         this._unsubscribeAll = new Subject();
     }
 
-    /**
-     * On ngAfterViewInit
-     */
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -101,8 +92,8 @@ export class CreditAndDebitNotesComponent {
         this.dataSource.sort = this.sort;
     }
 
-    delete(id: string, type: string){
-        if(type === 'Note de Debito'){
+    delete(id: string, type: string) {
+        if (type === 'Note de Debito') {
             this._orderService.deleteDebitNote(id).then(
                 (d) => {
                     this.get();
@@ -112,7 +103,7 @@ export class CreditAndDebitNotesComponent {
                 }
             );
         }
-        else if(type == 'Note de Credito'){
+        else if (type == 'Note de Credito') {
             this._orderService.deleteCreditNote(id).then(
                 (d) => {
                     this.get();
@@ -124,7 +115,7 @@ export class CreditAndDebitNotesComponent {
         }
     }
 
-    get(){
+    get() {
         this._orderService.get(this.order.id).then(
             (order) => {
                 this.order = order;
@@ -137,5 +128,9 @@ export class CreditAndDebitNotesComponent {
                 );
             }
         );
+    }
+
+    getDocumentState(documentState: DocumentState) {
+        return DocumentState[documentState];
     }
 }

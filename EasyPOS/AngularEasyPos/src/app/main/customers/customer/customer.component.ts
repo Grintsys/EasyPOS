@@ -40,9 +40,6 @@ export class CustomerComponent implements OnInit, OnDestroy {
         this._unsubscribeAll = new Subject();
     }
 
-    /**
-     * On init
-     */
     ngOnInit(): void {
         // Subscribe to update customer on changes
         this._customerService.onCustomerChanged
@@ -69,14 +66,14 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
     createcustomerForm(type: string): FormGroup {
         return this._formBuilder.group({
-            firstName: new FormControl({value: this.customer.firstName, disabled: type === "view"}, type == 'new' ? Validators.required : Validators.minLength(1)),
-            lastName: new FormControl({value: this.customer.lastName,disabled: type === "view"}, type == 'new' ? Validators.required : Validators.minLength(1)),
-            idNumber: new FormControl({value: this.customer.idNumber,disabled: type === "view"}, Validators.minLength(13)),
-            rtn: new FormControl({value: this.customer.rtn, disabled: type === "view"}, Validators.minLength(14)),
-            address: new FormControl({value: this.customer.address, disabled: type === "view"}),
-            phoneNumber: new FormControl({value: this.customer.phoneNumber, disabled: type === "view"}),
-            status: new FormControl({value: this.customer.status, disabled: type === "view"}),
-            code: new FormControl({value: this.customer.code,disabled: type === "view"}, type == 'new' ? Validators.required : Validators.minLength(1))
+            firstName: new FormControl({ value: this.customer.firstName, disabled: type === "view" }, type == 'new' ? Validators.required : Validators.minLength(1)),
+            lastName: new FormControl({ value: this.customer.lastName, disabled: type === "view" }, type == 'new' ? Validators.required : Validators.minLength(1)),
+            idNumber: new FormControl({ value: this.customer.idNumber, disabled: type === "view" }, Validators.minLength(13)),
+            rtn: new FormControl({ value: this.customer.rtn, disabled: type === "view" }, Validators.minLength(14)),
+            address: new FormControl({ value: this.customer.address, disabled: type === "view" }),
+            phoneNumber: new FormControl({ value: this.customer.phoneNumber, disabled: type === "view" }),
+            status: new FormControl({ value: this.customer.status, disabled: type === "view" }),
+            code: new FormControl({ value: this.customer.code, disabled: type === "view" }, type == 'new' ? Validators.required : Validators.minLength(1))
         });
     }
 

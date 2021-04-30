@@ -18,7 +18,6 @@ import { OrderItemDto } from "app/main/orders/order.model";
     styleUrls: ["./product-card.component.scss"],
 })
 export class ProductCardComponent implements OnInit, OnDestroy {
-    // Private
     private _unsubscribeAll: Subject<any>;
     @Input() product: ProductDto;
     @Output() newOrderItemEvent = new EventEmitter<OrderItemDto>();
@@ -31,7 +30,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
         this.quantity = 0;
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void { }
 
     ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
@@ -40,7 +39,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
     }
 
     increaseOrderItem() {
-        if(this.product.inventory > this.quantity)
+        if (this.product.inventory > this.quantity)
             this.quantity++;
     }
 

@@ -46,11 +46,6 @@ export class OrderProductsComponent {
     // Private
     private _unsubscribeAll: Subject<any>;
 
-    /**
-     * Constructor
-     *
-     * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
-     */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _orderService: OrderService
@@ -60,9 +55,7 @@ export class OrderProductsComponent {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
     }
-    /**
-     * On init
-     */
+
     ngOnInit(): void {
         // Subscribe to update order on changes
         this._orderService.onOrderChanged
@@ -78,9 +71,6 @@ export class OrderProductsComponent {
             });
     }
 
-    /**
-     * On ngAfterViewInit
-     */
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;

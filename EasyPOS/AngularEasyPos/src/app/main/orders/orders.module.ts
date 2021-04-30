@@ -27,27 +27,27 @@ import { SearchModule } from 'app/layout/components/search/search.module';
 
 const routes = [
     {
-        path     : 'order-list',
+        path: 'order-list',
         component: OrderListComponent
     },
     {
-        path     : 'order',
+        path: 'order',
         component: OrderComponent,
-        resolve  : {
+        resolve: {
             data: OrderService
         }
     },
     {
-        path     : 'order/:id',
+        path: 'order/:id',
         component: OrderComponent,
-        resolve  : {
+        resolve: {
             data: OrderService
         }
     },
     {
-        path     : 'order/:id/:handle',
+        path: 'order/:id/:handle',
         component: OrderComponent,
-        resolve  : {
+        resolve: {
             data: OrderService
         }
     },
@@ -61,7 +61,7 @@ const routes = [
         OrderProductsComponent,
         CreditAndDebitNotesComponent
     ],
-    imports     : [
+    imports: [
         RouterModule.forChild(routes),
 
         TranslateModule,
@@ -88,18 +88,17 @@ const routes = [
         MatDialogModule,
         MatToolbarModule,
     ],
-    exports     : [
+    exports: [
         OrderListComponent,
         OrderComponent,
         OrderDetailsComponent,
         OrderProductsComponent,
         CreditAndDebitNotesComponent
     ],
-    providers : [
+    providers: [
         OrderService,
     ]
 })
 
-export class OrdersModule
-{
+export class OrdersModule {
 }

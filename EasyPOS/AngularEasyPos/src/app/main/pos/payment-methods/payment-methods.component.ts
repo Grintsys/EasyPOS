@@ -35,13 +35,6 @@ export class PaymentMethodsComponent implements OnInit {
     taxes: number;
     discount: number;
 
-    /**
-     * Constructor
-     *
-     * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
-     * @param {MatDialogRef<MailNgrxComposeDialogComponent>} matDialogRef
-     * @param _data
-     */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         public matDialogRef: MatDialogRef<PaymentMethodsComponent>,
@@ -78,9 +71,9 @@ export class PaymentMethodsComponent implements OnInit {
     setSelectedPaymentMethod(id: string) {
         this.selectedPaymentMethodType = this.paymentMethodTypes.find(x => x.id == id);
     }
-    change(event) { 
+    change(event) {
         console.log(event.target.value);
-        this.paymentMethodDto.amount = parseInt(event.target.value); 
+        this.paymentMethodDto.amount = parseInt(event.target.value);
     }
 
     addPayment() {

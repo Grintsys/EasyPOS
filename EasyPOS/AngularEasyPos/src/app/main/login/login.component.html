@@ -43,11 +43,11 @@
                         Contraseña es requerida
                     </mat-error>
                 </mat-form-field>
-                <br/>
+                <br />
                 <mat-error *ngIf="invalidPassword != ''">
                     {{invalidPassword}}
                 </mat-error>
-                <br/>
+                <br />
                 <mat-form-field appearance="fill">
                     <mat-label>Compañia</mat-label>
                     <mat-select name="company">
@@ -56,11 +56,12 @@
                         <mat-option value="C">Compania C</mat-option>
                     </mat-select>
                 </mat-form-field>
-                
-                <button mat-raised-button color="accent" class="submit-button" aria-label="LOGIN" 
-                    (click)="doLogin()" [disabled]="loginInProgress">
+
+                <button mat-raised-button color="accent" class="submit-button" aria-label="LOGIN" (click)="doLogin()"
+                    [disabled]="loginInProgress">
                     <p *ngIf="!loginInProgress">Iniciar Sesion</p>
-                    <mat-spinner *ngIf="loginInProgress" diameter="30" style="margin:0 auto; font-size: small;"></mat-spinner>
+                    <mat-spinner *ngIf="loginInProgress" diameter="30" style="margin:0 auto; font-size: small;">
+                    </mat-spinner>
                 </button>
 
             </form>
