@@ -52,7 +52,7 @@ export class CustomerListComponent {
         "options",
     ];
     customerList: CustomerDto[];
-    isDialog: boolean;   
+    isDialog: boolean;
 
     private _unsubscribeAll: Subject<any>;
 
@@ -70,7 +70,7 @@ export class CustomerListComponent {
         this.isDialog = _data != null ? _data.isDialog : false;
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void { }
 
     ngAfterViewInit() {
         this.getCustomerList('');
@@ -94,7 +94,7 @@ export class CustomerListComponent {
         );
     }
 
-    deleteCustomer(id: string){
+    deleteCustomer(id: string) {
         this._customerService.delete(id).then(
             (d) => {
                 this.getCustomerList('');
@@ -105,14 +105,14 @@ export class CustomerListComponent {
         );
     }
 
-    selectCustomer(id: String){
-        if(this.isDialog){
+    selectCustomer(id: String) {
+        if (this.isDialog) {
             var selectedCustomer = this.customerList.find(x => x.id == id);
             this.matDialogRef.close(selectedCustomer);
         }
     }
 
-    getCustomerStatus(status: CustomerStatus){
+    getCustomerStatus(status: CustomerStatus) {
         return CustomerStatus[status];
     }
 }

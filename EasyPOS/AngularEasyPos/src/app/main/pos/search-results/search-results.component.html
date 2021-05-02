@@ -15,7 +15,6 @@
         <p>Productos encontrados</p>
     </div>
     <div *ngFor="let product of productList" class="body">
-        <app-product-card (newOrderItemEvent)="addOrderItem($event)" [product]= "product"></app-product-card>
+        <app-product-card (newOrderItemEvent)="addOrderItem($event)" [product]="product"></app-product-card>
     </div>
 </div>
-
