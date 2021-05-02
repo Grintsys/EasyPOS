@@ -43,9 +43,6 @@ namespace Grintsys.EasyPOS
 
             CreateMap<PaymentMethod.PaymentMethod, PaymentMethodDto>();
             CreateMap<CreateUpdatePaymentMethodDto, PaymentMethod.PaymentMethod>();
-
-            CreateMap<PaymentMethodType, PaymentMethodTypeDto>();
-            CreateMap<CreateUpdatePaymentMethodTypeDto, PaymentMethodType>(); 
             
             CreateMap<Warehouse, WarehouseDto>();
             CreateMap<CreateUpdateWarehouseDto, Warehouse>();

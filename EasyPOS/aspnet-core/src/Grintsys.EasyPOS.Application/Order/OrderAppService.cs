@@ -73,7 +73,6 @@ namespace Grintsys.EasyPOS.Order
             var documents = new OrderDocumentDto()
             {
                 Id = orderId,
-                DebitNotes = dto.DebitNotes,
                 CreditNotes = dto.CreditNotes
             };
             

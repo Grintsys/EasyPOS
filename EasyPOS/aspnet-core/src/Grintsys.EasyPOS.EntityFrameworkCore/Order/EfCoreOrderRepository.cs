@@ -22,8 +22,6 @@ namespace Grintsys.EasyPOS.Order
             var data = (await GetQueryableAsync())
                 .Include(x => x.Items)
                 .Include(x => x.Customer)
-                .Include(x => x.DebitNotes)
-                    .ThenInclude(x => x.Items)
                 .Include(x => x.CreditNotes)
                     .ThenInclude(x => x.Items)
                 .Include(x => x.PaymentMethods);
@@ -35,8 +33,6 @@ namespace Grintsys.EasyPOS.Order
             var data = (await GetQueryableAsync())
                 .Include(x => x.Items)
                 .Include(x => x.Customer)
-                .Include(x => x.DebitNotes)
-                    .ThenInclude(x => x.Items)
                 .Include(x => x.CreditNotes)
                     .ThenInclude(x => x.Items)
                 .Include(x => x.PaymentMethods)
