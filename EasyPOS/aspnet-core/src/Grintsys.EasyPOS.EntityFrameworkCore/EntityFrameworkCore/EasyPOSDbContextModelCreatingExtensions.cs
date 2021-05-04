@@ -1,5 +1,6 @@
 ﻿using Grintsys.EasyPOS.CreditNote;
 using Grintsys.EasyPOS.DebitNote;
+using Grintsys.EasyPOS.PaymentMethod;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
@@ -65,6 +66,30 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                 
                 b.HasOne(o => o.CreditDebitCard)
                     .WithOne(o => o.PaymentMethod);
+            });
+            
+            builder.Entity<BankCheck>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "BankChecks", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+            });
+            
+            builder.Entity<Cash>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "Cash", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+            });
+            
+            builder.Entity<WireTransfer>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "WireTransfers", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+            });
+            
+            builder.Entity<CreditDebitCard>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "CreditDebitCards", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
             });
             
             builder.Entity<Order.Order>(b =>
