@@ -106,7 +106,7 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
-                b.HasOne(o => o.PaymentMethods)
+                b.HasOne(o => o.PaymentMethod)
                     .WithOne(o => o.Order)
                     .IsRequired();
             });
