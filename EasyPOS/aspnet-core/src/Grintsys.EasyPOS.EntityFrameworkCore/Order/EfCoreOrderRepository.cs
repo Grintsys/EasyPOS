@@ -24,7 +24,14 @@ namespace Grintsys.EasyPOS.Order
                 .Include(x => x.Customer)
                 .Include(x => x.CreditNotes)
                     .ThenInclude(x => x.Items)
-                .Include(x => x.PaymentMethods);
+                .Include(x => x.PaymentMethods)
+                    .ThenInclude(x => x.Cash)
+                .Include(x => x.PaymentMethods)
+                    .ThenInclude(x => x.BankChecks)
+                .Include(x => x.PaymentMethods)
+                    .ThenInclude(x => x.WireTransfer)
+                .Include(x => x.PaymentMethods)
+                    .ThenInclude(x => x.CreditDebitCard);
             return await data.ToListAsync();
         }
 
@@ -36,6 +43,13 @@ namespace Grintsys.EasyPOS.Order
                 .Include(x => x.CreditNotes)
                     .ThenInclude(x => x.Items)
                 .Include(x => x.PaymentMethods)
+                    .ThenInclude(x => x.Cash)
+                .Include(x => x.PaymentMethods)
+                    .ThenInclude(x => x.BankChecks)
+                .Include(x => x.PaymentMethods)
+                    .ThenInclude(x => x.WireTransfer)
+                .Include(x => x.PaymentMethods)
+                    .ThenInclude(x => x.CreditDebitCard)
                 .FirstOrDefaultAsync(x => x.Id == id);
             return await data;
         }
@@ -46,6 +60,13 @@ namespace Grintsys.EasyPOS.Order
                 .Include(x => x.Items)
                 .Include(x => x.Customer)
                 .Include(x => x.PaymentMethods)
+                    .ThenInclude(x => x.Cash)
+                .Include(x => x.PaymentMethods)
+                    .ThenInclude(x => x.BankChecks)
+                .Include(x => x.PaymentMethods)
+                    .ThenInclude(x => x.WireTransfer)
+                .Include(x => x.PaymentMethods)
+                    .ThenInclude(x => x.CreditDebitCard)
                 .FirstOrDefaultAsync(x => x.Id == id);
             return await data;
         }

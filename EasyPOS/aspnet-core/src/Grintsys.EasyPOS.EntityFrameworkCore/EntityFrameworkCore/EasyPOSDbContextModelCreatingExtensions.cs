@@ -53,6 +53,18 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
             {
                 b.ToTable(EasyPOSConsts.DbTablePrefix + "PaymentMethods", EasyPOSConsts.DbSchema);
                 b.ConfigureByConvention();
+
+                b.HasMany(p => p.BankChecks)
+                    .WithOne(p => p.PaymentMethod);
+                
+                b.HasOne(o => o.Cash)
+                    .WithOne(o => o.PaymentMethod);
+                
+                b.HasOne(o => o.WireTransfer)
+                    .WithOne(o => o.PaymentMethod);
+                
+                b.HasOne(o => o.CreditDebitCard)
+                    .WithOne(o => o.PaymentMethod);
             });
             
             builder.Entity<Order.Order>(b =>
@@ -69,7 +81,7 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
-                b.HasMany(o => o.PaymentMethods)
+                b.HasOne(o => o.PaymentMethods)
                     .WithOne(o => o.Order)
                     .IsRequired();
             });
