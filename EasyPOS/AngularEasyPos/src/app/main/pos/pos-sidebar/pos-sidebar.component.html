@@ -59,9 +59,9 @@
     <div *ngIf="pageType=='Orden' && orderType != 1" 
         class="buttom-chip-toggle payment-methods" fxLayoutAlign="space-between end">
         <mat-chip-list *ngFor="let payment of order.paymentMethods" aria-label="Fish selection">
-            <mat-chip class="customer-add-mat-chip" (click)="removePaymentMethod(payment.paymentMethodTypeId)">
+            <mat-chip class="customer-add-mat-chip">
                 <mat-icon class="s-20 mr-8">remove_circle</mat-icon>
-                {{payment.paymentMethodTypeName +': ' + (payment.amount | currency:'HNL':'symbol')}}
+                {{(payment.amount | currency:'HNL':'symbol')}}
             </mat-chip>
         </mat-chip-list>
     </div>

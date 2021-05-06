@@ -1,4 +1,3 @@
-import { CLASS_NAME } from '@angular/flex-layout';
 import { FuseUtils } from '@fuse/utils';
 import { ProductDto } from '../products/product.model';
 
@@ -9,11 +8,6 @@ export class OrderProduct {
     salePrice: string;
     total: number;
 
-    /**
-     * Constructor
-     *
-     * @param orderProduct
-    */
     constructor(orderProduct?)
     {
         orderProduct = orderProduct || {};
@@ -117,24 +111,6 @@ export class OrderDto extends DocumentDto<OrderItemDto> {
     paymentMethods: PaymentMethodDto[] = [];
     paymentAmount: number = 0;
     orderType: OrderType;
-
-    // constructor(order){
-    //     super();
-    //     order = order || {};
-    //     this.id = order.id || FuseUtils.generateGUID();
-    //     this.customerId = order.customerId || FuseUtils.generateGUID();
-    //     this.customerName = order.customerName || '';
-    //     this.customerCode = order.customerCode || '';
-    //     this.state = order.state || '';
-    //     this.subTotal = order.subTotal || '';
-    //     this.isv = order.isv || '';
-    //     this.discount = order.discount || '';
-    //     this.total = order.total || '';
-    //     this.items = order.items || [];
-    //     this.debitNotes = order.debitNotes || [];
-    //     this.creditNotes = order.creditNotes || [];
-    //     this.paymentMethods = order.paymentMethods || [];
-    // }
 }
 
 export class OrderItemDto extends DocumentItemDto {
@@ -149,7 +125,7 @@ export class OrderItemDto extends DocumentItemDto {
         this.code = product.code || '',
         this.salePrice = product.salePrice || 0,
         this.taxes = product.taxes || 0,
-        this.discount = product.taxes || 0, //TODO
+        this.discount = 0,
         this.quantity = 0,
         this.totalItem = this.quantity * this.salePrice
     }
@@ -164,7 +140,6 @@ export class CreateUpdateDebitNoteItemDto extends CreateUpdateDocumentItemDto {
 }
 
 export class DebitNoteDto extends DocumentDto<DebitNoteItemDto> {
-    orderId?: string;
 }
 
 export class DebitNoteItemDto extends DocumentItemDto {
@@ -186,27 +161,79 @@ export class CreditNoteDto extends DocumentDto<CreditNoteItemDto> {
 export class CreditNoteItemDto extends DocumentItemDto {
     creditNoteId?: string;
 }
-export class CreateUpdatePaymentMethodDto {
-    orderId?: string;
-    paymentMethodTypeId?: string;
-    amount: number;
-}
 
-export class CreateUpdatePaymentMethodTypeDto {
-    name?: string;
-    imageUrl: string;
+export class CreateUpdatePaymentMethodDto {
+    id?: string;
+    orderId: string;
+    creditDebitCard?: any;
+    createUpdateCashDto?: any;
+    createUpdateWireTransferDto?: any;
+    bankChecks?: any[];
 }
 
 export class PaymentMethodDto {
     id?: string;
-    orderId?: string;
-    paymentMethodTypeId?: string;
-    paymentMethodTypeName?: string;
+    creditDebitCardId?: string;
+    cashId?: string;
+    wireTransferId?: string;
+    bankChecks?: string;
     amount: number;
 }
 
-export class PaymentMethodTypeDto {
-    id?: string;
-    name?: string;
-    imageUrl?: string;
+export class CreateUpdateCreditDebitCardDto {
+    total: number;
+    name: string;
+    validThru: Date;
+    personId: string;
+    certificateRetentionNumber: string;
+    paymentMethodId: string;
+}
+
+export class CreditDebitCardDto {
+    total: number;
+    name: string;
+    validThru: Date;
+    personId: string;
+    certificateRetentionNumber: string;
+    paymentMethodId: string;
+}
+
+export class CreateUpdateCashDto {
+    total: number;
+    paymentMethodId: string;
+}
+
+export class CashDto {
+    total: number;
+    paymentMethodId: string;
+}
+
+export class CreateUpdateWireTransferDto {
+    total: number;
+    paymentMethodId: string;
+    account: string;
+    dateTime: string;
+    reference: string;
+}
+
+export class WireTransferDto {
+    total: number;
+    paymentMethodId: string;
+    account: string;
+    dateTime: string;
+    reference: string;
+}
+
+export class CreateUpdateBankCheckDto {
+    total: number;
+    paymentMethodId: string;
+    bank: string;
+    date: string;
+}
+
+export class BankCheckDto {
+    total: number;
+    paymentMethodId: string;
+    bank: string;
+    date: string;
 }

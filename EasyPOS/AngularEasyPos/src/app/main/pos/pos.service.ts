@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from "@angular/router";
 import { BehaviorSubject, Observable } from "rxjs";
 import { CustomerDto } from "../customers/customer.model";
-import { PaymentMethodTypeDto, CreateUpdateOrderDto, OrderDto, CreateUpdateCreditNoteDto, CreateUpdateDebitNoteDto, DebitNoteDto, CreditNoteDto } from "../orders/order.model";
+import { CreateUpdateOrderDto, OrderDto, CreateUpdateCreditNoteDto, CreateUpdateDebitNoteDto, DebitNoteDto, CreditNoteDto } from "../orders/order.model";
 import { CreateUpdateProductWarehouseDto, ProductDto } from "../products/product.model";
 
 @Injectable()
@@ -48,14 +48,6 @@ export class PosService implements Resolve<any>{
         }`;
         const promise = this._httpClient
             .get<ProductDto[]>(url, this.getHttpOptions())
-            .toPromise();
-        return promise;
-    }
-
-    public getPaymentMethods(): Promise<any> {
-        var url = `${this.baseUrl}/payment-method-type/payment-methods`;
-        const promise = this._httpClient
-            .get<PaymentMethodTypeDto[]>(url, this.getHttpOptions())
             .toPromise();
         return promise;
     }

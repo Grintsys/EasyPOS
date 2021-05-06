@@ -148,16 +148,6 @@ export class PosProductsComponent implements OnChanges {
         this.newOrderItemsEvent.emit(this.orderItems);
     }
 
-    changeTotal(total: string, orderItemId: string) {
-        var orderItemIndex = this.orderItems.findIndex(x => x.productId == orderItemId);
-
-        if (Number(total) >= 0) {
-            this.orderItems[orderItemIndex].totalItem = Number(total);
-        }
-
-        this.newOrderItemsEvent.emit(this.orderItems);
-    }
-
     calculateTotalItem(x: OrderItemDto) {
         return x.quantity * x.salePrice + (x.quantity * x.salePrice * x.taxes) - (x.quantity * x.salePrice * (x.discount / 100));
     }

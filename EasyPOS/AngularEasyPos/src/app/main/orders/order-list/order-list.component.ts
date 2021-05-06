@@ -70,9 +70,6 @@ export class OrderListComponent {
     getOrderList(filter: string) {
         this._orderService.getList(filter).then(
             (d) => {
-                // d.forEach(e => {
-                //   this.orders.push(new OrderDto(e));
-                // });
                 this.dataSource = new MatTableDataSource(d);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;

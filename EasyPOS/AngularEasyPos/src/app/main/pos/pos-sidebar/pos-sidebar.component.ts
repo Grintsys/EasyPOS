@@ -22,7 +22,7 @@ import {
     CreateUpdateOrderDto,
     CreateUpdatePaymentMethodDto,
     DocumentState,
-    OrderDto, OrderItemDto, OrderType, PaymentMethodDto, PaymentMethodTypeDto,
+    OrderDto, OrderItemDto, OrderType, PaymentMethodDto
 } from "app/main/orders/order.model";
 import { PosService } from "../pos.service";
 import { CustomerDto } from "app/main/customers/customer.model";
@@ -98,32 +98,17 @@ export class PosSidebarComponent {
     }
 
     openPaymentMethodDialog(): void {
-        var newPayment: PaymentMethodTypeDto = new PaymentMethodTypeDto();
-
         const dialogConfig = new MatDialogConfig();
         dialogConfig.panelClass = "payment-method-dialog";
         dialogConfig.data = {
             discount: this.order.discount,
             subtotal: this.order.subTotal,
             taxes: this.order.isv,
-            PaymentMethod: newPayment
         };
 
         this.dialogRef = this._matDialog.open(PaymentMethodsComponent, dialogConfig);
 
         this.dialogRef.afterClosed().subscribe((paymentMethod) => {
-            if (paymentMethod != undefined) {
-                paymentMethod.amount = Number(paymentMethod.amount);
-                var index = this.order.paymentMethods.findIndex(x => x.paymentMethodTypeId == paymentMethod.paymentMethodTypeId);
-
-                if (index != -1) {
-                    this.order.paymentMethods[index].amount += paymentMethod.amount;
-                }
-                else {
-                    this.order.paymentMethods.push(paymentMethod);
-                    this.order.paymentAmount += paymentMethod.amount;
-                }
-            }
             this.validateOrder();
         });
     }
@@ -224,10 +209,10 @@ export class PosSidebarComponent {
         createUpdateOrder.items = this.order.items.map(x => {
             return this.mapDocumentItem(x);
         });
-        createUpdateOrder.paymentMethods = this.order.paymentMethods.map(x => {
+        /* createUpdateOrder.paymentMethods = this.order.paymentMethods.map(x => {
             return this.mapPaymentMethod(x);
         });
-
+        */
 
         this._posService.createOrder(createUpdateOrder).then(
             (data) => {
@@ -311,7 +296,7 @@ export class PosSidebarComponent {
     }
 
     removePaymentMethod(id: string) {
-        this.order.paymentMethods = this.order.paymentMethods.filter(x => x.paymentMethodTypeId != id);
+
     }
 
     
@@ -332,9 +317,6 @@ export class PosSidebarComponent {
 
     mapPaymentMethod(payment: PaymentMethodDto) {
         var dto = new CreateUpdatePaymentMethodDto();
-        dto.amount = payment.amount;
-        dto.paymentMethodTypeId = payment.paymentMethodTypeId;
-
         return dto;
     }
 }

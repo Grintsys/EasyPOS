@@ -15,7 +15,7 @@
 
     <div>
       <!-- [@animateStagger]="{value:'50'}" -->
-      <div *ngIf="paymentMethodTypes.length > 0" class="payment-method-list">
+      <!-- <div *ngIf="paymentMethodTypes.length > 0" class="payment-method-list">
         <div *ngFor="let payment of paymentMethodTypes" class="payment-method-ripple-container"
           [ngClass]="{'payment-method-selected': payment.id == selectedPaymentMethodType?.id}" matRipple
           fxLayout="column wrap" fxLayoutAlign="center center" [matRippleCentered]="centered"
@@ -24,7 +24,7 @@
           <img class="m-8" src={{payment.imageUrl}}>
           <span>{{payment.name}}</span>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div class="container-to-paid">
@@ -51,8 +51,8 @@
   </div>
 
   <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end end">
-    <button mat-raised-button color="accent" [disabled]="selectedPaymentMethodType?.id == undefined || amount == 0"
-      (click)="addPayment()" class="save-button" aria-label="SAVE">
+    <button mat-raised-button color="accent"
+      class="save-button" aria-label="SAVE">
       <mat-icon>add</mat-icon>
       Agregar pago
     </button>
