@@ -16,6 +16,14 @@ export const navigation: FuseNavigation[] = [
                 url      : '/pos',
             },
             {
+                id       : 'DEBITNOTE',
+                title    : 'Nota de Debito',
+                translate: 'NAV.POS.TITLE',
+                type     : 'item',
+                icon     : 'shopping_cart',
+                url      : '/debit-note',
+            },
+            {
                 id       : 'ORDER',
                 title    : 'Orders',
                 translate: 'NAV.ORDERS.TITLE',

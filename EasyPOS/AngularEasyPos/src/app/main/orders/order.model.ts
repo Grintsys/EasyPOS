@@ -19,26 +19,6 @@ export class OrderProduct {
     }
 }
 
-export class CreditDebitNote {
-    code: number;
-    customerCode: string;
-    customerName: string;
-    total: number;
-    documentType: string;
-    state: string;
-
-    constructor(creditDebitNote?)
-    {
-        creditDebitNote = creditDebitNote || {};
-        this.code = creditDebitNote.id || FuseUtils.generateGUID();
-        this.customerCode = creditDebitNote.customerCode || '';
-        this.customerName = creditDebitNote.customerName || '';
-        this.total = creditDebitNote.total || 0;
-        this.documentType = creditDebitNote.documentType || '';
-        this.state = creditDebitNote.state || '';
-    }
-}
-
 export enum DocumentState {
     Creada = 1,
     Editada = 2,

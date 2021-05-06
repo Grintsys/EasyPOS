@@ -49,13 +49,13 @@ export class PosComponent implements OnInit, OnDestroy {
                 if (this.router.url == "/pos") {
                     this.pageType = "Orden";
                     this.order = new OrderDto();
+                } else if (this.router.url == "/debit-note") {
+                    this.pageType = "Nota de Debito";
+                    this.order = new OrderDto();
                 } else if (data.Type == "nota-credito") {
                     this.getOrder(data.Id);
                     this.pageType = "Nota de Credito";
-                } else if (data.Type == "nota-debito") {
-                    this.getOrder(data.Id);
-                    this.pageType = "Nota de Debito";
-                }
+                } 
 
                 this._sharedService.updateposPageType(this.pageType);
             });

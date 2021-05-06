@@ -8,7 +8,7 @@ import { takeUntil } from "rxjs/operators";
 import { Output, EventEmitter } from '@angular/core';
 import { locale as english } from "../../i18n/en";
 import { locale as spanish } from "../../i18n/es";
-import { CreditDebitNote, DocumentState, OrderDto } from "../../order.model";
+import { DocumentState, OrderDto } from "../../order.model";
 import { OrderService } from "../../order.service";
 
 @Component({
@@ -16,7 +16,7 @@ import { OrderService } from "../../order.service";
     templateUrl: "./credit-and-debit-notes.component.html",
     styleUrls: ["./credit-and-debit-notes.component.scss"],
 })
-export class CreditAndDebitNotesComponent {
+export class CreditNotesComponent {
     dataSource = new MatTableDataSource();
     displayedColumns: string[] = [
         "code",

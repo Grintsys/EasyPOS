@@ -1,8 +1,14 @@
 <div class="blank p-24 pos-sidebar" fusePerfectScrollbar>
 
+    <div *ngIf="pageType == 'Nota de Credito'">
+        <h2 class="page-typeitle">{{pageType}}</h2>
+        <h3>{{'Cliente: ' + order.customerName}}</h3>
+    </div>
+
     <!-- CONTENT CHIP TOGGLE -->
-    <div *ngIf="pageType=='Orden'" class="buttom-chip-toggle" fxLayoutAlign="space-between end">
-        <mat-chip-list aria-label="Fish selection">
+
+    <div class="buttom-chip-toggle" fxLayoutAlign="space-between end">
+        <mat-chip-list *ngIf="pageType != 'Nota de Credito'" aria-label="Fish selection">
             <mat-chip class="customer-add-mat-chip" (click)="openDialogToAddCustomer()">
                 <mat-icon class="s-20 mr-8">add_circle</mat-icon>
                 {{customer.firstName != undefined && customer.lastName != undefined 
@@ -10,16 +16,12 @@
             </mat-chip>
         </mat-chip-list>
 
-        <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+        <mat-button-toggle-group *ngIf="pageType=='Orden'" name="fontStyle" aria-label="Font Style">
             <mat-button-toggle (click)="setOrderType('Contado')" value="cash">Contado</mat-button-toggle>
             <mat-button-toggle (click)="setOrderType('Credito')" value="credit">Crédito</mat-button-toggle>
         </mat-button-toggle-group>
     </div>
 
-    <div *ngIf="pageType != 'Orden'">
-        <h2>{{pageType}}</h2>
-        <h3>{{'Cliente: ' + order.customerName}}</h3>
-    </div>
     <!-- / CONTENT CARD -->
 
     <mat-divider></mat-divider>

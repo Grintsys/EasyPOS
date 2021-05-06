@@ -6,6 +6,9 @@ export const locale = {
             'POS'   : {
                 'TITLE': 'POS'
             },
+            'DEBITNOTE'   : {
+                'TITLE': 'Nota de Debito'
+            },
             'ORDERS'   : {
                 'TITLE': 'Órdenes'
             },

@@ -82,11 +82,10 @@ export class PosSidebarComponent {
             .subscribe((data) => {
                 if (this._router.url == "/pos") {
                     this.pageType = "Orden";
-                    this.validateOrder();
+                } else if (this._router.url == "/debit-note") {
+                    this.pageType = "Nota de Debito";
                 } else if (data.Type == "nota-credito") {
                     this.pageType = "Nota de Credito";
-                } else if (data.Type == "nota-debito") {
-                    this.pageType = "Nota de Debito";
                 }
             });
     }
@@ -162,7 +161,11 @@ export class PosSidebarComponent {
         else if (this.orderType == OrderType.Ninguno && this.pageType == 'Orden') {
             this.isOrderReady = false;
         }
-        else if (this.pageType != 'Orden') {
+        else if (this.pageType == 'Nota de Debito' && this.order.customerId != undefined
+            && this.order.items.length > 0) {
+            this.isOrderReady = true;
+        }
+        else if (this.pageType == 'Nota de Credito') {
             this.isOrderReady = true;
         }
         else {
@@ -171,7 +174,7 @@ export class PosSidebarComponent {
     }
 
     resetOrder() {
-        if (this.pageType != 'Orden') {
+        if (this.pageType == 'Nota de Credito') {
             this.pageType = 'Orden';
             this._router.navigate([`/order/${this.order.id}/view`]);
 
@@ -276,7 +279,6 @@ export class PosSidebarComponent {
 
     createDebitNote() {
         var dto = new CreateUpdateDebitNoteDto();
-        dto.orderId = this.order.id;
         dto.state = DocumentState.Creada;
         dto.customerId = this.order.customerId;
         dto.items = this.order.items.map(x => {
@@ -285,6 +287,7 @@ export class PosSidebarComponent {
 
         this._posService.createDebitNote(dto).then(
             (data) => {
+                this.updateInventory();
                 this.resetOrder();
             },
             (error) => {
@@ -299,7 +302,7 @@ export class PosSidebarComponent {
 
     }
 
-    
+
     mapDocumentItem(orderItem: OrderItemDto) {
         var dto = new CreateUpdateDocumentItemDto();
         dto.productId = orderItem.productId || '',
