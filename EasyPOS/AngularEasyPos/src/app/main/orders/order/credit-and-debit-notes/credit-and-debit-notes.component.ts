@@ -23,7 +23,6 @@ export class CreditAndDebitNotesComponent {
         "customerCode",
         "customerName",
         "total",
-        "documentType",
         "status",
         "options",
     ];
@@ -74,20 +73,7 @@ export class CreditAndDebitNotesComponent {
     }
 
     setDataSource() {
-        this.notes = [];
-        this.order.creditNotes.forEach((cn) => {
-            var creditNote = new CreditDebitNote(cn);
-            creditNote.documentType = "Note de Credito";
-            this.notes.push(creditNote);
-        });
-
-        this.order.debitNotes.forEach((dn) => {
-            var debitNote = new CreditDebitNote(dn);
-            debitNote.documentType = "Note de Debito";
-            this.notes.push(debitNote);
-        });
-
-        this.dataSource = new MatTableDataSource(this.notes);
+        this.dataSource = new MatTableDataSource(this.order.creditNotes);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
     }

@@ -33,6 +33,7 @@
                     <mat-icon mat-icon>sync</mat-icon>
                     <span>Nota de crédito</span>
                 </button>
+
             </div>
         </div>
         <!-- / HEADER -->
@@ -50,7 +51,7 @@
                     <mat-tab label="({{order.items.length}}) productos">
                         <app-order-products [order]="order"></app-order-products>
                     </mat-tab>
-                    <mat-tab label="({{order.creditNotes.length + order.debitNotes.length}}) Notas de crédito / débito">
+                    <mat-tab label="({{order.creditNotes.length}}) Notas de crédito">
                         <app-credit-and-debit-notes (orderEvent)="refreshOrder($event)" [order]="order">
                         </app-credit-and-debit-notes>
                     </mat-tab>
