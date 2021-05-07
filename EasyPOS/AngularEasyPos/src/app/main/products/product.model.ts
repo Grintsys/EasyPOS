@@ -51,5 +51,6 @@ export class WarehouseDto{
     id?: string;
     name?: string;
     address?: string;
+    defaultCustomerId?: string;
     productWarehouses: ProductWarehouseDto[];
 }

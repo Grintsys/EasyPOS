@@ -18,18 +18,18 @@ export const navigation: FuseNavigation[] = [
             {
                 id       : 'DEBITNOTE',
                 title    : 'Nota de Debito',
-                translate: 'NAV.POS.TITLE',
+                translate: 'NAV.DEBITNOTE.TITLE',
                 type     : 'item',
-                icon     : 'shopping_cart',
+                icon     : 'assignment',
                 url      : '/debit-note',
             },
             {
                 id       : 'ORDER',
-                title    : 'Orders',
-                translate: 'NAV.ORDERS.TITLE',
+                title    : 'Documents',
+                translate: 'NAV.DOCUMENTS.TITLE',
                 type     : 'item',
                 icon     : 'list_alt',
-                url      : '/order-list',
+                url      : '/document-list',
             },
             {
                 id       : 'CUSTOMERS',

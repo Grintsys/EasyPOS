@@ -78,27 +78,15 @@ export class CreditNotesComponent {
         this.dataSource.sort = this.sort;
     }
 
-    delete(id: string, type: string) {
-        if (type === 'Note de Debito') {
-            this._orderService.deleteDebitNote(id).then(
-                (d) => {
-                    this.get();
-                },
-                (error) => {
-                    console.log("Delete Debit Note Failed: " + JSON.stringify(error));
-                }
-            );
-        }
-        else if (type == 'Note de Credito') {
-            this._orderService.deleteCreditNote(id).then(
-                (d) => {
-                    this.get();
-                },
-                (error) => {
-                    console.log("Delete Credit Note Failed: " + JSON.stringify(error));
-                }
-            );
-        }
+    delete(id: string) {
+        this._orderService.deleteCreditNote(id).then(
+            (d) => {
+                this.get();
+            },
+            (error) => {
+                console.log("Delete Credit Note Failed: " + JSON.stringify(error));
+            }
+        );
     }
 
     get() {

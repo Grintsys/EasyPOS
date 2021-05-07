@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder } from "@angular/forms";
 import { FuseTranslationLoaderService } from "@fuse/services/translation-loader.service";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { OrderDto } from "../../order.model";
+import { OrderDto, OrderType } from "../../order.model";
 import { OrderService } from "../../order.service";
 
 import { locale as english } from "../../i18n/en";
@@ -41,11 +41,7 @@ export class OrderDetailsComponent implements OnInit {
         this._orderService.onOrderChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
-                if (data.Type == "view") {
-                    this.pageType = "edit";
-                } else {
-                    this.pageType = "new";
-                }
+                this.pageType = data.Type;
                 this.orderForm = this.createorderForm();
             });
     }
@@ -60,11 +56,16 @@ export class OrderDetailsComponent implements OnInit {
         return this._formBuilder.group({
             subtotal: [{ value: 'HNL ' + this.order.subTotal, disabled: true }],
             discount: [{ value: 'HNL ' + this.order.discount, disabled: true }],
+            orderType: [{ value: this.getOrderType(this.order.orderType), disabled: true }],
             tax: [{ value: this.order.isv, disabled: true }],
             total: [{ value: 'HNL ' + this.order.total, disabled: true }],
             toPay: [{ value: 'HNL ' + this.order.paymentAmount, disabled: true }],
             customerCode: [{ value: this.order.customerCode, disabled: true }],
             customerName: [{ value: this.order.customerName, disabled: true }]
         });
+    }
+
+    getOrderType(orderType: OrderType){
+        return OrderType[orderType];
     }
 }

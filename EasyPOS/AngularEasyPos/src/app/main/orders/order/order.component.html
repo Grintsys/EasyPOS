@@ -13,28 +13,32 @@
             <!-- APP TITLE -->
             <div fxLayout="row" fxLayoutAlign="start center">
 
-                <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/order-list'">
+                <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/document-list'">
                     <mat-icon>arrow_back</mat-icon>
                 </button>
 
                 <div fxLayout="column" fxLayoutAlign="start start"
                     [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
                     <div class="h2">
-                        Orden {{order.customerName}}
+                        {{pageType == 'order' ? 'Orden' : 'Nota de Debito'}}
                     </div>
-                    <div class="subtitle secondary-text">
-                        <span>Contado</span>
+                    <div class="h2">
+                        {{order.customerName}}
+                    </div>
+                    <div *ngIf="pageType == 'order'" class="subtitle secondary-text">
+                        <span>{{getOrderType(order.orderType)}}</span>
                     </div>
                 </div>
-            </div>
-            <div>
 
+            </div>
+
+            <div *ngIf="pageType == 'order'">
                 <button mat-stroked-button [routerLink]="'/pos/' + order.id + '/nota-credito'">
                     <mat-icon mat-icon>sync</mat-icon>
                     <span>Nota de crédito</span>
                 </button>
-
             </div>
+
         </div>
         <!-- / HEADER -->
 
@@ -45,13 +49,13 @@
             <div *ngIf="isDataAvailable" class="content">
 
                 <mat-tab-group>
-                    <mat-tab label="Detalles de la orden">
+                    <mat-tab label="Detalles">
                         <app-order-details [order]="order"></app-order-details>
                     </mat-tab>
-                    <mat-tab label="({{order.items.length}}) productos">
+                    <mat-tab label="({{order.items.length}}) Productos">
                         <app-order-products [order]="order"></app-order-products>
                     </mat-tab>
-                    <mat-tab label="({{order.creditNotes.length}}) Notas de crédito">
+                    <mat-tab *ngIf="pageType == 'order' " label="({{order.creditNotes.length}}) Notas de crédito">
                         <app-credit-and-debit-notes (orderEvent)="refreshOrder($event)" [order]="order">
                         </app-credit-and-debit-notes>
                     </mat-tab>

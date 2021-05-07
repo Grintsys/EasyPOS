@@ -39,8 +39,8 @@
                             <mat-icon (click)="decreaseOrderItem(product.productId)" class="s-16">remove</mat-icon>
                         </button>
                     </div>
-                    <span *ngIf="pageType != 'Orden'" class="text-truncate">{{product.quantity}}</span>
-                    <input class="list-input" *ngIf="pageType == 'Orden'" matInput [(ngModel)]="product.quantity"
+                    <!-- <span *ngIf="pageType != 'Orden'" class="text-truncate">{{product.quantity}}</span> -->
+                    <input class="list-input" matInput [(ngModel)]="product.quantity"
                         (change)="changeDiscount(product.quantity, product.productId)" placeholder="%">
                     <div>
                         <button mat-icon-button>

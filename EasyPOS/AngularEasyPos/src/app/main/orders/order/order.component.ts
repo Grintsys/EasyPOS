@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FuseTranslationLoaderService } from "@fuse/services/translation-loader.service";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { OrderDto } from "../order.model";
+import { OrderDto, OrderType } from "../order.model";
 
 import { locale as english } from "../i18n/en";
 import { locale as spanish } from "../i18n/es";
@@ -42,12 +42,26 @@ export class OrderComponent implements OnInit {
         this._orderService.onOrderChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
-                if (data.Type == "view") {
+                if (data.Type == "order") {
                     this._orderService.get(data.Id).then(
                         (order) => {
                             this.order = order;
                             this.isDataAvailable = true;
-                            this.pageType = "view";
+                            this.pageType = data.Type;
+                        },
+                        (error) => {
+                            console.log(
+                                "Get Order Failed: " + JSON.stringify(error)
+                            );
+                        }
+                    );
+                }
+                else if(data.Type == 'debit-note'){
+                    this._orderService.getDebitNote(data.Id).then(
+                        (order) => {
+                            this.order = order;
+                            this.isDataAvailable = true;
+                            this.pageType = data.Type;
                         },
                         (error) => {
                             console.log(
@@ -67,5 +81,9 @@ export class OrderComponent implements OnInit {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
+    }
+
+    getOrderType(orderType: OrderType){
+        return OrderType[orderType];
     }
 }

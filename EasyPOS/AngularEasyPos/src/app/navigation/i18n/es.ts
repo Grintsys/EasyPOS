@@ -9,8 +9,8 @@ export const locale = {
             'DEBITNOTE'   : {
                 'TITLE': 'Nota de Debito'
             },
-            'ORDERS'   : {
-                'TITLE': 'Órdenes'
+            'DOCUMENTS'   : {
+                'TITLE': 'Documentos'
             },
             'CUSTOMERS'   : {
                 'TITLE': 'Clientes'

@@ -176,7 +176,7 @@ export class PosSidebarComponent {
     resetOrder() {
         if (this.pageType == 'Nota de Credito') {
             this.pageType = 'Orden';
-            this._router.navigate([`/order/${this.order.id}/view`]);
+            this._router.navigate([`/document/${this.order.id}/view`]);
 
         }
         this.order = new OrderDto();

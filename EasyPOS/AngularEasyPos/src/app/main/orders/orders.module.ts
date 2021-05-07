@@ -27,25 +27,25 @@ import { SearchModule } from 'app/layout/components/search/search.module';
 
 const routes = [
     {
-        path: 'order-list',
+        path: 'document-list',
         component: OrderListComponent
     },
     {
-        path: 'order',
+        path: 'document',
         component: OrderComponent,
         resolve: {
             data: OrderService
         }
     },
     {
-        path: 'order/:id',
+        path: 'document/:id',
         component: OrderComponent,
         resolve: {
             data: OrderService
         }
     },
     {
-        path: 'order/:id/:handle',
+        path: 'document/:id/:handle',
         component: OrderComponent,
         resolve: {
             data: OrderService

@@ -17,7 +17,7 @@
                     list_alt
                 </mat-icon>
                 <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    Ordenes
+                    Documentos
                 </span>
             </div>
             <!-- / APP TITLE -->
@@ -33,10 +33,18 @@
         <div class="content-card">
             <mat-table class="orders-table" #table [dataSource]="dataSource" matSort fusePerfectScrollbar>
 
+                <!-- DOCUMENT_TYPE Column -->
+                <ng-container matColumnDef="documentType">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de Documento</mat-header-cell>
+                    <mat-cell *matCellDef="let order" [routerLink]="'/document/'+order.id+'/'+order.url">
+                        <p class="text-truncate">{{order.documentType}}</p>
+                    </mat-cell>
+                </ng-container>
+
                 <!-- CUSTOMER_CODE Column -->
                 <ng-container matColumnDef="customerCode">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Código del Cliente</mat-header-cell>
-                    <mat-cell *matCellDef="let order" [routerLink]="'/order/'+order.id+'/view'">
+                    <mat-cell *matCellDef="let order" [routerLink]="'/document/'+order.id+'/'+order.url">
                         <p class="text-truncate">{{order.customerCode}}</p>
                     </mat-cell>
                 </ng-container>
@@ -44,7 +52,7 @@
                 <!-- CUSTOMER_NAME Column -->
                 <ng-container matColumnDef="customerName">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre del Cliente</mat-header-cell>
-                    <mat-cell *matCellDef="let order" [routerLink]="'/order/'+order.id+'/view'">
+                    <mat-cell *matCellDef="let order" [routerLink]="'/document/'+order.id+'/'+order.url">
                         <p class="text-truncate">{{order.customerName}}</p>
                     </mat-cell>
                 </ng-container>
@@ -52,7 +60,7 @@
                 <!-- SUB_TOTAL Column -->
                 <ng-container matColumnDef="subTotal">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Subtotal</mat-header-cell>
-                    <mat-cell *matCellDef="let order" [routerLink]="'/order/'+order.id+'/view'">
+                    <mat-cell *matCellDef="let order" [routerLink]="'/document/'+order.id+'/'+order.url">
                         <p class="text-truncate">{{order.subTotal | currency:'HNL ':'symbol'}}</p>
                     </mat-cell>
                 </ng-container>
@@ -60,7 +68,7 @@
                 <!-- ISV Column -->
                 <ng-container matColumnDef="isv">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>ISV</mat-header-cell>
-                    <mat-cell *matCellDef="let order" [routerLink]="'/order/'+order.id+'/view'">
+                    <mat-cell *matCellDef="let order" [routerLink]="'/document/'+order.id+'/'+order.url">
                         <p class="text-truncate">{{order.isv + '%'}}</p>
                     </mat-cell>
                 </ng-container>
@@ -68,7 +76,7 @@
                 <!-- DISCOUNT Column -->
                 <ng-container matColumnDef="discount">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Descuento</mat-header-cell>
-                    <mat-cell *matCellDef="let order" [routerLink]="'/order/'+order.id+'/view'">
+                    <mat-cell *matCellDef="let order" [routerLink]="'/document/'+order.id+'/'+order.url">
                         <p class="text-truncate">{{order.discount | currency:'HNL ':'symbol'}}</p>
                     </mat-cell>
                 </ng-container>
@@ -76,7 +84,7 @@
                 <!-- TOTAL Column -->
                 <ng-container matColumnDef="total">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
-                    <mat-cell *matCellDef="let order" [routerLink]="'/order/'+order.id+'/view'">
+                    <mat-cell *matCellDef="let order" [routerLink]="'/document/'+order.id+'/'+order.url">
                         <p class="text-truncate">{{order.total | currency:'HNL ':'symbol'}}</p>
                     </mat-cell>
                 </ng-container>
@@ -84,16 +92,8 @@
                 <!-- STATUS Column -->
                 <ng-container matColumnDef="state">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
-                    <mat-cell *matCellDef="let order" [routerLink]="'/order/'+order.id+'/view'">
+                    <mat-cell *matCellDef="let order" [routerLink]="'/document/'+order.id+'/'+order.url">
                         <p class="text-truncate">{{getDocumentState(order.state)}}</p>
-                    </mat-cell>
-                </ng-container>
-
-                <!-- ORDER_TYPE Column -->
-                <ng-container matColumnDef="orderType">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de Orden</mat-header-cell>
-                    <mat-cell *matCellDef="let order" [routerLink]="'/order/'+order.id+'/view'">
-                        <p class="text-truncate">{{getOrderType(order.orderType)}}</p>
                     </mat-cell>
                 </ng-container>
 
