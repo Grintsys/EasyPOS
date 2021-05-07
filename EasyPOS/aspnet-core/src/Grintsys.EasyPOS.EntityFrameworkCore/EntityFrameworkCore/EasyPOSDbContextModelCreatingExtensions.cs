@@ -1,5 +1,6 @@
 ﻿using Grintsys.EasyPOS.CreditNote;
 using Grintsys.EasyPOS.DebitNote;
+using Grintsys.EasyPOS.PaymentMethod;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
@@ -54,17 +55,43 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                 b.ToTable(EasyPOSConsts.DbTablePrefix + "PaymentMethods", EasyPOSConsts.DbSchema);
                 b.ConfigureByConvention();
 
-                b.HasOne(c => c.PaymentMethodType)
-                    .WithMany(o => o.PaymentMethods)
-                    .IsRequired();
+                b.HasMany(p => p.BankChecks)
+                    .WithOne(p => p.PaymentMethod);
+                
+                b.HasOne(o => o.Cash)
+                    .WithOne(o => o.PaymentMethod);
+                
+                b.HasOne(o => o.WireTransfer)
+                    .WithOne(o => o.PaymentMethod);
+                
+                b.HasOne(o => o.CreditDebitCard)
+                    .WithOne(o => o.PaymentMethod);
             });
-
-            builder.Entity<PaymentMethod.PaymentMethodType>(b =>
+            
+            builder.Entity<BankCheck>(b =>
             {
-                b.ToTable(EasyPOSConsts.DbTablePrefix + "PaymentMethodTypes", EasyPOSConsts.DbSchema);
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "BankChecks", EasyPOSConsts.DbSchema);
                 b.ConfigureByConvention();
             });
-
+            
+            builder.Entity<Cash>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "Cash", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+            });
+            
+            builder.Entity<WireTransfer>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "WireTransfers", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+            });
+            
+            builder.Entity<CreditDebitCard>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "CreditDebitCards", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+            });
+            
             builder.Entity<Order.Order>(b =>
             {
                 b.ToTable(EasyPOSConsts.DbTablePrefix + "Orders", EasyPOSConsts.DbSchema);
@@ -73,18 +100,13 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                 b.HasMany(o => o.Items)
                     .WithOne(o => o.Order)
                     .IsRequired();
-
-                b.HasMany(o => o.DebitNotes)
-                    .WithOne(o => o.Order)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .IsRequired();
-
+                
                 b.HasMany(o => o.CreditNotes)
                     .WithOne(o => o.Order)
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
-                b.HasMany(o => o.PaymentMethods)
+                b.HasOne(o => o.PaymentMethod)
                     .WithOne(o => o.Order)
                     .IsRequired();
             });

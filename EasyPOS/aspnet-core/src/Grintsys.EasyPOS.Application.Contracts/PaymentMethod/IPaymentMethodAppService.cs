@@ -14,6 +14,5 @@ namespace Grintsys.EasyPOS.PaymentMethod
             CreateUpdatePaymentMethodDto
         >
     {
-        Task<List<PaymentMethodDto>> GetListPaymentMethodsAsync(string filter);
     }
 }

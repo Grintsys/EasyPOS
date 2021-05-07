@@ -7,7 +7,7 @@ import {
     RouterStateSnapshot,
 } from "@angular/router";
 import { BehaviorSubject, Observable } from "rxjs";
-import { CreateUpdateOrderDto, OrderDto } from "./order.model";
+import { CreateUpdateOrderDto, DocumentDto, DocumentItemDto, OrderDto } from "./order.model";
 
 @Injectable()
 export class OrderService implements Resolve<any> {
@@ -96,10 +96,25 @@ export class OrderService implements Resolve<any> {
     }
 
     public getList(filter: string): Promise<any> {
-        var url = `${this.baseUrl}order/order-list${filter != `` ? `?filter=${filter}` : ``
-            }`;
+        var url = `${this.baseUrl}order/order-list${filter != `` ? `?filter=${filter}` : ``}`;
         const promise = this._httpClient
-            .get<OrderDto[]>(url, this.getHttpOptions())
+            .get<DocumentDto<DocumentItemDto>[]>(url, this.getHttpOptions())
+            .toPromise();
+        return promise;
+    }
+
+    public getDebitNote(id: string): Promise<any> {
+        var url = `${this.baseUrl}debit-note/${id}`;
+        const promise = this._httpClient
+            .get<DocumentDto<DocumentItemDto>[]>(url, this.getHttpOptions())
+            .toPromise();
+        return promise;
+    }
+    
+    public getDebitNoteList(): Promise<any> {
+        var url = `${this.baseUrl}debit-note/debit-note-list`;
+        const promise = this._httpClient
+            .get<DocumentDto<DocumentItemDto>[]>(url, this.getHttpOptions())
             .toPromise();
         return promise;
     }

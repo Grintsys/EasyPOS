@@ -30,7 +30,7 @@ const routes = [
         component: PosComponent
     },
     {
-        path     : 'pos/:id/:handle',
+        path     : 'debit-note',
         component: PosComponent,
         resolve  : {
             data: PosService

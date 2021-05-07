@@ -61,8 +61,8 @@ export class OrderProductsComponent {
         this._orderService.onOrderChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
-                if (data.Type == "view") {
-                    this.pageType = "view";
+                if (data.Type == "order" || data.Type == "debit-note") {
+                    this.pageType = data.Type;
                     this.dataSource = new MatTableDataSource(this.order.items);
                     this.dataSource.paginator = this.paginator;
                     this.dataSource.sort = this.sort;

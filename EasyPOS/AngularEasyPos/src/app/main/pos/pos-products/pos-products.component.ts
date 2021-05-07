@@ -97,7 +97,7 @@ export class PosProductsComponent implements OnChanges {
         var index = this.productList.findIndex(x => x.id == orderItemId);
         var orderItemIndex = this.orderItems.findIndex(x => x.productId == orderItemId);
 
-        if(this.productList[index].inventory > this.orderItems[orderItemIndex].quantity){
+        if (this.productList[index].inventory > this.orderItems[orderItemIndex].quantity) {
             this.orderItems[orderItemIndex].quantity++;
             this.orderItems[orderItemIndex].totalItem = this.calculateTotalItem(this.orderItems[orderItemIndex]);
         }
@@ -123,24 +123,24 @@ export class PosProductsComponent implements OnChanges {
         this.newOrderItemsEvent.emit(this.orderItems);
     }
 
-    changeDiscount(discount: string, orderItemId: string){
-        if(Number(discount) > 0 && Number(discount) <= 100){
+    changeDiscount(discount: string, orderItemId: string) {
+        if (Number(discount) > 0 && Number(discount) <= 100) {
             this.orderItems.map(x => {
                 if (x.productId == orderItemId && x.quantity > 1) {
                     x.discount = Number(discount);
                     x.totalItem = this.calculateTotalItem(x);
                 }
             });
-    
+
             this.newOrderItemsEvent.emit(this.orderItems);
         }
     }
 
-    changeQuantity(quantity: string, orderItemId: string){
+    changeQuantity(quantity: string, orderItemId: string) {
         var index = this.productList.findIndex(x => x.id == orderItemId);
         var orderItemIndex = this.orderItems.findIndex(x => x.productId == orderItemId);
 
-        if(Number(quantity) > 0 && this.productList[index].inventory >= Number(quantity)){
+        if (Number(quantity) > 0 && this.productList[index].inventory >= Number(quantity)) {
             this.orderItems[orderItemIndex].quantity = Number(quantity);
             this.orderItems[orderItemIndex].totalItem = this.calculateTotalItem(this.orderItems[orderItemIndex]);
         }
@@ -148,17 +148,7 @@ export class PosProductsComponent implements OnChanges {
         this.newOrderItemsEvent.emit(this.orderItems);
     }
 
-    changeTotal(total: string, orderItemId: string){
-        var orderItemIndex = this.orderItems.findIndex(x => x.productId == orderItemId);
-
-        if(Number(total) >= 0){
-            this.orderItems[orderItemIndex].totalItem = Number(total);
-        }
-
-        this.newOrderItemsEvent.emit(this.orderItems);
-    }
-
-    calculateTotalItem(x: OrderItemDto){
+    calculateTotalItem(x: OrderItemDto) {
         return x.quantity * x.salePrice + (x.quantity * x.salePrice * x.taxes) - (x.quantity * x.salePrice * (x.discount / 100));
     }
 }

@@ -13,7 +13,6 @@ namespace Grintsys.EasyPOS.Seed
     {
         private readonly IRepository<Customer.Customer, Guid> _customerRepository;
         private readonly IRepository<Product.Product, Guid> _productRepository;
-        private readonly IRepository<PaymentMethodType, Guid> _paymentMethodTypeRepository;
         private readonly IRepository<PaymentMethod.PaymentMethod, Guid> _paymentMethodRepository;
         private readonly IRepository<Warehouse, Guid> _warehouseRepository;
         private readonly IRepository<ProductWarehouse, Guid> _productWarehousesRepository;
@@ -21,14 +20,12 @@ namespace Grintsys.EasyPOS.Seed
         public EasyPOSDataSeederContributor(
             IRepository<Customer.Customer, Guid> customerRepository, 
             IRepository<Product.Product, Guid> productRepository, 
-            IRepository<PaymentMethodType, Guid> paymentMethodTypeRepository, 
             IRepository<PaymentMethod.PaymentMethod, Guid> paymentMethodRepository, 
             IRepository<Warehouse, Guid> warehouseRepository, 
             IRepository<ProductWarehouse, Guid> productWarehousesRepository)
         {
             _customerRepository = customerRepository;
             _productRepository = productRepository;
-            _paymentMethodTypeRepository = paymentMethodTypeRepository;
             _paymentMethodRepository = paymentMethodRepository;
             _warehouseRepository = warehouseRepository;
             _productWarehousesRepository = productWarehousesRepository;
@@ -182,41 +179,7 @@ namespace Grintsys.EasyPOS.Seed
                     Code = "Customer2"
                 });*/
 
-            /*await _paymentMethodTypeRepository.InsertAsync(
-                new PaymentMethodType()
-                {
-                    Name = "Efectivo",
-                    ImageUrl = "https://www.svgrepo.com/show/293511/cash.svg"
-                });
-            
-            await _paymentMethodTypeRepository.InsertAsync(
-                new PaymentMethodType()
-                {
-                    Name = "Tarjeta de Credito",
-                    ImageUrl = "https://www.svgrepo.com/show/9862/payment-methods.svg"
-                });
-            
-            await _paymentMethodTypeRepository.InsertAsync(
-                new PaymentMethodType()
-                {
-                    Name = "Tarjeta de Debito",
-                    ImageUrl = "https://www.svgrepo.com/show/17830/payment-method.svg"
-                });
-            
-            await _paymentMethodTypeRepository.InsertAsync(
-                new PaymentMethodType()
-                {
-                    Name = "Cheque",
-                    ImageUrl = "https://www.svgrepo.com/show/74980/commercial-payment-tools-pen-signing-a-check.svg"
-                });
-            
-            await _paymentMethodTypeRepository.InsertAsync(
-                new PaymentMethodType()
-                {
-                    Name = "Transferencia",
-                    ImageUrl = "https://www.svgrepo.com/show/75253/payment-method.svg"
-                });
-
+         /*
             await _warehouseRepository.InsertAsync(
                 new Warehouse()
                 {

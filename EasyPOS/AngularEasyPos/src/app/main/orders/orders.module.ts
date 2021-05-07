@@ -20,32 +20,32 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { OrderService } from './order.service';
 import { OrderDetailsComponent } from './order/order-details/order-details.component';
-import { CreditAndDebitNotesComponent } from './order/credit-and-debit-notes/credit-and-debit-notes.component';
+import { CreditNotesComponent } from './order/credit-and-debit-notes/credit-and-debit-notes.component';
 import { OrderComponent } from './order/order.component';
 import { OrderProductsComponent } from './order/order-products/order-products.component';
 import { SearchModule } from 'app/layout/components/search/search.module';
 
 const routes = [
     {
-        path: 'order-list',
+        path: 'document-list',
         component: OrderListComponent
     },
     {
-        path: 'order',
+        path: 'document',
         component: OrderComponent,
         resolve: {
             data: OrderService
         }
     },
     {
-        path: 'order/:id',
+        path: 'document/:id',
         component: OrderComponent,
         resolve: {
             data: OrderService
         }
     },
     {
-        path: 'order/:id/:handle',
+        path: 'document/:id/:handle',
         component: OrderComponent,
         resolve: {
             data: OrderService
@@ -59,7 +59,7 @@ const routes = [
         OrderComponent,
         OrderDetailsComponent,
         OrderProductsComponent,
-        CreditAndDebitNotesComponent
+        CreditNotesComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -93,7 +93,7 @@ const routes = [
         OrderComponent,
         OrderDetailsComponent,
         OrderProductsComponent,
-        CreditAndDebitNotesComponent
+        CreditNotesComponent
     ],
     providers: [
         OrderService,

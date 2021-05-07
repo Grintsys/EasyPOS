@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
-import { PaymentMethodDto, PaymentMethodTypeDto } from 'app/main/orders/order.model';
+import { PaymentMethodDto } from 'app/main/orders/order.model';
 
 import { locale as english } from '../i18n/en';
 import { locale as spanish } from '../i18n/es';
@@ -22,8 +22,6 @@ export class PaymentMethodsComponent implements OnInit {
     radius: number;
     color: string;
 
-    selectedPaymentMethodType: PaymentMethodTypeDto;
-    paymentMethodTypes: PaymentMethodTypeDto[];
 
     paymentMethodDto: PaymentMethodDto;
 
@@ -42,8 +40,6 @@ export class PaymentMethodsComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) private _data: any
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
-        this.paymentMethodTypes = [];
-        this.selectedPaymentMethodType = new PaymentMethodTypeDto();
         this.paymentMethodDto = _data.PaymentMethod;
         this.subtotal = _data.subtotal;
         this.taxes = _data.taxes;
@@ -52,34 +48,10 @@ export class PaymentMethodsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.getPaymentMethods();
     }
 
-    getPaymentMethods() {
-        this._posService.getPaymentMethods().then(
-            (data) => {
-                this.paymentMethodTypes = data;
-            },
-            (error) => {
-                console.log("Payment-Methods-Component: Error Getting Payment Methods List " +
-                    JSON.stringify(error)
-                );
-            }
-        );
-    }
-
-    setSelectedPaymentMethod(id: string) {
-        this.selectedPaymentMethodType = this.paymentMethodTypes.find(x => x.id == id);
-    }
     change(event) {
         console.log(event.target.value);
         this.paymentMethodDto.amount = parseInt(event.target.value);
-    }
-
-    addPayment() {
-        this.paymentMethodDto.paymentMethodTypeId = this.selectedPaymentMethodType.id;
-        this.paymentMethodDto.amount = this.amount;
-        this.paymentMethodDto.paymentMethodTypeName = this.selectedPaymentMethodType.name;
-        this.matDialogRef.close(this.paymentMethodDto);
     }
 }

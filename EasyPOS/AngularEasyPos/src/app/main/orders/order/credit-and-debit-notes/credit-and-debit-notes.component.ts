@@ -8,7 +8,7 @@ import { takeUntil } from "rxjs/operators";
 import { Output, EventEmitter } from '@angular/core';
 import { locale as english } from "../../i18n/en";
 import { locale as spanish } from "../../i18n/es";
-import { CreditDebitNote, DocumentState, OrderDto } from "../../order.model";
+import { DocumentState, OrderDto } from "../../order.model";
 import { OrderService } from "../../order.service";
 
 @Component({
@@ -16,14 +16,13 @@ import { OrderService } from "../../order.service";
     templateUrl: "./credit-and-debit-notes.component.html",
     styleUrls: ["./credit-and-debit-notes.component.scss"],
 })
-export class CreditAndDebitNotesComponent {
+export class CreditNotesComponent {
     dataSource = new MatTableDataSource();
     displayedColumns: string[] = [
         "code",
         "customerCode",
         "customerName",
         "total",
-        "documentType",
         "status",
         "options",
     ];
@@ -74,45 +73,20 @@ export class CreditAndDebitNotesComponent {
     }
 
     setDataSource() {
-        this.notes = [];
-        this.order.creditNotes.forEach((cn) => {
-            var creditNote = new CreditDebitNote(cn);
-            creditNote.documentType = "Note de Credito";
-            this.notes.push(creditNote);
-        });
-
-        this.order.debitNotes.forEach((dn) => {
-            var debitNote = new CreditDebitNote(dn);
-            debitNote.documentType = "Note de Debito";
-            this.notes.push(debitNote);
-        });
-
-        this.dataSource = new MatTableDataSource(this.notes);
+        this.dataSource = new MatTableDataSource(this.order.creditNotes);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
     }
 
-    delete(id: string, type: string) {
-        if (type === 'Note de Debito') {
-            this._orderService.deleteDebitNote(id).then(
-                (d) => {
-                    this.get();
-                },
-                (error) => {
-                    console.log("Delete Debit Note Failed: " + JSON.stringify(error));
-                }
-            );
-        }
-        else if (type == 'Note de Credito') {
-            this._orderService.deleteCreditNote(id).then(
-                (d) => {
-                    this.get();
-                },
-                (error) => {
-                    console.log("Delete Credit Note Failed: " + JSON.stringify(error));
-                }
-            );
-        }
+    delete(id: string) {
+        this._orderService.deleteCreditNote(id).then(
+            (d) => {
+                this.get();
+            },
+            (error) => {
+                console.log("Delete Credit Note Failed: " + JSON.stringify(error));
+            }
+        );
     }
 
     get() {

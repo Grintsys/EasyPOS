@@ -16,6 +16,5 @@ namespace Grintsys.EasyPOS.DebitNote
     {
         Task<DebitNoteDto> CreateDebitNoteAsync(Guid orderId);
         Task<List<DebitNoteDto>> GetDebitNoteList(string filter);
-        Task<List<DebitNoteDto>> GetDebitNoteListByOrder(string filter, Guid orderId);
     }
 }

@@ -22,7 +22,7 @@ import {
     CreateUpdateOrderDto,
     CreateUpdatePaymentMethodDto,
     DocumentState,
-    OrderDto, OrderItemDto, OrderType, PaymentMethodDto, PaymentMethodTypeDto,
+    OrderDto, OrderItemDto, OrderType, PaymentMethodDto
 } from "app/main/orders/order.model";
 import { PosService } from "../pos.service";
 import { CustomerDto } from "app/main/customers/customer.model";
@@ -82,11 +82,10 @@ export class PosSidebarComponent {
             .subscribe((data) => {
                 if (this._router.url == "/pos") {
                     this.pageType = "Orden";
-                    this.validateOrder();
+                } else if (this._router.url == "/debit-note") {
+                    this.pageType = "Nota de Debito";
                 } else if (data.Type == "nota-credito") {
                     this.pageType = "Nota de Credito";
-                } else if (data.Type == "nota-debito") {
-                    this.pageType = "Nota de Debito";
                 }
             });
     }
@@ -98,32 +97,17 @@ export class PosSidebarComponent {
     }
 
     openPaymentMethodDialog(): void {
-        var newPayment: PaymentMethodTypeDto = new PaymentMethodTypeDto();
-
         const dialogConfig = new MatDialogConfig();
         dialogConfig.panelClass = "payment-method-dialog";
         dialogConfig.data = {
             discount: this.order.discount,
             subtotal: this.order.subTotal,
             taxes: this.order.isv,
-            PaymentMethod: newPayment
         };
 
         this.dialogRef = this._matDialog.open(PaymentMethodsComponent, dialogConfig);
 
         this.dialogRef.afterClosed().subscribe((paymentMethod) => {
-            if (paymentMethod != undefined) {
-                paymentMethod.amount = Number(paymentMethod.amount);
-                var index = this.order.paymentMethods.findIndex(x => x.paymentMethodTypeId == paymentMethod.paymentMethodTypeId);
-
-                if (index != -1) {
-                    this.order.paymentMethods[index].amount += paymentMethod.amount;
-                }
-                else {
-                    this.order.paymentMethods.push(paymentMethod);
-                    this.order.paymentAmount += paymentMethod.amount;
-                }
-            }
             this.validateOrder();
         });
     }
@@ -177,7 +161,11 @@ export class PosSidebarComponent {
         else if (this.orderType == OrderType.Ninguno && this.pageType == 'Orden') {
             this.isOrderReady = false;
         }
-        else if (this.pageType != 'Orden') {
+        else if (this.pageType == 'Nota de Debito' && this.order.customerId != undefined
+            && this.order.items.length > 0) {
+            this.isOrderReady = true;
+        }
+        else if (this.pageType == 'Nota de Credito') {
             this.isOrderReady = true;
         }
         else {
@@ -186,9 +174,9 @@ export class PosSidebarComponent {
     }
 
     resetOrder() {
-        if (this.pageType != 'Orden') {
+        if (this.pageType == 'Nota de Credito') {
             this.pageType = 'Orden';
-            this._router.navigate([`/order/${this.order.id}/view`]);
+            this._router.navigate([`/document/${this.order.id}/view`]);
 
         }
         this.order = new OrderDto();
@@ -224,10 +212,10 @@ export class PosSidebarComponent {
         createUpdateOrder.items = this.order.items.map(x => {
             return this.mapDocumentItem(x);
         });
-        createUpdateOrder.paymentMethods = this.order.paymentMethods.map(x => {
+        /* createUpdateOrder.paymentMethods = this.order.paymentMethods.map(x => {
             return this.mapPaymentMethod(x);
         });
-
+        */
 
         this._posService.createOrder(createUpdateOrder).then(
             (data) => {
@@ -291,7 +279,6 @@ export class PosSidebarComponent {
 
     createDebitNote() {
         var dto = new CreateUpdateDebitNoteDto();
-        dto.orderId = this.order.id;
         dto.state = DocumentState.Creada;
         dto.customerId = this.order.customerId;
         dto.items = this.order.items.map(x => {
@@ -300,6 +287,7 @@ export class PosSidebarComponent {
 
         this._posService.createDebitNote(dto).then(
             (data) => {
+                this.updateInventory();
                 this.resetOrder();
             },
             (error) => {
@@ -311,10 +299,10 @@ export class PosSidebarComponent {
     }
 
     removePaymentMethod(id: string) {
-        this.order.paymentMethods = this.order.paymentMethods.filter(x => x.paymentMethodTypeId != id);
+
     }
 
-    
+
     mapDocumentItem(orderItem: OrderItemDto) {
         var dto = new CreateUpdateDocumentItemDto();
         dto.productId = orderItem.productId || '',
@@ -332,9 +320,6 @@ export class PosSidebarComponent {
 
     mapPaymentMethod(payment: PaymentMethodDto) {
         var dto = new CreateUpdatePaymentMethodDto();
-        dto.amount = payment.amount;
-        dto.paymentMethodTypeId = payment.paymentMethodTypeId;
-
         return dto;
     }
 }

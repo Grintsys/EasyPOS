@@ -20,14 +20,20 @@ namespace Grintsys.EasyPOS.PaymentMethod
         public async Task<List<PaymentMethod>> GetPaymentMethodsAsync()
         {
             var data = (await GetQueryableAsync())
-                .Include(x => x.PaymentMethodType);
+                .Include(x => x.Cash)
+                .Include(x => x.BankChecks)
+                .Include(x => x.WireTransfer)
+                .Include(x => x.CreditDebitCard);
             return await data.ToListAsync();
         }
 
         public async Task<PaymentMethod> GetPaymentMethodsByIdAsync(Guid id)
         {
             var data = (await GetQueryableAsync())
-                    .Include(x => x.PaymentMethodType)
+                .Include(x => x.Cash)
+                .Include(x => x.BankChecks)
+                .Include(x => x.WireTransfer)
+                .Include(x => x.CreditDebitCard)
                 .FirstOrDefaultAsync(x => x.Id == id);
             return await data;
         }

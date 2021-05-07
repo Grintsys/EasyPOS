@@ -25,16 +25,7 @@ namespace Grintsys.EasyPOS.DebitNote
                 .Include(x => x.Customer);
             return await data.ToListAsync();
         }
-
-        public async Task<List<DebitNote>> GetDebitNotesByOrderAsync(Guid orderId)
-        {
-            var data = (await GetQueryableAsync())
-                .Include(x => x.Items)
-                .Include(x => x.Customer)
-                .Where(x => x.OrderId == orderId);
-            return await data.ToListAsync();
-        }
-
+        
         public async Task<DebitNote> GetDebitNoteByIdAsync(Guid id)
         {
             var data = (await GetQueryableAsync())

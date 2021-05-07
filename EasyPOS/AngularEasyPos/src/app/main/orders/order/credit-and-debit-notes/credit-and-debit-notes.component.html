@@ -7,7 +7,7 @@
         <ng-container matColumnDef="code">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
             <mat-cell *matCellDef="let document">
-                <p class="text-truncate">{{document.code}}</p>
+                <p class="text-truncate">{{document.id}}</p>
             </mat-cell>
         </ng-container>
 
@@ -35,15 +35,6 @@
             </mat-cell>
         </ng-container>
 
-
-        <!-- DOCUMENT_TYPE Column -->
-        <ng-container matColumnDef="documentType">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de documento</mat-header-cell>
-            <mat-cell *matCellDef="let document">
-                <p class="text-truncate">{{document.documentType}}</p>
-            </mat-cell>
-        </ng-container>
-
         <!-- STATUS Column -->
         <ng-container matColumnDef="status">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
@@ -60,7 +51,7 @@
                     <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item (click)="delete(document.code, document.documentType)">
+                    <button mat-menu-item (click)="delete(document.id)">
                         <mat-icon>cancel</mat-icon>
                         <span>Cancelar</span>
                     </button>

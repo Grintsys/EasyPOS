@@ -39,9 +39,8 @@
                             <mat-icon (click)="decreaseOrderItem(product.productId)" class="s-16">remove</mat-icon>
                         </button>
                     </div>
-                    <!-- <span class="text-truncate">{{product.quantity}}</span> -->
-                    <span *ngIf="pageType != 'Orden'" class="text-truncate">{{product.quantity}}</span>
-                    <input class="list-input" *ngIf="pageType == 'Orden'" matInput [(ngModel)]="product.quantity"
+                    <!-- <span *ngIf="pageType != 'Orden'" class="text-truncate">{{product.quantity}}</span> -->
+                    <input class="list-input" matInput [(ngModel)]="product.quantity"
                         (change)="changeDiscount(product.quantity, product.productId)" placeholder="%">
                     <div>
                         <button mat-icon-button>
@@ -82,10 +81,7 @@
         <ng-container matColumnDef="total">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
             <mat-cell *matCellDef="let product">
-                <p *ngIf="pageType == 'Orden'" class="text-truncate">{{product.totalItem | currency:'HNL ':'symbol'}}
-                </p>
-                <input class="text-right" *ngIf="pageType != 'Orden'" matInput [(ngModel)]="product.totalItem"
-                    (change)="changeTotal(product.totalItem, product.productId)" placeholder="%">
+                <p class="text-truncate">{{product.totalItem | currency:'HNL ':'symbol'}}</p>
             </mat-cell>
         </ng-container>
 

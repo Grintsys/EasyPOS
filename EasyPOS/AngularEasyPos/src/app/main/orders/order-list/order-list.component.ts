@@ -35,6 +35,7 @@ export class OrderListComponent {
 
     dataSource = new MatTableDataSource();
     displayedColumns: string[] = [
+        "documentType",
         "customerCode",
         "customerName",
         "subTotal",
@@ -42,7 +43,6 @@ export class OrderListComponent {
         "discount",
         "total",
         "state",
-        "orderType",
         "options",
     ];
     orders: OrderDto[];
@@ -68,14 +68,34 @@ export class OrderListComponent {
     }
 
     getOrderList(filter: string) {
+        var dataList: any[] = [];
+
         this._orderService.getList(filter).then(
             (d) => {
-                // d.forEach(e => {
-                //   this.orders.push(new OrderDto(e));
-                // });
-                this.dataSource = new MatTableDataSource(d);
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
+                var orderList: any[] = d;
+                orderList.map(x => {
+                    x.documentType = 'Orden';
+                    x.url = 'order';
+                });
+                dataList = dataList.concat(orderList);
+
+                this._orderService.getDebitNoteList().then(
+                    (d) => {
+                        var debitNoteList: any[] = d;
+                        debitNoteList.map(x => {
+                            x.documentType = 'Nota de Debito';
+                            x.url = 'debit-note';
+                        });
+                        dataList = dataList.concat(debitNoteList);
+
+                        this.dataSource = new MatTableDataSource(dataList);
+                        this.dataSource.paginator = this.paginator;
+                        this.dataSource.sort = this.sort;
+                    },
+                    (error) => {
+                        console.log("Promise rejected with " + JSON.stringify(error));
+                    }
+                );
             },
             (error) => {
                 console.log("Promise rejected with " + JSON.stringify(error));
@@ -94,11 +114,11 @@ export class OrderListComponent {
         );
     }
 
-    getOrderType(orderType: OrderType){
+    getOrderType(orderType: OrderType) {
         return OrderType[orderType];
     }
 
-    getDocumentState(documentState: DocumentState){
+    getDocumentState(documentState: DocumentState) {
         return DocumentState[documentState];
     }
 }

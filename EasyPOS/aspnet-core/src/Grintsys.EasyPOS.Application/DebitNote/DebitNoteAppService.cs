@@ -53,23 +53,7 @@ namespace Grintsys.EasyPOS.DebitNote
 
             return dto;
         }
-
-        public async Task<List<DebitNoteDto>> GetDebitNoteListByOrder(string filter, Guid orderId)
-        {
-            var notes = await _debitNoteRepository.GetDebitNotesByOrderAsync(orderId);
-            var dto = new List<DebitNoteDto>(ObjectMapper.Map<List<DebitNote>, List<DebitNoteDto>>(notes));
-
-            if (!filter.IsNullOrWhiteSpace())
-            {
-                filter = filter.ToLower();
-                dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(),
-                    x => x.CustomerName.ToLower().Contains(filter))
-                    .OrderBy(x => x.CustomerName).ToList();
-            }
-
-            return dto;
-        }
-
+        
         public async Task<DebitNoteDto> CreateDebitNoteAsync(Guid orderId)
         {
             var order = await _orderRepository.GetOrdersByIdAsync(orderId);
@@ -81,7 +65,6 @@ namespace Grintsys.EasyPOS.DebitNote
                     Id = Guid.NewGuid(),
                     CustomerId = order.CustomerId,
                     State = DocumentState.Created,
-                    OrderId = orderId,
                     Items = order.Items.Select(x => ObjectMapper.Map<
                         Order.OrderItem, CreateUpdateDebitNoteItemDto>(x)).ToList()
                 };
@@ -103,7 +86,6 @@ namespace Grintsys.EasyPOS.DebitNote
 
             var createUpdateDto = new CreateUpdateDebitNoteDto()
             {
-                OrderId = data.OrderId,
                 Id = id,
                 CustomerId = data.CustomerId,
                 State = DocumentState.Cancelled
