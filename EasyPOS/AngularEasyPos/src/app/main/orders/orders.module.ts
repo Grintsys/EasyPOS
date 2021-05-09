@@ -20,7 +20,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { OrderService } from './order.service';
 import { OrderDetailsComponent } from './order/order-details/order-details.component';
-import { CreditNotesComponent } from './order/credit-and-debit-notes/credit-and-debit-notes.component';
+import { CreditNotesComponent } from './order/credit-notes/credit-notes.component';
 import { OrderComponent } from './order/order.component';
 import { OrderProductsComponent } from './order/order-products/order-products.component';
 import { SearchModule } from 'app/layout/components/search/search.module';

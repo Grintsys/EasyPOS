@@ -56,8 +56,8 @@
                         <app-order-products [order]="order"></app-order-products>
                     </mat-tab>
                     <mat-tab *ngIf="pageType == 'order' " label="({{order.creditNotes.length}}) Notas de crédito">
-                        <app-credit-and-debit-notes (orderEvent)="refreshOrder($event)" [order]="order">
-                        </app-credit-and-debit-notes>
+                        <app-credit-notes (orderEvent)="refreshOrder($event)" [order]="order">
+                        </app-credit-notes>
                     </mat-tab>
                 </mat-tab-group>
 
