@@ -12,9 +12,9 @@ import { DocumentState, OrderDto } from "../../order.model";
 import { OrderService } from "../../order.service";
 
 @Component({
-    selector: "app-credit-and-debit-notes",
-    templateUrl: "./credit-and-debit-notes.component.html",
-    styleUrls: ["./credit-and-debit-notes.component.scss"],
+    selector: "app-credit-notes",
+    templateUrl: "./credit-notes.component.html",
+    styleUrls: ["./credit-notes.component.scss"],
 })
 export class CreditNotesComponent {
     dataSource = new MatTableDataSource();
@@ -39,7 +39,6 @@ export class CreditNotesComponent {
     filter: ElementRef;
 
     @Input() order: OrderDto;
-    notes: any[];
     pageType: string;
 
     // Private
@@ -51,7 +50,6 @@ export class CreditNotesComponent {
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
         this.order = new OrderDto();
-        this.notes = [];
         this._unsubscribeAll = new Subject();
     }
 
@@ -65,8 +63,8 @@ export class CreditNotesComponent {
         this._orderService.onOrderChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
-                if (data.Type == "view") {
-                    this.pageType = "view";
+                if (data.Type == "order") {
+                    this.pageType = data.Type;
                     this.setDataSource();
                 }
             });
