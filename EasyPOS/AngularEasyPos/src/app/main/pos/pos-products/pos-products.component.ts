@@ -22,7 +22,6 @@ import { OrderItemDto } from "app/main/orders/order.model";
 import { SharedService } from "app/shared.service";
 import { Subscription } from "rxjs";
 import { ProductDto } from "app/main/products/product.model";
-import { Router } from "@angular/router";
 
 @Component({
     selector: "pos-products",
@@ -87,7 +86,17 @@ export class PosProductsComponent implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.orderItems && changes.orderItems.currentValue) {
-            this.dataSource = new MatTableDataSource(changes.orderItems.currentValue);
+            
+            this.orderItems = changes.orderItems.currentValue.map(x => {
+                var prodIndex = this.productList.findIndex(y => y.id == x.productId);
+                
+                if(x.quantity > this.productList[prodIndex].inventory){
+                    x.quantity = this.productList[prodIndex].inventory;
+                }
+
+                return x;
+            })
+            this.dataSource = new MatTableDataSource(this.orderItems);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
         }

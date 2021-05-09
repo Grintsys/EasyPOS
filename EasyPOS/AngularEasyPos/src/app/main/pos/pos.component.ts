@@ -84,12 +84,14 @@ export class PosComponent implements OnInit, OnDestroy {
 
     addItem(newItem: OrderItemDto) {
         var index = this.order.items.findIndex(x => x.productId == newItem.productId);
+        var newArray: OrderItemDto[] = [];
+
         if (index != -1) {
             this.order.items[index].quantity += newItem.quantity;
-            this.order = { ...this.order };
+            newArray.push(...this.order.items);
+            this.order = { ...this.order, items: newArray };
         }
         else {
-            var newArray: OrderItemDto[] = [];
             newArray.push(...this.order.items, newItem);
             this.order = { ...this.order, items: newArray };
         }
