@@ -86,7 +86,7 @@ export class PosProductsComponent implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.orderItems && changes.orderItems.currentValue) {
-            
+
             this.orderItems = changes.orderItems.currentValue.map(x => {
                 var prodIndex = this.productList.findIndex(y => y.id == x.productId);
                 
@@ -121,6 +121,28 @@ export class PosProductsComponent implements OnChanges {
                 x.totalItem = this.calculateTotalItem(x);
             }
         });
+
+        this.newOrderItemsEvent.emit(this.orderItems);
+    }
+
+    increaseDiscount(orderItemId: string) {
+        var orderItemIndex = this.orderItems.findIndex(x => x.productId == orderItemId);
+
+        if (this.orderItems[orderItemIndex].discount < 5) {
+            this.orderItems[orderItemIndex].discount++;
+            this.orderItems[orderItemIndex].totalItem = this.calculateTotalItem(this.orderItems[orderItemIndex]);
+        }
+
+        this.newOrderItemsEvent.emit(this.orderItems);
+    }
+
+    decreaseDiscount(orderItemId: string) {
+        var orderItemIndex = this.orderItems.findIndex(x => x.productId == orderItemId);
+
+        if (this.orderItems[orderItemIndex].discount > 0) {
+            this.orderItems[orderItemIndex].discount--;
+            this.orderItems[orderItemIndex].totalItem = this.calculateTotalItem(this.orderItems[orderItemIndex]);
+        }
 
         this.newOrderItemsEvent.emit(this.orderItems);
     }
