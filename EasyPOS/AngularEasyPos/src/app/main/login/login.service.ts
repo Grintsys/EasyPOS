@@ -30,7 +30,6 @@ export class LoginService{
         params.append('grant_type', this.settings.GRANT_TYPE);
         params.append('client_id', this.settings.CLIENT_ID);
         params.append('client_secret', this.settings.CLIENT_SECRET);
-        //params.append('redirect_uri', this.redirectUri);
         params.append('username', input.username);
         params.append('password', input.password);
 
@@ -39,8 +38,6 @@ export class LoginService{
                 "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
             }),
         };
-
-        console.log(params.toString());
 
         const promise = this._httpClient.post<LoginModel>(this.baseUrl, params.toString(), httpOptions).toPromise();
 

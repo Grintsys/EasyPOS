@@ -1,4 +1,5 @@
-﻿using Grintsys.EasyPOS.Users;
+﻿using Grintsys.EasyPOS.Sync;
+using Grintsys.EasyPOS.Users;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
@@ -33,6 +34,9 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
         public DbSet<DebitNote.DebitNoteItem> DebitNoteItems { get; set; }
         public DbSet<PaymentMethod.PaymentMethod> PaymentMethods { get; set; }
         public DbSet<PaymentMethod.PaymentMethodType> PaymentMethodTypes { get; set; }
+        public DbSet<Inbox> Inbox { get; set; }
+        public DbSet<Outbox> Outbox { get; set; }
+
 
         /* Add DbSet properties for your Aggregate Roots / Entities here.
          * Also map them inside EasyPOSDbContextModelCreatingExtensions.ConfigureEasyPOS

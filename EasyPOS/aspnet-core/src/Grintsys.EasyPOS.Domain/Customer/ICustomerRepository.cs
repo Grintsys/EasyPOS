@@ -8,6 +8,5 @@ namespace Grintsys.EasyPOS.Customer
     public interface ICustomerRepository : IRepository<Customer, Guid>
     {
         Task<List<Customer>> GetListAsync();
-
     }
 }
