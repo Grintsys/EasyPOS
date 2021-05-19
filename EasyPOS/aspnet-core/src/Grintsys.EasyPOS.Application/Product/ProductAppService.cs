@@ -1,4 +1,5 @@
-﻿using SAPbobsCOM;
+﻿using Microsoft.Extensions.Configuration;
+using SAPbobsCOM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +22,9 @@ namespace Grintsys.EasyPOS.Product
         IProductAppService
     {
         private readonly IProductRepository _productRepository;
-        private readonly ISettingProvider _settingProvider;
+        private readonly IConfiguration _settingProvider;
         public ProductAppService(IRepository<Product, Guid> repository, 
-            IProductRepository productRepository, ISettingProvider settingProvider) : base(repository)
+            IProductRepository productRepository, IConfiguration settingProvider) : base(repository)
         {
             _productRepository = productRepository;
             _settingProvider = settingProvider;
@@ -66,17 +67,17 @@ namespace Grintsys.EasyPOS.Product
         private async Task<Company> GetCompany()
         {
             return new Company()
-            {
-                Server = await _settingProvider.GetOrNullAsync("SAP.Server"),
-                CompanyDB = await _settingProvider.GetOrNullAsync("SAP.CompanyDB"),
+            { 
+                Server = _settingProvider.GetValue<string>("SAP.Server"),
+                CompanyDB = _settingProvider.GetValue<string>("SAP.SompanyDB"),
                 DbServerType = BoDataServerTypes.dst_MSSQL2014,
-                DbUserName = await _settingProvider.GetOrNullAsync("SAP.DbUserName"),
-                DbPassword = await _settingProvider.GetOrNullAsync("SAP.DbPassword"),
-                UserName = await _settingProvider.GetOrNullAsync("SAP.UserName"),
-                Password = await _settingProvider.GetOrNullAsync("SAP.Password"),
+                DbUserName = _settingProvider.GetValue<string>("SAP.DbUserName"),
+                DbPassword = _settingProvider.GetValue<string>("SAP.DbPassword"),
+                UserName = _settingProvider.GetValue<string>("SAP.UserName"),
+                Password = _settingProvider.GetValue<string>("SAP.Password"),
                 language = BoSuppLangs.ln_Spanish,
                 UseTrusted = false,
-                LicenseServer = await _settingProvider.GetOrNullAsync("SAP.LicenseServer")
+                LicenseServer = _settingProvider.GetValue<string>("SAP.LicenseServer")
             };
         }
 
