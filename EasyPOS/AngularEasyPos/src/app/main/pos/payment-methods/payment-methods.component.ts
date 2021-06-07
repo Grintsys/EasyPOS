@@ -25,6 +25,10 @@ export class PaymentMethodsComponent implements OnInit {
 
     paymentMethodDto: PaymentMethodDto;
 
+    paymentMethodList: Array<PaymentMethodTemp>;
+    selectedPaymentMethod: PaymentMethodTemp;
+    paymentMethodEnum = PaymentMethodEnumTemp;
+
     public form: FormGroup = new FormGroup({
         userName: new FormControl(''),
     });
@@ -45,6 +49,7 @@ export class PaymentMethodsComponent implements OnInit {
         this.taxes = _data.taxes;
         this.discount = _data.discount;
         this.amount = 0;
+        this.initialDataTemp();
     }
 
     ngOnInit(): void {
@@ -54,4 +59,47 @@ export class PaymentMethodsComponent implements OnInit {
         console.log(event.target.value);
         this.paymentMethodDto.amount = parseInt(event.target.value);
     }
+
+    initialDataTemp(): void {
+        this.paymentMethodList = [
+            new PaymentMethodTemp('CASH', 'Efectivo', 'cash', true),
+            new PaymentMethodTemp('TRANSFER', 'Transferencia', 'transfer', false),
+            new PaymentMethodTemp('CREDITCARD', 'Tarjeta', 'credit-card', false),
+            new PaymentMethodTemp('CHECK', 'Cheque', 'check', false),
+        ];
+        this.selectedPaymentMethod = this.paymentMethodList[0];
+    }
+
+    setSelectedPaymentMethod(_methodType: string): void {
+        (this.paymentMethodList.find(el => el.isSelected === true)).isSelected = false;
+        this.selectedPaymentMethod = this.paymentMethodList.find(el => el.methodType === _methodType);
+        this.selectedPaymentMethod.isSelected = true;
+    }
+
+    isVisible():boolean {
+        this.selectedPaymentMethod
+        return true;
+    }
+}
+
+
+export class PaymentMethodTemp {
+    methodType: string;
+    title: string;
+    icon: string;
+    isSelected: boolean;
+
+    constructor(_methodType: string, _title: string, _icon: string, _isSelected: boolean){
+        this.methodType = _methodType;
+        this.icon = _icon;
+        this.title = _title;
+        this.isSelected = _isSelected;
+    }
+}
+
+enum PaymentMethodEnumTemp {
+    CASH = "CASH",
+    TRANSFER = "TRANSFER",
+    CREDITCARD = "CREDITCARD",
+    CHECK = "CHECK",
 }
