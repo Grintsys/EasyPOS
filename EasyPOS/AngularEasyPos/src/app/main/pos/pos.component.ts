@@ -68,7 +68,9 @@ export class PosComponent implements OnInit, OnDestroy {
     }
 
     search(value): void {
-        this._sharedService.setPosProductsSearch(value.target.value);
+        if(value.target != undefined && value.target.value != undefined){
+            this._sharedService.setPosProductsSearch(value.target.value);
+        }
     }
 
     getOrder(orderId: string) {

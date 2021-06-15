@@ -64,7 +64,9 @@ export class OrderListComponent {
     }
 
     search(value): void {
-        this.getOrderList(value.target.value);
+        if (value.target != undefined && value.target.value != undefined){
+            this.getOrderList(value.target.value);
+        }
     }
 
     getOrderList(filter: string) {

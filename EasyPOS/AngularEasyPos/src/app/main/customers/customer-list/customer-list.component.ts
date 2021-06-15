@@ -77,7 +77,9 @@ export class CustomerListComponent {
     }
 
     search(value): void {
-        this.getCustomerList(value.target.value);
+        if(value.target != undefined && value.target.value != undefined){
+            this.getCustomerList(value.target.value);
+        }
     }
 
     getCustomerList(filter: string) {

@@ -73,7 +73,9 @@ export class ProductListComponent {
     }
 
     search(value: any): void {
-        this.getProductList(value.target.value);
+        if(value.target != undefined && value.target.value != undefined){
+            this.getProductList(value.target.value);
+        }
     }
 
     getProductList(filter: string) {

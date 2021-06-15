@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
-import { PaymentMethodDto } from 'app/main/orders/order.model';
+import { PaymentMethodDto, SavePaymentMethod } from 'app/main/orders/order.model';
 
 import { locale as english } from '../i18n/en';
 import { locale as spanish } from '../i18n/es';
@@ -22,8 +22,9 @@ export class PaymentMethodsComponent implements OnInit {
     radius: number;
     color: string;
 
-
     paymentMethodDto: PaymentMethodDto;
+
+    sideBarPaymentMethod: SavePaymentMethod;
 
     paymentMethodList: Array<PaymentMethodTemp>;
     selectedPaymentMethod: PaymentMethodTemp;
@@ -33,9 +34,19 @@ export class PaymentMethodsComponent implements OnInit {
         userName: new FormControl(''),
     });
     amount: number;
-    subtotal: number;
-    taxes: number;
-    discount: number;
+
+    orderSubtotal: number;
+    orderTaxes: number;
+    orderDiscount: number;
+
+    total: number;
+    bankName: string;
+    date: Date;
+    account: string;
+    reference: string;
+    clientName: string;
+    clientId: string;
+    certificateNumber: string;
 
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
@@ -45,9 +56,10 @@ export class PaymentMethodsComponent implements OnInit {
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
         this.paymentMethodDto = _data.PaymentMethod;
-        this.subtotal = _data.subtotal;
-        this.taxes = _data.taxes;
-        this.discount = _data.discount;
+        this.sideBarPaymentMethod = new SavePaymentMethod;
+        this.orderSubtotal = _data.subtotal;
+        this.orderTaxes = _data.taxes;
+        this.orderDiscount = _data.discount;
         this.amount = 0;
         this.initialDataTemp();
     }
@@ -55,9 +67,36 @@ export class PaymentMethodsComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    change(event) {
-        console.log(event.target.value);
-        this.paymentMethodDto.amount = parseInt(event.target.value);
+    totalChange(event) {
+        this.total = parseFloat(event);
+    }
+
+    bankNameChange(event) {
+        this.bankName = event;
+    }
+
+    dateChange(event) {
+        this.date = event;
+    }
+
+    accountChange(event) {
+        this.account = event;
+    }
+
+    referenceChange(event) {
+        this.reference = event;
+    }
+
+    clientNameChange(event) {
+        this.clientName = event;
+    }
+
+    clientIdChange(event) {
+        this.clientId = event;
+    }
+
+    certificateNumberChange(event) {
+        this.certificateNumber = event;
     }
 
     initialDataTemp(): void {
@@ -76,12 +115,44 @@ export class PaymentMethodsComponent implements OnInit {
         this.selectedPaymentMethod.isSelected = true;
     }
 
-    isVisible():boolean {
+    isVisible(): boolean {
         this.selectedPaymentMethod
         return true;
     }
-}
 
+    save() {
+        if (this.selectedPaymentMethod.methodType == 'CASH') {
+            if (this.total != undefined) {
+                this.sideBarPaymentMethod.type = 'CASH';
+                this.sideBarPaymentMethod.cash.total = this.total;
+                this.matDialogRef.close(this.sideBarPaymentMethod);
+            }
+        }
+        else if (this.selectedPaymentMethod.methodType == 'TRANSFER') {
+            this.sideBarPaymentMethod.type = 'TRANSFER';
+            this.sideBarPaymentMethod.transfer.total = this.total;
+            this.sideBarPaymentMethod.transfer.account = this.account;
+            this.sideBarPaymentMethod.transfer.dateTime = this.date;
+            this.sideBarPaymentMethod.transfer.reference = this.reference;
+            this.matDialogRef.close(this.sideBarPaymentMethod);
+        }
+        else if (this.selectedPaymentMethod.methodType == 'CREDITCARD') {
+            this.sideBarPaymentMethod.type = 'CREDITCARD';
+            this.sideBarPaymentMethod.card.total = this.total;
+            this.sideBarPaymentMethod.card.name = this.clientName;
+            this.sideBarPaymentMethod.card.validThru = this.date;
+            this.sideBarPaymentMethod.card.personId = this.clientId;
+            this.matDialogRef.close(this.sideBarPaymentMethod);
+        }
+        else if (this.selectedPaymentMethod.methodType == 'CHECK') {
+            this.sideBarPaymentMethod.type = 'CHECK';
+            this.sideBarPaymentMethod.bank.total = this.total;
+            this.sideBarPaymentMethod.bank.bank = this.clientName;
+            this.sideBarPaymentMethod.bank.date = this.date;
+            this.matDialogRef.close(this.sideBarPaymentMethod);
+        }
+    }
+}
 
 export class PaymentMethodTemp {
     methodType: string;
@@ -89,7 +160,7 @@ export class PaymentMethodTemp {
     icon: string;
     isSelected: boolean;
 
-    constructor(_methodType: string, _title: string, _icon: string, _isSelected: boolean){
+    constructor(_methodType: string, _title: string, _icon: string, _isSelected: boolean) {
         this.methodType = _methodType;
         this.icon = _icon;
         this.title = _title;

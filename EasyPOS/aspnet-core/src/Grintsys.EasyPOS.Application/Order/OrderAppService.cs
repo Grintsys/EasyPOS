@@ -33,6 +33,11 @@ namespace Grintsys.EasyPOS.Order
             return dto;
         }
 
+        public override Task<OrderDto> CreateAsync(CreateUpdateOrderDto input)
+        {
+            return base.CreateAsync(input);
+        }
+
         public async Task<List<OrderDto>> GetOrderList(string filter)
         {
             var orders = await _orderRepository.GetOrdersAsync();

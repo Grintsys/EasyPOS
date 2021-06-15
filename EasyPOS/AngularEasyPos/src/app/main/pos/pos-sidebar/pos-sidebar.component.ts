@@ -27,7 +27,7 @@ import {
 import { PosService } from "../pos.service";
 import { CustomerDto } from "app/main/customers/customer.model";
 import { takeUntil } from "rxjs/operators";
-import { Subject, Subscription } from "rxjs";
+import { Subject } from "rxjs";
 import { Router } from "@angular/router";
 import { SharedService } from "app/shared.service";
 import { CreateUpdateProductWarehouseDto } from "app/main/products/product.model";
@@ -56,6 +56,7 @@ export class PosSidebarComponent {
     isOrderReady: boolean;
     orderType: OrderType;
     pageType: string;
+    paymentMethod: CreateUpdatePaymentMethodDto;
 
     private _unsubscribeAll: Subject<any>;
 
@@ -73,6 +74,7 @@ export class PosSidebarComponent {
         this.customer = new CustomerDto();
         this.isOrderReady = false;
         this.orderType = OrderType.Ninguno;
+        this.paymentMethod = new CreateUpdatePaymentMethodDto;
     }
 
     ngOnInit(): void {
@@ -107,9 +109,46 @@ export class PosSidebarComponent {
 
         this.dialogRef = this._matDialog.open(PaymentMethodsComponent, dialogConfig);
 
-        this.dialogRef.afterClosed().subscribe((paymentMethod) => {
+        this.dialogRef.afterClosed().subscribe((pm) => {
+
+            if (pm != undefined) {
+                if (pm.type == 'CASH') {
+                    this.paymentMethod.cash = pm.cash;
+                }
+
+                if (pm.type == 'TRANSFER') {
+                    this.paymentMethod.wireTransfer = pm.transfer;
+                }
+
+                if (pm.type == 'CREDITCARD') {
+                    this.paymentMethod.creditDebitCard = pm.card;
+                }
+
+                if (pm.type == 'CHECK') {
+                    this.paymentMethod.bankChecks.push(pm.bank);
+                }
+                this.order.paymentAmount = this.getOrderPaymentAmount(this.paymentMethod);
+            }
+
             this.validateOrder();
         });
+    }
+
+    getOrderPaymentAmount(payment: any){
+        var paymentAmount = 0;
+        if(payment.cash != undefined)
+            paymentAmount += payment.cash.total;
+        
+        if(payment.transfer != undefined)
+            paymentAmount += payment.transfer.total;
+
+        if(payment.card != undefined)
+            paymentAmount += payment.card.total;
+
+        if(payment.bankChecks != undefined)
+            paymentAmount += payment.bankChecks.reduce((a, c) => a + c, 0);
+
+        return paymentAmount;
     }
 
     openDialogToAddCustomer(): void {
@@ -151,7 +190,7 @@ export class PosSidebarComponent {
 
     validateOrder() {
         if (this.orderType == OrderType.Contado && this.order.customerId != undefined
-            && this.order.items.length > 0 && this.order.paymentMethods.length > 0) {
+            && this.order.items.length > 0 && this.getOrderPaymentAmount(this.paymentMethod) > 0) {
             this.isOrderReady = true;
         }
         else if (this.orderType == OrderType.Credito && this.order.customerId != undefined
@@ -212,11 +251,9 @@ export class PosSidebarComponent {
         createUpdateOrder.items = this.order.items.map(x => {
             return this.mapDocumentItem(x);
         });
-        /* createUpdateOrder.paymentMethods = this.order.paymentMethods.map(x => {
-            return this.mapPaymentMethod(x);
-        });
-        */
+        createUpdateOrder.paymentMethods = this.paymentMethod;
 
+        debugger;
         this._posService.createOrder(createUpdateOrder).then(
             (data) => {
                 this.updateInventory();
@@ -315,11 +352,6 @@ export class PosSidebarComponent {
             dto.quantity = orderItem.quantity || 0,
             dto.totalItem = orderItem.totalItem || 0
 
-        return dto;
-    }
-
-    mapPaymentMethod(payment: PaymentMethodDto) {
-        var dto = new CreateUpdatePaymentMethodDto();
         return dto;
     }
 }
