@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
-import { PaymentMethodDto, SavePaymentMethod } from 'app/main/orders/order.model';
+import { CreateUpdateBankCheckDto, CreateUpdatePaymentMethodDto, PaymentMethodDto } from 'app/main/orders/order.model';
 
 import { locale as english } from '../i18n/en';
 import { locale as spanish } from '../i18n/es';
@@ -23,8 +23,7 @@ export class PaymentMethodsComponent implements OnInit {
     color: string;
 
     paymentMethodDto: PaymentMethodDto;
-
-    sideBarPaymentMethod: SavePaymentMethod;
+    paymentMethodsData: CreateUpdatePaymentMethodDto;
 
     paymentMethodList: Array<PaymentMethodTemp>;
     selectedPaymentMethod: PaymentMethodTemp;
@@ -56,7 +55,7 @@ export class PaymentMethodsComponent implements OnInit {
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
         this.paymentMethodDto = _data.PaymentMethod;
-        this.sideBarPaymentMethod = new SavePaymentMethod;
+        this.paymentMethodsData = _data.paymentMethdosData;
         this.orderSubtotal = _data.subtotal;
         this.orderTaxes = _data.taxes;
         this.orderDiscount = _data.discount;
@@ -123,33 +122,32 @@ export class PaymentMethodsComponent implements OnInit {
     save() {
         if (this.selectedPaymentMethod.methodType == 'CASH') {
             if (this.total != undefined) {
-                this.sideBarPaymentMethod.type = 'CASH';
-                this.sideBarPaymentMethod.cash.total = this.total;
-                this.matDialogRef.close(this.sideBarPaymentMethod);
+                this.paymentMethodsData.cash.total = this.total;
+                this.matDialogRef.close(this.paymentMethodsData);
             }
         }
         else if (this.selectedPaymentMethod.methodType == 'TRANSFER') {
-            this.sideBarPaymentMethod.type = 'TRANSFER';
-            this.sideBarPaymentMethod.transfer.total = this.total;
-            this.sideBarPaymentMethod.transfer.account = this.account;
-            this.sideBarPaymentMethod.transfer.dateTime = this.date;
-            this.sideBarPaymentMethod.transfer.reference = this.reference;
-            this.matDialogRef.close(this.sideBarPaymentMethod);
+            this.paymentMethodsData.wireTransfer.total = this.total;
+            this.paymentMethodsData.wireTransfer.account = this.account;
+            this.paymentMethodsData.wireTransfer.dateTime = this.date;
+            this.paymentMethodsData.wireTransfer.reference = this.reference;
+            this.matDialogRef.close(this.paymentMethodsData);
         }
         else if (this.selectedPaymentMethod.methodType == 'CREDITCARD') {
-            this.sideBarPaymentMethod.type = 'CREDITCARD';
-            this.sideBarPaymentMethod.card.total = this.total;
-            this.sideBarPaymentMethod.card.name = this.clientName;
-            this.sideBarPaymentMethod.card.validThru = this.date;
-            this.sideBarPaymentMethod.card.personId = this.clientId;
-            this.matDialogRef.close(this.sideBarPaymentMethod);
+            this.paymentMethodsData.creditDebitCard.total = this.total;
+            this.paymentMethodsData.creditDebitCard.name = this.clientName;
+            this.paymentMethodsData.creditDebitCard.validThru = this.date;
+            this.paymentMethodsData.creditDebitCard.personId = this.clientId;
+            this.matDialogRef.close(this.paymentMethodsData);
         }
         else if (this.selectedPaymentMethod.methodType == 'CHECK') {
-            this.sideBarPaymentMethod.type = 'CHECK';
-            this.sideBarPaymentMethod.bank.total = this.total;
-            this.sideBarPaymentMethod.bank.bank = this.clientName;
-            this.sideBarPaymentMethod.bank.date = this.date;
-            this.matDialogRef.close(this.sideBarPaymentMethod);
+            var bankCheck = new CreateUpdateBankCheckDto;
+            bankCheck.total = this.total;
+            bankCheck.bank = this.clientName;
+            bankCheck.date = this.date;
+
+            this.paymentMethodsData.bankChecks.push(bankCheck);
+            this.matDialogRef.close(this.paymentMethodsData);
         }
     }
 }

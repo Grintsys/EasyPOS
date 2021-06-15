@@ -218,11 +218,3 @@ export class BankCheckDto {
     bank: string;
     date: Date;
 }
-
-export class SavePaymentMethod {
-    bank: CreateUpdateBankCheckDto = new CreateUpdateBankCheckDto;
-    transfer: CreateUpdateWireTransferDto = new CreateUpdateWireTransferDto;
-    cash: CreateUpdateCashDto = new CreateUpdateCashDto;
-    card: CreditDebitCardDto = new CreditDebitCardDto;
-    type: string;
-}

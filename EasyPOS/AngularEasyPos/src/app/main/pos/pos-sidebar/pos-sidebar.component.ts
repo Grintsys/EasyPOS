@@ -102,6 +102,7 @@ export class PosSidebarComponent {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.panelClass = "payment-method-dialog";
         dialogConfig.data = {
+            paymentMethdosData: this.paymentMethod,
             discount: this.order.discount,
             subtotal: this.order.subTotal,
             taxes: this.order.isv,
@@ -112,21 +113,7 @@ export class PosSidebarComponent {
         this.dialogRef.afterClosed().subscribe((pm) => {
 
             if (pm != undefined) {
-                if (pm.type == 'CASH') {
-                    this.paymentMethod.cash = pm.cash;
-                }
-
-                if (pm.type == 'TRANSFER') {
-                    this.paymentMethod.wireTransfer = pm.transfer;
-                }
-
-                if (pm.type == 'CREDITCARD') {
-                    this.paymentMethod.creditDebitCard = pm.card;
-                }
-
-                if (pm.type == 'CHECK') {
-                    this.paymentMethod.bankChecks.push(pm.bank);
-                }
+                this.paymentMethod = pm;
                 this.order.paymentAmount = this.getOrderPaymentAmount(this.paymentMethod);
             }
 
@@ -134,19 +121,19 @@ export class PosSidebarComponent {
         });
     }
 
-    getOrderPaymentAmount(payment: any){
+    getOrderPaymentAmount(payment: any) {
         var paymentAmount = 0;
-        if(payment.cash != undefined)
+        if (payment.cash != undefined)
             paymentAmount += payment.cash.total;
-        
-        if(payment.transfer != undefined)
-            paymentAmount += payment.transfer.total;
 
-        if(payment.card != undefined)
-            paymentAmount += payment.card.total;
+        if (payment.wireTransfer != undefined)
+            paymentAmount += payment.wireTransfer.total;
 
-        if(payment.bankChecks != undefined)
-            paymentAmount += payment.bankChecks.reduce((a, c) => a + c, 0);
+        if (payment.creditDebitCard != undefined)
+            paymentAmount += payment.creditDebitCard.total;
+
+        if (payment.bankChecks != undefined)
+            paymentAmount += payment.bankChecks.map(a => a.total).reduce((a, c) => a + c, 0);
 
         return paymentAmount;
     }
@@ -253,7 +240,6 @@ export class PosSidebarComponent {
         });
         createUpdateOrder.paymentMethods = this.paymentMethod;
 
-        debugger;
         this._posService.createOrder(createUpdateOrder).then(
             (data) => {
                 this.updateInventory();
