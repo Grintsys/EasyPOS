@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 
 namespace Grintsys.EasyPOS.PaymentMethod
 {
-    public class PaymentMethodAppService : CrudAppService<
+    public class PaymentMethodAppService : 
+        CrudAppService<
             PaymentMethod,
             PaymentMethodDto,
             Guid,

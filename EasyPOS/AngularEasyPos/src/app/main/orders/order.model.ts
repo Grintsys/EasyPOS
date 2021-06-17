@@ -77,7 +77,7 @@ export class DocumentItemDto {
 }
 
 export class CreateUpdateOrderDto extends CreateUpdateDocumentDto<CreateUpdateOrderItemDto> {
-    paymentMethods: PaymentMethodDto[];
+    paymentMethods: CreateUpdatePaymentMethodDto;
     orderType: OrderType;
 }
 
@@ -145,10 +145,10 @@ export class CreditNoteItemDto extends DocumentItemDto {
 export class CreateUpdatePaymentMethodDto {
     id?: string;
     orderId: string;
-    creditDebitCard?: any;
-    createUpdateCashDto?: any;
-    createUpdateWireTransferDto?: any;
-    bankChecks?: any[];
+    creditDebitCard?: any = new CreateUpdateCreditDebitCardDto;
+    cash?: any = new CreateUpdateCashDto;
+    wireTransfer?: any = new CreateUpdateWireTransferDto;
+    bankChecks?: any[] = new Array;
 }
 
 export class PaymentMethodDto {
@@ -161,7 +161,7 @@ export class PaymentMethodDto {
 }
 
 export class CreateUpdateCreditDebitCardDto {
-    total: number;
+    total: number = 0;
     name: string;
     validThru: Date;
     personId: string;
@@ -179,7 +179,7 @@ export class CreditDebitCardDto {
 }
 
 export class CreateUpdateCashDto {
-    total: number;
+    total: number = 0;
     paymentMethodId: string;
 }
 
@@ -189,10 +189,10 @@ export class CashDto {
 }
 
 export class CreateUpdateWireTransferDto {
-    total: number;
+    total: number = 0;
     paymentMethodId: string;
     account: string;
-    dateTime: string;
+    dateTime: Date;
     reference: string;
 }
 
@@ -200,20 +200,21 @@ export class WireTransferDto {
     total: number;
     paymentMethodId: string;
     account: string;
-    dateTime: string;
+    dateTime: Date;
     reference: string;
 }
 
 export class CreateUpdateBankCheckDto {
-    total: number;
+    total: number = 0;
     paymentMethodId: string;
     bank: string;
-    date: string;
+    date: Date;
 }
 
 export class BankCheckDto {
     total: number;
     paymentMethodId: string;
+    reference: string;
     bank: string;
-    date: string;
+    date: Date;
 }

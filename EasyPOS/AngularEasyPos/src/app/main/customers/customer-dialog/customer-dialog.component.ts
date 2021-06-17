@@ -22,13 +22,6 @@ export class CustomerDialogComponent {
 
     paymentMethod: Object[];
 
-    /**
-     * Constructor
-     *
-     * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
-     * @param {MatDialogRef<MailNgrxComposeDialogComponent>} matDialogRef
-     * @param _data
-     */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         public matDialogRef: MatDialogRef<CustomerDialogComponent>,
