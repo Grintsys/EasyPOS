@@ -1,4 +1,5 @@
 ﻿using Grintsys.EasyPOS.Enums;
+using Grintsys.EasyPOS.PaymentMethod;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +21,17 @@ namespace Grintsys.EasyPOS.Order
         IOrderAppService
     {
         private readonly IOrderRepository _orderRepository;
-        public OrderAppService(IRepository<Order, Guid> repository, IOrderRepository orderRepository) 
+        private readonly IRepository<PaymentMethod.PaymentMethod, Guid> _paymentMethodRepository;
+
+        public OrderAppService(IRepository<Order, Guid> repository, 
+            IOrderRepository orderRepository, 
+            IRepository<PaymentMethod.PaymentMethod, Guid> personRepository)
             : base(repository)
         {
             _orderRepository = orderRepository;
+            _paymentMethodRepository = personRepository;
         }
-        
+
         public override async Task<OrderDto> GetAsync(Guid id)
         {
             var order = await _orderRepository.GetOrdersByIdAsync(id);
@@ -35,7 +41,16 @@ namespace Grintsys.EasyPOS.Order
 
         public override Task<OrderDto> CreateAsync(CreateUpdateOrderDto input)
         {
-            return base.CreateAsync(input);
+                var orderId = input.Id;
+
+                var order = base.CreateAsync(input);
+
+                var paymentMethodDto = ObjectMapper.Map<CreateUpdatePaymentMethodDto, PaymentMethod.PaymentMethod>(input.PaymentMethods);
+                paymentMethodDto.OrderId = orderId;
+
+                _paymentMethodRepository.InsertAsync(paymentMethodDto);
+
+                return order;
         }
 
         public async Task<List<OrderDto>> GetOrderList(string filter)
