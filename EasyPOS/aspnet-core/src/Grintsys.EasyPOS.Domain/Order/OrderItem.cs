@@ -6,6 +6,6 @@ namespace Grintsys.EasyPOS.Order
     public class OrderItem : DocumentItem
     {
         public Guid OrderId { get; set; }
-        public EasyPOS.Order.Order Order { get; set; }
+        public Order Order { get; set; }
     }
 }
