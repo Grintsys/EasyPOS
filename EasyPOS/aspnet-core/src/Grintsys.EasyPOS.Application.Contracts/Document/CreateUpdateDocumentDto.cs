@@ -8,6 +8,8 @@ namespace Grintsys.EasyPOS.Document
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public Guid CustomerId { get; set; }
+        public int SalesPersonId { get; set; }
+        public string WarehouseCode { get; set; }
         public DocumentState State { get; set; } = DocumentState.Created;
         public List<T> Items { get; set; } = new List<T>();
     }
