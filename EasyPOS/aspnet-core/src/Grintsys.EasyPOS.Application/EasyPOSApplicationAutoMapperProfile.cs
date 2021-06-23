@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Grintsys.EasyPOS.ConfigurationManager;
 using Grintsys.EasyPOS.CreditNote;
 using Grintsys.EasyPOS.Customer;
 using Grintsys.EasyPOS.DebitNote;
 using Grintsys.EasyPOS.Order;
 using Grintsys.EasyPOS.PaymentMethod;
 using Grintsys.EasyPOS.Product;
+using Grintsys.EasyPOS.Sincronizador;
 
 namespace Grintsys.EasyPOS
 {
@@ -58,7 +60,13 @@ namespace Grintsys.EasyPOS
             
             CreateMap<Warehouse, WarehouseDto>();
             CreateMap<CreateUpdateWarehouseDto, Warehouse>();
-            
+
+            CreateMap<ConfigurationManager.ConfigurationManager, ConfigurationManagerDto>();
+            CreateMap<CreateUpdateConfigurationManagerDto, ConfigurationManager.ConfigurationManager>();
+
+            CreateMap<Sincronizador.Sincronizador, SincronizadorDto>();
+            CreateMap<CreateUpdateSincronizadorDto, Sincronizador.Sincronizador>();
+
             CreateMap<ProductWarehouse, ProductWarehouseDto>();
             CreateMap<CreateUpdateProductWarehouseDto, ProductWarehouse>();
         }
