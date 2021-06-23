@@ -1,5 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import {
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    Validators,
+} from "@angular/forms";
 
 import { fuseAnimations } from "@fuse/animations";
 import { FuseTranslationLoaderService } from "@fuse/services/translation-loader.service";
@@ -66,14 +71,52 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
     createcustomerForm(type: string): FormGroup {
         return this._formBuilder.group({
-            firstName: new FormControl({ value: this.customer.firstName, disabled: type === "view" }, type == 'new' ? Validators.required : Validators.minLength(1)),
-            lastName: new FormControl({ value: this.customer.lastName, disabled: type === "view" }, type == 'new' ? Validators.required : Validators.minLength(1)),
-            idNumber: new FormControl({ value: this.customer.idNumber, disabled: type === "view" }, Validators.minLength(13)),
-            rtn: new FormControl({ value: this.customer.rtn, disabled: type === "view" }, Validators.minLength(14)),
-            address: new FormControl({ value: this.customer.address, disabled: type === "view" }),
-            phoneNumber: new FormControl({ value: this.customer.phoneNumber, disabled: type === "view" }),
-            status: new FormControl({ value: this.customer.status, disabled: type === "view" }),
-            code: new FormControl({ value: this.customer.code, disabled: type === "view" }, type == 'new' ? Validators.required : Validators.minLength(1))
+            firstName: new FormControl(
+                { value: this.customer.firstName, disabled: type === "view" },
+                Validators.compose([
+                    Validators.required,
+                    Validators.minLength(1),
+                ])
+            ),
+            lastName: new FormControl(
+                { value: this.customer.lastName, disabled: type === "view" },
+                Validators.compose([
+                    Validators.required,
+                    Validators.minLength(1),
+                ])
+            ),
+            idNumber: new FormControl(
+                { value: this.customer.idNumber, disabled: type === "view" },
+                Validators.compose([
+                    Validators.required,
+                    Validators.minLength(13),
+                    Validators.maxLength(13),
+                    Validators.pattern(/^[0-9]\d*$/)
+                ])
+            ),
+            rtn: new FormControl(
+                { value: this.customer.rtn, disabled: type === "view" },
+                Validators.compose([
+                    Validators.required,
+                    Validators.minLength(14),
+                    Validators.maxLength(14),
+                    Validators.pattern(/^[0-9]\d*$/),
+                ])
+            ),
+            address: new FormControl(
+                { value: this.customer.address, disabled: type === "view"},  
+            ),
+            phoneNumber: new FormControl({
+                value: this.customer.phoneNumber, disabled: type === "view"},
+                Validators.compose([Validators.pattern(/^\([0-9]{3}[\-\)][0-9]{4}-[0-9]{4}$/)])  
+            ),
+            status: new FormControl({
+                value: this.customer.status,
+                disabled: type === "view",
+            }),
+            code: new FormControl(
+                { value: this.customer.code, disabled: true }
+            ),
         });
     }
 

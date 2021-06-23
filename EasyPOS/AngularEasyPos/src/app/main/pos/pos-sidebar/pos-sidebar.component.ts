@@ -57,6 +57,8 @@ export class PosSidebarComponent {
     orderType: OrderType;
     pageType: string;
     paymentMethod: CreateUpdatePaymentMethodDto;
+    
+    selectedOrderType: string;
 
     private _unsubscribeAll: Subject<any>;
 
@@ -83,6 +85,8 @@ export class PosSidebarComponent {
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
                 if (this._router.url == "/pos") {
+                    this.setOrderType('Contado');
+                    
                     this.pageType = "Orden";
                 } else if (this._router.url == "/debit-note") {
                     this.pageType = "Nota de Debito";
@@ -207,7 +211,7 @@ export class PosSidebarComponent {
         }
         this.order = new OrderDto();
         this.customer = new CustomerDto();
-        this.orderType = OrderType.Ninguno;
+        this.orderType = OrderType.Contado;
         this.newOrderEvent.emit(this.order);
     }
 
@@ -224,12 +228,18 @@ export class PosSidebarComponent {
     setOrderType(orderType: string) {
         if (orderType == 'Contado') {
             this.orderType = OrderType.Contado;
+            this.selectedOrderType = 'contado';
         } else if (orderType == 'Credito') {
             this.orderType = OrderType.Credito;
+            this.selectedOrderType = 'credito';
         }
         this.validateOrder();
     }
 
+    public onValChange(val: string) {
+        this.selectedOrderType = val;
+    }
+    
     createOrder() {
         var createUpdateOrder = new CreateUpdateOrderDto();
         createUpdateOrder.customerId = this.order.customerId;

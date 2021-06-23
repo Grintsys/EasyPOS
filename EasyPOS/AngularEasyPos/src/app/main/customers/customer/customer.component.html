@@ -69,13 +69,19 @@
                                     <input matInput placeholder="Apellido" name="lastName"
                                         value="{{ customer.lastName }}" formControlName="lastName" />
                                 </mat-form-field>
-
+                                <div
+                                    *ngIf="customerForm.get('idNumber').errors?.minlength || customerForm.get('idNumber').errors?.maxlenght">
+                                    El valor debe contener 13 caracteres numericos
+                                </div>
                                 <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                     <mat-label>Identidad</mat-label>
                                     <input matInput placeholder="Identidad" name="idNumber"
                                         value="{{ customer.idNumber }}" formControlName="idNumber" />
                                 </mat-form-field>
-
+                                <div
+                                    *ngIf="customerForm.get('rtn').errors?.minlength || customerForm.get('rtn').errors?.maxlenght">
+                                    El valor debe contener 14 caracteres numericos
+                                </div>
                                 <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                     <mat-label>RTN</mat-label>
                                     <input matInput placeholder="RTN" name="rtn" value="{{ customer.rtn }}"
@@ -87,10 +93,12 @@
                                     <input matInput placeholder="Dirección" name="address"
                                         value="{{ customer.address }}" formControlName="address" />
                                 </mat-form-field>
-
+                                <div *ngIf="customerForm.get('phoneNumber').hasError('pattern')">
+                                    Formato incorrecto, ejm: (555)5555-5555
+                                </div>
                                 <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                     <mat-label>Teléfono</mat-label>
-                                    <input matInput placeholder="Teléfono" name="phoneNumber"
+                                    <input matInput placeholder="(000)0000-0000" name="phoneNumber"
                                         value="{{ customer.phoneNumber }}" formControlName="phoneNumber" />
                                 </mat-form-field>
                             </div>

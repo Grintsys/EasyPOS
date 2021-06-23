@@ -16,9 +16,9 @@
             </mat-chip>
         </mat-chip-list>
 
-        <mat-button-toggle-group *ngIf="pageType=='Orden'" name="fontStyle" aria-label="Font Style">
-            <mat-button-toggle (click)="setOrderType('Contado')" value="cash">Contado</mat-button-toggle>
-            <mat-button-toggle (click)="setOrderType('Credito')" value="credit">Crédito</mat-button-toggle>
+        <mat-button-toggle-group *ngIf="pageType=='Orden'" name="fontStyle" aria-label="Font Style" [value]="selectedOrderType">
+            <mat-button-toggle (click)="setOrderType('Contado')" value="contado">Contado</mat-button-toggle>
+            <mat-button-toggle (click)="setOrderType('Credito')" value="credito">Crédito</mat-button-toggle>
         </mat-button-toggle-group>
     </div>
 
