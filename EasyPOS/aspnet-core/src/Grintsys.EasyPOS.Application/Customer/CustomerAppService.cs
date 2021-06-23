@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Grintsys.EasyPOS.SAP;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,11 +20,35 @@ namespace Grintsys.EasyPOS.Customer
         ICustomerAppService
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly ISapManager _sapManager;
+
 
         public CustomerAppService(IRepository<Customer, Guid> repository, 
-            ICustomerRepository customerRepository) : base(repository)
+            ICustomerRepository customerRepository,
+            ISapManager sapManager) : base(repository)
         {
             _customerRepository = customerRepository;
+            _sapManager = sapManager;
+        }
+
+        public override Task<CustomerDto> CreateAsync(CreateUpdateCustomerDto input)
+        {
+            input.Status = Enums.CustomerStatus.Transferred;
+            input.Code = $"c{Guid.NewGuid().ToString().Replace("-", "")}".Truncate(6);
+            var customer = base.CreateAsync(input);
+
+            var customerDto = new CreateOrUpdateCustomer
+            {
+                CustomerCode = customer.Result.Code,
+                Address = customer.Result.Address,
+                CustomerName = customer.Result.FirstName + " " + customer.Result.LastName,
+                RTN = customer.Result.RTN,
+                SalesPersonCode = 1,
+            };
+
+            _sapManager.CreateCustomerAsync(customerDto);
+
+            return customer;
         }
 
         public async Task<List<CustomerDto>> GetCustomerList(string filter)

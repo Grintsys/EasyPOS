@@ -4,7 +4,7 @@
     {
         Created = 1,
         Edited = 2,
-        Transferred = 3,
+        Transferred = 4,
         Cancelled = 3
     }
 }

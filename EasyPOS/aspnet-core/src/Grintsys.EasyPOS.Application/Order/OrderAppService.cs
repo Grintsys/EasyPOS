@@ -1,5 +1,6 @@
 ﻿using Grintsys.EasyPOS.Enums;
 using Grintsys.EasyPOS.PaymentMethod;
+using Grintsys.EasyPOS.SAP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +23,17 @@ namespace Grintsys.EasyPOS.Order
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IRepository<PaymentMethod.PaymentMethod, Guid> _paymentMethodRepository;
+        private readonly ISapManager _sapManager;
 
         public OrderAppService(IRepository<Order, Guid> repository, 
             IOrderRepository orderRepository, 
-            IRepository<PaymentMethod.PaymentMethod, Guid> personRepository)
+            IRepository<PaymentMethod.PaymentMethod, Guid> personRepository,
+            ISapManager sapManager)
             : base(repository)
         {
             _orderRepository = orderRepository;
             _paymentMethodRepository = personRepository;
+            _sapManager = sapManager;
         }
 
         public override async Task<OrderDto> GetAsync(Guid id)
@@ -41,16 +45,39 @@ namespace Grintsys.EasyPOS.Order
 
         public override Task<OrderDto> CreateAsync(CreateUpdateOrderDto input)
         {
-                var orderId = input.Id;
+            var orderId = input.Id;
 
-                var order = base.CreateAsync(input);
+            //TODO: fix transferred object bad mapping
+            input.State = DocumentState.Transferred;
+            var order = base.CreateAsync(input);
 
-                var paymentMethodDto = ObjectMapper.Map<CreateUpdatePaymentMethodDto, PaymentMethod.PaymentMethod>(input.PaymentMethods);
-                paymentMethodDto.OrderId = orderId;
+            var paymentMethodDto = ObjectMapper.Map<CreateUpdatePaymentMethodDto, PaymentMethod.PaymentMethod>(input.PaymentMethods);
+            paymentMethodDto.OrderId = orderId;
 
-                _paymentMethodRepository.InsertAsync(paymentMethodDto);
+            _paymentMethodRepository.InsertAsync(paymentMethodDto);
 
-                return order;
+            var salesOrderDto = new CreateOrUpdateSalesOrder()
+            {
+                CreatedDate = order.Result.CreationTime,
+                CustomerCode = "00001",
+                CustomerName = order.Result.CustomerName,
+                SalesPersonId = 1,
+                WarehouseCode = "01",
+                Lines = order.Result.Items
+            };
+          
+            var response = _sapManager.CreateSalesOrderAsync(salesOrderDto);
+
+            //if(response.Result.IsSuccess)
+            //{
+            //    base.UpdateAsync(orderId, new CreateUpdateOrderDto
+            //    {
+            //        Id = orderId,                   
+            //        State = DocumentState.Transferred
+            //    });
+            //}
+
+            return order;
         }
 
         public async Task<List<OrderDto>> GetOrderList(string filter)

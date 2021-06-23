@@ -22,7 +22,7 @@ export class OrderProduct {
 export enum DocumentState {
     Creada = 1,
     Editada = 2,
-    Transferida = 3,
+    Transferida = 4,
     Cancelada = 3,
 }
 
