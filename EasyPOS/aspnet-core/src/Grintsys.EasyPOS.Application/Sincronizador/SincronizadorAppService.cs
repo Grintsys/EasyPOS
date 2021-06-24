@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Grintsys.EasyPOS.Sincronizador
 {
-    class SincronizadorAppService :
+    public class SincronizadorAppService :
         CrudAppService<
             Sincronizador,
             SincronizadorDto,

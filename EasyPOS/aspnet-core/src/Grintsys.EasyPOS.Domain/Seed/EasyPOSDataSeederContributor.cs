@@ -40,7 +40,7 @@ namespace Grintsys.EasyPOS.Seed
                     Description = "The Coca-Cola - Classic 12oz cans",
                     Code = "Code1",
                     SalePrice = 1.36f,
-                    Taxes = 0.0f,
+                    Taxes = true,
                     IsActive = true,
                     ImageUrl = "http:cdn.shopify.com/s/files/1/0358/4714/3560/products/COKECAN_1200x1200.jpg?v=1584912010"
                 });
@@ -52,7 +52,7 @@ namespace Grintsys.EasyPOS.Seed
                     Description = "Doritos Tortilla Chips, Flamin' Hot flavor, 9.75 Ounce (Pack of 1)",
                     Code = "Code2",
                     SalePrice = 8.86f,
-                    Taxes = 0.0f,
+                    Taxes = true,
                     IsActive = true,
                     ImageUrl = "https:images-na.ssl-images-amazon.com/images/I/81H-aEOo09L._SL1500_.jpg"
                 });
@@ -64,7 +64,7 @@ namespace Grintsys.EasyPOS.Seed
                     Description = "Cheetos Crunchy Flamin' Hot Cheese Flavored Snacks, 1 Ounce (Pack of 40)",
                     Code = "Code3",
                     SalePrice = 16.98f,
-                    Taxes = 0.0f,
+                    Taxes = true,
                     IsActive = true,
                     ImageUrl = "https:http2.mlstatic.com/D_NQ_NP_681966-MCO32215719280_092019-O.jpg"
                 });
@@ -76,7 +76,7 @@ namespace Grintsys.EasyPOS.Seed
                     Description = "The Coca-Cola - Classic 12oz cans (Pack of 18)",
                     Code = "Code4",
                     SalePrice = 20.50f,
-                    Taxes = 0.0f,
+                    Taxes = true,
                     IsActive = true,
                     ImageUrl = "https:images-na.ssl-images-amazon.com/images/I/81GsS1XFEZL._AC_SX569_.jpg"
                 });
@@ -88,7 +88,7 @@ namespace Grintsys.EasyPOS.Seed
                     Description = "Lemon-Lime Soda, 100% Natural Flavors 12oz cans (Pack of 18)",
                     Code = "Code5",
                     SalePrice = 19.01f,
-                    Taxes = 0.0f,
+                    Taxes = true,
                     IsActive = true,
                     ImageUrl = "https:m.media-amazon.com/images/I/519okNpItHL.jpg"
                 });
@@ -100,7 +100,7 @@ namespace Grintsys.EasyPOS.Seed
                     Description = "Lemon-Lime Soda, 100% Natural Flavors 12oz cans",
                     Code = "Code6",
                     SalePrice = 1.35f,
-                    Taxes = 0.0f,
+                    Taxes = true,
                     IsActive = true,
                     ImageUrl = "https:5.imimg.com/data5/GT/UV/HS/SELLER-65134076/355ml-sprite-can-500x500.jpg"
                 });
@@ -112,7 +112,7 @@ namespace Grintsys.EasyPOS.Seed
                     Description = "Made with a fluffy, whipped chocolate center and covered in milk chocolate (Pack 24)",
                     Code = "Code7",
                     SalePrice = 35.52f,
-                    Taxes = 0.0f,
+                    Taxes = true,
                     IsActive = true,
                     ImageUrl = "https:i5.walmartimages.com/asr/e8d9a5d0-411a-4658-a396-d9a9ac59e9f5.7e3ba4a3152ab82b2337ad232656f358.jpeg"
                 });
@@ -124,7 +124,7 @@ namespace Grintsys.EasyPOS.Seed
                     Description = "Fill snack drawers, lunch boxes and candy displays all year long with dark chocolate and wafer KIT KAT candy bars (Pack 24)",
                     Code = "Code8",
                     SalePrice = 20.40f,
-                    Taxes = 0.0f,
+                    Taxes = true,
                     IsActive = true,
                     ImageUrl = "https:www.hersheys.com/content/dam/smartlabelproductsimage/kitkat/00034000000463-0013.png"
                 });
@@ -136,7 +136,7 @@ namespace Grintsys.EasyPOS.Seed
                     Description = "Made with roasted peanuts and real milk chocolate surrounded by a colorful candy shell (Pack of 48)",
                     Code = "Code9",
                     SalePrice = 34.99f,
-                    Taxes = 0.0f,
+                    Taxes = true,
                     IsActive = true,
                     ImageUrl = "https:cdn11.bigcommerce.com/s-2fq65jrvsu/images/stencil/1280x1280/products/817/1986/c-m_m-pea__82865.1592026178.jpg?c=1"
                 });
@@ -148,7 +148,7 @@ namespace Grintsys.EasyPOS.Seed
                     Description = "MILKY WAY Candy Bars feature creamy caramel and smooth nougat enrobed in rich milk chocolate (Pack 36)",
                     Code = "Code10",
                     SalePrice = 23.35f,
-                    Taxes = 0.0f,
+                    Taxes = true,
                     IsActive = true,
                     ImageUrl = "https:resources.sears.com.mx/medios-plazavip/fotos/productos_sears1/original/3125678.jpg"
                 });
