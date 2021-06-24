@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Grintsys.EasyPOS.Enums;
 using Grintsys.EasyPOS.PaymentMethod;
 using Grintsys.EasyPOS.Product;
+using Newtonsoft.Json;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
@@ -13,22 +15,26 @@ namespace Grintsys.EasyPOS.Seed
     {
         private readonly IRepository<Customer.Customer, Guid> _customerRepository;
         private readonly IRepository<Product.Product, Guid> _productRepository;
-        private readonly IRepository<PaymentMethod.PaymentMethod, Guid> _paymentMethodRepository;
         private readonly IRepository<Warehouse, Guid> _warehouseRepository;
         private readonly IRepository<ProductWarehouse, Guid> _productWarehousesRepository;
+        private readonly IRepository<ConfigurationManager.ConfigurationManager, Guid> _configurationManagerRepository;
+        private readonly IRepository<Sincronizador.Sincronizador, Guid> _syncRepository;
 
         public EasyPOSDataSeederContributor(
-            IRepository<Customer.Customer, Guid> customerRepository, 
-            IRepository<Product.Product, Guid> productRepository, 
-            IRepository<PaymentMethod.PaymentMethod, Guid> paymentMethodRepository, 
-            IRepository<Warehouse, Guid> warehouseRepository, 
-            IRepository<ProductWarehouse, Guid> productWarehousesRepository)
+            IRepository<Customer.Customer, Guid> customerRepository,
+            IRepository<Product.Product, Guid> productRepository,
+            IRepository<PaymentMethod.PaymentMethod, Guid> paymentMethodRepository,
+            IRepository<Warehouse, Guid> warehouseRepository,
+            IRepository<ProductWarehouse, Guid> productWarehousesRepository,
+            IRepository<Sincronizador.Sincronizador, Guid> syncRepository, 
+            IRepository<ConfigurationManager.ConfigurationManager, Guid> configurationManagerRepository)
         {
             _customerRepository = customerRepository;
             _productRepository = productRepository;
-            _paymentMethodRepository = paymentMethodRepository;
             _warehouseRepository = warehouseRepository;
             _productWarehousesRepository = productWarehousesRepository;
+            _syncRepository = syncRepository;
+            _configurationManagerRepository = configurationManagerRepository;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -438,6 +444,42 @@ namespace Grintsys.EasyPOS.Seed
                     ProductId = prod9.Id,
                     WarehouseId = ware3.Id,
                     Inventory = 100
+                });
+
+            await _configurationManagerRepository.InsertAsync(
+                new ConfigurationManager.ConfigurationManager()
+                {
+                    Key = "Currency",
+                    Value = "HNL"
+                });
+
+
+            var banks = new List<string>()
+            {
+                "Banpais",
+                "Banco Atlantida",
+                "BAC",
+                "Banco Promerica"
+            };
+
+            await _configurationManagerRepository.InsertAsync(
+                new ConfigurationManager.ConfigurationManager()
+                {
+                    Key = "Bank",
+                    Value = JsonConvert.SerializeObject(banks)
+                });
+
+            var taxes = new List<string>()
+            {
+                "IVA",
+                "EXE"
+            };
+
+            await _configurationManagerRepository.InsertAsync(
+                new ConfigurationManager.ConfigurationManager()
+                {
+                    Key = "Taxes",
+                    Value = JsonConvert.SerializeObject(taxes)
                 });
         }
     }
