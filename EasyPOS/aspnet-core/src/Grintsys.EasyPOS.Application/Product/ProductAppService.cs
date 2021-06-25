@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Grintsys.EasyPOS.SAP;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,10 +20,13 @@ namespace Grintsys.EasyPOS.Product
         IProductAppService
     {
         private readonly IProductRepository _productRepository;
+        private readonly ISapManager _sapManager;
         public ProductAppService(IRepository<Product, Guid> repository, 
-            IProductRepository productRepository) : base(repository)
+            IProductRepository productRepository, 
+            ISapManager sapManager) : base(repository)
         {
             _productRepository = productRepository;
+            _sapManager = sapManager;
         }
 
         public async Task<ProductDto> GetProduct(Guid id, Guid warehouseId)
@@ -85,10 +89,25 @@ namespace Grintsys.EasyPOS.Product
             var data = await _productRepository.GetListAsync();
 
             var dataDto = await MapToGetListOutputDtosAsync(data);
+
             dataDto = dataDto.Where(x => x.ProductWarehouse.Select(x => x.WarehouseId == wareHouseId).Any()).ToList();
 
             return dataDto;
         }
 
+        public async Task<List<ProductDto>> GetSAPProducts()
+        {
+            var data = await _sapManager.GetProductListAsync();
+
+            return data.Select(MapProduct).ToList();
+        }
+
+        private ProductDto MapProduct(SAP.ProductDto product) => new()
+        {
+            Code = product.ItemCode,
+            Description = product.ItemName,
+            Name = product.ItemName,
+            SalePrice = (float)product.SalesPrice
+        };
     }
 }
