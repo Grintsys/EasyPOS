@@ -13,5 +13,7 @@ namespace Grintsys.EasyPOS.SAP
         Task<List<ProductDto>> GetProductListAsync(int skipCount = 100);
         Task<List<CustomerDto>> GetCustomerListAsync(int skipCount = 100);
         Task<CompanyMetadataDto> GetCompanyMetadata();
+        Task UpsertProducts();
+        Task UpsertCustomers();
     }
 }
