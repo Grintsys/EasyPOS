@@ -21,6 +21,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { SyncListComponent } from './sync-list/sync-list.component';
 import { SyncDialogComponent } from './sync-dialog/sync-dialog.component';
 import { SearchModule } from 'app/layout/components/search/search.module';
+import { SyncService } from './syncs.service';
 
 const routes = [
     {
@@ -64,6 +65,9 @@ const routes = [
     exports     : [
         SyncListComponent,
         SyncDialogComponent
+    ],
+    providers: [
+        SyncService,
     ]
 })
 

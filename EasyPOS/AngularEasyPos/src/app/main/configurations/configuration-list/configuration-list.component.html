@@ -8,13 +8,11 @@
     <div class="center">
 
         <!-- HEADER -->
-        <div class="header accent"
-             fxLayout="column" fxLayoutAlign="center center"
-             fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+        <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+            fxLayoutAlign.gt-sm="space-between center">
 
             <!-- APP TITLE -->
-            <div class="logo mb-24 mb-md-0"
-                fxLayout="row" fxLayoutAlign="start center">
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
                 <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*', params:{delay:'50ms',scale:'0.2'}}">
                     settings
                 </mat-icon>
@@ -25,12 +23,10 @@
             <!-- / APP TITLE -->
 
             <!-- ADD BUTTON -->
-            <button mat-stroked-button
-                [routerLink]="'/configuration/new'"
-                color="primary">
+            <!--  <button mat-stroked-button [routerLink]="'/configuration/new'" color="primary">
                 <mat-icon mat-icon>add</mat-icon>
                 <span>Nueva configuración</span>
-            </button>
+            </button> -->
             <!-- / ADD BUTTON -->
 
         </div>
@@ -44,25 +40,22 @@
         <div class="content-card">
 
 
-            <mat-table class="configurations-table"
-                        #table [dataSource]="dataSource"
-                        matSort
-                        fusePerfectScrollbar>
+            <mat-table class="configurations-table" #table [dataSource]="dataSource" matSort fusePerfectScrollbar>
 
                 <!-- CODE Column -->
-                <ng-container matColumnDef="code">
+                <!--  <ng-container matColumnDef="code">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
                     <mat-cell *matCellDef="let configuration"
                         [routerLink]="'/configuration/'+configuration.code+'/'+configuration.firstName">
                         <p class="text-truncate">{{configuration.code}}</p>
                     </mat-cell>
-                </ng-container>
+                </ng-container> -->
 
                 <!-- KEY Column -->
                 <ng-container matColumnDef="key">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Llave</mat-header-cell>
                     <mat-cell *matCellDef="let configuration"
-                        [routerLink]="'/configuration/'+configuration.code+'/'+configuration.firstName">
+                        [routerLink]="'/configuration/'+configuration.id">
                         <p class="text-truncate">{{configuration.key}}</p>
                     </mat-cell>
                 </ng-container>
@@ -71,13 +64,13 @@
                 <ng-container matColumnDef="value">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Valor</mat-header-cell>
                     <mat-cell *matCellDef="let configuration"
-                        [routerLink]="'/configuration/'+configuration.code+'/'+configuration.firstName">
+                        [routerLink]="'/configuration/'+configuration.id">
                         <p class="text-truncate">{{configuration.value}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <!-- OPTIONS Column -->
-                <ng-container matColumnDef="options" stickyEnd>
+                <!--  <ng-container matColumnDef="options" stickyEnd>
                     <mat-header-cell *matHeaderCellDef>Opciones</mat-header-cell>
                     <mat-cell *matCellDef="let customer">
                         <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
@@ -95,22 +88,17 @@
                             </button>
                         </mat-menu>
                     </mat-cell>
-                </ng-container>
+                </ng-container>  -->
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
-                <mat-row *matRowDef="let configuration; columns: displayedColumns;"
-                            class="configuration"
-                            matRipple>
+                <mat-row *matRowDef="let configuration; columns: displayedColumns;" class="configuration" matRipple>
                 </mat-row>
 
             </mat-table>
 
-            <mat-paginator #paginator
-                            [length]="dataSource.filteredData.length"
-                            [pageIndex]="0"
-                            [pageSize]="10"
-                            [pageSizeOptions]="[5, 10, 25, 100]">
+            <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]">
             </mat-paginator>
 
         </div>

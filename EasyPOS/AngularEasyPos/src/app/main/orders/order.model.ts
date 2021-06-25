@@ -37,6 +37,8 @@ export class CreateUpdateDocumentDto<T> {
     customerId?: string;
     state: DocumentState;
     items: T[] = [];
+    salesPersonId: number;
+    warehouseCode: string;
 }
 
 export class CreateUpdateDocumentItemDto {
@@ -45,7 +47,8 @@ export class CreateUpdateDocumentItemDto {
     description?: string;
     code?: string;
     salePrice: number;
-    taxes: number;
+    taxes: boolean;
+    taxAmount: number;
     quantity: number;
     discount: number;
     totalItem: number;
@@ -62,6 +65,8 @@ export class DocumentDto<T> {
     discount: number = 0;
     total: number = 0;
     items: T[] = [];
+    salesPersonId: number;
+    warehouseCode: string;
 }
 
 export class DocumentItemDto {
@@ -70,7 +75,8 @@ export class DocumentItemDto {
     description?: string;
     code?: string;
     salePrice: number;
-    taxes: number;
+    taxes: boolean;
+    taxAmount: number;
     discount: number;
     quantity: number;
     totalItem: number;
@@ -104,7 +110,7 @@ export class OrderItemDto extends DocumentItemDto {
         this.description = product.description || '',
         this.code = product.code || '',
         this.salePrice = product.salePrice || 0,
-        this.taxes = product.taxes || 0,
+        this.taxes = product.taxes || false,
         this.discount = 0,
         this.quantity = 0,
         this.totalItem = this.quantity * this.salePrice

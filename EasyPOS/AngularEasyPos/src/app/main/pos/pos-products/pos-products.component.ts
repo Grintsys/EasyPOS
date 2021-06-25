@@ -180,6 +180,6 @@ export class PosProductsComponent implements OnChanges {
     }
 
     calculateTotalItem(x: OrderItemDto) {
-        return x.quantity * x.salePrice + (x.quantity * x.salePrice * x.taxes) - (x.quantity * x.salePrice * (x.discount / 100));
+        return x.quantity * x.salePrice + (x.quantity * x.salePrice) - (x.quantity * x.salePrice * (x.discount / 100));
     }
 }

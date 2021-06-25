@@ -21,7 +21,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { ConfigurationListComponent } from './configuration-list/configuration-list.component';
 import { ConfigurationComponent } from './configuration/configuration.component';
-import { ConfigurationService } from './configuration/configuration.service';
+import { ConfigurationService } from './configuration.service';
 
 const routes = [
     {

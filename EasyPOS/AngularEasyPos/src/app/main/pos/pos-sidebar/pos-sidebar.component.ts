@@ -169,7 +169,7 @@ export class PosSidebarComponent {
                 return a + (value.salePrice * value.quantity) * (value.discount / 100);
             }, 0);
             this.order.isv = this.order.items.reduce(function (a, value) {
-                return a + (value.salePrice * value.quantity) * value.taxes;
+                return a + (value.salePrice * value.quantity); //* value.taxes;
             }, 0);
 
             this.order.total = this.order.items.reduce(function (a, value) {
@@ -343,7 +343,7 @@ export class PosSidebarComponent {
             dto.description = orderItem.description || '',
             dto.code = orderItem.code || '',
             dto.salePrice = orderItem.salePrice || 0,
-            dto.taxes = orderItem.taxes || 0,
+            //dto.taxes = orderItem.taxes || 0,
             dto.discount = orderItem.discount || 0,
             dto.quantity = orderItem.quantity || 0,
             dto.totalItem = orderItem.totalItem || 0
