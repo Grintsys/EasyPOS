@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -10,7 +10,7 @@ import { Subject } from 'rxjs';
 import { locale as english } from '../i18n/en';
 import { locale as spanish } from '../i18n/es';
 import { SyncDialogComponent } from '../sync-dialog/sync-dialog.component';
-import { SyncDto } from '../sync.model';
+import { SyncDto, SyncEstados, Transacciones } from '../sync.model';
 import { SyncService } from '../syncs.service';
 
 @Component({
@@ -32,7 +32,7 @@ export class SyncListComponent {
 
   dataSource = new MatTableDataSource();
   displayedColumnSyncDown: string[] = ['fecha', 'data', 'informationType', 'status', 'options'];
-  
+
   syncList: SyncDto[];
   dialogRef: any;
 
@@ -72,31 +72,56 @@ export class SyncListComponent {
     );
   }
 
-  openDialogToEditJSON(): void {
-    this.dialogRef = this._matDialog.open(SyncDialogComponent, {
-      panelClass: 'edit-JSON-dialog'
-    });
+  updateJson(data: SyncDto) {
+    this._syncService.update(data.id, data).then(
+      () => {
+        this.getSyncList('');
+      },
+      (error) => {
+        console.log("Promise rejected with " + JSON.stringify(error));
+      }
+    );
+  }
+
+  retry(id: string) {
+    this._syncService.retry(id).then(
+      () => {
+        this.getSyncList('');
+      },
+      (error) => {
+        console.log("Promise rejected with " + JSON.stringify(error));
+      }
+    );
+  }
+
+  check(estado: SyncEstados){
+    if(estado == SyncEstados.Fallido)
+      return true;
+    return false;
+  }
+
+  openDialogToEditJSON(data: SyncDto): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = "edit-JSON-dialog";
+    dialogConfig.data = data;
+
+    this.dialogRef = this._matDialog.open(SyncDialogComponent, dialogConfig);
 
     this.dialogRef.afterClosed()
       .subscribe(response => {
         if (!response) {
           return;
         }
-        const actionType: string = response[0];
-        switch (actionType) {
-          /**
-           * Send
-           */
-          case 'send':
-            console.log('new Mail');
-            break;
-          /**
-           * Delete
-           */
-          case 'delete':
-            console.log('delete Mail');
-            break;
-        }
+        data.data = response;
+        this.updateJson(data);
       });
+  }
+
+  mapTransaccionesEnum(value: Transacciones) {
+    return Transacciones[value];
+  }
+
+  mapSyncEstadosEnum(value: SyncEstados) {
+    return SyncEstados[value];
   }
 }

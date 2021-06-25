@@ -30,7 +30,7 @@
     <form name="formatJsonForm" [formGroup]="formatJsonForm" class="m-24">
       <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
         <mat-label>Formato JSON</mat-label>
-        <textarea matInput placeholder="json format here" name="jsonFormat" formControlName="jsonFormat"></textarea>
+        <textarea matInput placeholder="json format here"  (input)='dataChange($event.target.value)' name="jsonFormat" formControlName="jsonFormat"></textarea>
       </mat-form-field>
     </form>
 
@@ -39,7 +39,7 @@
   <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end end">
     <button mat-raised-button
             color="accent"
-            (click)="matDialogRef.close(['send'])"
+            (click)="save()"
             class="save-button"
             aria-label="SAVE">
         <mat-icon class="mr-8">save</mat-icon>

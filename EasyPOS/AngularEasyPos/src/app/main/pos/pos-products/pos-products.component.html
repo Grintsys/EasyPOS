@@ -63,8 +63,17 @@
         <ng-container matColumnDef="tax">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Impuesto</mat-header-cell>
             <mat-cell *matCellDef="let product">
-                <p class="text-truncate">{{product.taxes + '%'}}</p>
+                <mat-form-field appearance="fill">
+                <!-- <p class="text-truncate">{{product.taxes}}</p> -->
+                <mat-select name="food">
+                    <mat-option *ngFor="let f of food" [value]="f">
+                        {{f}}
+                    </mat-option>
+                </mat-select>
+                </mat-form-field>
             </mat-cell>
+
+
         </ng-container>
 
         <!-- DISCOUNT Column -->
@@ -77,7 +86,7 @@
                             <mat-icon (click)="decreaseDiscount(product.productId)" class="s-16">remove</mat-icon>
                         </button>
                     </div>
-                    <span class="text-truncate">{{product.discount}}</span> 
+                    <span class="text-truncate">{{product.discount}}</span>
                     <span class="text-truncate">%</span>
                     <div>
                         <button mat-icon-button>

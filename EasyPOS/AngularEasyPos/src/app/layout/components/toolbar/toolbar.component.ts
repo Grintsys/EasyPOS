@@ -105,7 +105,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
             (data) => {
                 this.warehouses = data;
                 if(this.warehouses.length > 0){
-                    this.selectedWarehouse = this.warehouses[0].name;
+                    this.selectWarehouse(this.warehouses[0].id)
                 }
             },
             (error) => {

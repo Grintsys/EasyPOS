@@ -481,6 +481,13 @@ namespace Grintsys.EasyPOS.Seed
                     Key = "Taxes",
                     Value = JsonConvert.SerializeObject(taxes)
                 });
+
+            await _syncRepository.InsertAsync(
+                new Sincronizador.Sincronizador(){
+                    TipoTransaccion = Transacciones.Orden,
+                    Estado = SyncEstados.Created,
+                    Data = JsonConvert.SerializeObject(banks)
+                });
         }
     }
 }

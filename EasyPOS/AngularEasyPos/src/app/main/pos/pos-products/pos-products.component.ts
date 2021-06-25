@@ -57,7 +57,7 @@ export class PosProductsComponent implements OnChanges {
     subscription: Subscription;
     productList: ProductDto[];
     pageType: string;
-
+    food: any = ['Pizza', 'Sandwich'];
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _sharedService: SharedService

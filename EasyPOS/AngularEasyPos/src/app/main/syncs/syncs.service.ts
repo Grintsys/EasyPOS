@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from "@angular/router";
 import { BehaviorSubject, Observable } from "rxjs";
-import { SyncDto } from "./sync.model";
+import { CreateUpdateSyncDto, SyncDto } from "./sync.model";
 
 @Injectable()
 export class SyncService implements Resolve<any> {
@@ -45,6 +45,18 @@ export class SyncService implements Resolve<any> {
         const promise = this._httpClient.get<SyncDto[]>(url, this.getHttpOptions()).toPromise();
         return promise;
     }
+
+    public update(id: string, data: CreateUpdateSyncDto): Promise<any> {
+        var url = `${this.baseUrl}/${id}`
+        const promise = this._httpClient.put<SyncDto>(url, data, this.getHttpOptions()).toPromise();
+        return promise;
+    }
+
+    public retry(id: string): Promise<any> {
+        var url = `${this.baseUrl}/${id}`
+        const promise = this._httpClient.post<SyncDto>(url, this.getHttpOptions()).toPromise();
+        return promise;
+    } 
 
     private getHttpOptions(){
         return {

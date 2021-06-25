@@ -62,7 +62,7 @@ export class ProductComponent implements OnInit, OnDestroy {
             name: [{ value: this.product.name, disabled: true }],
             description: [{ value: this.product.description, disabled: true }],
             salePrice: [{ value: this.product.salePrice, disabled: true }],
-            taxes: [{ value: this.product.taxes, disabled: true }],
+            taxes: [{ value: this.product.taxes ? 'Si' : 'No', disabled: true }],
             inventory: [{ value: this.product.inventory, disabled: true }],
         });
     }

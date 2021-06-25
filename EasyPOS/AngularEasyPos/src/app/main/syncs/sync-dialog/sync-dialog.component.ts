@@ -7,13 +7,12 @@ import { locale as english } from '../i18n/en';
 import { locale as spanish } from '../i18n/es';
 
 @Component({
-    selector   : 'sync-dialog',
+    selector: 'sync-dialog',
     templateUrl: './sync-dialog.component.html',
-    styleUrls  : ['./sync-dialog.component.scss'],
+    styleUrls: ['./sync-dialog.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class SyncDialogComponent implements OnInit
-{
+export class SyncDialogComponent implements OnInit {
 
     formatJsonForm: FormGroup;
     jsonFormat: string;
@@ -25,7 +24,7 @@ export class SyncDialogComponent implements OnInit
     radius: number;
     color: string;
 
-    paymentMethod:Object[];
+    paymentMethod: Object[];
 
     /**
      * Constructor
@@ -39,29 +38,27 @@ export class SyncDialogComponent implements OnInit
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         public matDialogRef: MatDialogRef<SyncDialogComponent>,
         @Inject(MAT_DIALOG_DATA) private _data: any,
-    )
-    {
+    ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
+        this.jsonFormat = _data.data;
     }
 
-    /**
-     * On init
-     */
-    ngOnInit(): void
-    {
+    ngOnInit(): void {
         this.formatJsonForm = this.createJsonForm();
+
     }
 
+    save() {
+        this.matDialogRef.close(this.jsonFormat);
+    }
 
-    /**
-     * Create product form
-     *
-     * @returns {FormGroup}
-    */
-    createJsonForm(): FormGroup
-    {
-    return this._formBuilder.group({
-            jsonFormat : new FormControl(this.jsonFormat),
+    dataChange(event) {
+        this.jsonFormat = event;
+    }
+
+    createJsonForm(): FormGroup {
+        return this._formBuilder.group({
+            jsonFormat: new FormControl(this.jsonFormat),
         });
     }
 
