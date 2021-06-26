@@ -88,10 +88,12 @@ export class PosProductsComponent implements OnChanges {
         if (changes.orderItems && changes.orderItems.currentValue) {
 
             this.orderItems = changes.orderItems.currentValue.map(x => {
-                var prodIndex = this.productList.findIndex(y => y.id == x.productId);
-                
-                if(x.quantity > this.productList[prodIndex].inventory){
-                    x.quantity = this.productList[prodIndex].inventory;
+                if (this.productList != undefined) {
+                    var prodIndex = this.productList.findIndex(y => y.id == x.productId);
+
+                    if (x.quantity > this.productList[prodIndex].inventory) {
+                        x.quantity = this.productList[prodIndex].inventory;
+                    }
                 }
 
                 return x;
@@ -180,7 +182,7 @@ export class PosProductsComponent implements OnChanges {
     }
 
     calculateTotalItem(x: OrderItemDto) {
-        var iva = x ? x.quantity * x.salePrice * 0.15: 0; //TODO sacar % de config manager
+        var iva = x ? x.quantity * x.salePrice * 0.15 : 0; //TODO sacar % de config manager
         return x.quantity * x.salePrice + iva - (x.quantity * x.salePrice * (x.discount / 100));
     }
 }

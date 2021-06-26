@@ -27,6 +27,8 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.BackgroundWorkers;
+using Grintsys.EasyPOS.Sincronizador;
 
 namespace Grintsys.EasyPOS
 {
@@ -232,6 +234,8 @@ namespace Grintsys.EasyPOS
             app.UseAuditing();
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();
+
+            context.AddBackgroundWorker<SyncWorker>();
         }
     }
 }
