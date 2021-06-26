@@ -42,7 +42,8 @@ namespace Grintsys.EasyPOS
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpSwashbuckleModule)
+        typeof(AbpSwashbuckleModule), 
+        typeof(AbpBackgroundWorkersModule)
     )]
     public class EasyPOSHttpApiHostModule : AbpModule
     {

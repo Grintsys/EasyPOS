@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Grintsys.EasyPOS.Product;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SAPbobsCOM;
@@ -14,22 +16,31 @@ namespace Grintsys.EasyPOS.SAP
     public class SapManager : ISapManager
     {
         private readonly IConfiguration _settingProvider;
-        private readonly IRepository<Product.Product> _productRepository;
+        private readonly IProductRepository _productRepository;
         private readonly IRepository<Customer.Customer> _customerRepository;
+        private readonly IRepository<ProductWarehouse> _productWarehouseRepository;
+        private readonly IRepository<Warehouse> _warehouseRepository;
         private readonly IRepository<Sincronizador.Sincronizador> _syncRepository;
         private readonly ILogger<SapManager> _logger;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
         public SapManager(IConfiguration settingProvider,
-            IRepository<Product.Product> products,
+            IProductRepository products,
             IRepository<Customer.Customer> customers,
             ILogger<SapManager> logger,
-            IRepository<Sincronizador.Sincronizador> syncRepository)
+            IRepository<Sincronizador.Sincronizador> syncRepository,
+            IServiceScopeFactory serviceScopeFactory, 
+            IRepository<ProductWarehouse> productWarehouseRepository, 
+            IRepository<Warehouse> warehouseRepository)
         {
             _settingProvider = settingProvider;
             _productRepository = products;
             _customerRepository = customers;
             _logger = logger;
             _syncRepository = syncRepository;
+            _serviceScopeFactory = serviceScopeFactory;
+            _productWarehouseRepository = productWarehouseRepository;
+            _warehouseRepository = warehouseRepository;
         }
 
         public async Task<SapResponse> CreateCreditNoteAsync(CreateOrUpdateSalesOrder input)
@@ -483,17 +494,17 @@ namespace Grintsys.EasyPOS.SAP
                 {
                     CardCode = a.SelectSingleNode("CardCode").InnerText,
                     CardName = a.SelectSingleNode("CardName").InnerText,
-                    Address = a.SelectSingleNode("Address").InnerText,
-                    Celular = a.SelectSingleNode("Celular").InnerText,
-                    Phone1 = a.SelectSingleNode("Phone1").InnerText,
-                    Phone2 = a.SelectSingleNode("Phone2").InnerText,
-                    City = a.SelectSingleNode("City").InnerText,
-                    Balance = decimal.Parse(a.SelectSingleNode("Balance").InnerText),
-                    RTN = a.SelectSingleNode("RTN").InnerText,
-                    Cedula = a.SelectSingleNode("Cedula").InnerText,
-                    CartType = char.Parse(a.SelectSingleNode("CartType").InnerText),
-                    CreateDate = DateTime.Parse(a.SelectSingleNode("CreateDate").InnerText),
-                    Email = a.SelectSingleNode("Email").InnerText
+                    Address = a.SelectSingleNode("Address")?.InnerText,
+                    Celular = a.SelectSingleNode("Cellular")?.InnerText,
+                    Phone1 = a.SelectSingleNode("Phone1")?.InnerText,
+                    Phone2 = a.SelectSingleNode("Phone2")?.InnerText,
+                    City = a.SelectSingleNode("City")?.InnerText,
+                    Balance = decimal.Parse(a.SelectSingleNode("Balance")?.InnerText),
+                    RTN = a.SelectSingleNode("U_rtn")?.InnerText,
+                    Cedula = a.SelectSingleNode("U_cedula")?.InnerText,
+                    CartType = char.Parse(a.SelectSingleNode("CardType").InnerText),
+                    CreateDate = DateTime.ParseExact(a.SelectSingleNode("CreateDate").InnerText.Insert(4, "/").Insert(7, "/"), "yyyy/MM/dd", new System.Globalization.CultureInfo("en-US")),
+                    Email = a.SelectSingleNode("E_mail")?.InnerText
                 })
                 .ToList();
 
@@ -560,23 +571,37 @@ namespace Grintsys.EasyPOS.SAP
 
         public async Task UpsertProducts()
         {
+            var savedDict = new Dictionary<string, Guid>();
             var items = await GetProductListAsync();
 
             foreach (var item in items)
             {
-                var productToUpdate = _productRepository.FirstOrDefault(x => x.Code == item.ItemCode);
+                var productToUpdate = await _productRepository.FirstOrDefaultAsync(x => x.Code == item.ItemCode);
 
-                var whsId = productToUpdate.ProductWarehouse.FirstOrDefault().Id;
-                var product = MapProduct(item, whsId);
                 var hasProduct = !(productToUpdate is null);
 
-                if (hasProduct)
+                if (hasProduct && item.OnHand > 0)
                 {
-                    await _productRepository.UpdateAsync(productToUpdate);
+                    await UpsertProductWarehouse(savedDict, item.WhsCode, productToUpdate.Id, (int)item.OnHand);
                 }
-                else
+                else if(!hasProduct && item.OnHand > 0)
                 {
-                    await _productRepository.InsertAsync(product);
+                    var prodId = Guid.Empty;
+                    
+                    var dictResult = savedDict.FirstOrDefault(x => x.Key == item.ItemCode);
+                    if (dictResult.Key != null)
+                    {
+                        prodId = dictResult.Value;
+                    }
+                    else
+                    {
+                        var productDto = MapProduct(item);
+                        var product = await _productRepository.InsertAsync(productDto);
+                        savedDict.Add(product.Code, product.Id);
+                        prodId = product.Id;
+                    }
+                    
+                    await UpsertProductWarehouse(savedDict, item.WhsCode, prodId, (int)item.OnHand);
                 }
             }
         }
@@ -632,26 +657,56 @@ namespace Grintsys.EasyPOS.SAP
             };
         }
 
-        private Product.Product MapProduct(ProductDto item, Guid warehouseId)
+        private Product.Product MapProduct(ProductDto item)
         {
             var product = new Product.Product()
             {
                 Code = item.ItemCode,
                 Name = item.ItemName,
                 Description = item.ItemName,
-                SalePrice = (float)item.SalesPrice
+                SalePrice = (float)item.SalesPrice,
+                Taxes = item.HasTaxes
             };
+
+            return product;
+        }
+
+        private async Task UpsertProductWarehouse(Dictionary<string, Guid> saved, string warehouseCode, Guid productId, int stock)
+        {
+
+            var warehouse = await _warehouseRepository.FirstOrDefaultAsync(x => x.Code == warehouseCode);
+            var wareHouseId = warehouse != null ? warehouse.Id : Guid.Empty;
+
+            if(warehouse == null)
+            {
+                var dicResult = saved.FirstOrDefault(x => x.Key == warehouseCode);
+
+                if(dicResult.Key == null)
+                {
+                    warehouse = await _warehouseRepository.InsertAsync(new Warehouse()
+                    {
+                        Code = warehouseCode,
+                        Name = "Bodega " + warehouseCode
+                    });
+
+                    wareHouseId = warehouse.Id;
+
+                    saved.Add(warehouse.Code, warehouse.Id);
+                }
+                else
+                {
+                    wareHouseId = dicResult.Value;
+                }
+            }
 
             var productWarehouseDto = new Product.ProductWarehouse()
             {
-                WarehouseId = warehouseId,
-                Inventory = (int)item.OnHand,
-                ProductId = product.Id,
+                WarehouseId = wareHouseId,
+                Inventory = stock,
+                ProductId = productId,
             };
 
-            product.ProductWarehouse.Add(productWarehouseDto);
-
-            return product;
+            await _productWarehouseRepository.InsertAsync(productWarehouseDto);
         }
     }
 

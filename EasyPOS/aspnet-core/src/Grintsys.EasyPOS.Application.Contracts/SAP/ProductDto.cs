@@ -7,5 +7,6 @@
         public string WhsCode { get; set; }
         public double OnHand { get; set; }
         public double SalesPrice { get; set; }
+        public bool HasTaxes { get; set; }
     }
 }
