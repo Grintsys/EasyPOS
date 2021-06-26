@@ -16,6 +16,7 @@ import { locale as spanish } from "../i18n/es";
 import { CreateUpdateCustomerDto, CustomerDto } from "../customer.model";
 import { CustomerService } from "../customer.service";
 import { ActivatedRoute, Router } from "@angular/router";
+import { FuseUtils } from "@fuse/utils";
 
 @Component({
     selector: "app-customer",
@@ -58,6 +59,8 @@ export class CustomerComponent implements OnInit, OnDestroy {
                     this.pageType = "edit";
                 } else {
                     this.pageType = "new";
+                    var suffix = FuseUtils.generateGUID();
+                    this.customer.code = 'CEP'+suffix.substring(0,5);
                 }
                 this.customerForm = this.createcustomerForm(this.pageType);
             });
