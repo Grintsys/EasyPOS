@@ -484,9 +484,10 @@ namespace Grintsys.EasyPOS.Seed
 
             await _syncRepository.InsertAsync(
                 new Sincronizador.Sincronizador(){
-                    TipoTransaccion = Transacciones.Orden,
+                    TipoTransaccion = Transacciones.CreacionOrden,
                     Estado = SyncEstados.Created,
-                    Data = JsonConvert.SerializeObject(banks)
+                    Data = JsonConvert.SerializeObject(banks),
+                    Message = string.Empty
                 });
         }
     }

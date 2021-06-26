@@ -2,8 +2,12 @@
 {
     public enum Transacciones
     {
-        Orden = 0,
-        NotaCredito = 1,
-        NotaDebito = 3
+        CreacionOrden = 0,
+        CreacionNotaCredito = 1,
+        CreacionNotaDebito = 3,
+        SyncProductos = 4, 
+        SyncClientes = 5,
+        CreacionCliente = 6,
+        SyncMetadata = 7
     }
 }

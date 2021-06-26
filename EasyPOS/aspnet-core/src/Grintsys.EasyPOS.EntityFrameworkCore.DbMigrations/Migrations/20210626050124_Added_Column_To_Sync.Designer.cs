@@ -4,15 +4,17 @@ using Grintsys.EasyPOS.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Grintsys.EasyPOS.Migrations
 {
     [DbContext(typeof(EasyPOSMigrationsDbContext))]
-    partial class EasyPOSMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210626050124_Added_Column_To_Sync")]
+    partial class Added_Column_To_Sync
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1164,6 +1166,9 @@ namespace Grintsys.EasyPOS.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("DeletionTime");
 
+                    b.Property<string>("ErrorMessage")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Estado")
                         .HasColumnType("int");
 
@@ -1184,9 +1189,6 @@ namespace Grintsys.EasyPOS.Migrations
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TipoTransaccion")
                         .HasColumnType("int");
