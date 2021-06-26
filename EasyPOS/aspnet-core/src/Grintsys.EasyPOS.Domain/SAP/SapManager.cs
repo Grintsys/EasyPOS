@@ -558,7 +558,8 @@ namespace Grintsys.EasyPOS.SAP
                     ItemName = a.SelectSingleNode("ItemName").InnerText,
                     OnHand = double.Parse(a.SelectSingleNode("OnHand").InnerText),
                     SalesPrice = double.Parse(a.SelectSingleNode("AvgPrice").InnerText),
-                    WhsCode = a.SelectSingleNode("WhsCode").InnerText
+                    WhsCode = a.SelectSingleNode("WhsCode").InnerText,
+                    HasTaxes = bool.Parse(a.SelectSingleNode("HasTaxes")?.InnerText),
                 })
                 .ToList();
 
@@ -580,11 +581,11 @@ namespace Grintsys.EasyPOS.SAP
 
                 var hasProduct = !(productToUpdate is null);
 
-                if (hasProduct && item.OnHand > 0)
+                if (hasProduct)
                 {
                     await UpsertProductWarehouse(savedDict, item.WhsCode, productToUpdate.Id, (int)item.OnHand);
                 }
-                else if(!hasProduct && item.OnHand > 0)
+                else if(!hasProduct)
                 {
                     var prodId = Guid.Empty;
                     
@@ -699,14 +700,28 @@ namespace Grintsys.EasyPOS.SAP
                 }
             }
 
-            var productWarehouseDto = new Product.ProductWarehouse()
+            if(stock > 0)
             {
-                WarehouseId = wareHouseId,
-                Inventory = stock,
-                ProductId = productId,
-            };
+                var prodWareHouse = await _productWarehouseRepository
+                    .FirstOrDefaultAsync(x => x.WarehouseId == wareHouseId && x.ProductId == productId);
 
-            await _productWarehouseRepository.InsertAsync(productWarehouseDto);
+                if(prodWareHouse != null)
+                {
+                    prodWareHouse.Inventory = stock;
+                    await _productWarehouseRepository.UpdateAsync(prodWareHouse);
+                }
+                else
+                {
+                    var newProdWarehouse = new ProductWarehouse()
+                    {
+                        WarehouseId = wareHouseId,
+                        Inventory = stock,
+                        ProductId = productId,
+                    };
+                    await _productWarehouseRepository.InsertAsync(newProdWarehouse);
+                }
+
+            }
         }
     }
 
