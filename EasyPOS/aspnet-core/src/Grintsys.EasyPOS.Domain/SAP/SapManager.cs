@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using SAPbobsCOM;
 using System;
 using System.Collections.Generic;
@@ -10,22 +11,25 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Grintsys.EasyPOS.SAP
 {
-    public class SapManager : ISapManager
+    public class SapManager /*: ISapManager*/
     {
         private readonly IConfiguration _settingProvider;
         private readonly IRepository<Product.Product> _productRepository;
         private readonly IRepository<Customer.Customer> _customerRepository;
+        private readonly IRepository<Sincronizador.Sincronizador> _syncRepository;
         private readonly ILogger<SapManager> _logger;
 
-        public SapManager(IConfiguration settingProvider, 
+        public SapManager(IConfiguration settingProvider,
             IRepository<Product.Product> products,
             IRepository<Customer.Customer> customers,
-            ILogger<SapManager> logger)
+            ILogger<SapManager> logger, 
+            IRepository<Sincronizador.Sincronizador> syncRepository)
         {
             _settingProvider = settingProvider;
             _productRepository = products;
             _customerRepository = customers;
             _logger = logger;
+            _syncRepository = syncRepository;
         }
 
         public async Task<SapResponse> CreateCreditNoteAsync(CreateOrUpdateSalesOrder input)
@@ -36,12 +40,24 @@ namespace Grintsys.EasyPOS.SAP
             var sapMessage = string.Format("Successfully added Sales Order DocEntry: {0}", oCompany.GetNewObjectKey());
             var isSuccess = true;
 
+            var syncRecord = new Sincronizador.Sincronizador()
+            {
+                TipoTransaccion = Enums.Transacciones.CreacionNotaCredito,
+                Estado = Enums.SyncEstados.Transferred,
+                Data = JsonConvert.SerializeObject(input)
+            };
+
             _logger.LogInformation("Creating CreditNote");
 
             if (companyResponse != 0)
             {    
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
                 _logger.LogError(errorMessage, errorCode);
+
+                syncRecord.Message = errorMessage;
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                await _syncRepository.InsertAsync(syncRecord);
 
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
@@ -76,11 +92,10 @@ namespace Grintsys.EasyPOS.SAP
                         + " - "
                         + oCompany.GetLastErrorDescription();
 
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
                 _logger.LogError(sapMessage);
             }
-
-            //TODO:
-            //Add summary information into sap sync table
 
             //recomended from http://www.appseconnect.com/di-api-memory-leak-in-sap-business-one-9-0/
             //System.Runtime.InteropServices.Marshal.ReleaseComObject(salesOrder);
@@ -94,6 +109,9 @@ namespace Grintsys.EasyPOS.SAP
                     Message = sapMessage
                 };
 
+            syncRecord.Message = response.Message;
+            await _syncRepository.InsertAsync(syncRecord);
+
             return response;
         }
 
@@ -104,9 +122,22 @@ namespace Grintsys.EasyPOS.SAP
             var sapMessage = string.Format("Successfully added new bussiness partner DocEntry: {0}", company.GetNewObjectKey());
             var isSuccess = true;
 
+            var syncRecord = new Sincronizador.Sincronizador()
+            {
+                TipoTransaccion = Enums.Transacciones.CreacionCliente,
+                Data = JsonConvert.SerializeObject(input),
+                Estado = Enums.SyncEstados.Transferred
+            };
+
             if (companyResponse != 0)
             {
                 company.GetLastError(out int errorCode, out string errorMessage);
+
+                syncRecord.Message = errorMessage;
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                await _syncRepository.InsertAsync(syncRecord);
+
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
 
@@ -139,6 +170,8 @@ namespace Grintsys.EasyPOS.SAP
                             + " - "
                             + company.GetLastErrorDescription();
 
+                    syncRecord.Estado = Enums.SyncEstados.Failed;
+
                     _logger.LogError(sapMessage);
                 }
             }
@@ -147,12 +180,17 @@ namespace Grintsys.EasyPOS.SAP
                 isSuccess = false;
                 sapMessage = e.Message;
 
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
                 _logger.LogError(sapMessage);
             }          
 
             //System.Runtime.InteropServices.Marshal.ReleaseComObject(businessPartner);
             company.Disconnect();
             _logger.LogInformation("Successfull created");
+
+            syncRecord.Message = sapMessage;
+            await _syncRepository.InsertAsync(syncRecord);
 
             var response = new SapResponse
             {
@@ -171,9 +209,22 @@ namespace Grintsys.EasyPOS.SAP
             var sapMessage = string.Format("Successfully added Sales Order DocEntry: {0}", oCompany.GetNewObjectKey());
             var isSuccess = true;
 
+            var syncRecord = new Sincronizador.Sincronizador()
+            {
+                TipoTransaccion = Enums.Transacciones.CreacionNotaDebito,
+                Data = JsonConvert.SerializeObject(input),
+                Estado = Enums.SyncEstados.Transferred
+            };
+
             if (companyResponse != 0)
             {
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
+
+                syncRecord.Message = errorMessage;
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                await _syncRepository.InsertAsync(syncRecord);
+
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
 
@@ -212,6 +263,8 @@ namespace Grintsys.EasyPOS.SAP
                         + " - "
                         + oCompany.GetLastErrorDescription();
 
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
                 _logger.LogError(sapMessage);
             }
 
@@ -230,6 +283,10 @@ namespace Grintsys.EasyPOS.SAP
                     Message = sapMessage
                 };
 
+            syncRecord.Message = sapMessage;
+
+            await _syncRepository.InsertAsync(syncRecord);
+
             return response;
         }
 
@@ -243,9 +300,22 @@ namespace Grintsys.EasyPOS.SAP
             var sapMessage = string.Format("Successfully added Sales Order DocEntry: {0}", oCompany.GetNewObjectKey());
             var isSuccess = true;
 
+            var syncRecord = new Sincronizador.Sincronizador()
+            {
+                TipoTransaccion = Enums.Transacciones.CreacionOrden,
+                Data = JsonConvert.SerializeObject(input),
+                Estado = Enums.SyncEstados.Transferred
+            };
+
             if (companyResponse != 0)
             {
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
+
+                syncRecord.Message = errorMessage;
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                await _syncRepository.InsertAsync(syncRecord);
+
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
 
@@ -280,6 +350,8 @@ namespace Grintsys.EasyPOS.SAP
                         + " - "
                         + oCompany.GetLastErrorDescription();
 
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
                 _logger.LogError(sapMessage);
             }
 
@@ -299,6 +371,10 @@ namespace Grintsys.EasyPOS.SAP
                     Message = sapMessage
                 };
 
+            syncRecord.Message = sapMessage;
+
+            await _syncRepository.InsertAsync(syncRecord);
+
             return response;
         }
 
@@ -309,9 +385,22 @@ namespace Grintsys.EasyPOS.SAP
             Company oCompany = GetCompany();
             var companyResponse = oCompany.Connect();
 
+            var syncRecord = new Sincronizador.Sincronizador()
+            {
+                TipoTransaccion = Enums.Transacciones.SyncMetadata,
+                Data = string.Empty,
+                Estado = Enums.SyncEstados.Transferred
+            };
+
             if (companyResponse != 0)
             {
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
+
+                syncRecord.Message = errorMessage;
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                await _syncRepository.InsertAsync(syncRecord);
+
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
 
@@ -345,6 +434,9 @@ namespace Grintsys.EasyPOS.SAP
                 Banks = banks
             };
 
+            syncRecord.Message = "Succesfully";
+            await _syncRepository.InsertAsync(syncRecord);
+
             return companyMetadata;
         }
 
@@ -353,9 +445,22 @@ namespace Grintsys.EasyPOS.SAP
             Company oCompany = GetCompany();
             var companyResponse = oCompany.Connect();
 
+            var syncRecord = new Sincronizador.Sincronizador()
+            {
+                TipoTransaccion = Enums.Transacciones.SyncClientes,
+                Data = string.Empty,
+                Estado = Enums.SyncEstados.Transferred
+            };
+
             if (companyResponse != 0)
             {
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
+
+                syncRecord.Message = errorMessage;
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                await _syncRepository.InsertAsync(syncRecord);
+
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
 
@@ -392,6 +497,10 @@ namespace Grintsys.EasyPOS.SAP
                 })
                 .ToList();
 
+            syncRecord.Message = "Successfully";
+
+            await _syncRepository.InsertAsync(syncRecord);
+
             return customers.Take(skipCount).ToList();
         }
 
@@ -400,9 +509,22 @@ namespace Grintsys.EasyPOS.SAP
             Company oCompany = GetCompany();
             var companyResponse = oCompany.Connect();
 
+            var syncRecord = new Sincronizador.Sincronizador()
+            {
+                TipoTransaccion = Enums.Transacciones.SyncProductos,
+                Data = string.Empty,
+                Estado = Enums.SyncEstados.Transferred
+            };
+
             if (companyResponse != 0)
             {
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
+
+                syncRecord.Message = errorMessage;
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                await _syncRepository.InsertAsync(syncRecord);
+
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
 
@@ -428,7 +550,11 @@ namespace Grintsys.EasyPOS.SAP
                     WhsCode = a.SelectSingleNode("WhsCode").InnerText
                 })
                 .ToList();
-   
+
+            syncRecord.Message = "Successfully";
+
+            await _syncRepository.InsertAsync(syncRecord);
+
             return products.Take(skipCount).ToList();
         }
 
@@ -491,7 +617,6 @@ namespace Grintsys.EasyPOS.SAP
 
             return oCompany;
         }
-
 
         private Customer.Customer MapCustomer(CustomerDto customer)
         {
