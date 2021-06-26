@@ -22,7 +22,7 @@ namespace Grintsys.EasyPOS.SAP
         public SapManager(IConfiguration settingProvider,
             IRepository<Product.Product> products,
             IRepository<Customer.Customer> customers,
-            ILogger<SapManager> logger, 
+            ILogger<SapManager> logger,
             IRepository<Sincronizador.Sincronizador> syncRepository)
         {
             _settingProvider = settingProvider;
@@ -50,7 +50,7 @@ namespace Grintsys.EasyPOS.SAP
             _logger.LogInformation("Creating CreditNote");
 
             if (companyResponse != 0)
-            {    
+            {
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
                 _logger.LogError(errorMessage, errorCode);
 
@@ -175,7 +175,7 @@ namespace Grintsys.EasyPOS.SAP
                     _logger.LogError(sapMessage);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 isSuccess = false;
                 sapMessage = e.Message;
@@ -183,7 +183,7 @@ namespace Grintsys.EasyPOS.SAP
                 syncRecord.Estado = Enums.SyncEstados.Failed;
 
                 _logger.LogError(sapMessage);
-            }          
+            }
 
             //System.Runtime.InteropServices.Marshal.ReleaseComObject(businessPartner);
             company.Disconnect();
@@ -541,8 +541,8 @@ namespace Grintsys.EasyPOS.SAP
             var nodeList = xml.SelectNodes("/BOM/BO/OITW/row");
 
             var products = nodeList.Cast<XmlNode>()
-                .Select(a => new ProductDto 
-                { 
+                .Select(a => new ProductDto
+                {
                     ItemCode = a.SelectSingleNode("ItemCode").InnerText,
                     ItemName = a.SelectSingleNode("ItemName").InnerText,
                     OnHand = double.Parse(a.SelectSingleNode("OnHand").InnerText),
@@ -644,9 +644,9 @@ namespace Grintsys.EasyPOS.SAP
 
             var productWarehouseDto = new Product.ProductWarehouse()
             {
-                WarehouseId =  warehouseId,
+                WarehouseId = warehouseId,
                 Inventory = (int)item.OnHand,
-                ProductId = product.Id,  
+                ProductId = product.Id,
             };
 
             product.ProductWarehouse.Add(productWarehouseDto);

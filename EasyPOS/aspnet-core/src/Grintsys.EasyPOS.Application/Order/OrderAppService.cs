@@ -65,10 +65,10 @@ namespace Grintsys.EasyPOS.Order
             var salesOrderDto = new CreateOrUpdateSalesOrder()
             {
                 CreatedDate = order.Result.CreationTime,
-                CustomerCode = "00001",
-                CustomerName = order.Result.CustomerName,
+                CustomerCode = input.CustomerCode,
+                CustomerName = input.CustomerName,
                 SalesPersonId = 1,
-                WarehouseCode = "01",
+                WarehouseCode = input.WarehouseCode,
                 Lines = order.Result.Items
             };
 

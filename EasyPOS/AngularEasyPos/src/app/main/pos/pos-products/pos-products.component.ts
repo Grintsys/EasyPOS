@@ -180,6 +180,7 @@ export class PosProductsComponent implements OnChanges {
     }
 
     calculateTotalItem(x: OrderItemDto) {
-        return x.quantity * x.salePrice + (x.quantity * x.salePrice) - (x.quantity * x.salePrice * (x.discount / 100));
+        var iva = x ? x.quantity * x.salePrice * 0.15: 0; //TODO sacar % de config manager
+        return x.quantity * x.salePrice + iva - (x.quantity * x.salePrice * (x.discount / 100));
     }
 }

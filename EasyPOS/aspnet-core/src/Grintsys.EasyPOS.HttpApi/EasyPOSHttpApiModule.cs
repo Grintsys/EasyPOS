@@ -44,8 +44,8 @@ namespace Grintsys.EasyPOS
         {
             context.Services.Configure<IdentityOptions>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = true;
-                options.SignIn.RequireConfirmedEmail = true;
+                options.SignIn.RequireConfirmedAccount = false; //TODO
+                options.SignIn.RequireConfirmedEmail = false; //TODO
 
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;

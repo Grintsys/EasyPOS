@@ -8,13 +8,11 @@
     <div class="center">
 
         <!-- HEADER -->
-        <div class="header accent"
-            fxLayout="column" fxLayoutAlign="center center"
-            fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+        <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+            fxLayoutAlign.gt-sm="space-between center">
 
             <!-- APP TITLE -->
-            <div class="logo mb-24 mb-md-0"
-                fxLayout="row" fxLayoutAlign="start center">
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
                 <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
                     sync
                 </mat-icon>
@@ -25,10 +23,10 @@
             <!-- / APP TITLE -->
 
             <!-- ADD BUTTON -->
-            <button mat-stroked-button color="primary">
+            <!-- <button mat-stroked-button color="primary">
                 <mat-icon mat-icon>sync</mat-icon>
                 <span>Sincronizar todo</span>
-            </button>
+            </button> -->
             <!-- / ADD BUTTON -->
 
         </div>
@@ -44,93 +42,81 @@
             <!-- CONTENT -->
             <div class="content" fxLayout="column" fxFlex>
 
-                <mat-tab-group>
+                <mat-table class="sincronization-table" #table [dataSource]="dataSource" matSort fusePerfectScrollbar>
 
-                    <mat-tab>
-                        <!-- <ng-template mat-tab-label>
-                            <mat-icon class="example-tab-icon mr-8">cloud_upload</mat-icon>
-                        </ng-template> -->
-                        <!-- CONTENT TAB -->
-                        <div class="tab-content" fusePerfectScrollbar>
+                    <!-- DATE Column -->
+                    <ng-container matColumnDef="fecha">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
+                        <mat-cell *matCellDef="let SyncDown">
+                            <p class="text-truncate">{{SyncDown.creationTime}}</p>
+                        </mat-cell>
+                    </ng-container>
 
-                            <mat-table class="sincronization-table"
-                                        #table [dataSource]="dataSource"
-                                        matSort
-                                        fusePerfectScrollbar>
+                    <!-- INFORMATION_TYPE Column -->
+                    <ng-container matColumnDef="informationType">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de información
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let SyncDown">
+                            <p class="text-truncate">{{mapTransaccionesEnum(SyncDown.tipoTransaccion)}}</p>
+                        </mat-cell>
+                    </ng-container>
 
-                                <!-- CODE Column -->
-                                <ng-container matColumnDef="fecha">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
-                                    <mat-cell *matCellDef="let SyncDown">
-                                        <p class="text-truncate">{{SyncDown.creationTime}}</p>
-                                    </mat-cell>
-                                </ng-container>
+                    <!-- DATA Column -->
+                    <ng-container matColumnDef="data">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Data</mat-header-cell>
+                        <mat-cell *matCellDef="let SyncDown">
+                            <p class="text-truncate">{{SyncDown.data}}</p>
+                        </mat-cell>
+                    </ng-container>
 
-                                <!-- CODE Column -->
-                                <ng-container matColumnDef="data">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Data</mat-header-cell>
-                                    <mat-cell *matCellDef="let SyncDown">
-                                        <p class="text-truncate">{{SyncDown.data}}</p>
-                                    </mat-cell>
-                                </ng-container>
+                    <!-- Message Column -->
+                    <ng-container matColumnDef="message">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Mensaje</mat-header-cell>
+                        <mat-cell *matCellDef="let SyncDown">
+                            <p class="text-truncate">{{SyncDown.message}}</p>
+                        </mat-cell>
+                    </ng-container>
 
-                                <!-- INFORMATION_TYPE Column -->
-                                <ng-container matColumnDef="informationType">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de información</mat-header-cell>
-                                    <mat-cell *matCellDef="let SyncDown">
-                                        <p class="text-truncate">{{mapTransaccionesEnum(SyncDown.tipoTransaccion)}}</p>
-                                    </mat-cell>
-                                </ng-container>
+                    <!-- STATUS Column -->
+                    <ng-container matColumnDef="status">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+                        <mat-cell *matCellDef="let SyncDown">
+                            <p class="text-truncate">{{mapSyncEstadosEnum(SyncDown.estado)}}</p>
+                        </mat-cell>
+                    </ng-container>
 
-                                <!-- STATUS Column -->
-                                <ng-container matColumnDef="status">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
-                                    <mat-cell *matCellDef="let SyncDown">
-                                        <p class="text-truncate">{{mapSyncEstadosEnum(SyncDown.estado)}}</p>
-                                    </mat-cell>
-                                </ng-container>
-
-                                <!-- OPTIONS Column -->
-                                <ng-container matColumnDef="options" stickyEnd>
-                                    <mat-header-cell *matHeaderCellDef>Opciones</mat-header-cell>
-                                    <mat-cell *matCellDef="let SyncDown">
-                                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="icon-button with a menu">
-                                            <mat-icon>more_vert</mat-icon>
-                                        </button>
-                                        <mat-menu #menu="matMenu">
-                                            <button mat-menu-item (click)="openDialogToEditJSON(SyncDown)">
-                                                <mat-icon>edit</mat-icon>
-                                                <span>Editar</span>
-                                            </button>
-                                            <!-- <mat-divider></mat-divider>
+                    <!-- OPTIONS Column -->
+                    <ng-container matColumnDef="options" stickyEnd>
+                        <mat-header-cell *matHeaderCellDef>Opciones</mat-header-cell>
+                        <mat-cell *matCellDef="let SyncDown">
+                            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="icon-button with a menu">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="openDialogToEditJSON(SyncDown)">
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Editar</span>
+                                </button>
+                                <!-- <mat-divider></mat-divider>
                                             <button mat-menu-item (click)="openDialogToEditJSON()">
                                                 <mat-icon>delete</mat-icon>
                                                 <span>Sync</span>
                                             </button> -->
-                                        </mat-menu>
-                                    </mat-cell>
-                                </ng-container>
-                                <mat-header-row *matHeaderRowDef="displayedColumnSyncDown; sticky:true"></mat-header-row>
+                            </mat-menu>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumnSyncDown; sticky:true">
+                    </mat-header-row>
 
-                                <mat-row *matRowDef="let SyncDown; columns: displayedColumnSyncDown;"
-                                            class="sincronization"
-                                            matRipple>
-                                </mat-row>
+                    <mat-row *matRowDef="let SyncDown; columns: displayedColumnSyncDown;" class="sincronization"
+                        matRipple>
+                    </mat-row>
 
-                            </mat-table>
+                </mat-table>
 
-                            <mat-paginator #paginator
-                                            [length]="dataSource.filteredData.length"
-                                            [pageIndex]="0"
-                                            [pageSize]="10"
-                                            [pageSizeOptions]="[5, 10, 25, 100]">
-                            </mat-paginator>
-
-                        </div>
-                        <!-- / CONTENT TAB -->
-                    </mat-tab>
-                </mat-tab-group>
-
+                <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+                    [pageSizeOptions]="[5, 10, 25, 100]">
+                </mat-paginator>
             </div>
             <!-- / CONTENT -->
         </div>

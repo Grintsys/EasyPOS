@@ -31,7 +31,7 @@ export class SyncListComponent {
   filter: ElementRef;
 
   dataSource = new MatTableDataSource();
-  displayedColumnSyncDown: string[] = ['fecha', 'data', 'informationType', 'status', 'options'];
+  displayedColumnSyncDown: string[] = ['fecha', 'data', 'informationType','message', 'status', 'options'];
 
   syncList: SyncDto[];
   dialogRef: any;

@@ -154,7 +154,9 @@ export class PosSidebarComponent {
         this.dialogRef.afterClosed().subscribe((response) => {
             if (response != undefined) {
                 this.customer = response;
+                this.order.customerCode = this.customer.code;
                 this.order.customerId = this.customer.id;
+                this.order.customerName = this.customer.firstName + ' ' + this.customer.lastName;
             }
             this.validateOrder();
         });
@@ -169,7 +171,10 @@ export class PosSidebarComponent {
                 return a + (value.salePrice * value.quantity) * (value.discount / 100);
             }, 0);
             this.order.isv = this.order.items.reduce(function (a, value) {
-                return a + (value.salePrice * value.quantity); //* value.taxes;
+                if(value.taxes){
+                    return a + (value.salePrice * value.quantity * 0.15);
+                }
+                return a;
             }, 0);
 
             this.order.total = this.order.items.reduce(function (a, value) {
@@ -243,6 +248,9 @@ export class PosSidebarComponent {
     createOrder() {
         var createUpdateOrder = new CreateUpdateOrderDto();
         createUpdateOrder.customerId = this.order.customerId;
+        createUpdateOrder.customerCode = this.order.customerCode;
+        createUpdateOrder.customerName = this.order.customerName;
+        createUpdateOrder.warehouseCode = localStorage.getItem("warehouseCode");
         createUpdateOrder.state = DocumentState.Creada;
         createUpdateOrder.orderType = this.orderType;
         createUpdateOrder.items = this.order.items.map(x => {
@@ -294,6 +302,9 @@ export class PosSidebarComponent {
         dto.orderId = this.order.id;
         dto.state = DocumentState.Creada;
         dto.customerId = this.order.customerId;
+        dto.customerCode = this.order.customerCode;
+        dto.customerName = this.order.customerName;
+        dto.warehouseCode = localStorage.getItem("warehouseCode");
         dto.items = this.order.items.map(x => {
             return this.mapDocumentItem(x);
         });
@@ -314,6 +325,9 @@ export class PosSidebarComponent {
         var dto = new CreateUpdateDebitNoteDto();
         dto.state = DocumentState.Creada;
         dto.customerId = this.order.customerId;
+        dto.customerCode = this.order.customerCode;
+        dto.customerName = this.order.customerName;
+        dto.warehouseCode = localStorage.getItem("warehouseCode");
         dto.items = this.order.items.map(x => {
             return this.mapDocumentItem(x);
         });
@@ -343,7 +357,7 @@ export class PosSidebarComponent {
             dto.description = orderItem.description || '',
             dto.code = orderItem.code || '',
             dto.salePrice = orderItem.salePrice || 0,
-            //dto.taxes = orderItem.taxes || 0,
+            dto.taxes = orderItem.taxes || false,
             dto.discount = orderItem.discount || 0,
             dto.quantity = orderItem.quantity || 0,
             dto.totalItem = orderItem.totalItem || 0

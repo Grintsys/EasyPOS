@@ -4,7 +4,7 @@ import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from "@a
 import { BehaviorSubject, Observable } from "rxjs";
 import { CustomerDto } from "../customers/customer.model";
 import { CreateUpdateOrderDto, OrderDto, CreateUpdateCreditNoteDto, CreateUpdateDebitNoteDto, DebitNoteDto, CreditNoteDto } from "../orders/order.model";
-import { CreateUpdateProductWarehouseDto, ProductDto } from "../products/product.model";
+import { CreateUpdateProductWarehouseDto, ProductDto, WarehouseDto } from "../products/product.model";
 
 @Injectable()
 export class PosService implements Resolve<any>{
@@ -87,6 +87,12 @@ export class PosService implements Resolve<any>{
     public getCustomer(customerId: string): Promise<any> {
         var url = `${this.baseUrl}/customer/${customerId}`
         const promise = this._httpClient.get<CustomerDto>(url, this.getHttpOptions()).toPromise();
+        return promise;
+    }
+
+    public getWarehouse(id: string): Promise<any> {
+        var url = `${this.baseUrl}/warehouse/${id}`
+        const promise = this._httpClient.get<WarehouseDto>(url, this.getHttpOptions()).toPromise();
         return promise;
     }
 

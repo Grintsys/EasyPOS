@@ -5,6 +5,7 @@ export class SyncDto {
     tipoTransaccion: Transacciones;
     estado: SyncEstados;
     data: string;
+    message: string;
     creationTime: Date;
 
     constructor(SyncDown?)
@@ -13,6 +14,7 @@ export class SyncDto {
         this.tipoTransaccion = SyncDown.tipoTransaccion || '';
         this.estado = SyncDown.estado || '';
         this.data = SyncDown.data || '';
+        this.data = SyncDown.message || '';
         this.creationTime = SyncDown.creationTime || Date.now;
     }
 }
@@ -21,6 +23,7 @@ export class CreateUpdateSyncDto {
     tipoTransaccion: Transacciones;
     estado: SyncEstados;
     data: string;
+    message: string;
     creationTime: Date;
 
     constructor(SyncDown?)
@@ -29,6 +32,7 @@ export class CreateUpdateSyncDto {
         this.tipoTransaccion = SyncDown.tipoTransaccion || '';
         this.estado = SyncDown.estado || '';
         this.data = SyncDown.data || '';
+        this.data = SyncDown.message || '';
         this.creationTime = SyncDown.creationTime || Date.now;
     }
 }
@@ -40,7 +44,11 @@ export enum SyncEstados {
 }
 
 export enum Transacciones {
-    Orden = 0,
-    NotaCredito = 1,
-    NotaDebito = 3
+    CreacionOrden = 0,
+    CreacionNotaCredito = 1,
+    CreacionNotaDebito = 3,
+    SyncProductos = 4, 
+    SyncClientes = 5,
+    CreacionCliente = 6,
+    SyncMetadata = 7
 }

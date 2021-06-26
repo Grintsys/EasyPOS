@@ -35,6 +35,8 @@ export enum OrderType {
 export class CreateUpdateDocumentDto<T> {
     id?: string;
     customerId?: string;
+    customerCode?: string;
+    customerName?: string;
     state: DocumentState;
     items: T[] = [];
     salesPersonId: number;
