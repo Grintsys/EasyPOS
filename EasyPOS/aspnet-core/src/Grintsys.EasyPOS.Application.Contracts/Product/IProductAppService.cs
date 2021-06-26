@@ -17,5 +17,6 @@ namespace Grintsys.EasyPOS.Product
         Task<ProductDto> GetProduct(Guid id, Guid wareHouseId);
         Task<List<ProductDto>> GetProductList(string filter, Guid wareHouseId);
         Task<List<ProductDto>> GetProductListByWarehouseAsync(Guid wareHouseId);
+        Task<List<ProductDto>> GetSAPProducts();
     }
 }

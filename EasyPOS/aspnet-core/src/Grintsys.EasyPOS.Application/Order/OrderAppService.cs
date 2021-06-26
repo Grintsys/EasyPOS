@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Domain.Repositories;
 
 namespace Grintsys.EasyPOS.Order
@@ -24,16 +25,20 @@ namespace Grintsys.EasyPOS.Order
         private readonly IOrderRepository _orderRepository;
         private readonly IRepository<PaymentMethod.PaymentMethod, Guid> _paymentMethodRepository;
         private readonly ISapManager _sapManager;
+        private readonly IBackgroundJobManager _backgroundJobManager;
+
 
         public OrderAppService(IRepository<Order, Guid> repository, 
             IOrderRepository orderRepository, 
             IRepository<PaymentMethod.PaymentMethod, Guid> personRepository,
-            ISapManager sapManager)
+            ISapManager sapManager,
+            IBackgroundJobManager backgroundJobManager)
             : base(repository)
         {
             _orderRepository = orderRepository;
             _paymentMethodRepository = personRepository;
             _sapManager = sapManager;
+            _backgroundJobManager = backgroundJobManager;
         }
 
         public override async Task<OrderDto> GetAsync(Guid id)
@@ -56,6 +61,7 @@ namespace Grintsys.EasyPOS.Order
 
             _paymentMethodRepository.InsertAsync(paymentMethodDto);
 
+
             var salesOrderDto = new CreateOrUpdateSalesOrder()
             {
                 CreatedDate = order.Result.CreationTime,
@@ -65,8 +71,12 @@ namespace Grintsys.EasyPOS.Order
                 WarehouseCode = "01",
                 Lines = order.Result.Items
             };
+
+            //cep00001
           
-            var response = _sapManager.CreateSalesOrderAsync(salesOrderDto);
+            //var response = _sapManager.CreateSalesOrderAsync(salesOrderDto);
+
+            _backgroundJobManager.EnqueueAsync(_sapManager.CreateSalesOrderAsync(salesOrderDto));
 
             //if(response.Result.IsSuccess)
             //{
