@@ -1,12 +1,14 @@
 ﻿using Grintsys.EasyPOS.Document;
 using Grintsys.EasyPOS.Enums;
 using Grintsys.EasyPOS.Order;
+using Grintsys.EasyPOS.SAP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Domain.Repositories;
 
 namespace Grintsys.EasyPOS.CreditNote
@@ -22,14 +24,20 @@ namespace Grintsys.EasyPOS.CreditNote
     {
         private readonly ICreditNoteRepository _creditNoteRepository;
         private readonly IOrderRepository _orderRepository;
+        private readonly IBackgroundJobManager _backgroundJobManager;
+        private readonly ISapManager _sapManager;
 
         public CreditNoteAppService(
-            IRepository<CreditNote, Guid> repository, 
-            ICreditNoteRepository creditNoteRepository, 
-            IOrderRepository orderRepository) : base(repository)
+            IRepository<CreditNote, Guid> repository,
+            ICreditNoteRepository creditNoteRepository,
+            IOrderRepository orderRepository,
+            ISapManager sapManager, 
+            IBackgroundJobManager backgroundJobManager) : base(repository)
         {
             _creditNoteRepository = creditNoteRepository;
             _orderRepository = orderRepository;
+            _sapManager = sapManager;
+            _backgroundJobManager = backgroundJobManager;
         }
 
         public override async Task<CreditNoteDto> GetAsync(Guid id)
@@ -37,6 +45,26 @@ namespace Grintsys.EasyPOS.CreditNote
             var order = await _creditNoteRepository.GetCreditNoteByIdAsync(id);
             var dto = ObjectMapper.Map<CreditNote, CreditNoteDto>(order);
             return dto;
+        }
+
+        public override Task<CreditNoteDto> CreateAsync(CreateUpdateCreditNoteDto input)
+        {
+            input.State = DocumentState.Transferred;
+            var document = base.CreateAsync(input);
+
+            var dto = new CreateOrUpdateSalesOrder()
+            {
+                CreatedDate = document.Result.CreationTime,
+                CustomerCode = input.CustomerCode,
+                CustomerName = input.CustomerName,
+                SalesPersonId = 1,
+                WarehouseCode = input.WarehouseCode,
+                Lines = input.Items.Select(x => Map(x)).ToList()
+            };
+
+            _backgroundJobManager.EnqueueAsync(_sapManager.CreateCreditNoteAsync(dto));
+
+            return document;
         }
 
         public async Task<List<CreditNoteDto>> GetCreditNoteList(string filter)
@@ -106,6 +134,22 @@ namespace Grintsys.EasyPOS.CreditNote
             };
 
             await base.UpdateAsync(id, createUpdateDto);
+        }
+
+        private OrderItemDto Map(CreateUpdateCreditNoteItemDto item)
+        {
+            return new OrderItemDto()
+            {
+                ProductId = item.ProductId,
+                Name = item.Name,
+                Description = item.Description,
+                Code = item.Code,
+                Quantity = item.Quantity,
+                SalePrice = item.SalePrice,
+                Taxes = item.Taxes,
+                Discount = item.Discount,
+                TotalItem = item.TotalItem
+            };
         }
     }
 }
