@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Domain.Repositories;
 
 namespace Grintsys.EasyPOS.Customer
@@ -21,14 +22,17 @@ namespace Grintsys.EasyPOS.Customer
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly ISapManager _sapManager;
+        private readonly IBackgroundJobManager _backgroundJobManager;
 
 
         public CustomerAppService(IRepository<Customer, Guid> repository, 
             ICustomerRepository customerRepository,
-            ISapManager sapManager) : base(repository)
+            ISapManager sapManager,
+            IBackgroundJobManager backgroundJobManager) : base(repository)
         {
             _customerRepository = customerRepository;
             _sapManager = sapManager;
+            _backgroundJobManager = backgroundJobManager;
         }
 
         public override Task<CustomerDto> CreateAsync(CreateUpdateCustomerDto input)
@@ -46,7 +50,7 @@ namespace Grintsys.EasyPOS.Customer
                 SalesPersonCode = 1,
             };
 
-            _sapManager.CreateCustomerAsync(customerDto);
+            _backgroundJobManager.EnqueueAsync(_sapManager.CreateCustomerAsync(customerDto));            
 
             return customer;
         }

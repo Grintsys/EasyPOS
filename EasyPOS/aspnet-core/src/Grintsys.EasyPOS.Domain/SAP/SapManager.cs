@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 using SAPbobsCOM;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 using Volo.Abp.Domain.Repositories;
 
 namespace Grintsys.EasyPOS.SAP
@@ -14,12 +14,18 @@ namespace Grintsys.EasyPOS.SAP
     {
         private readonly IConfiguration _settingProvider;
         private readonly IRepository<Product.Product> _productRepository;
+        private readonly IRepository<Customer.Customer> _customerRepository;
+        private readonly ILogger<SapManager> _logger;
 
         public SapManager(IConfiguration settingProvider, 
-            IRepository<Product.Product> products)
+            IRepository<Product.Product> products,
+            IRepository<Customer.Customer> customers,
+            ILogger<SapManager> logger)
         {
             _settingProvider = settingProvider;
             _productRepository = products;
+            _customerRepository = customers;
+            _logger = logger;
         }
 
         public async Task<SapResponse> CreateCreditNoteAsync(CreateOrUpdateSalesOrder input)
@@ -30,9 +36,13 @@ namespace Grintsys.EasyPOS.SAP
             var sapMessage = string.Format("Successfully added Sales Order DocEntry: {0}", oCompany.GetNewObjectKey());
             var isSuccess = true;
 
+            _logger.LogInformation("Creating CreditNote");
+
             if (companyResponse != 0)
-            {
+            {    
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
+                _logger.LogError(errorMessage, errorCode);
+
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
 
@@ -40,7 +50,6 @@ namespace Grintsys.EasyPOS.SAP
             document.CardCode = input.CustomerCode;
             document.CardName = input.CustomerName;
             document.Comments = $"Creado por {nameof(SapManager)} en EasyPOS";
-            //salesOrder.Series = input.Series;
             document.SalesPersonCode = input.SalesPersonId;
             document.DocDueDate = input.CreatedDate;
 
@@ -57,10 +66,6 @@ namespace Grintsys.EasyPOS.SAP
                 //salesOrder.Lines.TaxCode = item.Taxes;
                 document.Lines.DiscountPercent = item.Discount;
                 document.Lines.WarehouseCode = input.WarehouseCode;
-                ////settigs by tenant
-                //salesOrder.Lines.CostingCode = tenant.CostingCode;
-                //salesOrder.Lines.CostingCode2 = tenant.CostingCode2;
-                //salesOrder.Lines.CostingCode3 = dimension;
                 document.Lines.Add();
             }
             // add Sales Order
@@ -70,14 +75,17 @@ namespace Grintsys.EasyPOS.SAP
                         + oCompany.GetLastErrorCode().ToString()
                         + " - "
                         + oCompany.GetLastErrorDescription();
+
+                _logger.LogError(sapMessage);
             }
 
             //TODO:
-            //update order status
+            //Add summary information into sap sync table
 
             //recomended from http://www.appseconnect.com/di-api-memory-leak-in-sap-business-one-9-0/
             //System.Runtime.InteropServices.Marshal.ReleaseComObject(salesOrder);
             oCompany.Disconnect();
+            _logger.LogInformation("Successfully created");
 
             var response =
                 new SapResponse
@@ -104,17 +112,23 @@ namespace Grintsys.EasyPOS.SAP
 
             try
             {
+                _logger.LogInformation("Creating Customer");
+
                 IBusinessPartners document = (IBusinessPartners)company.GetBusinessObject(BoObjectTypes.oBusinessPartners);
                 document.CardName = input.CustomerName;
                 document.CardCode = input.CustomerCode;
+                document.Phone1 = input.Phone1;
+                document.Phone2 = input.Phone2;
                 document.Address = input.Address;
                 document.CardType = BoCardTypes.cCustomer;
                 document.SalesPersonCode = input.SalesPersonCode;
+                //It's a default field
                 document.FederalTaxID = "000000000000";
 
                 if (document.UserFields.Fields.Count > 0)
                 {
-                    //document.UserFields.Fields.Item("U_NIT").Value = input.RTN;
+                    document.UserFields.Fields.Item("u_rtn").Value = input.RTN;
+                    document.UserFields.Fields.Item("u_cedula").Value = input.Cedula;
                 }
 
                 if (document.Add() != 0)
@@ -124,16 +138,21 @@ namespace Grintsys.EasyPOS.SAP
                             + company.GetLastErrorCode().ToString()
                             + " - "
                             + company.GetLastErrorDescription();
+
+                    _logger.LogError(sapMessage);
                 }
             }
             catch(Exception e)
             {
                 isSuccess = false;
                 sapMessage = e.Message;
+
+                _logger.LogError(sapMessage);
             }          
 
             //System.Runtime.InteropServices.Marshal.ReleaseComObject(businessPartner);
             company.Disconnect();
+            _logger.LogInformation("Successfull created");
 
             var response = new SapResponse
             {
@@ -192,10 +211,13 @@ namespace Grintsys.EasyPOS.SAP
                         + oCompany.GetLastErrorCode().ToString()
                         + " - "
                         + oCompany.GetLastErrorDescription();
+
+                _logger.LogError(sapMessage);
             }
 
             //TODO:
             //update order status
+            _logger.LogInformation("successfull created");
 
             //recomended from http://www.appseconnect.com/di-api-memory-leak-in-sap-business-one-9-0/
             //System.Runtime.InteropServices.Marshal.ReleaseComObject(salesOrder);
@@ -213,6 +235,8 @@ namespace Grintsys.EasyPOS.SAP
 
         public async Task<SapResponse> CreateSalesOrderAsync(CreateOrUpdateSalesOrder input)
         {
+            _logger.LogInformation("Creating sales order");
+
             Company oCompany = GetCompany();
 
             var companyResponse = oCompany.Connect();
@@ -246,10 +270,6 @@ namespace Grintsys.EasyPOS.SAP
                 //salesOrder.Lines.TaxCode = item.Taxes;
                 document.Lines.DiscountPercent = item.Discount;
                 document.Lines.WarehouseCode = input.WarehouseCode;
-                ////settigs by tenant
-                //salesOrder.Lines.CostingCode = tenant.CostingCode;
-                //salesOrder.Lines.CostingCode2 = tenant.CostingCode2;
-                //salesOrder.Lines.CostingCode3 = dimension;
                 document.Lines.Add();
             }
             // add Sales Order
@@ -259,7 +279,11 @@ namespace Grintsys.EasyPOS.SAP
                         + oCompany.GetLastErrorCode().ToString()
                         + " - "
                         + oCompany.GetLastErrorDescription();
+
+                _logger.LogError(sapMessage);
             }
+
+            _logger.LogInformation("Successfully created");
 
             //TODO:
             //update order status
@@ -278,37 +302,178 @@ namespace Grintsys.EasyPOS.SAP
             return response;
         }
 
-        public async Task<List<CustomerDto>> GetCustomerListAsync()
+        public async Task<CompanyMetadataDto> GetCompanyMetadata()
         {
-            using StreamReader r = new(@"Data\customersDummy.json");
-            string json = await r.ReadToEndAsync();
-            List<CustomerDto> items = JsonConvert.DeserializeObject<List<CustomerDto>>(json);
-            return items;
+            _logger.LogInformation("Getting company metada");
+
+            Company oCompany = GetCompany();
+            var companyResponse = oCompany.Connect();
+
+            if (companyResponse != 0)
+            {
+                oCompany.GetLastError(out int errorCode, out string errorMessage);
+                throw new ArgumentException($"{errorCode}: {errorMessage}");
+            }
+
+            Recordset oRecordSet = oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+
+            var query = _settingProvider.GetValue<string>("Queries:Banks");
+
+            oRecordSet.DoQuery(query);
+
+            string stringData = oRecordSet.GetAsXML();
+
+            oCompany.Disconnect();
+
+            XmlDocument xml = new();
+            xml.LoadXml(stringData);
+            var nodeList = xml.SelectNodes("/BOM/BO/DSC1/row");
+
+            var banks = nodeList.Cast<XmlNode>()
+                .Select(a => new BankDto
+                {
+                    BankCode = a.SelectSingleNode("BankCode").InnerText,
+                    Account = a.SelectSingleNode("Account").InnerText,
+                })
+                .ToList();
+
+
+            //TODO: implement taxes information and get currency
+            var companyMetadata = new CompanyMetadataDto
+            {
+                Currency = "GT",
+                Banks = banks
+            };
+
+            return companyMetadata;
         }
 
-        public async Task<List<ProductDto>> GetProductListAsync()
+        public async Task<List<CustomerDto>> GetCustomerListAsync(int skipCount = 100)
         {
-            using StreamReader r = new(@"Data\productsDummy.json");
-            string json = await r.ReadToEndAsync();
-            List<ProductDto> items = JsonConvert.DeserializeObject<List<ProductDto>>(json);
+            Company oCompany = GetCompany();
+            var companyResponse = oCompany.Connect();
+
+            if (companyResponse != 0)
+            {
+                oCompany.GetLastError(out int errorCode, out string errorMessage);
+                throw new ArgumentException($"{errorCode}: {errorMessage}");
+            }
+
+            Recordset oRecordSet = oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+
+            var query = _settingProvider.GetValue<string>("Queries:Customers");
+
+            oRecordSet.DoQuery(query);
+
+            string stringData = oRecordSet.GetAsXML();
+
+            oCompany.Disconnect();
+
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(stringData);
+            var nodeList = xml.SelectNodes("/BOM/BO/OCRD/row");
+
+            var customers = nodeList.Cast<XmlNode>()
+                .Select(a => new CustomerDto
+                {
+                    CardCode = a.SelectSingleNode("CardCode").InnerText,
+                    CardName = a.SelectSingleNode("CardName").InnerText,
+                    Address = a.SelectSingleNode("Address").InnerText,
+                    Celular = a.SelectSingleNode("Celular").InnerText,
+                    Phone1 = a.SelectSingleNode("Phone1").InnerText,
+                    Phone2 = a.SelectSingleNode("Phone2").InnerText,
+                    City = a.SelectSingleNode("City").InnerText,
+                    Balance = decimal.Parse(a.SelectSingleNode("Balance").InnerText),
+                    RTN = a.SelectSingleNode("RTN").InnerText,
+                    Cedula = a.SelectSingleNode("Cedula").InnerText,
+                    CartType = char.Parse(a.SelectSingleNode("CartType").InnerText),
+                    CreateDate = DateTime.Parse(a.SelectSingleNode("CreateDate").InnerText),
+                    Email = a.SelectSingleNode("Email").InnerText
+                })
+                .ToList();
+
+            return customers.Take(skipCount).ToList();
+        }
+
+        public async Task<List<ProductDto>> GetProductListAsync(int skipCount = 100)
+        {
+            Company oCompany = GetCompany();
+            var companyResponse = oCompany.Connect();
+
+            if (companyResponse != 0)
+            {
+                oCompany.GetLastError(out int errorCode, out string errorMessage);
+                throw new ArgumentException($"{errorCode}: {errorMessage}");
+            }
+
+            Recordset oRecordSet = oCompany.GetBusinessObject(BoObjectTypes.BoRecordset);
+
+            var query = _settingProvider.GetValue<string>("Queries:Items");
+
+            oRecordSet.DoQuery(query);
+
+            string stringData = oRecordSet.GetAsXML();
+
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(stringData);
+            var nodeList = xml.SelectNodes("/BOM/BO/OITW/row");
+
+            var products = nodeList.Cast<XmlNode>()
+                .Select(a => new ProductDto 
+                { 
+                    ItemCode = a.SelectSingleNode("ItemCode").InnerText,
+                    ItemName = a.SelectSingleNode("ItemName").InnerText,
+                    OnHand = double.Parse(a.SelectSingleNode("OnHand").InnerText),
+                    SalesPrice = double.Parse(a.SelectSingleNode("AvgPrice").InnerText),
+                    WhsCode = a.SelectSingleNode("WhsCode").InnerText
+                })
+                .ToList();
+   
+            return products.Take(skipCount).ToList();
+        }
+
+        public async Task UpsertProducts()
+        {
+            var items = await GetProductListAsync();
 
             foreach (var item in items)
             {
                 var productToUpdate = _productRepository.FirstOrDefault(x => x.Code == item.ItemCode);
-                var product = MapProduct(item);
+
+                var whsId = productToUpdate.ProductWarehouse.FirstOrDefault().Id;
+                var product = MapProduct(item, whsId);
                 var hasProduct = !(productToUpdate is null);
 
                 if (hasProduct)
                 {
-                    await _productRepository.UpdateAsync(product);
+                    await _productRepository.UpdateAsync(productToUpdate);
                 }
                 else
                 {
                     await _productRepository.InsertAsync(product);
                 }
-
             }
-            return items;
+        }
+
+        public async Task UpsertCustomers()
+        {
+            var items = await GetCustomerListAsync();
+
+            foreach (var item in items)
+            {
+                var customertToUpdate = _customerRepository.FirstOrDefault(x => x.Code == item.CardCode);
+                var customer = MapCustomer(item);
+                var hasCustomer = !(customertToUpdate is null);
+
+                if (hasCustomer)
+                {
+                    await _customerRepository.UpdateAsync(customertToUpdate);
+                }
+                else
+                {
+                    await _customerRepository.InsertAsync(customer);
+                }
+            }
         }
 
         private Company GetCompany()
@@ -327,15 +492,42 @@ namespace Grintsys.EasyPOS.SAP
             return oCompany;
         }
 
-        private Product.Product MapProduct(ProductDto item) =>
-           new()
-           {
-               Name = item.ItemName,
-               Code = item.ItemCode,
-               //ProductWarehouse = item.WarehouseCode,
-               Description = item.ItemName,
-               SalePrice = item.SalesPrice,
-           };
+
+        private Customer.Customer MapCustomer(CustomerDto customer)
+        {
+            return new Customer.Customer
+            {
+                Code = customer.CardCode,
+                FirstName = customer.CardName,
+                Address = customer.Address,
+                RTN = customer.RTN,
+                PhoneNumber = customer.Phone1,
+                IdNumber = customer.Cedula,
+                Status = Enums.CustomerStatus.Transferred
+            };
+        }
+
+        private Product.Product MapProduct(ProductDto item, Guid warehouseId)
+        {
+            var product = new Product.Product()
+            {
+                Code = item.ItemCode,
+                Name = item.ItemName,
+                Description = item.ItemName,
+                SalePrice = (float)item.SalesPrice
+            };
+
+            var productWarehouseDto = new Product.ProductWarehouse()
+            {
+                WarehouseId =  warehouseId,
+                Inventory = (int)item.OnHand,
+                ProductId = product.Id,  
+            };
+
+            product.ProductWarehouse.Add(productWarehouseDto);
+
+            return product;
+        }
     }
 
 }
