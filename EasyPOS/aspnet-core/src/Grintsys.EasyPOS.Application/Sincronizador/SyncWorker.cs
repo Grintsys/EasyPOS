@@ -1,15 +1,16 @@
 ﻿using Grintsys.EasyPOS.SAP;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundWorkers;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
+using Volo.Abp.Uow;
 
 namespace Grintsys.EasyPOS.Sincronizador
 {
     public class SyncWorker
-        : AsyncPeriodicBackgroundWorkerBase
+        : AsyncPeriodicBackgroundWorkerBase, ISingletonDependency
     {
 
         public SyncWorker(
@@ -22,6 +23,7 @@ namespace Grintsys.EasyPOS.Sincronizador
             Timer.Period = 600000; //10 minutes
         }
 
+        [UnitOfWork]
         protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
             Logger.LogInformation("Starting: Sync Worker");
