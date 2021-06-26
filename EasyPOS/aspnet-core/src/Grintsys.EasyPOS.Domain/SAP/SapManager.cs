@@ -11,7 +11,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Grintsys.EasyPOS.SAP
 {
-    public class SapManager /*: ISapManager*/
+    public class SapManager : ISapManager
     {
         private readonly IConfiguration _settingProvider;
         private readonly IRepository<Product.Product> _productRepository;
