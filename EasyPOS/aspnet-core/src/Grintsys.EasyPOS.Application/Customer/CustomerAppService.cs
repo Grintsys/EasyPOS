@@ -48,6 +48,7 @@ namespace Grintsys.EasyPOS.Customer
                 CustomerName = customer.Result.FirstName + " " + customer.Result.LastName,
                 RTN = customer.Result.RTN,
                 SalesPersonCode = 1,
+                Cedula = customer.Result.IdNumber
             };
 
             _backgroundJobManager.EnqueueAsync(_sapManager.CreateCustomerAsync(customerDto));            
@@ -65,12 +66,12 @@ namespace Grintsys.EasyPOS.Customer
                 filter = filter.ToLower();
                 dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), 
                     x => x.FirstName.ToLower().Contains(filter) 
-                    || x.LastName.ToLower().Contains(filter)
-                    || x.FullName.ToLower().Contains(filter)
-                    || x.RTN.ToLower().Contains(filter)
-                    || x.IdNumber.ToLower().Contains(filter)
-                    || x.PhoneNumber.ToLower().Contains(filter)
-                    || x.Address.ToLower().Contains(filter)
+                    //|| x.LastName.ToLower().Contains(filter)
+                    //|| x.FullName.ToLower().Contains(filter)
+                    //|| x.RTN.ToLower().Contains(filter)
+                    //|| x.IdNumber.ToLower().Contains(filter)
+                    //|| x.PhoneNumber.ToLower().Contains(filter)
+                    //|| x.Address.ToLower().Contains(filter)
                     || x.Code.ToLower().Contains(filter))
                     .OrderBy(x => x.FirstName).ToList();
             }

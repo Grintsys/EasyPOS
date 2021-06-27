@@ -169,8 +169,8 @@ namespace Grintsys.EasyPOS.SAP
 
                 if (document.UserFields.Fields.Count > 0)
                 {
-                    document.UserFields.Fields.Item("u_rtn").Value = input.RTN;
-                    document.UserFields.Fields.Item("u_cedula").Value = input.Cedula;
+                    document.UserFields.Fields.Item("U_rtn").Value = input.RTN;
+                    document.UserFields.Fields.Item("U_cedula").Value = input.Cedula;
                 }
 
                 if (document.Add() != 0)
@@ -303,90 +303,106 @@ namespace Grintsys.EasyPOS.SAP
 
         public async Task<SapResponse> CreateSalesOrderAsync(CreateOrUpdateSalesOrder input)
         {
-            _logger.LogInformation("Creating sales order");
+             _logger.LogInformation("Creating sales order");
 
-            Company oCompany = GetCompany();
+         
+                Company oCompany = GetCompany();
 
-            var companyResponse = oCompany.Connect();
-            var sapMessage = string.Format("Successfully added Sales Order DocEntry: {0}", oCompany.GetNewObjectKey());
-            var isSuccess = true;
+                var companyResponse = oCompany.Connect();
+                var sapMessage = string.Format("Successfully added Sales Order DocEntry: {0}", oCompany.GetNewObjectKey());
+                var isSuccess = true;
 
-            var syncRecord = new Sincronizador.Sincronizador()
+                var syncRecord = new Sincronizador.Sincronizador()
+                {
+                    TipoTransaccion = Enums.Transacciones.CreacionOrden,
+                    Data = JsonConvert.SerializeObject(input),
+                    Estado = Enums.SyncEstados.Transferred
+                };
+
+
+            try
             {
-                TipoTransaccion = Enums.Transacciones.CreacionOrden,
-                Data = JsonConvert.SerializeObject(input),
-                Estado = Enums.SyncEstados.Transferred
-            };
 
-            if (companyResponse != 0)
-            {
-                oCompany.GetLastError(out int errorCode, out string errorMessage);
+                if (companyResponse != 0)
+                {
+                    oCompany.GetLastError(out int errorCode, out string errorMessage);
 
-                syncRecord.Message = errorMessage;
-                syncRecord.Estado = Enums.SyncEstados.Failed;
+                    syncRecord.Message = errorMessage;
+                    syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                    await _syncRepository.InsertAsync(syncRecord);
+
+                    throw new ArgumentException($"{errorCode}: {errorMessage}");
+                }
+
+                IDocuments document = (IDocuments)oCompany.GetBusinessObject(BoObjectTypes.oOrders);
+                document.CardCode = input.CustomerCode;
+                document.CardName = input.CustomerName;
+                document.Comments = $"Creado por {nameof(SapManager)} en EasyPOS";
+                //salesOrder.Series = input.Series;
+                document.SalesPersonCode = input.SalesPersonId;
+                document.DocDueDate = input.CreatedDate;
+
+                //if (salesOrder.UserFields.Fields.Count > 0)
+                //{
+                //    salesOrder.UserFields.Fields.Item("U_FacNit").Value = client == null ? string.Empty : string.IsNullOrWhiteSpace(client.RTN) ? string.Empty : client.RTN;
+                //    salesOrder.UserFields.Fields.Item("U_M2_UUID").Value = order.U_M2_UUID.ToString();
+                //}
+
+                foreach (var item in input.Lines)
+                {
+                    document.Lines.ItemCode = item.Code;
+                    document.Lines.Quantity = item.Quantity;
+                    //salesOrder.Lines.TaxCode = item.Taxes;
+                    document.Lines.DiscountPercent = item.Discount;
+                    document.Lines.WarehouseCode = input.WarehouseCode;
+                    document.Lines.Add();
+                }
+                // add Sales Order
+                if (document.Add() != 0)
+                {
+                    sapMessage = "Error Code: "
+                            + oCompany.GetLastErrorCode().ToString()
+                            + " - "
+                            + oCompany.GetLastErrorDescription();
+
+                    syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                    _logger.LogError(sapMessage);
+                }
+
+                _logger.LogInformation("Successfully created");
+
+                //TODO:
+                //update order status
+
+                //recomended from http://www.appseconnect.com/di-api-memory-leak-in-sap-business-one-9-0/
+                //System.Runtime.InteropServices.Marshal.ReleaseComObject(salesOrder);
+                oCompany.Disconnect();
+
+                var response =
+                    new SapResponse
+                    {
+                        IsSuccess = isSuccess,
+                        Message = sapMessage
+                    };
+
+                syncRecord.Message = sapMessage;
 
                 await _syncRepository.InsertAsync(syncRecord);
 
-                throw new ArgumentException($"{errorCode}: {errorMessage}");
+                return response;
+
             }
-
-            IDocuments document = (IDocuments)oCompany.GetBusinessObject(BoObjectTypes.oOrders);
-            document.CardCode = input.CustomerCode;
-            document.CardName = input.CustomerName;
-            document.Comments = $"Creado por {nameof(SapManager)} en EasyPOS";
-            //salesOrder.Series = input.Series;
-            document.SalesPersonCode = input.SalesPersonId;
-            document.DocDueDate = input.CreatedDate;
-
-            //if (salesOrder.UserFields.Fields.Count > 0)
-            //{
-            //    salesOrder.UserFields.Fields.Item("U_FacNit").Value = client == null ? string.Empty : string.IsNullOrWhiteSpace(client.RTN) ? string.Empty : client.RTN;
-            //    salesOrder.UserFields.Fields.Item("U_M2_UUID").Value = order.U_M2_UUID.ToString();
-            //}
-
-            foreach (var item in input.Lines)
+            catch(Exception e)
             {
-                document.Lines.ItemCode = item.Code;
-                document.Lines.Quantity = item.Quantity;
-                //salesOrder.Lines.TaxCode = item.Taxes;
-                document.Lines.DiscountPercent = item.Discount;
-                document.Lines.WarehouseCode = input.WarehouseCode;
-                document.Lines.Add();
-            }
-            // add Sales Order
-            if (document.Add() != 0)
-            {
-                sapMessage = "Error Code: "
-                        + oCompany.GetLastErrorCode().ToString()
-                        + " - "
-                        + oCompany.GetLastErrorDescription();
-
+                _logger.LogError(e.Message);
+                syncRecord.Message = e.Message;
                 syncRecord.Estado = Enums.SyncEstados.Failed;
-
-                _logger.LogError(sapMessage);
+                await _syncRepository.InsertAsync(syncRecord);
             }
 
-            _logger.LogInformation("Successfully created");
-
-            //TODO:
-            //update order status
-
-            //recomended from http://www.appseconnect.com/di-api-memory-leak-in-sap-business-one-9-0/
-            //System.Runtime.InteropServices.Marshal.ReleaseComObject(salesOrder);
-            oCompany.Disconnect();
-
-            var response =
-                new SapResponse
-                {
-                    IsSuccess = isSuccess,
-                    Message = sapMessage
-                };
-
-            syncRecord.Message = sapMessage;
-
-            await _syncRepository.InsertAsync(syncRecord);
-
-            return response;
+            return null;
         }
 
         public async Task<CompanyMetadataDto> GetCompanyMetadata()
@@ -573,7 +589,7 @@ namespace Grintsys.EasyPOS.SAP
         public async Task UpsertProducts()
         {
             var savedDict = new Dictionary<string, Guid>();
-            var items = await GetProductListAsync();
+            var items = await GetProductListAsync(10000);
 
             foreach (var item in items)
             {
@@ -609,7 +625,7 @@ namespace Grintsys.EasyPOS.SAP
 
         public async Task UpsertCustomers()
         {
-            var items = await GetCustomerListAsync();
+            var items = await GetCustomerListAsync(1000);
 
             foreach (var item in items)
             {

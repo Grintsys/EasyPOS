@@ -1,6 +1,7 @@
 ﻿using Grintsys.EasyPOS.SAP;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.DependencyInjection;
@@ -20,13 +21,14 @@ namespace Grintsys.EasyPOS.Sincronizador
             timer,
             serviceScopeFactory)
         {
-            Timer.Period = 60000; //10 minutes
+            Timer.Period = 60000; //1 minutes
         }
 
         [UnitOfWork]
         protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
-            Logger.LogInformation("Starting: Sync Worker");
+            var startTime = DateTime.UtcNow;
+            Logger.LogInformation($"Starting: Sync Worker, {startTime}");
 
             //Resolve dependencies
             var _sapManager = workerContext
@@ -37,7 +39,8 @@ namespace Grintsys.EasyPOS.Sincronizador
             await _sapManager.UpsertProducts();
             await _sapManager.UpsertCustomers();
 
-            Logger.LogInformation("Completed: Sync Worker");
+            var endTime = DateTime.UtcNow;
+            Logger.LogInformation($"Completed: Sync Worker, {endTime}");
         }
     }
 }
