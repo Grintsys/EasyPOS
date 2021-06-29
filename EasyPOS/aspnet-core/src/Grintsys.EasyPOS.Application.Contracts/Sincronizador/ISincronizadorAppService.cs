@@ -15,5 +15,6 @@ namespace Grintsys.EasyPOS.Sincronizador
         >
     {
         Task<List<SincronizadorDto>> GetSyncList(string filter);
+        Task<List<SincronizadorDto>> Retry(Guid id);
     }
 }

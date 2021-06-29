@@ -53,7 +53,7 @@ export class SyncService implements Resolve<any> {
     }
 
     public retry(id: string): Promise<any> {
-        var url = `${this.baseUrl}/${id}`
+        var url = `${this.baseUrl}/${id}/retry`
         const promise = this._httpClient.post<SyncDto>(url, this.getHttpOptions()).toPromise();
         return promise;
     } 

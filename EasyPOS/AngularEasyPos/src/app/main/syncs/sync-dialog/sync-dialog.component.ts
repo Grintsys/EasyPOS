@@ -5,6 +5,7 @@ import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.
 
 import { locale as english } from '../i18n/en';
 import { locale as spanish } from '../i18n/es';
+import { SyncDto } from '../sync.model';
 
 @Component({
     selector: 'sync-dialog',
@@ -15,7 +16,7 @@ import { locale as spanish } from '../i18n/es';
 export class SyncDialogComponent implements OnInit {
 
     formatJsonForm: FormGroup;
-    jsonFormat: string;
+    syncData: SyncDto;
 
     centered = false;
     disabled = false;
@@ -25,14 +26,8 @@ export class SyncDialogComponent implements OnInit {
     color: string;
 
     paymentMethod: Object[];
+    dialogType: string;
 
-    /**
-     * Constructor
-     * @param {FormBuilder} _formBuilder
-     * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
-     * @param {MatDialogRef<MailNgrxComposeDialogComponent>} matDialogRef
-     * @param _data
-     */
     constructor(
         private _formBuilder: FormBuilder,
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
@@ -40,25 +35,34 @@ export class SyncDialogComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) private _data: any,
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
-        this.jsonFormat = _data.data;
+        this.syncData = _data.syncDto;
+        this.dialogType = _data.mode;
     }
 
     ngOnInit(): void {
         this.formatJsonForm = this.createJsonForm();
-
     }
 
     save() {
-        this.matDialogRef.close(this.jsonFormat);
+        this.matDialogRef.close(this.syncData.data);
+    }
+
+    close(){
+        this.matDialogRef.close(undefined);
     }
 
     dataChange(event) {
-        this.jsonFormat = event;
+        this.syncData.data = event;
     }
 
     createJsonForm(): FormGroup {
         return this._formBuilder.group({
-            jsonFormat: new FormControl(this.jsonFormat),
+            jsonData: new FormControl({
+                value: this.syncData.data, disabled: this.dialogType == 'view'
+            }),
+            message: new FormControl({
+                value: this.syncData.message, disabled: true
+            })
         });
     }
 

@@ -4,22 +4,23 @@
       <mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center">
         <div fxLayoutAlign="center center">
           <mat-icon class="mr-8">edit</mat-icon>
-          <span class="title dialog-title">Editar documento</span>
+          <span *ngIf="dialogType == 'edit'" class="title dialog-title">Editar registro</span>
+          <span *ngIf="dialogType == 'view'" class="title dialog-title">Ver registro</span>
         </div>
-        <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+        <button mat-icon-button (click)="close()" aria-label="Close dialog">
             <mat-icon>close</mat-icon>
         </button>
       </mat-toolbar-row>
   </mat-toolbar>
 
   <div mat-dialog-content fusePerfectScrollbar class="h-100-p">
-    <div class="alert-message">
+    <div *ngIf="dialogType == 'edit'" class="alert-message">
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
         <mat-icon class="mr-24">warning</mat-icon>
         <p>Te encuentras en modo edición JSON. <span>Evita eliminar datos sin conocimiento.</span></p>
       </div>
       <button mat-stroked-button
-        (click)="matDialogRef.close(['send'])"
+        (click)="close()"
         class="exit-button"
         aria-label="EXIT">
           <mat-icon class="mr-8">exit_to_app</mat-icon>
@@ -29,15 +30,19 @@
 
     <form name="formatJsonForm" [formGroup]="formatJsonForm" class="m-24">
       <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-        <mat-label>Formato JSON</mat-label>
-        <textarea matInput placeholder="json format here"  (input)='dataChange($event.target.value)' name="jsonFormat" formControlName="jsonFormat"></textarea>
+        <mat-label>Mensaje</mat-label>
+        <textarea matInput placeholder="Mensaje"  name="message" formControlName="message"></textarea>
+      </mat-form-field>
+      <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+        <mat-label>JSON</mat-label>
+        <textarea matInput placeholder="json data"  (input)='dataChange($event.target.value)' name="jsonData" formControlName="jsonData"></textarea>
       </mat-form-field>
     </form>
 
   </div>
 
   <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end end">
-    <button mat-raised-button
+    <button *ngIf="dialogType == 'edit'" mat-raised-button
             color="accent"
             (click)="save()"
             class="save-button"

@@ -40,7 +40,7 @@ export class CreateUpdateSyncDto {
 export enum SyncEstados {
     Fallido = 0,
     Transferido = 1,
-    Creado = 3
+    Creado = 2
 }
 
 export enum Transacciones {

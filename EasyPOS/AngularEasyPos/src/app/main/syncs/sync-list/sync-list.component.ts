@@ -31,7 +31,7 @@ export class SyncListComponent {
   filter: ElementRef;
 
   dataSource = new MatTableDataSource();
-  displayedColumnSyncDown: string[] = ['fecha', 'data', 'informationType','message', 'status', 'options'];
+  displayedColumnSyncDown: string[] = ['fecha', 'data', 'informationType', 'message', 'status', 'options'];
 
   syncList: SyncDto[];
   dialogRef: any;
@@ -94,27 +94,51 @@ export class SyncListComponent {
     );
   }
 
-  check(estado: SyncEstados){
-    if(estado == SyncEstados.Fallido)
+  validateRetry(syncDto: SyncDto){
+    if(syncDto.estado == 2 
+      && (syncDto.tipoTransaccion == Transacciones.CreacionCliente
+      || syncDto.tipoTransaccion == Transacciones.CreacionNotaDebito
+      || syncDto.tipoTransaccion == Transacciones.CreacionOrden
+      || syncDto.tipoTransaccion == Transacciones.CreacionNotaCredito)){
+        return true;
+      }
+      return false;
+  }
+
+  check(estado: SyncEstados) {
+    if (estado == SyncEstados.Fallido)
       return true;
     return false;
   }
 
-  openDialogToEditJSON(data: SyncDto): void {
+  openDialogToEditJSON(syncData: SyncDto): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass = "edit-JSON-dialog";
-    dialogConfig.data = data;
-
+    dialogConfig.data = {
+      syncDto: syncData,
+      mode: 'edit'
+    };
     this.dialogRef = this._matDialog.open(SyncDialogComponent, dialogConfig);
 
     this.dialogRef.afterClosed()
       .subscribe(response => {
-        if (!response) {
-          return;
+        if (response != undefined) {
+          syncData.data = response;
+          this.updateJson(syncData);
         }
-        data.data = response;
-        this.updateJson(data);
+
       });
+  }
+
+  openViewData(syncData: SyncDto): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = "edit-JSON-dialog";
+    dialogConfig.data = {
+      syncDto: syncData,
+      mode: 'view'
+    };
+
+    this.dialogRef = this._matDialog.open(SyncDialogComponent, dialogConfig);
   }
 
   mapTransaccionesEnum(value: Transacciones) {
