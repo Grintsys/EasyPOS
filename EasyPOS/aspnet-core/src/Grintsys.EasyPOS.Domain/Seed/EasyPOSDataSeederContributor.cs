@@ -162,8 +162,7 @@ namespace Grintsys.EasyPOS.Seed
             var cus1 = await _customerRepository.InsertAsync(
                 new Customer.Customer()
                 {
-                    FirstName = "Jane",
-                    LastName = "Doe",
+                    FullName = "Jane Doe",
                     IdNumber = "1618199791312",
                     RTN = "16181997913120",
                     Address = "San Pedro Sula, Colonia Los Alamos",
@@ -175,8 +174,7 @@ namespace Grintsys.EasyPOS.Seed
             var cus2 = await _customerRepository.InsertAsync(
                 new Customer.Customer()
                 {
-                    FirstName = "John",
-                    LastName = "Doe",
+                    FullName = "John Doe",
                     IdNumber = "1618199791332",
                     RTN = "16181997913130",
                     Address = "San Pedro Sula, Colonia Los Alamos",

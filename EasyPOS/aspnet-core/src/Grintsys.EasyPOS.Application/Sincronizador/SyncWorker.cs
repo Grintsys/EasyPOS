@@ -21,7 +21,7 @@ namespace Grintsys.EasyPOS.Sincronizador
             timer,
             serviceScopeFactory)
         {
-            Timer.Period = 60000; //1 minutes
+            Timer.Period = 3600000; //1 hora
         }
 
         [UnitOfWork]

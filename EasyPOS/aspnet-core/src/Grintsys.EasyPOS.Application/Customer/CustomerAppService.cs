@@ -45,7 +45,7 @@ namespace Grintsys.EasyPOS.Customer
             {
                 CustomerCode = customer.Result.Code,
                 Address = customer.Result.Address,
-                CustomerName = customer.Result.FirstName + " " + customer.Result.LastName,
+                CustomerName = customer.Result.FullName,
                 RTN = customer.Result.RTN,
                 SalesPersonCode = 1,
                 Cedula = customer.Result.IdNumber
@@ -65,15 +65,13 @@ namespace Grintsys.EasyPOS.Customer
             {
                 filter = filter.ToLower();
                 dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), 
-                    x => x.FirstName.ToLower().Contains(filter) 
-                    //|| x.LastName.ToLower().Contains(filter)
-                    //|| x.FullName.ToLower().Contains(filter)
-                    //|| x.RTN.ToLower().Contains(filter)
-                    //|| x.IdNumber.ToLower().Contains(filter)
-                    //|| x.PhoneNumber.ToLower().Contains(filter)
-                    //|| x.Address.ToLower().Contains(filter)
-                    || x.Code.ToLower().Contains(filter))
-                    .OrderBy(x => x.FirstName).ToList();
+                    x => x.FullName.ToLower().Contains(filter) 
+                    || (!string.IsNullOrEmpty(x.RTN) && x.RTN.ToLower().Contains(filter))
+                    || (!string.IsNullOrEmpty(x.IdNumber) && x.IdNumber.ToLower().Contains(filter))
+                    || (!string.IsNullOrEmpty(x.PhoneNumber) && x.PhoneNumber.ToLower().Contains(filter))
+                    || (!string.IsNullOrEmpty(x.Address) && x.Address.ToLower().Contains(filter))
+                    || (!string.IsNullOrEmpty(x.Code) && x.Code.ToLower().Contains(filter)))
+                    .OrderBy(x => x.FullName).ToList();
             }
 
             return dto;

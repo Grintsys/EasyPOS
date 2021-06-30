@@ -17,7 +17,7 @@ namespace Grintsys.EasyPOS.Document
         public string WarehouseCode { get; set; }
         public Guid CustomerId { get; set; }
         public Customer.Customer Customer { get; set; }
-        public string CustomerName => Customer?.FirstName + " " + Customer?.LastName;
+        public string CustomerName => Customer?.FullName;
         public string CustomerCode => Customer?.Code;
     }
 }

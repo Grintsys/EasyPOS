@@ -5,10 +5,8 @@ namespace Grintsys.EasyPOS.Customer
 {
     public class CreateUpdateCustomerDto
     {
-        public string FirstName { get; set; }
+        public string FullName { get; set; }
 
-        public string LastName { get; set; }
-        
         [StringLength(13)]
         [RegularExpression(@"^(\d{13}|\s*)?$", ErrorMessage = "Id must be numeric")]
         public string IdNumber { get; set; }
