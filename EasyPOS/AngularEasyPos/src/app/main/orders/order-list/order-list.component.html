@@ -33,6 +33,14 @@
         <div class="content-card">
             <mat-table class="orders-table" #table [dataSource]="dataSource" matSort fusePerfectScrollbar>
 
+                <!-- FECHA Column -->
+                <ng-container matColumnDef="creationTime">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
+                    <mat-cell *matCellDef="let order" [routerLink]="'/document/'+order.id+'/'+order.url">
+                        <p class="text-truncate">{{order.creationTime | date:'dd/MM/yy, h:mm a'}}</p>
+                    </mat-cell>
+                </ng-container>
+
                 <!-- DOCUMENT_TYPE Column -->
                 <ng-container matColumnDef="documentType">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de Documento</mat-header-cell>

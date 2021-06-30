@@ -35,6 +35,7 @@ export class OrderListComponent {
 
     dataSource = new MatTableDataSource();
     displayedColumns: string[] = [
+        "creationTime",
         "documentType",
         "customerCode",
         "customerName",

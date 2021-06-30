@@ -69,6 +69,7 @@ export class DocumentDto<T> {
     items: T[] = [];
     salesPersonId: number;
     warehouseCode: string;
+    creationTime: Date;
 }
 
 export class DocumentItemDto {

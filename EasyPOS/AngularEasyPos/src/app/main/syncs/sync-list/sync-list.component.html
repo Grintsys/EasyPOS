@@ -48,7 +48,7 @@
                     <ng-container matColumnDef="fecha">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
                         <mat-cell *matCellDef="let SyncDown">
-                            <p class="text-truncate">{{SyncDown.creationTime}}</p>
+                            <p class="text-truncate">{{SyncDown.creationTime | date:'dd/MM/yy, h:mm a'}}</p>
                         </mat-cell>
                     </ng-container>
 
