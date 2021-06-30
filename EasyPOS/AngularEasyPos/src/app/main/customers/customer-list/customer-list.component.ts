@@ -42,8 +42,7 @@ export class CustomerListComponent {
     dataSource = new MatTableDataSource();
     displayedColumns: string[] = [
         "code",
-        "firstName",
-        "lastName",
+        "fullName",
         "idNumber",
         "rtn",
         "address",

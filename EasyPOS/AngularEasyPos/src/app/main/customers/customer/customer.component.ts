@@ -74,15 +74,8 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
     createcustomerForm(type: string): FormGroup {
         return this._formBuilder.group({
-            firstName: new FormControl(
-                { value: this.customer.firstName, disabled: type === "view" },
-                Validators.compose([
-                    Validators.required,
-                    Validators.minLength(1),
-                ])
-            ),
-            lastName: new FormControl(
-                { value: this.customer.lastName, disabled: type === "view" },
+            fullName: new FormControl(
+                { value: this.customer.fullName, disabled: type === "view" },
                 Validators.compose([
                     Validators.required,
                     Validators.minLength(1),
@@ -137,14 +130,10 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
     getFormObject(): CreateUpdateCustomerDto {
         let newCustomer = new CreateUpdateCustomerDto();
-        newCustomer.firstName =
-            this.customerForm.get("firstName").value == undefined
-                ? this.customer.firstName
-                : this.customerForm.get("firstName").value;
-        newCustomer.lastName =
-            this.customerForm.get("lastName").value == undefined
-                ? this.customer.lastName
-                : this.customerForm.get("lastName").value;
+        newCustomer.fullName =
+            this.customerForm.get("fullName").value == undefined
+                ? this.customer.fullName
+                : this.customerForm.get("fullName").value;
         newCustomer.idNumber =
             this.customerForm.get("idNumber").value == undefined
                 ? this.customer.idNumber

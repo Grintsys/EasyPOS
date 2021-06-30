@@ -156,7 +156,7 @@ export class PosSidebarComponent {
                 this.customer = response;
                 this.order.customerCode = this.customer.code;
                 this.order.customerId = this.customer.id;
-                this.order.customerName = this.customer.firstName + ' ' + this.customer.lastName;
+                this.order.customerName = this.customer.fullName;
             }
             this.validateOrder();
         });

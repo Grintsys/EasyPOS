@@ -52,22 +52,12 @@
                 </ng-container>
 
                 <!-- NAME Column -->
-                <ng-container matColumnDef="firstName">
+                <ng-container matColumnDef="fullName">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
                     <mat-cell *matCellDef="let customer"
                         [routerLink]="!isDialog ? '/customer/'+customer.id+'/view' : null"
                         (click)="selectCustomer(customer.id)">
-                        <p class="text-truncate">{{customer.firstName}}</p>
-                    </mat-cell>
-                </ng-container>
-
-                <!-- LASTNAME Column -->
-                <ng-container matColumnDef="lastName">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Apellido</mat-header-cell>
-                    <mat-cell *matCellDef="let customer"
-                        [routerLink]="!isDialog ? '/customer/'+customer.id+'/view' : null"
-                        (click)="selectCustomer(customer.id)">
-                        <p class="text-truncate">{{customer.lastName}}</p>
+                        <p class="text-truncate">{{customer.fullName}}</p>
                     </mat-cell>
                 </ng-container>
 
