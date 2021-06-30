@@ -14,7 +14,7 @@
         <div>{{productList.length}}</div>
         <p>Productos encontrados</p>
     </div>
-    <div *ngFor="let product of productList" class="body">
-        <app-product-card (newOrderItemEvent)="addOrderItem($event)" [product]="product"></app-product-card>
+    <div class="body">
+        <app-product-card *ngFor="let product of productList" (newOrderItemEvent)="addOrderItem($event)" [product]="product"></app-product-card>
     </div>
 </div>

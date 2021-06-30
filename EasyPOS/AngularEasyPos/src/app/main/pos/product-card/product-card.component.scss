@@ -7,6 +7,23 @@ $padding: 1em 1em 0 1em;;
     .card {
         border-radius: 8px;
         border: 1px solid #e4e4e4;
+        height: 100%;
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 140px;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: auto;
+                vertical-align: top;
+                border: none;
+                object-fit: cover;
+                filter: brightness(0.98);
+            }
+        }
 
         .card-header {
             padding: $padding;

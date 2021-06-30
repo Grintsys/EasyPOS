@@ -45,7 +45,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         this.input = new EventEmitter();
 
         this.collapsed = true;
-        this.productList = [];
+        // this.productList = [];
+        this.productList = this.dataTemp();
 
         this.subscription = _sharedService.selectedWarehouseId$.subscribe(
             () => {
@@ -103,5 +104,94 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
     addOrderItem(newItem: OrderItemDto) {
         this.newOrderItemEvent.emit(newItem);
+    }
+
+    dataTemp(): ProductDto[] {
+        return [
+            {
+                id: '1',
+                name: 'Filtro de Aceite SUPRAJIT COMPACT',
+                description: 'Filtro de Aceite SUPRAJIT COMPACT',
+                code: 'SBOF2011',
+                salePrice: 82.92,
+                taxes: 10,
+                isActive: true,
+                imageUrl: 'https://multicomer.com/wp-content/uploads/2013/01/12SBOF2011part_720x.jpg',
+                inventory: 250,
+                productWarehouse: [],
+            },
+            {
+                id: '2',
+                name: 'Zapata de freno SUPRAJIT PLSR/DSVR/APCH/GXT/GN125',
+                description: 'Zapata de Freno SUPRAJIT PLSR/DSVR/APCH/GXT/GN125',
+                code: 'SBOF2011',
+                salePrice: 107.89,
+                taxes: 50,
+                isActive: true,
+                imageUrl: 'https://multicomer.com/wp-content/uploads/2021/03/150-SBS0305-ZAPATA-DE-FRENO-SUPRAJIT-PLSR-DSVR-APCH-GXT-GN125-scaled.jpg',
+                inventory: 250,
+                productWarehouse: [],
+            },
+            {
+                id: '3',
+                name: 'Cable de Clutch SUPRAJIT 2013-2019',
+                description: 'Cable de Clutch SUPRAJIT 2013-2019',
+                code: 'AA191092-SUP',
+                salePrice: 233.97,
+                taxes: 50,
+                isActive: true,
+                imageUrl: 'https://multicomer.com/wp-content/uploads/2021/03/24-AA191092-SUP-CABLE-DE-CLUTCH-SUPRAJIT-2013-2019-scaled.jpg',
+                inventory: 588,
+                productWarehouse: [],
+            },
+            {
+                id: '4',
+                name: 'Kit de Cilindro NPC PLSR 135',
+                description: 'ZKit de Cilindro NPC PLSR 135',
+                code: 'SBOF2011',
+                salePrice: 1168.16,
+                taxes: 12,
+                isActive: true,
+                imageUrl: 'https://multicomer.com/wp-content/uploads/2021/01/4652-JE00-16_720x.jpg',
+                inventory: 540,
+                productWarehouse: [],
+            },
+            {
+                id: '5',
+                name: 'Cadena de Tiempo 94L NPC APCH 160/180, 200NS',
+                description: 'Cadena de Tiempo 94L NPC APCH 160/180, 200NS',
+                code: 'SBOF2011',
+                salePrice: 258.22,
+                taxes: 20,
+                isActive: true,
+                imageUrl: null,
+                inventory: 365,
+                productWarehouse: [],
+            },
+            {
+                id: '6',
+                name: 'Cadena de 2 Tiempos',
+                description: 'Cadena de 2 Tiempos',
+                code: 'SBOF209',
+                salePrice: 1254.22,
+                taxes: 5,
+                isActive: true,
+                imageUrl: null,
+                inventory: 1865,
+                productWarehouse: [],
+            },
+            {
+                id: '7',
+                name: 'Cascos reforzados',
+                description: 'Color rojo',
+                code: 'SBOF2020',
+                salePrice: 5598.22,
+                taxes: 10,
+                isActive: true,
+                imageUrl: "https://www.remove.bg/images/remove_image_background.jpg",
+                inventory: 200,
+                productWarehouse: [],
+            }
+        ];
     }
 }

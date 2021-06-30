@@ -100,10 +100,9 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, 14vw);
             grid-gap: 2rem;
+            grid-template-rows: 374px;
             justify-content: center;
-            margin-top: 5em;
-            margin-right: 3.3em;
-            float: left;
+            margin-top: 6em;
         }
     }
 
