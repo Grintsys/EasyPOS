@@ -64,3 +64,10 @@
     border: 1px solid;
     border-color: #ccc transparent transparent #ccc;
 }
+
+.button-close-tooltip {
+    position: absolute;
+    right: 10px;
+    top: 18px;
+    z-index: 100;
+}
