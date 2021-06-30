@@ -45,8 +45,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         this.input = new EventEmitter();
 
         this.collapsed = true;
-        // this.productList = [];
-        this.productList = this.dataTemp();
+        this.productList = [];
+        // this.productList = this.dataForProductTemp();
 
         this.subscription = _sharedService.selectedWarehouseId$.subscribe(
             () => {
@@ -106,7 +106,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         this.newOrderItemEvent.emit(newItem);
     }
 
-    dataTemp(): ProductDto[] {
+    dataForProductTemp(): ProductDto[] {
         return [
             {
                 id: '1',

@@ -78,20 +78,17 @@ export class LoginComponent implements OnInit {
         this.invalidPassword = "";
         this.loginInProgress = true;
 
-        this.loginInProgress = false;
-        this.router.navigate(["/pos"]);
-
-        // this._loginService.authorize(loginInput).then(
-        //     () => {
-        //         this.loginInProgress = false;
-        //         this.router.navigate(["/pos"]);
-        //     },
-        //     (error) => {
-        //         console.log("Promise rejected with " + JSON.stringify(error));
-        //         this.invalidPassword = "Contraseña o Usuario incorrecto!";
-        //         this.loginForm.reset();
-        //         this.loginInProgress = false;
-        //     }
-        // );
+        this._loginService.authorize(loginInput).then(
+            () => {
+                this.loginInProgress = false;
+                this.router.navigate(["/pos"]);
+            },
+            (error) => {
+                console.log("Promise rejected with " + JSON.stringify(error));
+                this.invalidPassword = "Contraseña o Usuario incorrecto!";
+                this.loginForm.reset();
+                this.loginInProgress = false;
+            }
+        );
     }
 }
