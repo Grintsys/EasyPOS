@@ -4,6 +4,9 @@
         <div class="container-searchs">
             <search *ngIf="pageType != 'Nota de Credito'" (click)="openProductList()" (input)="search($event)"></search>
             <div #searchResults class="tooltip-content bottom s-z-tooltip">
+                <button mat-icon-button class="button-close-tooltip" (click)="openProductList()">
+                    <mat-icon>close</mat-icon>
+                </button>
                 <search-results (newOrderItemEvent)="addItem($event)"></search-results>
             </div>
         </div>
