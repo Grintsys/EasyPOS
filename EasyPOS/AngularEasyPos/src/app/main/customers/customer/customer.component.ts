@@ -59,8 +59,14 @@ export class CustomerComponent implements OnInit, OnDestroy {
                     this.pageType = "edit";
                 } else {
                     this.pageType = "new";
-                    var suffix = FuseUtils.generateGUID();
-                    this.customer.code = 'CEP'+suffix.substring(0,5);
+                    this._customerService.getNextCode().then(
+                        (dto) => {
+                            this.customer.code = dto.code;
+                        },
+                        (error) => {
+                            console.log("Promise rejected with " + JSON.stringify(error));
+                        }
+                    );
                 }
                 this.customerForm = this.createcustomerForm(this.pageType);
             });
@@ -100,11 +106,12 @@ export class CustomerComponent implements OnInit, OnDestroy {
                 ])
             ),
             address: new FormControl(
-                { value: this.customer.address, disabled: type === "view"},  
+                { value: this.customer.address, disabled: type === "view" },
             ),
             phoneNumber: new FormControl({
-                value: this.customer.phoneNumber, disabled: type === "view"},
-                Validators.compose([Validators.pattern(/^\([0-9]{3}[\-\)][0-9]{4}-[0-9]{4}$/)])  
+                value: this.customer.phoneNumber, disabled: type === "view"
+            },
+                Validators.compose([Validators.pattern(/^\([0-9]{3}[\-\)][0-9]{4}-[0-9]{4}$/)])
             ),
             status: new FormControl({
                 value: this.customer.status,

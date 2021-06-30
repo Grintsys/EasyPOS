@@ -6,7 +6,7 @@ import {
     RouterStateSnapshot,
 } from "@angular/router";
 import { BehaviorSubject, Observable } from "rxjs";
-import { CreateUpdateCustomerDto, CustomerDto } from "./customer.model";
+import { CodeDto, CreateUpdateCustomerDto, CustomerDto } from "./customer.model";
 import { AppSettingsService } from "../../app-settings/app-settings.service"
 import { Router } from "@angular/router";
 
@@ -60,20 +60,26 @@ export class CustomerService implements Resolve<any> {
     }
 
     public update(customerId: string, data: CreateUpdateCustomerDto): Promise<any> {
-        var url = `${this.baseUrl}/${customerId}`
+        var url = `${this.baseUrl}/${customerId}`;
         const promise = this._httpClient.put<CustomerDto>(url, data, this.getHttpOptions()).toPromise();
         return promise;
     } 
     
     public delete(customerId: string): Promise<any> {
-        var url = `${this.baseUrl}/${customerId}`
+        var url = `${this.baseUrl}/${customerId}`;
         const promise = this._httpClient.delete<CustomerDto>(url, this.getHttpOptions()).toPromise();
         return promise;
     }
 
     public get(customerId: string): Promise<any> {
-        var url = `${this.baseUrl}/${customerId}`
+        var url = `${this.baseUrl}/${customerId}`;
         const promise = this._httpClient.get<CustomerDto>(url, this.getHttpOptions()).toPromise();
+        return promise;
+    }
+
+    public getNextCode(): Promise<any> {
+        var url = `${this.baseUrl}/next-code`;
+        const promise = this._httpClient.get<CodeDto>(url, this.getHttpOptions()).toPromise();
         return promise;
     }
     

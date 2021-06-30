@@ -26,6 +26,10 @@ export class CustomerLookupDto{
     fullName?: string;
 }
 
+export class CodeDto{
+    code?: string;
+}
+
 export enum CustomerStatus {
     Creado = 1,
     Transferido = 2,

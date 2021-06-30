@@ -21,6 +21,7 @@ namespace Grintsys.EasyPOS.Customer
         ICustomerAppService
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly IRepository<Customer, Guid> _repository;
         private readonly ISapManager _sapManager;
         private readonly IBackgroundJobManager _backgroundJobManager;
 
@@ -30,6 +31,7 @@ namespace Grintsys.EasyPOS.Customer
             ISapManager sapManager,
             IBackgroundJobManager backgroundJobManager) : base(repository)
         {
+            _repository = repository;
             _customerRepository = customerRepository;
             _sapManager = sapManager;
             _backgroundJobManager = backgroundJobManager;
@@ -75,6 +77,19 @@ namespace Grintsys.EasyPOS.Customer
             }
 
             return dto;
+        }
+
+        public async Task<object> GetNextCode()
+        {
+            var customersList = await _repository.GetListAsync();
+
+            var suffix = customersList.Any() 
+                ? customersList.OrderByDescending(x => x.Suffix).FirstOrDefault().Suffix + 1
+                : 1;
+
+            string asString = suffix.ToString("D" + 5);
+
+            return new { Code = "CEP" + asString };
         }
     }
 }
