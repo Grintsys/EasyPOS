@@ -7,6 +7,7 @@ namespace Grintsys.EasyPOS.Customer
 {
     public class Customer : FullAuditedAggregateRoot<Guid>
     {
+        public int Suffix { get; set; }
         public string FullName { get; set; }
         public string IdNumber { get; set; }
         public string RTN { get; set; }

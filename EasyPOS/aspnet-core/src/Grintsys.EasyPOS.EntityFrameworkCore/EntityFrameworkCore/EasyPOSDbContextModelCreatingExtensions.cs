@@ -62,6 +62,10 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                     .IsRequired();
             });
 
+            builder.Entity<Customer.Customer>()
+                .Property(p => p.Suffix)
+                .ValueGeneratedOnAdd();
+
             builder.Entity<PaymentMethod.PaymentMethod>(b =>
             {
                 b.ToTable(EasyPOSConsts.DbTablePrefix + "PaymentMethods", EasyPOSConsts.DbSchema);
