@@ -4,15 +4,17 @@ using Grintsys.EasyPOS.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Grintsys.EasyPOS.Migrations
 {
     [DbContext(typeof(EasyPOSMigrationsDbContext))]
-    partial class EasyPOSMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210701003308_Added_Columns")]
+    partial class Added_Columns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
