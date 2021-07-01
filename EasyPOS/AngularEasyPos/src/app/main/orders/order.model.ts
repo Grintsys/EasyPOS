@@ -51,6 +51,7 @@ export class CreateUpdateDocumentItemDto {
     salePrice: number;
     taxes: boolean;
     taxAmount: number;
+    selectedTax: string;
     quantity: number;
     discount: number;
     totalItem: number;
@@ -80,6 +81,7 @@ export class DocumentItemDto {
     salePrice: number;
     taxes: boolean;
     taxAmount: number;
+    selectedTax: string;
     discount: number;
     quantity: number;
     totalItem: number;
