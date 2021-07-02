@@ -6,6 +6,7 @@ namespace Grintsys.EasyPOS.PaymentMethod
 {
     public class BankCheck : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
+        public Guid? TenantId { get; set; }
         public float Total { get; set; }
         public string Bank { get; set; }
         public DateTime Date { get; set; }

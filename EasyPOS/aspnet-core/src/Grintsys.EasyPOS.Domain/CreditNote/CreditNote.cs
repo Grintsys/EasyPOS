@@ -5,9 +5,8 @@ using Volo.Abp.MultiTenancy;
 
 namespace Grintsys.EasyPOS.CreditNote
 {
-    public class CreditNote : Document<CreditNoteItem>, IMultiTenant
+    public class CreditNote : Document<CreditNoteItem>
     {
-        public Guid? TenantId { get; set; }
         public Guid OrderId { get; set; }
         public Order.Order Order { get; set; }
         public override float ISV => Items.Sum(x => x.TaxAmount * x.SalePrice * x.Quantity);
