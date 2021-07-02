@@ -39,6 +39,15 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                  * See the documentation for more:
                  * https://docs.abp.io/en/abp/latest/Customizing-Application-Modules-Extending-Entities
                  */
+
+                ObjectExtensionManager.Instance
+                         .MapEfCoreProperty<IdentityUser, int>(
+                             "SalesPersonCode",
+                             (entityBuilder, propertyBuilder) =>
+                             {
+                                 propertyBuilder.HasDefaultValue(1);
+                             }
+                         );
             });
         }
     }

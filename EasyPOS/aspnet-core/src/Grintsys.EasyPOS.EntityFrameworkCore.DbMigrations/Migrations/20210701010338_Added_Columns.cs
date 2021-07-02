@@ -23,6 +23,13 @@ namespace Grintsys.EasyPOS.Migrations
                 table: "AppCreditNoteItems",
                 type: "nvarchar(max)",
                 nullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "SalesPersonCode",
+                table: "AbpUsers",
+                type: "int",
+                nullable: false,
+                defaultValue: 1);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -38,6 +45,10 @@ namespace Grintsys.EasyPOS.Migrations
             migrationBuilder.DropColumn(
                 name: "SelectedTax",
                 table: "AppCreditNoteItems");
+
+            migrationBuilder.DropColumn(
+                name: "SalesPersonCode",
+                table: "AbpUsers");
         }
     }
 }

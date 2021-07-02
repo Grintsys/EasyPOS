@@ -21,7 +21,7 @@ namespace Grintsys.EasyPOS.Users
          * services (like IdentityUserManager) to change them.
          * So, this properties are designed as read only!
          */
-
+        
         public virtual Guid? TenantId { get; private set; }
 
         public virtual string UserName { get; private set; }
@@ -54,6 +54,8 @@ namespace Grintsys.EasyPOS.Users
          * 4. Run the .DbMigrator project (or use the Update-Database command) to apply
          * schema change to the database.
          */
+        
+        public int SalesPersonCode { get; set; }
 
         private AppUser()
         {

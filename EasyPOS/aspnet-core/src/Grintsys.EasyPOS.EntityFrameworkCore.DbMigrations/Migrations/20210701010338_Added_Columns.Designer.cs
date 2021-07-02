@@ -11,7 +11,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Grintsys.EasyPOS.Migrations
 {
     [DbContext(typeof(EasyPOSMigrationsDbContext))]
-    [Migration("20210701003308_Added_Columns")]
+    [Migration("20210701010338_Added_Columns")]
     partial class Added_Columns
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1887,6 +1887,11 @@ namespace Grintsys.EasyPOS.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnName("PhoneNumberConfirmed");
+
+                    b.Property<int>("SalesPersonCode")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<string>("SecurityStamp")
                         .IsRequired()

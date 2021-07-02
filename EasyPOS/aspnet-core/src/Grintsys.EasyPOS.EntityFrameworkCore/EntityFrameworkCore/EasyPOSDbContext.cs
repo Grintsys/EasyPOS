@@ -67,6 +67,10 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                  */
             });
 
+            builder.Entity<AppUser>()
+                .Property(e => e.SalesPersonCode)
+                .HasDefaultValue(1);
+
             /* Configure your own tables/entities inside the ConfigureEasyPOS method */
 
             builder.ConfigureEasyPOS();
