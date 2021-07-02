@@ -1,11 +1,13 @@
 ﻿using Grintsys.EasyPOS.Document;
 using System;
 using System.Linq;
+using Volo.Abp.MultiTenancy;
 
 namespace Grintsys.EasyPOS.DebitNote
 {
-    public class DebitNote : Document<DebitNoteItem>
+    public class DebitNote : Document<DebitNoteItem>, IMultiTenant
     {
+        public Guid? TenantId { get; set; }
         public override float ISV => Items.Sum(x => x.TaxAmount * x.SalePrice * x.Quantity);
         public override float Discount => Items.Sum(x => (x.Discount / 100) * x.SalePrice * x.Quantity);
         public override float SubTotal => Items.Sum(x => x.SalePrice * x.Quantity);

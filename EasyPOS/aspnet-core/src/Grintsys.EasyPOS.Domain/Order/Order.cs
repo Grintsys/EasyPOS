@@ -1,12 +1,12 @@
-﻿using System;
-using Grintsys.EasyPOS.Document;
+﻿using Grintsys.EasyPOS.Document;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Volo.Abp.MultiTenancy;
 
 namespace Grintsys.EasyPOS.Order
 {
-    public class Order : Document<OrderItem>
+    public class Order : Document<OrderItem>, IMultiTenant
     {
         public OrderType OrderType { get; set; }
         public List<CreditNote.CreditNote> CreditNotes { get; set; } = new List<CreditNote.CreditNote>();

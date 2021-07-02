@@ -1,6 +1,7 @@
 ﻿using System;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Users;
+using Volo.Abp.MultiTenancy;
 
 namespace Grintsys.EasyPOS.Users
 {
@@ -12,7 +13,7 @@ namespace Grintsys.EasyPOS.Users
      * - You can query users from database with this entity.
      * - You can update values of your custom properties.
      */
-    public class AppUser : FullAuditedAggregateRoot<Guid>, IUser
+    public class AppUser : FullAuditedAggregateRoot<Guid>, IUser, IMultiTenant
     {
         #region Base properties
 
