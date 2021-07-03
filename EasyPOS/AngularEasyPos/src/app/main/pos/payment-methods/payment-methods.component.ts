@@ -55,7 +55,6 @@ export class PaymentMethodsComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) private _data: any
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
-        this.paymentMethodDto = _data.PaymentMethod;
         this.paymentMethodsData = _data.paymentMethdosData;
         this.orderSubtotal = _data.subtotal;
         this.orderTaxes = _data.taxes;
@@ -158,7 +157,7 @@ export class PaymentMethodsComponent implements OnInit {
         else if (this.selectedPaymentMethod.methodType == 'CHECK') {
             var bankCheck = new CreateUpdateBankCheckDto;
             bankCheck.total = this.total;
-            bankCheck.bank = this.clientName;
+            bankCheck.bank = this.bankName;
             bankCheck.date = this.date;
 
             this.paymentMethodsData.bankChecks.push(bankCheck);

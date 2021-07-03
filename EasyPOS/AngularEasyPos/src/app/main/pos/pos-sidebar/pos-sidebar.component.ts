@@ -214,6 +214,8 @@ export class PosSidebarComponent {
 
         }
         this.order = new OrderDto();
+        this.paymentMethod = new CreateUpdatePaymentMethodDto();
+
         this.customer = new CustomerDto();
         this.orderType = OrderType.Contado;
         this.newOrderEvent.emit(this.order);
