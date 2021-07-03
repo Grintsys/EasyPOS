@@ -63,14 +63,14 @@ export const navigation: FuseNavigation[] = [
                 icon     : 'settings',
                 url      : '/configuration-list',
             },
-            {
+            /* {
                 id       : 'ROLES',
                 title    : 'Roles',
                 translate: 'NAV.ROLES.TITLE',
                 type     : 'item',
                 icon     : 'person_pin',
                 url      : '/roles',
-            }
+            } */
         ]
     }
 ];
