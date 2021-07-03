@@ -18,10 +18,11 @@ import { FuseTranslationLoaderService } from "@fuse/services/translation-loader.
 import { locale as english } from "../i18n/en";
 import { locale as spanish } from "../i18n/es";
 import { MatTableDataSource } from "@angular/material/table";
-import { OrderItemDto } from "app/main/orders/order.model";
+import { OrderItemDto, TaxesDto } from "app/main/orders/order.model";
 import { SharedService } from "app/shared.service";
 import { Subscription } from "rxjs";
 import { ProductDto } from "app/main/products/product.model";
+import { PosService } from "../pos.service";
 
 @Component({
     selector: "pos-products",
@@ -54,17 +55,20 @@ export class PosProductsComponent implements OnChanges {
     @Input() orderItems: OrderItemDto[];
     @Output() newOrderItemsEvent = new EventEmitter<OrderItemDto[]>();
 
+    taxesList: TaxesDto[];
     subscription: Subscription;
     productList: ProductDto[];
     pageType: string;
     food: any = ['Pizza', 'Sandwich'];
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
-        private _sharedService: SharedService
+        private _sharedService: SharedService,
+        public _posService: PosService
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
         this.dataSource = new MatTableDataSource();
         this.orderItems = [];
+        this.taxesList = [];
 
         this.subscription = _sharedService.posPageType$.subscribe(
             type => {
@@ -82,6 +86,23 @@ export class PosProductsComponent implements OnChanges {
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
+        this.getConfigList('Impuestos');
+    }
+
+    getConfigList(filter: string) {
+        this._posService.getConfList(filter).then(
+            (d) => {
+                this.taxesList = JSON.parse(d[0].value);
+            },
+            (error) => {
+                console.log("Promise rejected with " + JSON.stringify(error));
+            }
+        );
+    }
+
+    selectedTaxChange(value: any){
+        console.log(value);
     }
 
     ngOnChanges(changes: SimpleChanges) {

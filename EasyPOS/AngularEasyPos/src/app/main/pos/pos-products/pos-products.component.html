@@ -63,14 +63,13 @@
         <ng-container matColumnDef="tax">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Impuesto</mat-header-cell>
             <mat-cell *matCellDef="let product">
-                <mat-form-field appearance="fill">
-                <p class="text-truncate">{{product.taxes ? 'IVA' : 'EXE'}}</p>
-                <!-- <mat-select name="food">
-                    <mat-option *ngFor="let f of food" [value]="f">
-                        {{f}}
-                    </mat-option>
-                </mat-select>-->
-                </mat-form-field> 
+                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p mb-8">
+                    <p class="text-truncate">{{product.taxes ? 'IVA' : 'EXE'}}</p>
+                    <!-- <mat-select name="taxes" (selectionChange)='selectedTaxChange($event.value)'
+                        placeholder="Seleccionar opción">
+                        <mat-option *ngFor="let bank of taxesList" [value]="bank.TaxCode">{{bank.Tax}}</mat-option>
+                    </mat-select> -->
+                </mat-form-field>
             </mat-cell>
 
 

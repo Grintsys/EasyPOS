@@ -8,8 +8,7 @@ export class OrderProduct {
     salePrice: string;
     total: number;
 
-    constructor(orderProduct?)
-    {
+    constructor(orderProduct?) {
         orderProduct = orderProduct || {};
         this.code = orderProduct.code || FuseUtils.generateGUID();
         this.productName = orderProduct.productName || '';
@@ -107,19 +106,19 @@ export class OrderDto extends DocumentDto<OrderItemDto> {
 export class OrderItemDto extends DocumentItemDto {
     orderId?: string;
 
-    constructor(product: ProductDto){
+    constructor(product: ProductDto) {
         super();
         product = product || new ProductDto,
-        this.productId = product.id || '',
-        this.name = product.name || '',
-        this.description = product.description || '',
-        this.code = product.code || '',
-        this.salePrice = product.salePrice || 0,
-        this.taxes = product.taxes || false,
-        this.selectedTax = '',
-        this.discount = 0,
-        this.quantity = 0,
-        this.totalItem = this.quantity * this.salePrice
+            this.productId = product.id || '',
+            this.name = product.name || '',
+            this.description = product.description || '',
+            this.code = product.code || '',
+            this.salePrice = product.salePrice || 0,
+            this.taxes = product.taxes || false,
+            this.selectedTax = '',
+            this.discount = 0,
+            this.quantity = 0,
+            this.totalItem = this.quantity * this.salePrice
     }
 }
 
@@ -229,4 +228,14 @@ export class BankCheckDto {
     reference: string;
     bank: string;
     date: Date;
+}
+
+export class TaxesDto {
+    taxCode: string;
+    tax: string;
+}
+
+export class BankDto {
+    bankCode: string;
+    account: string;
 }

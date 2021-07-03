@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
-import { CreateUpdateBankCheckDto, CreateUpdatePaymentMethodDto, PaymentMethodDto } from 'app/main/orders/order.model';
+import { BankDto, CreateUpdateBankCheckDto, CreateUpdatePaymentMethodDto, PaymentMethodDto } from 'app/main/orders/order.model';
 
 import { locale as english } from '../i18n/en';
 import { locale as spanish } from '../i18n/es';
@@ -24,6 +24,7 @@ export class PaymentMethodsComponent implements OnInit {
 
     paymentMethodDto: PaymentMethodDto;
     paymentMethodsData: CreateUpdatePaymentMethodDto;
+    bankList: BankDto[];
 
     paymentMethodList: Array<PaymentMethodTemp>;
     selectedPaymentMethod: PaymentMethodTemp;
@@ -60,10 +61,24 @@ export class PaymentMethodsComponent implements OnInit {
         this.orderTaxes = _data.taxes;
         this.orderDiscount = _data.discount;
         this.amount = 0;
+        this.bankList = [];
         this.initialDataTemp();
     }
 
+    getConfigList(filter: string) {
+        this._posService.getConfList(filter).then(
+            (d) => {
+                this.bankList = JSON.parse(d[0].value);
+                console.log(this.bankList);
+            },
+            (error) => {
+                console.log("Promise rejected with " + JSON.stringify(error));
+            }
+        );
+    }
+
     ngOnInit(): void {
+        this.getConfigList('Bancos');
     }
 
     totalChange(event) {

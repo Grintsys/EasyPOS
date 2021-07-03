@@ -95,10 +95,8 @@
     <div class="container-amount" *ngIf="selectedPaymentMethod?.methodType === paymentMethodEnum.CHECK">
       <mat-form-field appearance="outline" floatLabel="always" class="w-100-p mb-8">
         <mat-label>Nombre del banco</mat-label>
-        <mat-select name="BanckName" (input)='bankNameChange($event.target.value)' placeholder="Seleccionar opción">
-          <mat-option value="A">Banco A</mat-option>
-          <mat-option value="B">Banco B</mat-option>
-          <mat-option value="C">Banco C</mat-option>
+        <mat-select name="BanckName" (selectionChange)='bankNameChange($event.value)' placeholder="Seleccionar opción">
+          <mat-option *ngFor="let bank of bankList" [value]="bank.BankCode">{{bank.Account}}</mat-option>
         </mat-select>
       </mat-form-field>
 
