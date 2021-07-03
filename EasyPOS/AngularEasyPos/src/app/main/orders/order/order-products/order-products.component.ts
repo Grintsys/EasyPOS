@@ -29,6 +29,7 @@ export class OrderProductsComponent {
     ];
     orderItems: OrderItemDto[];
     pageType: string;
+    currency: string= '';
 
     @ViewChild(MatPaginator, { static: true })
     paginator: MatPaginator;
@@ -67,8 +68,20 @@ export class OrderProductsComponent {
                     this.dataSource.paginator = this.paginator;
                     this.dataSource.sort = this.sort;
                     this.isDataAvailable = true;
+                    this.getConfigList('Moneda');
                 }
             });
+    }
+
+    getConfigList(filter: string) {
+        this._orderService.getConfList(filter).then(
+            (d) => {
+                this.currency = JSON.parse(d[0].value).Currency;
+            },
+            (error) => {
+                console.log("Promise rejected with " + JSON.stringify(error));
+            }
+        );
     }
 
     ngAfterViewInit() {

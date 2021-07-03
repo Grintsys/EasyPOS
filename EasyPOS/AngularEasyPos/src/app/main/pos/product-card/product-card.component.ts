@@ -51,7 +51,8 @@ export class ProductCardComponent implements OnInit, OnDestroy {
         if (this.quantity > 0) {
             var orderItem = new OrderItemDto(this.product);
             orderItem.quantity = this.quantity;
-            orderItem.totalItem = orderItem.quantity * orderItem.salePrice;
+            var isv = orderItem.taxes ? orderItem.quantity * orderItem.salePrice * 0.15 : 0;
+            orderItem.totalItem = orderItem.quantity * orderItem.salePrice + isv;
             this.quantity = 0;
             this.newOrderItemEvent.emit(orderItem);
         }

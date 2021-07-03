@@ -2,13 +2,15 @@
 using System;
 using System.Collections.Generic;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace Grintsys.EasyPOS.Customer
 {
-    public class Customer : FullAuditedAggregateRoot<Guid>
+    public class Customer : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public Guid? TenantId { get; set; }
+        public int Suffix { get; set; }
+        public string FullName { get; set; }
         public string IdNumber { get; set; }
         public string RTN { get; set; }
         public string Address { get; set; }

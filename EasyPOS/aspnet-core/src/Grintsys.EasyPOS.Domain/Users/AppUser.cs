@@ -1,6 +1,7 @@
 ﻿using System;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Users;
+using Volo.Abp.MultiTenancy;
 
 namespace Grintsys.EasyPOS.Users
 {
@@ -12,7 +13,7 @@ namespace Grintsys.EasyPOS.Users
      * - You can query users from database with this entity.
      * - You can update values of your custom properties.
      */
-    public class AppUser : FullAuditedAggregateRoot<Guid>, IUser
+    public class AppUser : FullAuditedAggregateRoot<Guid>, IUser, IMultiTenant
     {
         #region Base properties
 
@@ -21,7 +22,7 @@ namespace Grintsys.EasyPOS.Users
          * services (like IdentityUserManager) to change them.
          * So, this properties are designed as read only!
          */
-
+        
         public virtual Guid? TenantId { get; private set; }
 
         public virtual string UserName { get; private set; }
@@ -54,6 +55,8 @@ namespace Grintsys.EasyPOS.Users
          * 4. Run the .DbMigrator project (or use the Update-Database command) to apply
          * schema change to the database.
          */
+        
+        public int SalesPersonCode { get; set; }
 
         private AppUser()
         {

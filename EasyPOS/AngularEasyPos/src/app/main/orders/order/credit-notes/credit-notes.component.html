@@ -31,7 +31,7 @@
         <ng-container matColumnDef="total">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
             <mat-cell *matCellDef="let document">
-                <p class="text-truncate">{{document.total | currency:'HNL ':'symbol'}}</p>
+                <p class="text-truncate">{{currency + ' ' + document.total}}</p>
             </mat-cell>
         </ng-container>
 

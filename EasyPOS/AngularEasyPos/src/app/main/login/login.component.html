@@ -50,11 +50,10 @@
                 <br />
                 <mat-form-field appearance="fill">
                     <mat-label>Compañia</mat-label>
-                    <mat-select name="company">
-                        <mat-option value="A">Compania A</mat-option>
-                        <mat-option value="B">Compania B</mat-option>
-                        <mat-option value="C">Compania C</mat-option>
+                    <mat-select formControlName="tenant">
+                        <mat-option *ngFor="let t of tenants" [value]="t.id">{{t.name}}</mat-option>
                     </mat-select>
+
                 </mat-form-field>
 
                 <button mat-raised-button color="accent" class="submit-button" aria-label="LOGIN" (click)="doLogin()"

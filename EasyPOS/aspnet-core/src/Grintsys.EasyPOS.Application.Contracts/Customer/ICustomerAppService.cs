@@ -14,5 +14,6 @@ namespace Grintsys.EasyPOS.Customer
             CreateUpdateCustomerDto>
     {
         Task<List<CustomerDto>> GetCustomerList(string filter);
+        Task<object> GetNextCode();
     }
 }

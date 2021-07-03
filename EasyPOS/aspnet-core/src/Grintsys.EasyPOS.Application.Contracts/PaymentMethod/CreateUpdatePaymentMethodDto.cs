@@ -5,6 +5,7 @@ namespace Grintsys.EasyPOS.PaymentMethod
 {
     public class CreateUpdatePaymentMethodDto
     {
+        public Guid? TenantId { get; set; }
         public Guid Id { get; set; } = Guid.NewGuid();
         public Guid OrderId { get; set; }
         public CreateUpdateCreditDebitCardDto CreditDebitCard { get; set; }

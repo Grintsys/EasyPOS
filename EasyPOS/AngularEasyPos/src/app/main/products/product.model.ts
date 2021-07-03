@@ -3,7 +3,7 @@ export class CreateUpdateProductDto {
     description?: string;
     code?: string;
     salePrice: number;
-    taxes: number;
+    taxes: boolean;
     isActive: boolean;
     imageUrl?: string;
     productWarehouses: CreateUpdateProductWarehouseDto[];
@@ -18,6 +18,7 @@ export class CreateUpdateProductWarehouseDto {
 export class CreateUpdateWarehouseDto {
     name?: string;
     address?: string;
+    code?: string;
 }
 
 export class ProductDto{
@@ -26,7 +27,7 @@ export class ProductDto{
     description?: string;
     code?: string;
     salePrice: number;
-    taxes: number;
+    taxes: boolean;
     isActive: boolean;
     imageUrl?: string;
     inventory: number;
@@ -50,6 +51,7 @@ export class ProductWarehouseDto{
 export class WarehouseDto{
     id?: string;
     name?: string;
+    code?: string;
     address?: string;
     defaultCustomerId?: string;
     productWarehouses: ProductWarehouseDto[];

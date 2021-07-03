@@ -21,7 +21,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     product: ProductDto;
     pageType: string;
     productForm: FormGroup;
-
+    currency: string= '';
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -46,6 +46,7 @@ export class ProductComponent implements OnInit, OnDestroy {
                     this.getProductById(data.Id);
                     this.pageType = 'view';
                     this.productForm = this.createProductForm();
+                    this.getConfigList('Moneda');
                 }
             });
     }
@@ -62,9 +63,20 @@ export class ProductComponent implements OnInit, OnDestroy {
             name: [{ value: this.product.name, disabled: true }],
             description: [{ value: this.product.description, disabled: true }],
             salePrice: [{ value: this.product.salePrice, disabled: true }],
-            taxes: [{ value: this.product.taxes, disabled: true }],
+            taxes: [{ value: this.product.taxes ? 'Si' : 'No', disabled: true }],
             inventory: [{ value: this.product.inventory, disabled: true }],
         });
+    }
+
+    getConfigList(filter: string) {
+        this._productService.getConfList(filter).then(
+            (d) => {
+                this.currency = JSON.parse(d[0].value).Currency;
+            },
+            (error) => {
+                console.log("Promise rejected with " + JSON.stringify(error));
+            }
+        );
     }
 
     getProductById(id: string) {

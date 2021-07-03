@@ -29,6 +29,12 @@ namespace Grintsys.EasyPOS.Product
             _sapManager = sapManager;
         }
 
+        public override Task<ProductDto> CreateAsync(CreateUpdateProductDto input)
+        {
+            input.TenantId = CurrentTenant.Id;
+            return base.CreateAsync(input);
+        }
+
         public async Task<ProductDto> GetProduct(Guid id, Guid warehouseId)
         {
             var data = await _productRepository.GetAsync(id);

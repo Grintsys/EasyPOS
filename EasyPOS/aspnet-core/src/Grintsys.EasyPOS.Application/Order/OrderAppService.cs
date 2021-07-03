@@ -54,6 +54,7 @@ namespace Grintsys.EasyPOS.Order
 
             //TODO: fix transferred object bad mapping
             input.State = DocumentState.Transferred;
+            input.TenantId = CurrentTenant.Id;
             var order = base.CreateAsync(input);
 
             var paymentMethodDto = ObjectMapper.Map<CreateUpdatePaymentMethodDto, PaymentMethod.PaymentMethod>(input.PaymentMethods);
@@ -65,10 +66,10 @@ namespace Grintsys.EasyPOS.Order
             var salesOrderDto = new CreateOrUpdateSalesOrder()
             {
                 CreatedDate = order.Result.CreationTime,
-                CustomerCode = "00001",
-                CustomerName = order.Result.CustomerName,
+                CustomerCode = input.CustomerCode,
+                CustomerName = input.CustomerName,
                 SalesPersonId = 1,
-                WarehouseCode = "01",
+                WarehouseCode = input.WarehouseCode,
                 Lines = order.Result.Items
             };
 

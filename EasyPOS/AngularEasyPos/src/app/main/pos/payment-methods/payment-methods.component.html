@@ -27,20 +27,20 @@
     <div class="container-to-paid">
       <div class="item--paid-out">
         <h1>Por pagar</h1>
-        <h2>{{orderSubtotal + orderTaxes - orderDiscount| currency:'HNL':'symbol'}}</h2>
+        <h2>{{currency + ' ' +  (orderSubtotal + orderTaxes - orderDiscount)}}</h2>
       </div>
       <div class="item--exchange">
-        <h1>Subtotal <span>{{orderSubtotal | currency:'HNL':'symbol'}}</span></h1>
-        <h1>Descuento <span>{{orderDiscount | currency:'HNL':'symbol'}}</span></h1>
-        <h1>Impuesto <span>{{orderTaxes | currency:'HNL':'symbol'}}</span></h1>
+        <h1>Subtotal <span>{{currency + ' ' + orderSubtotal}}</span></h1>
+        <h1>Descuento <span>{{currency + ' ' + orderDiscount}}</span></h1>
+        <h1>Impuesto <span>{{currency + ' ' + orderTaxes}}</span></h1>
       </div>
     </div>
 
     <div class="container-amount" *ngIf="selectedPaymentMethod?.methodType === paymentMethodEnum.CASH">
       <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
         <mat-label>Monto</mat-label>
-        <input matInput placeholder="Digitar monto" (input)='totalChange($event.target.value)' name="amount"
-          formControlName="amount" type="number">
+        <input matInput placeholder="Digitar monto" value="{{paymentMethodsData.cash.total}}"
+          (input)='totalChange($event.target.value)' name="amount" formControlName="amount" type="number">
         <span matPrefix>$&nbsp;</span>
       </mat-form-field>
     </div>
@@ -49,21 +49,22 @@
       <mat-form-field appearance="outline" floatLabel="always" class="w-100-p mb-8">
         <mat-label>Cuenta contable</mat-label>
         <input matInput placeholder="Digitar cuenta contable" (input)='accountChange($event.target.value)'
-          name="accountingAccount" type="text">
+          name="accountingAccount" type="text" value="{{paymentMethodsData.wireTransfer.account}}">
       </mat-form-field>
       <mat-form-field appearance="outline" floatLabel="always" class="w-100-p mb-8">
         <mat-label>Fecha</mat-label>
-        <input matInput placeholder="Digitar fecha" (input)='dateChange($event.target.value)' name="date" type="date">
+        <input matInput placeholder="Digitar fecha" (input)='dateChange($event.target.value)' name="date" type="date"
+          value="{{paymentMethodsData.wireTransfer.dateTime}}">
       </mat-form-field>
       <mat-form-field appearance="outline" floatLabel="always" class="w-100-p mb-8">
         <mat-label>Referencia</mat-label>
         <input matInput placeholder="Digitar referencia" (input)='referenceChange($event.target.value)' name="Reference"
-          type="text">
+          type="text" value="{{paymentMethodsData.wireTransfer.reference}}">
       </mat-form-field>
       <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
         <mat-label>Monto</mat-label>
         <input matInput placeholder="Digitar monto" (input)='totalChange($event.target.value)' name="amount"
-          type="number">
+          type="number" value="{{paymentMethodsData.wireTransfer.total}}">
         <span matPrefix>$&nbsp;</span>
       </mat-form-field>
     </div>
@@ -72,22 +73,22 @@
       <mat-form-field appearance="outline" floatLabel="always" class="w-100-p mb-8">
         <mat-label>Nombre de la persona</mat-label>
         <input matInput placeholder="Digitar nombre" (input)='clientNameChange($event.target.value)'
-          name="accountingAccount" type="text">
+          name="accountingAccount" type="text" value="{{paymentMethodsData.creditDebitCard.name}}">
       </mat-form-field>
       <mat-form-field appearance="outline" floatLabel="always" class="w-100-p mb-8">
         <mat-label>ID persona</mat-label>
         <input matInput placeholder="Digitar identidad" (input)='clientIdChange($event.target.value)' name="Reference"
-          type="text">
+          type="text" value="{{paymentMethodsData.creditDebitCard.personId}}">
       </mat-form-field>
       <mat-form-field appearance="outline" floatLabel="always" class="w-100-p mb-8">
         <mat-label>Válida hasta</mat-label>
         <input matInput placeholder="Digitar fecha de validez" (input)='dateChange($event.target.value)' name="date"
-          type="date">
+          type="date" value="{{paymentMethodsData.creditDebitCard.validThru}}">
       </mat-form-field>
       <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
         <mat-label>Monto</mat-label>
         <input matInput placeholder="Digitar monto" (input)='totalChange($event.target.value)' name="amount"
-          type="number">
+          type="number" value="{{paymentMethodsData.creditDebitCard.total}}">
         <span matPrefix>$&nbsp;</span>
       </mat-form-field>
     </div>
@@ -95,10 +96,8 @@
     <div class="container-amount" *ngIf="selectedPaymentMethod?.methodType === paymentMethodEnum.CHECK">
       <mat-form-field appearance="outline" floatLabel="always" class="w-100-p mb-8">
         <mat-label>Nombre del banco</mat-label>
-        <mat-select name="BanckName" (input)='bankNameChange($event.target.value)' placeholder="Seleccionar opción">
-          <mat-option value="A">Banco A</mat-option>
-          <mat-option value="B">Banco B</mat-option>
-          <mat-option value="C">Banco C</mat-option>
+        <mat-select name="BanckName" (selectionChange)='bankNameChange($event.value)' placeholder="Seleccionar opción">
+          <mat-option *ngFor="let bank of bankList" [value]="bank.BankCode">{{bank.Account}}</mat-option>
         </mat-select>
       </mat-form-field>
 

@@ -6,6 +6,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { LoginService } from './login.service';
 import { LoginInput } from './login.input';
 import { Router } from "@angular/router";
+import { TenantModel } from './login.model';
 
 @Component({
     selector: 'app-login',
@@ -18,6 +19,9 @@ export class LoginComponent implements OnInit {
     loginForm: FormGroup;
     invalidPassword: string;
     loginInProgress: Boolean;
+
+    selectedValue: string;
+    tenants: TenantModel[];
 
     constructor(
         private _fuseConfigService: FuseConfigService,
@@ -45,22 +49,26 @@ export class LoginComponent implements OnInit {
 
         this.invalidPassword = "";
         this.loginInProgress = false;
+        this.tenants = [];
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
     ngOnInit(): void {
         this.loginForm = this._formBuilder.group({
             email: ['', [Validators.required]],
-            password: ['', Validators.required]
+            password: ['', Validators.required],
+            tenant: ['', Validators.required]
         });
 
         this.animateShapes();
+
+        this._loginService.getTenants().then(
+            (data) =>{
+                this.tenants = data;
+            },
+            (error) =>{
+                console.log("Promise rejected with " + JSON.stringify(error));
+            }
+        );
     }
 
     animateShapes(): void {
@@ -74,6 +82,10 @@ export class LoginComponent implements OnInit {
     doLogin() {
         const email = this.loginForm.get("email").value;
         const password = this.loginForm.get("password").value;
+        const tenant = this.loginForm.get("tenant").value;
+
+        debugger;
+
         const loginInput = new LoginInput(email, password);
         this.invalidPassword = "";
         this.loginInProgress = true;

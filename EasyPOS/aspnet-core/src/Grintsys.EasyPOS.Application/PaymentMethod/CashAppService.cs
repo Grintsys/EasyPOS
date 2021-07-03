@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 
@@ -15,6 +16,12 @@ namespace Grintsys.EasyPOS.PaymentMethod
     {
         public CashAppService(IRepository<Cash, Guid> repository) : base(repository)
         {
+        }
+
+        public override Task<CashDto> CreateAsync(CreateUpdateCashDto input)
+        {
+            input.TenantId = CurrentTenant.Id;
+            return base.CreateAsync(input);
         }
     }
 }

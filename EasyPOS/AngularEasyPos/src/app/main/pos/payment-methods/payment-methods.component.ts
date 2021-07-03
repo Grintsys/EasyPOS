@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
-import { CreateUpdateBankCheckDto, CreateUpdatePaymentMethodDto, PaymentMethodDto } from 'app/main/orders/order.model';
+import { BankDto, CreateUpdateBankCheckDto, CreateUpdatePaymentMethodDto, PaymentMethodDto } from 'app/main/orders/order.model';
 
 import { locale as english } from '../i18n/en';
 import { locale as spanish } from '../i18n/es';
@@ -24,6 +24,7 @@ export class PaymentMethodsComponent implements OnInit {
 
     paymentMethodDto: PaymentMethodDto;
     paymentMethodsData: CreateUpdatePaymentMethodDto;
+    bankList: BankDto[];
 
     paymentMethodList: Array<PaymentMethodTemp>;
     selectedPaymentMethod: PaymentMethodTemp;
@@ -37,7 +38,7 @@ export class PaymentMethodsComponent implements OnInit {
     orderSubtotal: number;
     orderTaxes: number;
     orderDiscount: number;
-
+    currency: string= '';
     total: number;
     bankName: string;
     date: Date;
@@ -54,16 +55,34 @@ export class PaymentMethodsComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) private _data: any
     ) {
         this._fuseTranslationLoaderService.loadTranslations(english, spanish);
-        this.paymentMethodDto = _data.PaymentMethod;
         this.paymentMethodsData = _data.paymentMethdosData;
         this.orderSubtotal = _data.subtotal;
         this.orderTaxes = _data.taxes;
         this.orderDiscount = _data.discount;
         this.amount = 0;
+        this.bankList = [];
         this.initialDataTemp();
     }
 
+    getConfigList(filter: string) {
+        this._posService.getConfList(filter).then(
+            (d) => {
+
+                if (filter == 'Moneda') {
+                    this.currency = JSON.parse(d[0].value).Currency;
+                } else if (filter == 'Impuestos') {
+                    this.bankList = JSON.parse(d[0].value);
+                }
+            },
+            (error) => {
+                console.log("Promise rejected with " + JSON.stringify(error));
+            }
+        );
+    }
+
     ngOnInit(): void {
+        this.getConfigList('Bancos');
+        this.getConfigList('Moneda');
     }
 
     totalChange(event) {
@@ -143,7 +162,7 @@ export class PaymentMethodsComponent implements OnInit {
         else if (this.selectedPaymentMethod.methodType == 'CHECK') {
             var bankCheck = new CreateUpdateBankCheckDto;
             bankCheck.total = this.total;
-            bankCheck.bank = this.clientName;
+            bankCheck.bank = this.bankName;
             bankCheck.date = this.date;
 
             this.paymentMethodsData.bankChecks.push(bankCheck);

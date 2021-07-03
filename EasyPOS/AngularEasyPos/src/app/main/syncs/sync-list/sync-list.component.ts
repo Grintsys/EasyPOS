@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -10,104 +10,142 @@ import { Subject } from 'rxjs';
 import { locale as english } from '../i18n/en';
 import { locale as spanish } from '../i18n/es';
 import { SyncDialogComponent } from '../sync-dialog/sync-dialog.component';
-import { SyncDown, SyncUp } from '../sync/sync.module';
+import { SyncDto, SyncEstados, Transacciones } from '../sync.model';
+import { SyncService } from '../syncs.service';
 
 @Component({
   selector: 'app-sync-list',
   templateUrl: './sync-list.component.html',
   styleUrls: ['./sync-list.component.scss'],
-  animations   : fuseAnimations,
+  animations: fuseAnimations,
   encapsulation: ViewEncapsulation.None
 })
 export class SyncListComponent {
-
-  dataSourceSyncDown = new MatTableDataSource(new SyncDown().getInitialData());
-  displayedColumnSyncDown: string[] = ['code', 'informationType', 'status', 'options'];
-
-  dataSourceSyncUp = new MatTableDataSource(new SyncUp().getInitialData());
-  displayedColumnSyncUp: string[] = ['code', 'customerCode', 'customerName', 'total', 'documentType', 'status', 'options'];
-
-  @ViewChild(MatPaginator, {static: true})
+  @ViewChild(MatPaginator, { static: true })
   paginator: MatPaginator;
 
-  @ViewChild(MatSort, {static: true})
+  @ViewChild(MatSort, { static: true })
   sort: MatSort;
 
-  @ViewChild('filter', {static: true})
+  @ViewChild('filter', { static: true })
   filter: ElementRef;
 
+  dataSource = new MatTableDataSource();
+  displayedColumnSyncDown: string[] = ['fecha', 'data', 'informationType', 'message', 'status', 'options'];
+
+  syncList: SyncDto[];
   dialogRef: any;
 
-
-  // Private
   private _unsubscribeAll: Subject<any>;
 
-  /**
-  * Constructor
-  *
-  * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
-  */
   constructor(
     private _fuseTranslationLoaderService: FuseTranslationLoaderService,
     private _matDialog: MatDialog,
-  )
-  {
+    private _syncService: SyncService
+  ) {
     this._fuseTranslationLoaderService.loadTranslations(english, spanish);
-    // Set the private defaults
     this._unsubscribeAll = new Subject();
+    this.syncList = [];
   }
 
-
-  /**
-  * On ngAfterViewInit
-  */
   ngAfterViewInit() {
-    this.dataSourceSyncDown.paginator = this.paginator;
-    this.dataSourceSyncDown.sort = this.sort;
-
-    this.dataSourceSyncUp.paginator = this.paginator;
-    this.dataSourceSyncUp.sort = this.sort;
+    this.getSyncList('');
   }
 
-  /**
-   * Search
-   *
-   * @param value
-   */
-    search(value): void
-    {
-        // Do your search here...
-        console.log(value);
+  search(value): void {
+    if (value.target != undefined && value.target.value != undefined) {
+      this.getSyncList(value.target.value);
     }
+  }
 
-  openDialogToEditJSON(): void
-    {
-        this.dialogRef = this._matDialog.open(SyncDialogComponent, {
-            panelClass: 'edit-JSON-dialog'
-        });
+  getSyncList(filter: string) {
+    this._syncService.getList(filter).then(
+      (d) => {
+        this.syncList = d;
+        this.dataSource = new MatTableDataSource(d);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      },
+      (error) => {
+        console.log("Promise rejected with " + JSON.stringify(error));
+      }
+    );
+  }
 
-        this.dialogRef.afterClosed()
-            .subscribe(response => {
-                if ( !response )
-                {
-                    return;
-                }
-                const actionType: string = response[0];
-                switch ( actionType )
-                {
-                    /**
-                     * Send
-                     */
-                    case 'send':
-                        console.log('new Mail');
-                        break;
-                    /**
-                     * Delete
-                     */
-                    case 'delete':
-                        console.log('delete Mail');
-                        break;
-                }
-            });
-    }
+  updateJson(data: SyncDto) {
+    this._syncService.update(data.id, data).then(
+      () => {
+        this.getSyncList('');
+      },
+      (error) => {
+        console.log("Promise rejected with " + JSON.stringify(error));
+      }
+    );
+  }
+
+  retry(id: string) {
+    this._syncService.retry(id).then(
+      () => {
+        this.getSyncList('');
+      },
+      (error) => {
+        console.log("Promise rejected with " + JSON.stringify(error));
+      }
+    );
+  }
+
+  validateRetry(syncDto: SyncDto){
+    if(syncDto.estado == 2 
+      && (syncDto.tipoTransaccion == Transacciones.CreacionCliente
+      || syncDto.tipoTransaccion == Transacciones.CreacionNotaDebito
+      || syncDto.tipoTransaccion == Transacciones.CreacionOrden
+      || syncDto.tipoTransaccion == Transacciones.CreacionNotaCredito)){
+        return true;
+      }
+      return false;
+  }
+
+  check(estado: SyncEstados) {
+    if (estado == SyncEstados.Fallido)
+      return true;
+    return false;
+  }
+
+  openDialogToEditJSON(syncData: SyncDto): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = "edit-JSON-dialog";
+    dialogConfig.data = {
+      syncDto: syncData,
+      mode: 'edit'
+    };
+    this.dialogRef = this._matDialog.open(SyncDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed()
+      .subscribe(response => {
+        if (response != undefined) {
+          syncData.data = response;
+          this.updateJson(syncData);
+        }
+
+      });
+  }
+
+  openViewData(syncData: SyncDto): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = "edit-JSON-dialog";
+    dialogConfig.data = {
+      syncDto: syncData,
+      mode: 'view'
+    };
+
+    this.dialogRef = this._matDialog.open(SyncDialogComponent, dialogConfig);
+  }
+
+  mapTransaccionesEnum(value: Transacciones) {
+    return Transacciones[value];
+  }
+
+  mapSyncEstadosEnum(value: SyncEstados) {
+    return SyncEstados[value];
+  }
 }

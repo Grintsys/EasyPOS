@@ -1,6 +1,5 @@
 export class CreateUpdateCustomerDto {
-    firstName?: string;
-    lastName?: string;
+    fullName?: string;
     idNumber?: string;
     rtn?: string;
     address?: string;
@@ -11,8 +10,7 @@ export class CreateUpdateCustomerDto {
 
 export class CustomerDto{
     id?: string;
-    firstName?: string;
-    lastName?: string;
+    fullName?: string;
     idNumber?: string;
     rtn?: string;
     address?: string;
@@ -26,6 +24,10 @@ export class CustomerLookupDto{
     firstName?: string;
     lastName?: string;
     fullName?: string;
+}
+
+export class CodeDto{
+    code?: string;
 }
 
 export enum CustomerStatus {

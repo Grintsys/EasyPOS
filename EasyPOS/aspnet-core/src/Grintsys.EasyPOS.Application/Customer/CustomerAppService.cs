@@ -21,6 +21,7 @@ namespace Grintsys.EasyPOS.Customer
         ICustomerAppService
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly IRepository<Customer, Guid> _repository;
         private readonly ISapManager _sapManager;
         private readonly IBackgroundJobManager _backgroundJobManager;
 
@@ -30,6 +31,7 @@ namespace Grintsys.EasyPOS.Customer
             ISapManager sapManager,
             IBackgroundJobManager backgroundJobManager) : base(repository)
         {
+            _repository = repository;
             _customerRepository = customerRepository;
             _sapManager = sapManager;
             _backgroundJobManager = backgroundJobManager;
@@ -37,6 +39,7 @@ namespace Grintsys.EasyPOS.Customer
 
         public override Task<CustomerDto> CreateAsync(CreateUpdateCustomerDto input)
         {
+            input.TenantId = CurrentTenant.Id;
             input.Status = Enums.CustomerStatus.Transferred;
             input.Code = $"c{Guid.NewGuid().ToString().Replace("-", "")}".Truncate(6);
             var customer = base.CreateAsync(input);
@@ -45,9 +48,10 @@ namespace Grintsys.EasyPOS.Customer
             {
                 CustomerCode = customer.Result.Code,
                 Address = customer.Result.Address,
-                CustomerName = customer.Result.FirstName + " " + customer.Result.LastName,
+                CustomerName = customer.Result.FullName,
                 RTN = customer.Result.RTN,
                 SalesPersonCode = 1,
+                Cedula = customer.Result.IdNumber
             };
 
             _backgroundJobManager.EnqueueAsync(_sapManager.CreateCustomerAsync(customerDto));            
@@ -64,18 +68,29 @@ namespace Grintsys.EasyPOS.Customer
             {
                 filter = filter.ToLower();
                 dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), 
-                    x => x.FirstName.ToLower().Contains(filter) 
-                    || x.LastName.ToLower().Contains(filter)
-                    || x.FullName.ToLower().Contains(filter)
-                    || x.RTN.ToLower().Contains(filter)
-                    || x.IdNumber.ToLower().Contains(filter)
-                    || x.PhoneNumber.ToLower().Contains(filter)
-                    || x.Address.ToLower().Contains(filter)
-                    || x.Code.ToLower().Contains(filter))
-                    .OrderBy(x => x.FirstName).ToList();
+                    x => x.FullName.ToLower().Contains(filter) 
+                    || (!string.IsNullOrEmpty(x.RTN) && x.RTN.ToLower().Contains(filter))
+                    || (!string.IsNullOrEmpty(x.IdNumber) && x.IdNumber.ToLower().Contains(filter))
+                    || (!string.IsNullOrEmpty(x.PhoneNumber) && x.PhoneNumber.ToLower().Contains(filter))
+                    || (!string.IsNullOrEmpty(x.Address) && x.Address.ToLower().Contains(filter))
+                    || (!string.IsNullOrEmpty(x.Code) && x.Code.ToLower().Contains(filter)))
+                    .OrderBy(x => x.FullName).ToList();
             }
 
             return dto;
+        }
+
+        public async Task<object> GetNextCode()
+        {
+            var customersList = await _repository.GetListAsync();
+
+            var suffix = customersList.Any() 
+                ? customersList.OrderByDescending(x => x.Suffix).FirstOrDefault().Suffix + 1
+                : 1;
+
+            string asString = suffix.ToString("D" + 5);
+
+            return new { Code = "CEP" + asString };
         }
     }
 }

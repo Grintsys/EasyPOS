@@ -105,7 +105,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
             (data) => {
                 this.warehouses = data;
                 if(this.warehouses.length > 0){
-                    this.selectedWarehouse = this.warehouses[0].name;
+                    this.selectWarehouse(this.warehouses[0].id)
                 }
             },
             (error) => {
@@ -117,8 +117,10 @@ export class ToolbarComponent implements OnInit, OnDestroy
     }
 
     selectWarehouse(warehouseId: string){
-        this.selectedWarehouse = this.warehouses.find(x => x.id == warehouseId).name;
+        var warehouse = this.warehouses.find(x => x.id == warehouseId)
+        this.selectedWarehouse = warehouse.name;
         localStorage.setItem("warehouseId", warehouseId);
+        localStorage.setItem("warehouseCode", warehouse.code);
 
         this._sharedService.updateWarehouse(warehouseId);
     }

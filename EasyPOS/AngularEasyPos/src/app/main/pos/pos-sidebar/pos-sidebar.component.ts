@@ -57,6 +57,9 @@ export class PosSidebarComponent {
     orderType: OrderType;
     pageType: string;
     paymentMethod: CreateUpdatePaymentMethodDto;
+    currency: string= '';
+
+    selectedOrderType: string;
 
     private _unsubscribeAll: Subject<any>;
 
@@ -83,12 +86,15 @@ export class PosSidebarComponent {
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
                 if (this._router.url == "/pos") {
+                    this.setOrderType('Contado');
                     this.pageType = "Orden";
                 } else if (this._router.url == "/debit-note") {
                     this.pageType = "Nota de Debito";
                 } else if (data.Type == "nota-credito") {
                     this.pageType = "Nota de Credito";
                 }
+
+                this.getConfigList('Moneda');
             });
     }
 
@@ -150,7 +156,9 @@ export class PosSidebarComponent {
         this.dialogRef.afterClosed().subscribe((response) => {
             if (response != undefined) {
                 this.customer = response;
+                this.order.customerCode = this.customer.code;
                 this.order.customerId = this.customer.id;
+                this.order.customerName = this.customer.fullName;
             }
             this.validateOrder();
         });
@@ -165,9 +173,11 @@ export class PosSidebarComponent {
                 return a + (value.salePrice * value.quantity) * (value.discount / 100);
             }, 0);
             this.order.isv = this.order.items.reduce(function (a, value) {
-                return a + (value.salePrice * value.quantity) * value.taxes;
+                if (value.taxes) {
+                    return a + (value.salePrice * value.quantity * 0.15);
+                }
+                return a;
             }, 0);
-
             this.order.total = this.order.items.reduce(function (a, value) {
                 return a + value.totalItem;
             }, 0);
@@ -202,12 +212,14 @@ export class PosSidebarComponent {
     resetOrder() {
         if (this.pageType == 'Nota de Credito') {
             this.pageType = 'Orden';
-            this._router.navigate([`/document/${this.order.id}/view`]);
+            this._router.navigate([`/document/${this.order.id}/order`]);
 
         }
         this.order = new OrderDto();
+        this.paymentMethod = new CreateUpdatePaymentMethodDto();
+
         this.customer = new CustomerDto();
-        this.orderType = OrderType.Ninguno;
+        this.orderType = OrderType.Contado;
         this.newOrderEvent.emit(this.order);
     }
 
@@ -224,15 +236,24 @@ export class PosSidebarComponent {
     setOrderType(orderType: string) {
         if (orderType == 'Contado') {
             this.orderType = OrderType.Contado;
+            this.selectedOrderType = 'contado';
         } else if (orderType == 'Credito') {
             this.orderType = OrderType.Credito;
+            this.selectedOrderType = 'credito';
         }
         this.validateOrder();
+    }
+
+    public onValChange(val: string) {
+        this.selectedOrderType = val;
     }
 
     createOrder() {
         var createUpdateOrder = new CreateUpdateOrderDto();
         createUpdateOrder.customerId = this.order.customerId;
+        createUpdateOrder.customerCode = this.order.customerCode;
+        createUpdateOrder.customerName = this.order.customerName;
+        createUpdateOrder.warehouseCode = localStorage.getItem("warehouseCode");
         createUpdateOrder.state = DocumentState.Creada;
         createUpdateOrder.orderType = this.orderType;
         createUpdateOrder.items = this.order.items.map(x => {
@@ -284,6 +305,9 @@ export class PosSidebarComponent {
         dto.orderId = this.order.id;
         dto.state = DocumentState.Creada;
         dto.customerId = this.order.customerId;
+        dto.customerCode = this.order.customerCode;
+        dto.customerName = this.order.customerName;
+        dto.warehouseCode = localStorage.getItem("warehouseCode");
         dto.items = this.order.items.map(x => {
             return this.mapDocumentItem(x);
         });
@@ -304,6 +328,9 @@ export class PosSidebarComponent {
         var dto = new CreateUpdateDebitNoteDto();
         dto.state = DocumentState.Creada;
         dto.customerId = this.order.customerId;
+        dto.customerCode = this.order.customerCode;
+        dto.customerName = this.order.customerName;
+        dto.warehouseCode = localStorage.getItem("warehouseCode");
         dto.items = this.order.items.map(x => {
             return this.mapDocumentItem(x);
         });
@@ -325,19 +352,32 @@ export class PosSidebarComponent {
 
     }
 
+    getConfigList(filter: string) {
+        this._posService.getConfList(filter).then(
+            (d) => {
+                this.currency = JSON.parse(d[0].value).Currency;
+            },
+            (error) => {
+                console.log("Promise rejected with " + JSON.stringify(error));
+            }
+        );
+    }
 
     mapDocumentItem(orderItem: OrderItemDto) {
         var dto = new CreateUpdateDocumentItemDto();
+        var iva = orderItem.taxes ? orderItem.quantity * orderItem.salePrice * 0.15 : 0;
+
         dto.productId = orderItem.productId || '',
             dto.name = orderItem.name || '',
             dto.description = orderItem.description || '',
             dto.code = orderItem.code || '',
             dto.salePrice = orderItem.salePrice || 0,
-            dto.taxes = orderItem.taxes || 0,
-            dto.discount = orderItem.discount || 0,
+            dto.taxes = orderItem.taxes || false,
+            dto.selectedTax = orderItem.taxes ? 'IVA' : 'EXE',
+            dto.taxAmount = iva;
+        dto.discount = orderItem.discount || 0,
             dto.quantity = orderItem.quantity || 0,
             dto.totalItem = orderItem.totalItem || 0
-
         return dto;
     }
 }

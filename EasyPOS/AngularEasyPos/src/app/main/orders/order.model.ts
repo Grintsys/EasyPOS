@@ -8,8 +8,7 @@ export class OrderProduct {
     salePrice: string;
     total: number;
 
-    constructor(orderProduct?)
-    {
+    constructor(orderProduct?) {
         orderProduct = orderProduct || {};
         this.code = orderProduct.code || FuseUtils.generateGUID();
         this.productName = orderProduct.productName || '';
@@ -35,8 +34,12 @@ export enum OrderType {
 export class CreateUpdateDocumentDto<T> {
     id?: string;
     customerId?: string;
+    customerCode?: string;
+    customerName?: string;
     state: DocumentState;
     items: T[] = [];
+    salesPersonId: number;
+    warehouseCode: string;
 }
 
 export class CreateUpdateDocumentItemDto {
@@ -45,7 +48,9 @@ export class CreateUpdateDocumentItemDto {
     description?: string;
     code?: string;
     salePrice: number;
-    taxes: number;
+    taxes: boolean;
+    taxAmount: number;
+    selectedTax: string;
     quantity: number;
     discount: number;
     totalItem: number;
@@ -62,6 +67,9 @@ export class DocumentDto<T> {
     discount: number = 0;
     total: number = 0;
     items: T[] = [];
+    salesPersonId: number;
+    warehouseCode: string;
+    creationTime: Date;
 }
 
 export class DocumentItemDto {
@@ -70,7 +78,9 @@ export class DocumentItemDto {
     description?: string;
     code?: string;
     salePrice: number;
-    taxes: number;
+    taxes: boolean;
+    taxAmount: number;
+    selectedTax: string;
     discount: number;
     quantity: number;
     totalItem: number;
@@ -96,18 +106,19 @@ export class OrderDto extends DocumentDto<OrderItemDto> {
 export class OrderItemDto extends DocumentItemDto {
     orderId?: string;
 
-    constructor(product: ProductDto){
+    constructor(product: ProductDto) {
         super();
         product = product || new ProductDto,
-        this.productId = product.id || '',
-        this.name = product.name || '',
-        this.description = product.description || '',
-        this.code = product.code || '',
-        this.salePrice = product.salePrice || 0,
-        this.taxes = product.taxes || 0,
-        this.discount = 0,
-        this.quantity = 0,
-        this.totalItem = this.quantity * this.salePrice
+            this.productId = product.id || '',
+            this.name = product.name || '',
+            this.description = product.description || '',
+            this.code = product.code || '',
+            this.salePrice = product.salePrice || 0,
+            this.taxes = product.taxes || false,
+            this.selectedTax = '',
+            this.discount = 0,
+            this.quantity = 0,
+            this.totalItem = this.quantity * this.salePrice
     }
 }
 
@@ -217,4 +228,14 @@ export class BankCheckDto {
     reference: string;
     bank: string;
     date: Date;
+}
+
+export class TaxesDto {
+    taxCode: string;
+    tax: string;
+}
+
+export class BankDto {
+    bankCode: string;
+    account: string;
 }

@@ -1,5 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import {
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    Validators,
+} from "@angular/forms";
 
 import { fuseAnimations } from "@fuse/animations";
 import { FuseTranslationLoaderService } from "@fuse/services/translation-loader.service";
@@ -11,6 +16,7 @@ import { locale as spanish } from "../i18n/es";
 import { CreateUpdateCustomerDto, CustomerDto } from "../customer.model";
 import { CustomerService } from "../customer.service";
 import { ActivatedRoute, Router } from "@angular/router";
+import { FuseUtils } from "@fuse/utils";
 
 @Component({
     selector: "app-customer",
@@ -53,6 +59,14 @@ export class CustomerComponent implements OnInit, OnDestroy {
                     this.pageType = "edit";
                 } else {
                     this.pageType = "new";
+                    this._customerService.getNextCode().then(
+                        (dto) => {
+                            this.customer.code = dto.code;
+                        },
+                        (error) => {
+                            console.log("Promise rejected with " + JSON.stringify(error));
+                        }
+                    );
                 }
                 this.customerForm = this.createcustomerForm(this.pageType);
             });
@@ -66,14 +80,46 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
     createcustomerForm(type: string): FormGroup {
         return this._formBuilder.group({
-            firstName: new FormControl({ value: this.customer.firstName, disabled: type === "view" }, type == 'new' ? Validators.required : Validators.minLength(1)),
-            lastName: new FormControl({ value: this.customer.lastName, disabled: type === "view" }, type == 'new' ? Validators.required : Validators.minLength(1)),
-            idNumber: new FormControl({ value: this.customer.idNumber, disabled: type === "view" }, Validators.minLength(13)),
-            rtn: new FormControl({ value: this.customer.rtn, disabled: type === "view" }, Validators.minLength(14)),
-            address: new FormControl({ value: this.customer.address, disabled: type === "view" }),
-            phoneNumber: new FormControl({ value: this.customer.phoneNumber, disabled: type === "view" }),
-            status: new FormControl({ value: this.customer.status, disabled: type === "view" }),
-            code: new FormControl({ value: this.customer.code, disabled: type === "view" }, type == 'new' ? Validators.required : Validators.minLength(1))
+            fullName: new FormControl(
+                { value: this.customer.fullName, disabled: type === "view" },
+                Validators.compose([
+                    Validators.required,
+                    Validators.minLength(1),
+                ])
+            ),
+            idNumber: new FormControl(
+                { value: this.customer.idNumber, disabled: type === "view" },
+                Validators.compose([
+                    Validators.required,
+                    Validators.minLength(13),
+                    Validators.maxLength(13),
+                    Validators.pattern(/^[0-9]\d*$/)
+                ])
+            ),
+            rtn: new FormControl(
+                { value: this.customer.rtn, disabled: type === "view" },
+                Validators.compose([
+                    Validators.required,
+                    Validators.minLength(14),
+                    Validators.maxLength(14),
+                    Validators.pattern(/^[0-9]\d*$/),
+                ])
+            ),
+            address: new FormControl(
+                { value: this.customer.address, disabled: type === "view" },
+            ),
+            phoneNumber: new FormControl({
+                value: this.customer.phoneNumber, disabled: type === "view"
+            },
+                Validators.compose([Validators.pattern(/^\([0-9]{3}[\-\)][0-9]{4}-[0-9]{4}$/)])
+            ),
+            status: new FormControl({
+                value: this.customer.status,
+                disabled: type === "view",
+            }),
+            code: new FormControl(
+                { value: this.customer.code, disabled: true }
+            ),
         });
     }
 
@@ -91,14 +137,10 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
     getFormObject(): CreateUpdateCustomerDto {
         let newCustomer = new CreateUpdateCustomerDto();
-        newCustomer.firstName =
-            this.customerForm.get("firstName").value == undefined
-                ? this.customer.firstName
-                : this.customerForm.get("firstName").value;
-        newCustomer.lastName =
-            this.customerForm.get("lastName").value == undefined
-                ? this.customer.lastName
-                : this.customerForm.get("lastName").value;
+        newCustomer.fullName =
+            this.customerForm.get("fullName").value == undefined
+                ? this.customer.fullName
+                : this.customerForm.get("fullName").value;
         newCustomer.idNumber =
             this.customerForm.get("idNumber").value == undefined
                 ? this.customer.idNumber

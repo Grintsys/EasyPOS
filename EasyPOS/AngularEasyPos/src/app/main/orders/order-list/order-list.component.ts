@@ -35,6 +35,7 @@ export class OrderListComponent {
 
     dataSource = new MatTableDataSource();
     displayedColumns: string[] = [
+        "creationTime",
         "documentType",
         "customerCode",
         "customerName",
@@ -45,7 +46,9 @@ export class OrderListComponent {
         "state",
         "options",
     ];
+    
     orders: OrderDto[];
+    currency: string;
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -61,6 +64,7 @@ export class OrderListComponent {
 
     ngAfterViewInit() {
         this.getOrderList('');
+        this.getConfigList('Moneda');
     }
 
     search(value): void {
@@ -69,6 +73,17 @@ export class OrderListComponent {
         }
     }
 
+    getConfigList(filter: string) {
+        this._orderService.getConfList(filter).then(
+            (d) => {
+                this.currency = JSON.parse(d[0].value).Currency;
+            },
+            (error) => {
+                console.log("Promise rejected with " + JSON.stringify(error));
+            }
+        );
+    }
+    
     getOrderList(filter: string) {
         var dataList: any[] = [];
 

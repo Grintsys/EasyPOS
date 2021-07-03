@@ -27,6 +27,8 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.BackgroundWorkers;
+using Grintsys.EasyPOS.Sincronizador;
 
 namespace Grintsys.EasyPOS
 {
@@ -40,7 +42,8 @@ namespace Grintsys.EasyPOS
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpSwashbuckleModule)
+        typeof(AbpSwashbuckleModule), 
+        typeof(AbpBackgroundWorkersModule)
     )]
     public class EasyPOSHttpApiHostModule : AbpModule
     {
@@ -232,6 +235,8 @@ namespace Grintsys.EasyPOS
             app.UseAuditing();
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();
+
+            context.AddBackgroundWorker<SyncWorker>();
         }
     }
 }

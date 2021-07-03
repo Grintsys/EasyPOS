@@ -31,6 +31,12 @@ namespace Grintsys.EasyPOS.DebitNote
             _orderRepository = orderRepository;
         }
 
+        public override Task<DebitNoteDto> CreateAsync(CreateUpdateDebitNoteDto input)
+        {
+            input.TenantId = CurrentTenant.Id;
+            return base.CreateAsync(input);
+        }
+
         public override async Task<DebitNoteDto> GetAsync(Guid id)
         {
             var order = await _debitNoteRepository.GetDebitNoteByIdAsync(id);

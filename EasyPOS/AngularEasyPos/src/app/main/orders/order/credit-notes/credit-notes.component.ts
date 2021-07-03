@@ -40,7 +40,8 @@ export class CreditNotesComponent {
 
     @Input() order: OrderDto;
     pageType: string;
-
+    currency: string= '';
+    
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -66,6 +67,7 @@ export class CreditNotesComponent {
                 if (data.Type == "order") {
                     this.pageType = data.Type;
                     this.setDataSource();
+                    this.getConfigList('Moneda');
                 }
             });
     }
@@ -74,6 +76,17 @@ export class CreditNotesComponent {
         this.dataSource = new MatTableDataSource(this.order.creditNotes);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+    }
+
+    getConfigList(filter: string) {
+        this._orderService.getConfList(filter).then(
+            (d) => {
+                this.currency = JSON.parse(d[0].value).Currency;
+            },
+            (error) => {
+                console.log("Promise rejected with " + JSON.stringify(error));
+            }
+        );
     }
 
     delete(id: string) {

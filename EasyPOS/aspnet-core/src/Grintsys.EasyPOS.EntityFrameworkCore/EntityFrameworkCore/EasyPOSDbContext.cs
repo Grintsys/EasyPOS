@@ -36,6 +36,8 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
         public DbSet<PaymentMethod.CreditDebitCard> CreditDebitCards { get; set; }
         public DbSet<PaymentMethod.WireTransfer> WireTransfers { get; set; }
         public DbSet<PaymentMethod.Cash> Cash { get; set; }
+        public DbSet<ConfigurationManager.ConfigurationManager> ConfigurationManager { get; set; }
+        public DbSet<Sincronizador.Sincronizador> Sincronizador { get; set; }
 
         /* Add DbSet properties for your Aggregate Roots / Entities here.
          * Also map them inside EasyPOSDbContextModelCreatingExtensions.ConfigureEasyPOS
@@ -64,6 +66,10 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                  * Also see the EasyPOSEfCoreEntityExtensionMappings class
                  */
             });
+
+            builder.Entity<AppUser>()
+                .Property(e => e.SalesPersonCode)
+                .HasDefaultValue(1);
 
             /* Configure your own tables/entities inside the ConfigureEasyPOS method */
 

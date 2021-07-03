@@ -15,6 +15,18 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
 
             /* Configure your own tables/entities inside here */
 
+            builder.Entity<ConfigurationManager.ConfigurationManager>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "ConfigurationManager", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+            });
+
+            builder.Entity<Sincronizador.Sincronizador>(b =>
+            {
+                b.ToTable(EasyPOSConsts.DbTablePrefix + "Sincronizador", EasyPOSConsts.DbSchema);
+                b.ConfigureByConvention();
+            });
+
             builder.Entity<Product.Product>(b =>
             {
                 b.ToTable(EasyPOSConsts.DbTablePrefix + "Products", EasyPOSConsts.DbSchema);
@@ -49,6 +61,10 @@ namespace Grintsys.EasyPOS.EntityFrameworkCore
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
             });
+
+            builder.Entity<Customer.Customer>()
+                .Property(p => p.Suffix)
+                .ValueGeneratedOnAdd();
 
             builder.Entity<PaymentMethod.PaymentMethod>(b =>
             {

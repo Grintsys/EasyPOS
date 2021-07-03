@@ -82,7 +82,7 @@ namespace Grintsys.EasyPOS.Pages.Account
             _abpIdentityUser = await UserManager.GetByIdAsync(userDto.Id);
 
             // Send user an email to confirm email address      
-            await SendEmailToAskForEmailConfirmationAsync(_abpIdentityUser);
+            //await SendEmailToAskForEmailConfirmationAsync(_abpIdentityUser);
         }
 
         protected override async Task RegisterExternalUserAsync(ExternalLoginInfo externalLoginInfo, string emailAddress)
@@ -108,7 +108,7 @@ namespace Grintsys.EasyPOS.Pages.Account
                 ))).CheckErrors();
             }
 
-            await SendEmailToAskForEmailConfirmationAsync(user);
+            //await SendEmailToAskForEmailConfirmationAsync(user);
         }
 
 

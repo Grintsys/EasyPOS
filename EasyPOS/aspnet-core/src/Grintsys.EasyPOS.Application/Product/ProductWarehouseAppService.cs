@@ -25,6 +25,12 @@ namespace Grintsys.EasyPOS.Product
             _productWarehouseRepository = productWarehouseRepository;
         }
 
+        public override Task<ProductWarehouseDto> CreateAsync(CreateUpdateProductWarehouseDto input)
+        {
+            input.TenantId = CurrentTenant.Id;
+            return base.CreateAsync(input);
+        }
+
         public override async Task<ProductWarehouseDto> GetAsync(Guid id)
         {
             var data = await _productWarehouseRepository.GetAsync(id);

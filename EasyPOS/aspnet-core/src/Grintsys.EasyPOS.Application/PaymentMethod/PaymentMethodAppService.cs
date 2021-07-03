@@ -20,5 +20,11 @@ namespace Grintsys.EasyPOS.PaymentMethod
         public PaymentMethodAppService(IRepository<PaymentMethod, Guid> repository) : base(repository)
         {
         }
+
+        public override Task<PaymentMethodDto> CreateAsync(CreateUpdatePaymentMethodDto input)
+        {
+            input.TenantId = CurrentTenant.Id;
+            return base.CreateAsync(input);
+        }
     }
 }

@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Grintsys.EasyPOS.Product;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using SAPbobsCOM;
 using System;
 using System.Collections.Generic;
@@ -13,19 +16,31 @@ namespace Grintsys.EasyPOS.SAP
     public class SapManager : ISapManager
     {
         private readonly IConfiguration _settingProvider;
-        private readonly IRepository<Product.Product> _productRepository;
+        private readonly IProductRepository _productRepository;
         private readonly IRepository<Customer.Customer> _customerRepository;
+        private readonly IRepository<ProductWarehouse> _productWarehouseRepository;
+        private readonly IRepository<Warehouse> _warehouseRepository;
+        private readonly IRepository<Sincronizador.Sincronizador> _syncRepository;
         private readonly ILogger<SapManager> _logger;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public SapManager(IConfiguration settingProvider, 
-            IRepository<Product.Product> products,
+        public SapManager(IConfiguration settingProvider,
+            IProductRepository products,
             IRepository<Customer.Customer> customers,
-            ILogger<SapManager> logger)
+            ILogger<SapManager> logger,
+            IRepository<Sincronizador.Sincronizador> syncRepository,
+            IServiceScopeFactory serviceScopeFactory,
+            IRepository<ProductWarehouse> productWarehouseRepository,
+            IRepository<Warehouse> warehouseRepository)
         {
             _settingProvider = settingProvider;
             _productRepository = products;
             _customerRepository = customers;
             _logger = logger;
+            _syncRepository = syncRepository;
+            _serviceScopeFactory = serviceScopeFactory;
+            _productWarehouseRepository = productWarehouseRepository;
+            _warehouseRepository = warehouseRepository;
         }
 
         public async Task<SapResponse> CreateCreditNoteAsync(CreateOrUpdateSalesOrder input)
@@ -36,12 +51,24 @@ namespace Grintsys.EasyPOS.SAP
             var sapMessage = string.Format("Successfully added Sales Order DocEntry: {0}", oCompany.GetNewObjectKey());
             var isSuccess = true;
 
+            var syncRecord = new Sincronizador.Sincronizador()
+            {
+                TipoTransaccion = Enums.Transacciones.CreacionNotaCredito,
+                Estado = Enums.SyncEstados.Transferred,
+                Data = JsonConvert.SerializeObject(input)
+            };
+
             _logger.LogInformation("Creating CreditNote");
 
             if (companyResponse != 0)
-            {    
+            {
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
                 _logger.LogError(errorMessage, errorCode);
+
+                syncRecord.Message = errorMessage;
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                await _syncRepository.InsertAsync(syncRecord);
 
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
@@ -76,11 +103,10 @@ namespace Grintsys.EasyPOS.SAP
                         + " - "
                         + oCompany.GetLastErrorDescription();
 
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
                 _logger.LogError(sapMessage);
             }
-
-            //TODO:
-            //Add summary information into sap sync table
 
             //recomended from http://www.appseconnect.com/di-api-memory-leak-in-sap-business-one-9-0/
             //System.Runtime.InteropServices.Marshal.ReleaseComObject(salesOrder);
@@ -94,7 +120,11 @@ namespace Grintsys.EasyPOS.SAP
                     Message = sapMessage
                 };
 
+            syncRecord.Message = response.Message;
+            await _syncRepository.InsertAsync(syncRecord);
+
             return response;
+            return null;
         }
 
         public async Task<SapResponse> CreateCustomerAsync(CreateOrUpdateCustomer input)
@@ -104,9 +134,22 @@ namespace Grintsys.EasyPOS.SAP
             var sapMessage = string.Format("Successfully added new bussiness partner DocEntry: {0}", company.GetNewObjectKey());
             var isSuccess = true;
 
+            var syncRecord = new Sincronizador.Sincronizador()
+            {
+                TipoTransaccion = Enums.Transacciones.CreacionCliente,
+                Data = JsonConvert.SerializeObject(input),
+                Estado = Enums.SyncEstados.Transferred
+            };
+
             if (companyResponse != 0)
             {
                 company.GetLastError(out int errorCode, out string errorMessage);
+
+                syncRecord.Message = errorMessage;
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                await _syncRepository.InsertAsync(syncRecord);
+
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
 
@@ -139,20 +182,27 @@ namespace Grintsys.EasyPOS.SAP
                             + " - "
                             + company.GetLastErrorDescription();
 
+                    syncRecord.Estado = Enums.SyncEstados.Failed;
+
                     _logger.LogError(sapMessage);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 isSuccess = false;
                 sapMessage = e.Message;
 
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
                 _logger.LogError(sapMessage);
-            }          
+            }
 
             //System.Runtime.InteropServices.Marshal.ReleaseComObject(businessPartner);
             company.Disconnect();
             _logger.LogInformation("Successfull created");
+
+            syncRecord.Message = sapMessage;
+            await _syncRepository.InsertAsync(syncRecord);
 
             var response = new SapResponse
             {
@@ -161,6 +211,7 @@ namespace Grintsys.EasyPOS.SAP
             };
 
             return response;
+            return null;
         }
 
         public async Task<SapResponse> CreateDebitNoteAsync(CreateOrUpdateSalesOrder input)
@@ -171,9 +222,22 @@ namespace Grintsys.EasyPOS.SAP
             var sapMessage = string.Format("Successfully added Sales Order DocEntry: {0}", oCompany.GetNewObjectKey());
             var isSuccess = true;
 
+            var syncRecord = new Sincronizador.Sincronizador()
+            {
+                TipoTransaccion = Enums.Transacciones.CreacionNotaDebito,
+                Data = JsonConvert.SerializeObject(input),
+                Estado = Enums.SyncEstados.Transferred
+            };
+
             if (companyResponse != 0)
             {
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
+
+                syncRecord.Message = errorMessage;
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                await _syncRepository.InsertAsync(syncRecord);
+
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
 
@@ -212,6 +276,8 @@ namespace Grintsys.EasyPOS.SAP
                         + " - "
                         + oCompany.GetLastErrorDescription();
 
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
                 _logger.LogError(sapMessage);
             }
 
@@ -230,7 +296,12 @@ namespace Grintsys.EasyPOS.SAP
                     Message = sapMessage
                 };
 
+            syncRecord.Message = sapMessage;
+
+            await _syncRepository.InsertAsync(syncRecord);
+
             return response;
+            return null;
         }
 
         public async Task<SapResponse> CreateSalesOrderAsync(CreateOrUpdateSalesOrder input)
@@ -243,9 +314,22 @@ namespace Grintsys.EasyPOS.SAP
             var sapMessage = string.Format("Successfully added Sales Order DocEntry: {0}", oCompany.GetNewObjectKey());
             var isSuccess = true;
 
+            var syncRecord = new Sincronizador.Sincronizador()
+            {
+                TipoTransaccion = Enums.Transacciones.CreacionOrden,
+                Data = JsonConvert.SerializeObject(input),
+                Estado = Enums.SyncEstados.Transferred
+            };
+
             if (companyResponse != 0)
             {
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
+
+                syncRecord.Message = errorMessage;
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                await _syncRepository.InsertAsync(syncRecord);
+
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
 
@@ -280,6 +364,8 @@ namespace Grintsys.EasyPOS.SAP
                         + " - "
                         + oCompany.GetLastErrorDescription();
 
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
                 _logger.LogError(sapMessage);
             }
 
@@ -299,7 +385,12 @@ namespace Grintsys.EasyPOS.SAP
                     Message = sapMessage
                 };
 
+            syncRecord.Message = sapMessage;
+
+            await _syncRepository.InsertAsync(syncRecord);
+
             return response;
+            return null;
         }
 
         public async Task<CompanyMetadataDto> GetCompanyMetadata()
@@ -309,9 +400,22 @@ namespace Grintsys.EasyPOS.SAP
             Company oCompany = GetCompany();
             var companyResponse = oCompany.Connect();
 
+            var syncRecord = new Sincronizador.Sincronizador()
+            {
+                TipoTransaccion = Enums.Transacciones.SyncMetadata,
+                Data = string.Empty,
+                Estado = Enums.SyncEstados.Transferred
+            };
+
             if (companyResponse != 0)
             {
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
+
+                syncRecord.Message = errorMessage;
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                await _syncRepository.InsertAsync(syncRecord);
+
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
 
@@ -345,7 +449,11 @@ namespace Grintsys.EasyPOS.SAP
                 Banks = banks
             };
 
+            syncRecord.Message = "Succesfully";
+            await _syncRepository.InsertAsync(syncRecord);
+
             return companyMetadata;
+            return null;
         }
 
         public async Task<List<CustomerDto>> GetCustomerListAsync(int skipCount = 100)
@@ -353,9 +461,22 @@ namespace Grintsys.EasyPOS.SAP
             Company oCompany = GetCompany();
             var companyResponse = oCompany.Connect();
 
+            var syncRecord = new Sincronizador.Sincronizador()
+            {
+                TipoTransaccion = Enums.Transacciones.SyncClientes,
+                Data = string.Empty,
+                Estado = Enums.SyncEstados.Transferred
+            };
+
             if (companyResponse != 0)
             {
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
+
+                syncRecord.Message = errorMessage;
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                await _syncRepository.InsertAsync(syncRecord);
+
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
 
@@ -378,21 +499,26 @@ namespace Grintsys.EasyPOS.SAP
                 {
                     CardCode = a.SelectSingleNode("CardCode").InnerText,
                     CardName = a.SelectSingleNode("CardName").InnerText,
-                    Address = a.SelectSingleNode("Address").InnerText,
-                    Celular = a.SelectSingleNode("Celular").InnerText,
-                    Phone1 = a.SelectSingleNode("Phone1").InnerText,
-                    Phone2 = a.SelectSingleNode("Phone2").InnerText,
-                    City = a.SelectSingleNode("City").InnerText,
-                    Balance = decimal.Parse(a.SelectSingleNode("Balance").InnerText),
-                    RTN = a.SelectSingleNode("RTN").InnerText,
-                    Cedula = a.SelectSingleNode("Cedula").InnerText,
-                    CartType = char.Parse(a.SelectSingleNode("CartType").InnerText),
-                    CreateDate = DateTime.Parse(a.SelectSingleNode("CreateDate").InnerText),
-                    Email = a.SelectSingleNode("Email").InnerText
+                    Address = a.SelectSingleNode("Address")?.InnerText,
+                    Celular = a.SelectSingleNode("Cellular")?.InnerText,
+                    Phone1 = a.SelectSingleNode("Phone1")?.InnerText,
+                    Phone2 = a.SelectSingleNode("Phone2")?.InnerText,
+                    City = a.SelectSingleNode("City")?.InnerText,
+                    Balance = decimal.Parse(a.SelectSingleNode("Balance")?.InnerText),
+                    RTN = a.SelectSingleNode("U_rtn")?.InnerText,
+                    Cedula = a.SelectSingleNode("U_cedula")?.InnerText,
+                    CartType = char.Parse(a.SelectSingleNode("CardType").InnerText),
+                    CreateDate = DateTime.ParseExact(a.SelectSingleNode("CreateDate").InnerText.Insert(4, "/").Insert(7, "/"), "yyyy/MM/dd", new System.Globalization.CultureInfo("en-US")),
+                    Email = a.SelectSingleNode("E_mail")?.InnerText
                 })
                 .ToList();
 
+            syncRecord.Message = "Successfully";
+
+            await _syncRepository.InsertAsync(syncRecord);
+
             return customers.Take(skipCount).ToList();
+            return null;
         }
 
         public async Task<List<ProductDto>> GetProductListAsync(int skipCount = 100)
@@ -400,9 +526,22 @@ namespace Grintsys.EasyPOS.SAP
             Company oCompany = GetCompany();
             var companyResponse = oCompany.Connect();
 
+            var syncRecord = new Sincronizador.Sincronizador()
+            {
+                TipoTransaccion = Enums.Transacciones.SyncProductos,
+                Data = string.Empty,
+                Estado = Enums.SyncEstados.Transferred
+            };
+
             if (companyResponse != 0)
             {
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
+
+                syncRecord.Message = errorMessage;
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                await _syncRepository.InsertAsync(syncRecord);
+
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
 
@@ -419,38 +558,58 @@ namespace Grintsys.EasyPOS.SAP
             var nodeList = xml.SelectNodes("/BOM/BO/OITW/row");
 
             var products = nodeList.Cast<XmlNode>()
-                .Select(a => new ProductDto 
-                { 
+                .Select(a => new ProductDto
+                {
                     ItemCode = a.SelectSingleNode("ItemCode").InnerText,
                     ItemName = a.SelectSingleNode("ItemName").InnerText,
                     OnHand = double.Parse(a.SelectSingleNode("OnHand").InnerText),
                     SalesPrice = double.Parse(a.SelectSingleNode("AvgPrice").InnerText),
-                    WhsCode = a.SelectSingleNode("WhsCode").InnerText
+                    WhsCode = a.SelectSingleNode("WhsCode").InnerText,
+                    HasTaxes = bool.Parse(a.SelectSingleNode("HasTaxes")?.InnerText),
                 })
                 .ToList();
-   
+
+            syncRecord.Message = "Successfully";
+
+            await _syncRepository.InsertAsync(syncRecord);
+
             return products.Take(skipCount).ToList();
+            return null;
         }
 
         public async Task UpsertProducts()
         {
+            var savedDict = new Dictionary<string, Guid>();
             var items = await GetProductListAsync();
 
             foreach (var item in items)
             {
-                var productToUpdate = _productRepository.FirstOrDefault(x => x.Code == item.ItemCode);
+                var productToUpdate = await _productRepository.FirstOrDefaultAsync(x => x.Code == item.ItemCode);
 
-                var whsId = productToUpdate.ProductWarehouse.FirstOrDefault().Id;
-                var product = MapProduct(item, whsId);
                 var hasProduct = !(productToUpdate is null);
 
                 if (hasProduct)
                 {
-                    await _productRepository.UpdateAsync(productToUpdate);
+                    await UpsertProductWarehouse(savedDict, item.WhsCode, productToUpdate.Id, (int)item.OnHand);
                 }
-                else
+                else if (!hasProduct)
                 {
-                    await _productRepository.InsertAsync(product);
+                    var prodId = Guid.Empty;
+
+                    var dictResult = savedDict.FirstOrDefault(x => x.Key == item.ItemCode);
+                    if (dictResult.Key != null)
+                    {
+                        prodId = dictResult.Value;
+                    }
+                    else
+                    {
+                        var productDto = MapProduct(item);
+                        var product = await _productRepository.InsertAsync(productDto);
+                        savedDict.Add(product.Code, product.Id);
+                        prodId = product.Id;
+                    }
+
+                    await UpsertProductWarehouse(savedDict, item.WhsCode, prodId, (int)item.OnHand);
                 }
             }
         }
@@ -492,13 +651,12 @@ namespace Grintsys.EasyPOS.SAP
             return oCompany;
         }
 
-
         private Customer.Customer MapCustomer(CustomerDto customer)
         {
             return new Customer.Customer
             {
                 Code = customer.CardCode,
-                FirstName = customer.CardName,
+                FullName = customer.CardName,
                 Address = customer.Address,
                 RTN = customer.RTN,
                 PhoneNumber = customer.Phone1,
@@ -507,26 +665,70 @@ namespace Grintsys.EasyPOS.SAP
             };
         }
 
-        private Product.Product MapProduct(ProductDto item, Guid warehouseId)
+        private Product.Product MapProduct(ProductDto item)
         {
             var product = new Product.Product()
             {
                 Code = item.ItemCode,
                 Name = item.ItemName,
                 Description = item.ItemName,
-                SalePrice = (float)item.SalesPrice
+                SalePrice = (float)item.SalesPrice,
+                Taxes = item.HasTaxes
             };
-
-            var productWarehouseDto = new Product.ProductWarehouse()
-            {
-                WarehouseId =  warehouseId,
-                Inventory = (int)item.OnHand,
-                ProductId = product.Id,  
-            };
-
-            product.ProductWarehouse.Add(productWarehouseDto);
 
             return product;
+        }
+
+        private async Task UpsertProductWarehouse(Dictionary<string, Guid> saved, string warehouseCode, Guid productId, int stock)
+        {
+
+            var warehouse = await _warehouseRepository.FirstOrDefaultAsync(x => x.Code == warehouseCode);
+            var wareHouseId = warehouse != null ? warehouse.Id : Guid.Empty;
+
+            if (warehouse == null)
+            {
+                var dicResult = saved.FirstOrDefault(x => x.Key == warehouseCode);
+
+                if (dicResult.Key == null)
+                {
+                    warehouse = await _warehouseRepository.InsertAsync(new Warehouse()
+                    {
+                        Code = warehouseCode,
+                        Name = "Bodega " + warehouseCode
+                    });
+
+                    wareHouseId = warehouse.Id;
+
+                    saved.Add(warehouse.Code, warehouse.Id);
+                }
+                else
+                {
+                    wareHouseId = dicResult.Value;
+                }
+            }
+
+            if (stock > 0)
+            {
+                var prodWareHouse = await _productWarehouseRepository
+                    .FirstOrDefaultAsync(x => x.WarehouseId == wareHouseId && x.ProductId == productId);
+
+                if (prodWareHouse != null)
+                {
+                    prodWareHouse.Inventory = stock;
+                    await _productWarehouseRepository.UpdateAsync(prodWareHouse);
+                }
+                else
+                {
+                    var newProdWarehouse = new ProductWarehouse()
+                    {
+                        WarehouseId = wareHouseId,
+                        Inventory = stock,
+                        ProductId = productId,
+                    };
+                    await _productWarehouseRepository.InsertAsync(newProdWarehouse);
+                }
+
+            }
         }
     }
 
