@@ -54,7 +54,7 @@ export class PosProductsComponent implements OnChanges {
 
     @Input() orderItems: OrderItemDto[];
     @Output() newOrderItemsEvent = new EventEmitter<OrderItemDto[]>();
-
+    currency: string= '';
     taxesList: TaxesDto[];
     subscription: Subscription;
     productList: ProductDto[];
@@ -88,12 +88,19 @@ export class PosProductsComponent implements OnChanges {
         this.dataSource.sort = this.sort;
 
         this.getConfigList('Impuestos');
+        this.getConfigList('Moneda');
     }
+
 
     getConfigList(filter: string) {
         this._posService.getConfList(filter).then(
             (d) => {
-                this.taxesList = JSON.parse(d[0].value);
+                if (filter == 'Moneda') {
+                    this.currency = JSON.parse(d[0].value).Currency;
+                } else if (filter == 'Impuestos') {
+                    this.taxesList = JSON.parse(d[0].value);
+
+                }
             },
             (error) => {
                 console.log("Promise rejected with " + JSON.stringify(error));
@@ -101,7 +108,7 @@ export class PosProductsComponent implements OnChanges {
         );
     }
 
-    selectedTaxChange(value: any){
+    selectedTaxChange(value: any) {
         console.log(value);
     }
 

@@ -8,6 +8,7 @@ import {
 } from "@angular/router";
 import { BehaviorSubject, Observable } from "rxjs";
 import { CreateUpdateOrderDto, DocumentDto, DocumentItemDto, OrderDto } from "./order.model";
+import { ConfigurationDto } from "../configurations/configuration.model";
 
 @Injectable()
 export class OrderService implements Resolve<any> {
@@ -132,6 +133,12 @@ export class OrderService implements Resolve<any> {
         const promise = this._httpClient
             .get<OrderDto[]>(url, this.getHttpOptions())
             .toPromise();
+        return promise;
+    }
+
+    public getConfList(filter: string): Promise<any> {
+        var url = `${this.baseUrl}configuration-manager/config-list${filter != `` ? `?filter=${filter}` : ``}`;
+        const promise = this._httpClient.get<ConfigurationDto[]>(url, this.getHttpOptions()).toPromise();
         return promise;
     }
 

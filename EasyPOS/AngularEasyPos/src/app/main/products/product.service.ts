@@ -8,6 +8,7 @@ import {
 import { BehaviorSubject, Observable } from "rxjs";
 import { ProductDto } from "./product.model";
 import { Router } from "@angular/router";
+import { ConfigurationDto } from "../configurations/configuration.model";
 
 @Injectable()
 export class ProductService implements Resolve<any> {
@@ -72,7 +73,7 @@ export class ProductService implements Resolve<any> {
 
     public get(productId: string): Promise<any> {
         var warehouseId = localStorage.getItem('warehouseId');
-        var url = `${this.baseUrl}/${productId}/product/${warehouseId}`;
+        var url = `${this.baseUrl}product/${productId}/product/${warehouseId}`;
         const promise = this._httpClient
             .get<ProductDto>(url, this.getHttpOptions())
             .toPromise();
@@ -81,7 +82,7 @@ export class ProductService implements Resolve<any> {
 
     public getList(filter: string): Promise<any> {
         var warehouseId = localStorage.getItem('warehouseId');
-        var url = `${this.baseUrl}/product-list/${warehouseId}${
+        var url = `${this.baseUrl}product/product-list/${warehouseId}${
             filter != `` ? `?filter=${filter}` : ``
         }`;
         const promise = this._httpClient
@@ -91,10 +92,16 @@ export class ProductService implements Resolve<any> {
     }
 
     public getListByWarehouse(wareHouseId: string): Promise<any> {
-        var url = `${this.baseUrl}/product-list-by-warehouse/${wareHouseId}`;
+        var url = `${this.baseUrl}product/product-list-by-warehouse/${wareHouseId}`;
         const promise = this._httpClient
             .get<ProductDto[]>(url, this.getHttpOptions())
             .toPromise();
+        return promise;
+    }
+    
+    public getConfList(filter: string): Promise<any> {
+        var url = `${this.baseUrl}configuration-manager/config-list${filter != `` ? `?filter=${filter}` : ``}`;
+        const promise = this._httpClient.get<ConfigurationDto[]>(url, this.getHttpOptions()).toPromise();
         return promise;
     }
 
@@ -108,7 +115,7 @@ export class ProductService implements Resolve<any> {
     }
 
     private checkSession() {
-        this.baseUrl = `${localStorage.getItem("baseUrl")}/api/app/product`;
+        this.baseUrl = `${localStorage.getItem("baseUrl")}/api/app/`;
         this.authToken = localStorage.getItem("token");
 
         if (this.authToken == null || this.baseUrl == null) {

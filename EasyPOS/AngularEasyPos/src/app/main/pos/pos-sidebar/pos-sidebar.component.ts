@@ -57,7 +57,8 @@ export class PosSidebarComponent {
     orderType: OrderType;
     pageType: string;
     paymentMethod: CreateUpdatePaymentMethodDto;
-    
+    currency: string= '';
+
     selectedOrderType: string;
 
     private _unsubscribeAll: Subject<any>;
@@ -86,13 +87,14 @@ export class PosSidebarComponent {
             .subscribe((data) => {
                 if (this._router.url == "/pos") {
                     this.setOrderType('Contado');
-                    
                     this.pageType = "Orden";
                 } else if (this._router.url == "/debit-note") {
                     this.pageType = "Nota de Debito";
                 } else if (data.Type == "nota-credito") {
                     this.pageType = "Nota de Credito";
                 }
+
+                this.getConfigList('Moneda');
             });
     }
 
@@ -171,7 +173,7 @@ export class PosSidebarComponent {
                 return a + (value.salePrice * value.quantity) * (value.discount / 100);
             }, 0);
             this.order.isv = this.order.items.reduce(function (a, value) {
-                if(value.taxes){
+                if (value.taxes) {
                     return a + (value.salePrice * value.quantity * 0.15);
                 }
                 return a;
@@ -245,7 +247,7 @@ export class PosSidebarComponent {
     public onValChange(val: string) {
         this.selectedOrderType = val;
     }
-    
+
     createOrder() {
         var createUpdateOrder = new CreateUpdateOrderDto();
         createUpdateOrder.customerId = this.order.customerId;
@@ -350,22 +352,32 @@ export class PosSidebarComponent {
 
     }
 
+    getConfigList(filter: string) {
+        this._posService.getConfList(filter).then(
+            (d) => {
+                this.currency = JSON.parse(d[0].value).Currency;
+            },
+            (error) => {
+                console.log("Promise rejected with " + JSON.stringify(error));
+            }
+        );
+    }
 
     mapDocumentItem(orderItem: OrderItemDto) {
         var dto = new CreateUpdateDocumentItemDto();
         var iva = orderItem.taxes ? orderItem.quantity * orderItem.salePrice * 0.15 : 0;
-        
+
         dto.productId = orderItem.productId || '',
-        dto.name = orderItem.name || '',
-        dto.description = orderItem.description || '',
-        dto.code = orderItem.code || '',
-        dto.salePrice = orderItem.salePrice || 0,
-        dto.taxes = orderItem.taxes || false,
-        dto.selectedTax = orderItem.taxes ? 'IVA' : 'EXE',
-        dto.taxAmount = iva;
+            dto.name = orderItem.name || '',
+            dto.description = orderItem.description || '',
+            dto.code = orderItem.code || '',
+            dto.salePrice = orderItem.salePrice || 0,
+            dto.taxes = orderItem.taxes || false,
+            dto.selectedTax = orderItem.taxes ? 'IVA' : 'EXE',
+            dto.taxAmount = iva;
         dto.discount = orderItem.discount || 0,
-        dto.quantity = orderItem.quantity || 0,
-        dto.totalItem = orderItem.totalItem || 0
+            dto.quantity = orderItem.quantity || 0,
+            dto.totalItem = orderItem.totalItem || 0
         return dto;
     }
 }

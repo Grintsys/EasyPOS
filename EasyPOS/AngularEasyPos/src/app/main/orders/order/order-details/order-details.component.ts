@@ -17,6 +17,7 @@ import { locale as spanish } from "../../i18n/es";
 export class OrderDetailsComponent implements OnInit {
     orderForm: FormGroup;
     pageType: string;
+    currency: string= '';
 
     @Input() order: OrderDto;
     // Private
@@ -43,6 +44,7 @@ export class OrderDetailsComponent implements OnInit {
             .subscribe((data) => {
                 this.pageType = data.Type;
                 this.orderForm = this.createorderForm();
+                this.getConfigList('Moneda');
             });
     }
 
@@ -54,15 +56,26 @@ export class OrderDetailsComponent implements OnInit {
 
     createorderForm(): FormGroup {
         return this._formBuilder.group({
-            subtotal: [{ value: 'HNL ' + this.order.subTotal, disabled: true }],
-            discount: [{ value: 'HNL ' + this.order.discount, disabled: true }],
+            subtotal: [{ value: this.order.subTotal, disabled: true }],
+            discount: [{ value: this.order.discount, disabled: true }],
             orderType: [{ value: this.getOrderType(this.order.orderType), disabled: true }],
-            tax: [{ value: this.order.isv, disabled: true }],
-            total: [{ value: 'HNL ' + this.order.total, disabled: true }],
-            toPay: [{ value: 'HNL ' + this.order.paymentAmount, disabled: true }],
+            tax: [{ value:  this.order.isv, disabled: true }],
+            total: [{ value: this.order.total, disabled: true }],
+            toPay: [{ value: this.order.paymentAmount, disabled: true }],
             customerCode: [{ value: this.order.customerCode, disabled: true }],
             customerName: [{ value: this.order.customerName, disabled: true }]
         });
+    }
+
+    getConfigList(filter: string) {
+        this._orderService.getConfList(filter).then(
+            (d) => {
+                this.currency = JSON.parse(d[0].value).Currency;
+            },
+            (error) => {
+                console.log("Promise rejected with " + JSON.stringify(error));
+            }
+        );
     }
 
     getOrderType(orderType: OrderType){

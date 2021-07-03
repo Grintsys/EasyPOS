@@ -27,12 +27,12 @@
     <div class="container-to-paid">
       <div class="item--paid-out">
         <h1>Por pagar</h1>
-        <h2>{{orderSubtotal + orderTaxes - orderDiscount| currency:'HNL':'symbol'}}</h2>
+        <h2>{{currency + ' ' +  (orderSubtotal + orderTaxes - orderDiscount)}}</h2>
       </div>
       <div class="item--exchange">
-        <h1>Subtotal <span>{{orderSubtotal | currency:'HNL':'symbol'}}</span></h1>
-        <h1>Descuento <span>{{orderDiscount | currency:'HNL':'symbol'}}</span></h1>
-        <h1>Impuesto <span>{{orderTaxes | currency:'HNL':'symbol'}}</span></h1>
+        <h1>Subtotal <span>{{currency + ' ' + orderSubtotal}}</span></h1>
+        <h1>Descuento <span>{{currency + ' ' + orderDiscount}}</span></h1>
+        <h1>Impuesto <span>{{currency + ' ' + orderTaxes}}</span></h1>
       </div>
     </div>
 

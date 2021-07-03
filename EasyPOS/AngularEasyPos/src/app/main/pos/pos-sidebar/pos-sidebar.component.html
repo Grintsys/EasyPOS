@@ -11,8 +11,8 @@
         <mat-chip-list *ngIf="pageType != 'Nota de Credito'" aria-label="Fish selection">
             <mat-chip class="customer-add-mat-chip" (click)="openDialogToAddCustomer()">
                 <mat-icon class="s-20 mr-8">add_circle</mat-icon>
-                {{customer.firstName != undefined && customer.lastName != undefined 
-                    ? customer.firstName +  ' ' + customer.lastName : 'Agregar cliente'}}
+                {{customer.fullName != undefined 
+                    ? customer.fullName : 'Agregar cliente'}}
             </mat-chip>
         </mat-chip-list>
 
@@ -30,19 +30,19 @@
         <tbody>
             <tr class="subtotal">
                 <td>Subtotal</td>
-                <td>{{ order.subTotal | currency:'HNL':'symbol'}}</td>
+                <td>{{ currency + ' ' + (order.subTotal | number : '1.2-2')}}</td>
             </tr>
             <tr class="discount">
                 <td>Descuento</td>
-                <td>-{{order.discount | currency:'HNL':'symbol'}}</td>
+                <td>-{{currency + ' ' + (order.discount | number : '1.2-2')}}</td>
             </tr>
             <tr class="tax">
                 <td>Impuesto</td>
-                <td>{{order.isv | currency:'HNL':'symbol'}}</td>
+                <td>{{currency + ' ' + (order.isv | number : '1.2-2')}}</td>
             </tr>
             <tr class="total">
                 <td>Total</td>
-                <td>{{order.total | currency:'HNL':'symbol'}}</td>
+                <td>{{currency + ' ' + (order.total | number : '1.2-2')}}</td>
             </tr>
         </tbody>
     </table>
@@ -50,11 +50,11 @@
     <div class="container-paid-exchange" *ngIf="orderType != 1 && pageType == 'Orden'">
         <div class="item--paid-out">
             <h1>Pagado</h1>
-            <h2>{{order.paymentAmount | currency:'HNL':'symbol'}}</h2>
+            <h2>{{currency + ' ' + (order.paymentAmount | number : '1.2-2') }}</h2>
         </div>
         <div class="item--exchange">
             <h1>Cambio</h1>
-            <h2>{{order.paymentAmount - order.total | currency:'HNL':'symbol'}}</h2>
+            <h2>{{ currency + ' ' +  ((order.paymentAmount - order.total) | number : '1.2-2') }}</h2>
         </div>
     </div>
 
@@ -63,7 +63,7 @@
         <mat-chip-list *ngFor="let payment of order.paymentMethods" aria-label="Fish selection">
             <mat-chip class="customer-add-mat-chip">
                 <mat-icon class="s-20 mr-8">remove_circle</mat-icon>
-                {{(payment.amount | currency:'HNL':'symbol')}}
+                {{(currency + ' ' + payment.amount )}}
             </mat-chip>
         </mat-chip-list>
     </div>

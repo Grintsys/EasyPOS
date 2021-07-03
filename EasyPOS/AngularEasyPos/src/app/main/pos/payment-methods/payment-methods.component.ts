@@ -38,7 +38,7 @@ export class PaymentMethodsComponent implements OnInit {
     orderSubtotal: number;
     orderTaxes: number;
     orderDiscount: number;
-
+    currency: string= '';
     total: number;
     bankName: string;
     date: Date;
@@ -67,8 +67,12 @@ export class PaymentMethodsComponent implements OnInit {
     getConfigList(filter: string) {
         this._posService.getConfList(filter).then(
             (d) => {
-                this.bankList = JSON.parse(d[0].value);
-                console.log(this.bankList);
+
+                if (filter == 'Moneda') {
+                    this.currency = JSON.parse(d[0].value).Currency;
+                } else if (filter == 'Impuestos') {
+                    this.bankList = JSON.parse(d[0].value);
+                }
             },
             (error) => {
                 console.log("Promise rejected with " + JSON.stringify(error));
@@ -78,6 +82,7 @@ export class PaymentMethodsComponent implements OnInit {
 
     ngOnInit(): void {
         this.getConfigList('Bancos');
+        this.getConfigList('Moneda');
     }
 
     totalChange(event) {

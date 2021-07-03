@@ -33,6 +33,7 @@ export class ProductListComponent {
 
     @ViewChild("filter", { static: true })
     filter: ElementRef;
+    currency: string= '';
 
     dataSource = new MatTableDataSource();
     displayedColumns: string[] = [
@@ -70,6 +71,18 @@ export class ProductListComponent {
 
     ngAfterViewInit() {
         this.getProductList('');
+        this.getConfigList('Moneda');
+    }
+
+    getConfigList(filter: string) {
+        this._productService.getConfList(filter).then(
+            (d) => {
+                this.currency = JSON.parse(d[0].value).Currency;
+            },
+            (error) => {
+                console.log("Promise rejected with " + JSON.stringify(error));
+            }
+        );
     }
 
     search(value: any): void {
