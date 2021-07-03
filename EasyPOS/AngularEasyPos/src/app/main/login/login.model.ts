@@ -5,3 +5,8 @@ export class LoginModel {
     refresh_token: string
     scope: string
 }
+
+export class TenantModel {
+    name: string;
+    id: string;
+}

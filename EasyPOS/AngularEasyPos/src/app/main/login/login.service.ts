@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { AppSettings } from "../../app-settings/app-settings.model";
 import { AppSettingsService } from "../../app-settings/app-settings.service";
 import { LoginInput } from "./login.input";
-import { LoginModel } from "./login.model";
+import { LoginModel, TenantModel } from "./login.model";
 
 @Injectable()
 export class LoginService {
@@ -18,7 +18,6 @@ export class LoginService {
         private _httpClient: HttpClient,
         private _appSettingService: AppSettingsService
     ) {
-        //TODO: cleanUp here
         _appSettingService.getSettings().then((response) => {
             this.settings = response;
             this.baseUrl = `${this.settings.API_URL}/connect/token`;
@@ -48,5 +47,23 @@ export class LoginService {
             localStorage.setItem("token", response.access_token);
             localStorage.setItem("baseUrl", this.settings.API_URL);
         });
+    }
+
+    public getTenants(): Promise<any> {
+        return this._appSettingService.getSettings().then((response) => {
+            var url = `${response.API_URL}/api/app/configuration-manager/return-all-tenants`;
+            const promise = this._httpClient
+                .post<TenantModel[]>(url, this.getHttpOptions())
+                .toPromise();
+            return promise;
+        });
+    }
+
+    private getHttpOptions() {
+        return {
+            headers: new HttpHeaders({
+                "Content-Type": "application/json"
+            }),
+        };
     }
 }
