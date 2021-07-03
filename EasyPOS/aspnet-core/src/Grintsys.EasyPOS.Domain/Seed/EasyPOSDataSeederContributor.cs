@@ -189,14 +189,14 @@ namespace Grintsys.EasyPOS.Seed
                     Address = "San Pedro Sula",
                     Name = "Bodega 1"
                 });
-            
+
             var ware2 = await _warehouseRepository.InsertAsync(
                 new Warehouse()
                 {
                     Address = "La Ceiba",
                     Name = "Bodega 2"
                 });
-            
+
             var ware3 = await _warehouseRepository.InsertAsync(
                 new Warehouse()
                 {
@@ -444,44 +444,75 @@ namespace Grintsys.EasyPOS.Seed
                     Inventory = 100
                 });
 
-            await _configurationManagerRepository.InsertAsync(
-                new ConfigurationManager.ConfigurationManager()
-                {
-                    Key = "Currency",
-                    Value = "HNL"
-                });
-
-
-            var banks = new List<string>()
+            var banks = new List<SAP.BankDto>()
             {
-                "Banpais",
-                "Banco Atlantida",
-                "BAC",
-                "Banco Promerica"
+                new SAP.BankDto()
+                {
+                    BankCode = "BP",
+                    Account = "Banpais"
+                },
+                new SAP.BankDto()
+                {
+                    BankCode = "BAC",
+                    Account = "Bac Credomatic"
+                },
+                new SAP.BankDto()
+                {
+                    BankCode = "FIC",
+                    Account = "Ficohsa"
+                },
+                new SAP.BankDto()
+                {
+                    BankCode = "BPr",
+                    Account = "Banco Promerica"
+                },
             };
 
             await _configurationManagerRepository.InsertAsync(
                 new ConfigurationManager.ConfigurationManager()
                 {
-                    Key = "Bank",
+                    Key = "Bancos",
                     Value = JsonConvert.SerializeObject(banks)
                 });
 
-            var taxes = new List<string>()
+            var taxes = new List<object>()
             {
-                "IVA",
-                "EXE"
+                new
+                {
+                    TaxCode = "EXE",
+                    Tax = "Excento"
+                },
+                 new
+                {
+                    TaxCode = "IVA",
+                    Tax = "ISV"
+                }
             };
 
             await _configurationManagerRepository.InsertAsync(
                 new ConfigurationManager.ConfigurationManager()
                 {
-                    Key = "Taxes",
+                    Key = "Impuestos",
                     Value = JsonConvert.SerializeObject(taxes)
                 });
 
+            var currency =
+                new
+                {
+                    Currency = "HNL"
+                };
+
+
+            await _configurationManagerRepository.InsertAsync(
+                new ConfigurationManager.ConfigurationManager()
+                {
+                    Key = "Moneda",
+                    Value = JsonConvert.SerializeObject(currency)
+                });
+
             await _syncRepository.InsertAsync(
-                new Sincronizador.Sincronizador(){
+                new Sincronizador.Sincronizador()
+                {
                     TipoTransaccion = Transacciones.CreacionOrden,
                     Estado = SyncEstados.Created,
                     Data = JsonConvert.SerializeObject(banks),
