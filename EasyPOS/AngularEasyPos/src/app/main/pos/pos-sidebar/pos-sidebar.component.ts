@@ -176,7 +176,6 @@ export class PosSidebarComponent {
                 }
                 return a;
             }, 0);
-
             this.order.total = this.order.items.reduce(function (a, value) {
                 return a + value.totalItem;
             }, 0);
@@ -352,16 +351,19 @@ export class PosSidebarComponent {
 
     mapDocumentItem(orderItem: OrderItemDto) {
         var dto = new CreateUpdateDocumentItemDto();
+        var iva = orderItem.taxes ? orderItem.quantity * orderItem.salePrice * 0.15 : 0;
+        
         dto.productId = orderItem.productId || '',
-            dto.name = orderItem.name || '',
-            dto.description = orderItem.description || '',
-            dto.code = orderItem.code || '',
-            dto.salePrice = orderItem.salePrice || 0,
-            dto.taxes = orderItem.taxes || false,
-            dto.discount = orderItem.discount || 0,
-            dto.quantity = orderItem.quantity || 0,
-            dto.totalItem = orderItem.totalItem || 0
-
+        dto.name = orderItem.name || '',
+        dto.description = orderItem.description || '',
+        dto.code = orderItem.code || '',
+        dto.salePrice = orderItem.salePrice || 0,
+        dto.taxes = orderItem.taxes || false,
+        dto.selectedTax = orderItem.taxes ? 'IVA' : 'EXE',
+        dto.taxAmount = iva;
+        dto.discount = orderItem.discount || 0,
+        dto.quantity = orderItem.quantity || 0,
+        dto.totalItem = orderItem.totalItem || 0
         return dto;
     }
 }
