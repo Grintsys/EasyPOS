@@ -43,13 +43,12 @@ namespace Grintsys.EasyPOS.SAP
             _warehouseRepository = warehouseRepository;
         }
 
-        public async Task<SapResponse> CreateCreditNoteAsync(CreateOrUpdateSalesOrder input)
+        public async Task CreateCreditNoteAsync(CreateOrUpdateSalesOrder input)
         {
             Company oCompany = GetCompany();
 
             var companyResponse = oCompany.Connect();
             var sapMessage = string.Format("Successfully added Sales Order DocEntry: {0}", oCompany.GetNewObjectKey());
-            var isSuccess = true;
 
             var syncRecord = new Sincronizador.Sincronizador()
             {
@@ -73,66 +72,63 @@ namespace Grintsys.EasyPOS.SAP
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
 
-            IDocuments document = (IDocuments)oCompany.GetBusinessObject(BoObjectTypes.oCreditNotes);
-            document.CardCode = input.CustomerCode;
-            document.CardName = input.CustomerName;
-            document.Comments = $"Creado por {nameof(SapManager)} en EasyPOS";
-            document.SalesPersonCode = input.SalesPersonId;
-            document.DocDueDate = input.CreatedDate;
-
-            //if (salesOrder.UserFields.Fields.Count > 0)
-            //{
-            //    salesOrder.UserFields.Fields.Item("U_FacNit").Value = client == null ? string.Empty : string.IsNullOrWhiteSpace(client.RTN) ? string.Empty : client.RTN;
-            //    salesOrder.UserFields.Fields.Item("U_M2_UUID").Value = order.U_M2_UUID.ToString();
-            //}
-
-            foreach (var item in input.Lines)
+            try
             {
-                document.Lines.ItemCode = item.Code;
-                document.Lines.Quantity = item.Quantity;
-                //salesOrder.Lines.TaxCode = item.Taxes;
-                document.Lines.DiscountPercent = item.Discount;
-                document.Lines.WarehouseCode = input.WarehouseCode;
-                document.Lines.Add();
+
+                IDocuments document = (IDocuments)oCompany.GetBusinessObject(BoObjectTypes.oCreditNotes);
+                document.CardCode = input.CustomerCode;
+                document.CardName = input.CustomerName;
+                document.Comments = $"Creado por {nameof(SapManager)} en EasyPOS";
+                document.SalesPersonCode = input.SalesPersonId;
+                document.DocDueDate = input.CreatedDate;
+
+                //if (salesOrder.UserFields.Fields.Count > 0)
+                //{
+                //    salesOrder.UserFields.Fields.Item("U_FacNit").Value = client == null ? string.Empty : string.IsNullOrWhiteSpace(client.RTN) ? string.Empty : client.RTN;
+                //    salesOrder.UserFields.Fields.Item("U_M2_UUID").Value = order.U_M2_UUID.ToString();
+                //}
+
+                foreach (var item in input.Lines)
+                {
+                    document.Lines.ItemCode = item.Code;
+                    document.Lines.Quantity = item.Quantity;
+                    //salesOrder.Lines.TaxCode = item.Taxes;
+                    document.Lines.DiscountPercent = item.Discount;
+                    document.Lines.WarehouseCode = input.WarehouseCode;
+                    document.Lines.Add();
+                }
+                // add Sales Order
+                if (document.Add() != 0)
+                {
+                    sapMessage = "Error Code: "
+                            + oCompany.GetLastErrorCode().ToString()
+                            + " - "
+                            + oCompany.GetLastErrorDescription();
+
+                    syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                    _logger.LogError(sapMessage);
+                }
             }
-            // add Sales Order
-            if (document.Add() != 0)
+            catch (Exception e)
             {
-                sapMessage = "Error Code: "
-                        + oCompany.GetLastErrorCode().ToString()
-                        + " - "
-                        + oCompany.GetLastErrorDescription();
-
+                sapMessage = e.Message;
                 syncRecord.Estado = Enums.SyncEstados.Failed;
-
                 _logger.LogError(sapMessage);
             }
 
-            //recomended from http://www.appseconnect.com/di-api-memory-leak-in-sap-business-one-9-0/
-            //System.Runtime.InteropServices.Marshal.ReleaseComObject(salesOrder);
             oCompany.Disconnect();
-            _logger.LogInformation("Successfully created");
+            _logger.LogInformation(sapMessage);     
 
-            var response =
-                new SapResponse
-                {
-                    IsSuccess = isSuccess,
-                    Message = sapMessage
-                };
-
-            syncRecord.Message = response.Message;
+            syncRecord.Message = sapMessage;
             await _syncRepository.InsertAsync(syncRecord);
-
-            return response;
-            return null;
         }
 
-        public async Task<SapResponse> CreateCustomerAsync(CreateOrUpdateCustomer input)
+        public async Task CreateCustomerAsync(CreateOrUpdateCustomer input)
         {
             Company company = GetCompany();
             var companyResponse = company.Connect();
             var sapMessage = string.Format("Successfully added new bussiness partner DocEntry: {0}", company.GetNewObjectKey());
-            var isSuccess = true;
 
             var syncRecord = new Sincronizador.Sincronizador()
             {
@@ -170,13 +166,12 @@ namespace Grintsys.EasyPOS.SAP
 
                 if (document.UserFields.Fields.Count > 0)
                 {
-                    document.UserFields.Fields.Item("u_rtn").Value = input.RTN;
-                    document.UserFields.Fields.Item("u_cedula").Value = input.Cedula;
+                    //document.UserFields.Fields.Item("u_rtn").Value = input.RTN;
+                    //document.UserFields.Fields.Item("u_cedula").Value = input.Cedula;
                 }
 
                 if (document.Add() != 0)
                 {
-                    isSuccess = false;
                     sapMessage = "Error Code: "
                             + company.GetLastErrorCode().ToString()
                             + " - "
@@ -189,38 +184,24 @@ namespace Grintsys.EasyPOS.SAP
             }
             catch (Exception e)
             {
-                isSuccess = false;
                 sapMessage = e.Message;
-
                 syncRecord.Estado = Enums.SyncEstados.Failed;
-
                 _logger.LogError(sapMessage);
             }
 
-            //System.Runtime.InteropServices.Marshal.ReleaseComObject(businessPartner);
             company.Disconnect();
-            _logger.LogInformation("Successfull created");
+            _logger.LogInformation(sapMessage);
 
             syncRecord.Message = sapMessage;
             await _syncRepository.InsertAsync(syncRecord);
-
-            var response = new SapResponse
-            {
-                IsSuccess = isSuccess,
-                Message = sapMessage
-            };
-
-            return response;
-            return null;
         }
 
-        public async Task<SapResponse> CreateDebitNoteAsync(CreateOrUpdateSalesOrder input)
+        public async Task CreateDebitNoteAsync(CreateOrUpdateSalesOrder input)
         {
             Company oCompany = GetCompany();
 
             var companyResponse = oCompany.Connect();
             var sapMessage = string.Format("Successfully added Sales Order DocEntry: {0}", oCompany.GetNewObjectKey());
-            var isSuccess = true;
 
             var syncRecord = new Sincronizador.Sincronizador()
             {
@@ -281,30 +262,14 @@ namespace Grintsys.EasyPOS.SAP
                 _logger.LogError(sapMessage);
             }
 
-            //TODO:
-            //update order status
-            _logger.LogInformation("successfull created");
-
-            //recomended from http://www.appseconnect.com/di-api-memory-leak-in-sap-business-one-9-0/
-            //System.Runtime.InteropServices.Marshal.ReleaseComObject(salesOrder);
+            _logger.LogInformation(sapMessage);
             oCompany.Disconnect();
 
-            var response =
-                new SapResponse
-                {
-                    IsSuccess = isSuccess,
-                    Message = sapMessage
-                };
-
             syncRecord.Message = sapMessage;
-
             await _syncRepository.InsertAsync(syncRecord);
-
-            return response;
-            return null;
         }
 
-        public async Task<SapResponse> CreateSalesOrderAsync(CreateOrUpdateSalesOrder input)
+        public async Task CreateSalesOrderAsync(CreateOrUpdateSalesOrder input)
         {
             _logger.LogInformation("Creating sales order");
 
@@ -312,7 +277,6 @@ namespace Grintsys.EasyPOS.SAP
 
             var companyResponse = oCompany.Connect();
             var sapMessage = string.Format("Successfully added Sales Order DocEntry: {0}", oCompany.GetNewObjectKey());
-            var isSuccess = true;
 
             var syncRecord = new Sincronizador.Sincronizador()
             {
@@ -333,64 +297,57 @@ namespace Grintsys.EasyPOS.SAP
                 throw new ArgumentException($"{errorCode}: {errorMessage}");
             }
 
-            IDocuments document = (IDocuments)oCompany.GetBusinessObject(BoObjectTypes.oOrders);
-            document.CardCode = input.CustomerCode;
-            document.CardName = input.CustomerName;
-            document.Comments = $"Creado por {nameof(SapManager)} en EasyPOS";
-            //salesOrder.Series = input.Series;
-            document.SalesPersonCode = input.SalesPersonId;
-            document.DocDueDate = input.CreatedDate;
-
-            //if (salesOrder.UserFields.Fields.Count > 0)
-            //{
-            //    salesOrder.UserFields.Fields.Item("U_FacNit").Value = client == null ? string.Empty : string.IsNullOrWhiteSpace(client.RTN) ? string.Empty : client.RTN;
-            //    salesOrder.UserFields.Fields.Item("U_M2_UUID").Value = order.U_M2_UUID.ToString();
-            //}
-
-            foreach (var item in input.Lines)
+            try
             {
-                document.Lines.ItemCode = item.Code;
-                document.Lines.Quantity = item.Quantity;
-                //salesOrder.Lines.TaxCode = item.Taxes;
-                document.Lines.DiscountPercent = item.Discount;
-                document.Lines.WarehouseCode = input.WarehouseCode;
-                document.Lines.Add();
-            }
-            // add Sales Order
-            if (document.Add() != 0)
-            {
-                sapMessage = "Error Code: "
-                        + oCompany.GetLastErrorCode().ToString()
-                        + " - "
-                        + oCompany.GetLastErrorDescription();
 
+                IDocuments document = (IDocuments)oCompany.GetBusinessObject(BoObjectTypes.oOrders);
+                document.CardCode = input.CustomerCode;
+                document.CardName = input.CustomerName;
+                document.Comments = $"Creado por {nameof(SapManager)} en EasyPOS";
+                //salesOrder.Series = input.Series;
+                document.SalesPersonCode = input.SalesPersonId;
+                document.DocDueDate = input.CreatedDate;
+
+                //if (salesOrder.UserFields.Fields.Count > 0)
+                //{
+                //    salesOrder.UserFields.Fields.Item("U_FacNit").Value = client == null ? string.Empty : string.IsNullOrWhiteSpace(client.RTN) ? string.Empty : client.RTN;
+                //    salesOrder.UserFields.Fields.Item("U_M2_UUID").Value = order.U_M2_UUID.ToString();
+                //}
+
+                foreach (var item in input.Lines)
+                {
+                    document.Lines.ItemCode = item.Code;
+                    document.Lines.Quantity = item.Quantity;
+                    //salesOrder.Lines.TaxCode = item.Taxes;
+                    document.Lines.DiscountPercent = item.Discount;
+                    document.Lines.WarehouseCode = input.WarehouseCode;
+                    document.Lines.Add();
+                }
+                // add Sales Order
+                if (document.Add() != 0)
+                {
+                    sapMessage = "Error Code: "
+                            + oCompany.GetLastErrorCode().ToString()
+                            + " - "
+                            + oCompany.GetLastErrorDescription();
+
+                    syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                    _logger.LogError(sapMessage);
+                }
+            }   
+            catch (Exception e)
+            {
+                sapMessage = e.Message;
                 syncRecord.Estado = Enums.SyncEstados.Failed;
-
                 _logger.LogError(sapMessage);
             }
 
-            _logger.LogInformation("Successfully created");
-
-            //TODO:
-            //update order status
-
-            //recomended from http://www.appseconnect.com/di-api-memory-leak-in-sap-business-one-9-0/
-            //System.Runtime.InteropServices.Marshal.ReleaseComObject(salesOrder);
+            _logger.LogInformation(sapMessage);
             oCompany.Disconnect();
-
-            var response =
-                new SapResponse
-                {
-                    IsSuccess = isSuccess,
-                    Message = sapMessage
-                };
-
             syncRecord.Message = sapMessage;
 
             await _syncRepository.InsertAsync(syncRecord);
-
-            return response;
-            return null;
         }
 
         public async Task<CompanyMetadataDto> GetCompanyMetadata()
@@ -453,7 +410,6 @@ namespace Grintsys.EasyPOS.SAP
             await _syncRepository.InsertAsync(syncRecord);
 
             return companyMetadata;
-            return null;
         }
 
         public async Task<List<CustomerDto>> GetCustomerListAsync(int skipCount = 100)
@@ -518,7 +474,6 @@ namespace Grintsys.EasyPOS.SAP
             await _syncRepository.InsertAsync(syncRecord);
 
             return customers.Take(skipCount).ToList();
-            return null;
         }
 
         public async Task<List<ProductDto>> GetProductListAsync(int skipCount = 100)
@@ -574,7 +529,6 @@ namespace Grintsys.EasyPOS.SAP
             await _syncRepository.InsertAsync(syncRecord);
 
             return products.Take(skipCount).ToList();
-            return null;
         }
 
         public async Task UpsertProducts()
@@ -729,6 +683,80 @@ namespace Grintsys.EasyPOS.SAP
                 }
 
             }
+        }
+
+        public async Task CreateInvoiceAsync(CreateOrUpdateSalesOrder input)
+        {
+            _logger.LogInformation("Creating sales order");
+
+            Company oCompany = GetCompany();
+
+            var companyResponse = oCompany.Connect();
+            
+            var syncRecord = new Sincronizador.Sincronizador()
+            {
+                TipoTransaccion = Enums.Transacciones.CreacionOrden,
+                Data = JsonConvert.SerializeObject(input),
+                Estado = Enums.SyncEstados.Transferred
+            };
+
+            if (companyResponse != 0)
+            {
+                oCompany.GetLastError(out int errorCode, out string errorMessage);
+
+                syncRecord.Message = errorMessage;
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                await _syncRepository.InsertAsync(syncRecord);
+
+                throw new ArgumentException($"{errorCode}: {errorMessage}");
+            }
+
+            IDocuments document = (IDocuments)oCompany.GetBusinessObject(BoObjectTypes.oInvoices);
+            document.CardCode = input.CustomerCode;
+            document.CardName = input.CustomerName;
+            document.Comments = $"Creado por {nameof(SapManager)} en EasyPOS";
+            //salesOrder.Series = input.Series;
+            document.SalesPersonCode = input.SalesPersonId;
+            document.DocDueDate = input.CreatedDate;
+
+            //if (salesOrder.UserFields.Fields.Count > 0)
+            //{
+            //    salesOrder.UserFields.Fields.Item("U_FacNit").Value = client == null ? string.Empty : string.IsNullOrWhiteSpace(client.RTN) ? string.Empty : client.RTN;
+            //    salesOrder.UserFields.Fields.Item("U_M2_UUID").Value = order.U_M2_UUID.ToString();
+            //}
+
+            foreach (var item in input.Lines)
+            {
+                document.Lines.ItemCode = item.Code;
+                document.Lines.Quantity = item.Quantity;
+                //salesOrder.Lines.TaxCode = item.Taxes;
+                document.Lines.DiscountPercent = item.Discount;
+                document.Lines.WarehouseCode = input.WarehouseCode;
+                document.Lines.Add();
+            }
+
+            var sapMessage = string.Format("Successfully added Invoice DocEntry: {0}", oCompany.GetNewObjectKey());
+
+            // add Sales Order
+            if (document.Add() != 0)
+            {
+                sapMessage = "Error Code: "
+                        + oCompany.GetLastErrorCode().ToString()
+                        + " - "
+                        + oCompany.GetLastErrorDescription();
+
+                syncRecord.Estado = Enums.SyncEstados.Failed;
+
+                _logger.LogError(sapMessage);
+            }
+
+            _logger.LogInformation(sapMessage);
+
+            oCompany.Disconnect();
+            syncRecord.Message = sapMessage;
+
+            await _syncRepository.InsertAsync(syncRecord);
         }
     }
 

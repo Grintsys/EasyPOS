@@ -37,10 +37,7 @@ namespace Grintsys.EasyPOS
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });
-
-//#if DEBUG
-//            context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
-//#endif
+            Configure<AbpBackgroundJobOptions>(options => options.IsJobExecutionEnabled = true);
         }
     }
 }

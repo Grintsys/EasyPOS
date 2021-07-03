@@ -1,4 +1,5 @@
 ﻿using Grintsys.EasyPOS.SAP;
+using Grintsys.EasyPOS.Sincronizador;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,24 +38,23 @@ namespace Grintsys.EasyPOS.Customer
             _backgroundJobManager = backgroundJobManager;
         }
 
-        public override Task<CustomerDto> CreateAsync(CreateUpdateCustomerDto input)
+        public override async Task<CustomerDto> CreateAsync(CreateUpdateCustomerDto input)
         {
             input.TenantId = CurrentTenant.Id;
             input.Status = Enums.CustomerStatus.Transferred;
             input.Code = $"c{Guid.NewGuid().ToString().Replace("-", "")}".Truncate(6);
-            var customer = base.CreateAsync(input);
+            var customer = await base.CreateAsync(input);
 
-            var customerDto = new CreateOrUpdateCustomer
-            {
-                CustomerCode = customer.Result.Code,
-                Address = customer.Result.Address,
-                CustomerName = customer.Result.FullName,
-                RTN = customer.Result.RTN,
-                SalesPersonCode = 1,
-                Cedula = customer.Result.IdNumber
-            };
-
-            _backgroundJobManager.EnqueueAsync(_sapManager.CreateCustomerAsync(customerDto));            
+           await _backgroundJobManager.EnqueueAsync(
+                new CustomerSapArgs
+                {
+                    CustomerCode = customer.Code,
+                    Address = customer.Address,
+                    CustomerName = customer.FullName,
+                    RTN = customer.RTN,
+                    SalesPersonCode = 1,
+                    Cedula = customer.IdNumber
+                });            
 
             return customer;
         }
@@ -62,19 +62,19 @@ namespace Grintsys.EasyPOS.Customer
         public async Task<List<CustomerDto>> GetCustomerList(string filter)
         {
             var customers = await _customerRepository.GetListAsync();
-            var dto = new List<CustomerDto>(ObjectMapper.Map<List<Customer>, List<CustomerDto>>(customers));
+            var dto = new List<CustomerDto>(ObjectMapper.Map<List<Customer>, List<CustomerDto>>(customers.Where(a => a.FullName != null).ToList()));
 
             if (!filter.IsNullOrWhiteSpace())
             {
                 filter = filter.ToLower();
                 dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), 
                     x => x.FullName.ToLower().Contains(filter) 
-                    || (!string.IsNullOrEmpty(x.RTN) && x.RTN.ToLower().Contains(filter))
-                    || (!string.IsNullOrEmpty(x.IdNumber) && x.IdNumber.ToLower().Contains(filter))
-                    || (!string.IsNullOrEmpty(x.PhoneNumber) && x.PhoneNumber.ToLower().Contains(filter))
-                    || (!string.IsNullOrEmpty(x.Address) && x.Address.ToLower().Contains(filter))
-                    || (!string.IsNullOrEmpty(x.Code) && x.Code.ToLower().Contains(filter)))
-                    .OrderBy(x => x.FullName).ToList();
+                    || (!string.IsNullOrEmpty(x?.RTN) && x.RTN.ToLower().Contains(filter))
+                    || (!string.IsNullOrEmpty(x?.IdNumber) && x.IdNumber.ToLower().Contains(filter))
+                    || (!string.IsNullOrEmpty(x?.PhoneNumber) && x.PhoneNumber.ToLower().Contains(filter))
+                    || (!string.IsNullOrEmpty(x?.Address) && x.Address.ToLower().Contains(filter))
+                    || (!string.IsNullOrEmpty(x?.Code) && x.Code.ToLower().Contains(filter)))
+                    .OrderBy(x => x?.FullName).ToList();
             }
 
             return dto;

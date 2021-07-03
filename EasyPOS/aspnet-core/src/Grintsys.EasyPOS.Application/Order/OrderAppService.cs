@@ -1,6 +1,7 @@
 ﻿using Grintsys.EasyPOS.Enums;
 using Grintsys.EasyPOS.PaymentMethod;
 using Grintsys.EasyPOS.SAP;
+using Grintsys.EasyPOS.Sincronizador;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,20 +25,17 @@ namespace Grintsys.EasyPOS.Order
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IRepository<PaymentMethod.PaymentMethod, Guid> _paymentMethodRepository;
-        private readonly ISapManager _sapManager;
         private readonly IBackgroundJobManager _backgroundJobManager;
 
 
         public OrderAppService(IRepository<Order, Guid> repository, 
             IOrderRepository orderRepository, 
             IRepository<PaymentMethod.PaymentMethod, Guid> personRepository,
-            ISapManager sapManager,
             IBackgroundJobManager backgroundJobManager)
             : base(repository)
         {
             _orderRepository = orderRepository;
             _paymentMethodRepository = personRepository;
-            _sapManager = sapManager;
             _backgroundJobManager = backgroundJobManager;
         }
 
@@ -48,45 +46,30 @@ namespace Grintsys.EasyPOS.Order
             return dto;
         }
 
-        public override Task<OrderDto> CreateAsync(CreateUpdateOrderDto input)
+        public override async Task<OrderDto> CreateAsync(CreateUpdateOrderDto input)
         {
             var orderId = input.Id;
 
             //TODO: fix transferred object bad mapping
             input.State = DocumentState.Transferred;
             input.TenantId = CurrentTenant.Id;
-            var order = base.CreateAsync(input);
+            var order = await base.CreateAsync(input);
 
             var paymentMethodDto = ObjectMapper.Map<CreateUpdatePaymentMethodDto, PaymentMethod.PaymentMethod>(input.PaymentMethods);
             paymentMethodDto.OrderId = orderId;
 
-            _paymentMethodRepository.InsertAsync(paymentMethodDto);
+            await _paymentMethodRepository.InsertAsync(paymentMethodDto);
 
-
-            var salesOrderDto = new CreateOrUpdateSalesOrder()
-            {
-                CreatedDate = order.Result.CreationTime,
-                CustomerCode = input.CustomerCode,
-                CustomerName = input.CustomerName,
-                SalesPersonId = 1,
-                WarehouseCode = input.WarehouseCode,
-                Lines = order.Result.Items
-            };
-
-            //cep00001
-          
-            //var response = _sapManager.CreateSalesOrderAsync(salesOrderDto);
-
-            _backgroundJobManager.EnqueueAsync(_sapManager.CreateSalesOrderAsync(salesOrderDto));
-
-            //if(response.Result.IsSuccess)
-            //{
-            //    base.UpdateAsync(orderId, new CreateUpdateOrderDto
-            //    {
-            //        Id = orderId,                   
-            //        State = DocumentState.Transferred
-            //    });
-            //}
+            await _backgroundJobManager.EnqueueAsync(
+                new SalesOrderSapArgs()
+                {
+                    CreatedDate = order.CreationTime,
+                    CustomerCode = input.CustomerCode,
+                    CustomerName = input.CustomerName,
+                    SalesPersonId = 1,
+                    WarehouseCode = input.WarehouseCode,
+                    Lines = order.Items
+                });
 
             return order;
         }
@@ -104,7 +87,7 @@ namespace Grintsys.EasyPOS.Order
                     .OrderBy(x => x.CustomerName).ToList();
             }
 
-            return dto;
+            return dto.OrderByDescending(a=> a.CreationTime).ToList();
         }
         
         protected override async Task DeleteByIdAsync(Guid id)

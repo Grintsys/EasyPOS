@@ -2,6 +2,7 @@
 using Grintsys.EasyPOS.Enums;
 using Grintsys.EasyPOS.Order;
 using Grintsys.EasyPOS.SAP;
+using Grintsys.EasyPOS.Sincronizador;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,18 +26,15 @@ namespace Grintsys.EasyPOS.CreditNote
         private readonly ICreditNoteRepository _creditNoteRepository;
         private readonly IOrderRepository _orderRepository;
         private readonly IBackgroundJobManager _backgroundJobManager;
-        private readonly ISapManager _sapManager;
 
         public CreditNoteAppService(
             IRepository<CreditNote, Guid> repository,
             ICreditNoteRepository creditNoteRepository,
             IOrderRepository orderRepository,
-            ISapManager sapManager, 
             IBackgroundJobManager backgroundJobManager) : base(repository)
         {
             _creditNoteRepository = creditNoteRepository;
             _orderRepository = orderRepository;
-            _sapManager = sapManager;
             _backgroundJobManager = backgroundJobManager;
         }
 
@@ -47,24 +45,22 @@ namespace Grintsys.EasyPOS.CreditNote
             return dto;
         }
 
-        public override Task<CreditNoteDto> CreateAsync(CreateUpdateCreditNoteDto input)
+        public override async Task<CreditNoteDto> CreateAsync(CreateUpdateCreditNoteDto input)
         {
             input.State = DocumentState.Transferred;
             input.TenantId = CurrentTenant.Id;
 
-            var document = base.CreateAsync(input);
+            var document = await base.CreateAsync(input);
 
-            var dto = new CreateOrUpdateSalesOrder()
+            await _backgroundJobManager.EnqueueAsync(new CreaditNodeSapArgs()
             {
-                CreatedDate = document.Result.CreationTime,
+                CreatedDate = document.CreationTime,
                 CustomerCode = input.CustomerCode,
                 CustomerName = input.CustomerName,
                 SalesPersonId = 1,
                 WarehouseCode = input.WarehouseCode,
                 Lines = input.Items.Select(x => Map(x)).ToList()
-            };
-
-            _backgroundJobManager.EnqueueAsync(_sapManager.CreateCreditNoteAsync(dto));
+            });
 
             return document;
         }
