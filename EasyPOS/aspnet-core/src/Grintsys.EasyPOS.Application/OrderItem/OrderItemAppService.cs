@@ -25,6 +25,12 @@ namespace Grintsys.EasyPOS.OrderItem
             _orderItemRepository = orderItemRepository;
         }
 
+        public override Task<OrderItemDto> CreateAsync(CreateUpdateOrderItemDto input)
+        {
+            input.TenantId = CurrentTenant.Id;
+            return base.CreateAsync(input);
+        }
+
         public async Task<List<OrderItemDto>> GetOrderItemsByOrderId(Guid orderId)
         {
             var data = await _orderItemRepository.GetByOrderIdAsync(orderId);

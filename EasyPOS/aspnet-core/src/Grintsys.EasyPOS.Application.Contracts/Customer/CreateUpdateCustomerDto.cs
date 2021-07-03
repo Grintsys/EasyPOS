@@ -1,10 +1,12 @@
 ﻿using Grintsys.EasyPOS.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Grintsys.EasyPOS.Customer
 {
     public class CreateUpdateCustomerDto
     {
+        public Guid? TenantId { get; set; }
         public string FullName { get; set; }
 
         [StringLength(13)]

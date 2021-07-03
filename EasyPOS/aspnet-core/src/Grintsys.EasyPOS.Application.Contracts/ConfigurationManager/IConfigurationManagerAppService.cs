@@ -15,5 +15,6 @@ namespace Grintsys.EasyPOS.ConfigurationManager
         >
     {
         Task<List<ConfigurationManagerDto>> GetConfigList(string filter);
+        Task<List<object>> ReturnAllTenants();
     }
 }

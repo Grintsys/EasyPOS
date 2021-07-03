@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.TenantManagement;
 
 namespace Grintsys.EasyPOS.ConfigurationManager
 {
@@ -18,11 +20,18 @@ namespace Grintsys.EasyPOS.ConfigurationManager
         IConfigurationManagerAppService
     {
         private readonly IRepository<ConfigurationManager, Guid> _configRepository;
+        private readonly IRepository<Tenant, Guid> _tenantRepository;
 
-        public ConfigurationManagerAppService(IRepository<ConfigurationManager, Guid> repository, IRepository<ConfigurationManager, Guid> configRepository) : base(repository)
+
+        public ConfigurationManagerAppService(
+            IRepository<ConfigurationManager, Guid> repository, 
+            IRepository<Tenant, Guid> tenantRepository) : base(repository)
         {
-            _configRepository = configRepository;
+            _configRepository = repository;
+            _tenantRepository = tenantRepository;
         }
+
+        [AllowAnonymous]
         public async Task<List<ConfigurationManagerDto>> GetConfigList(string filter)
         {
             var data = await _configRepository.GetListAsync();
@@ -37,6 +46,14 @@ namespace Grintsys.EasyPOS.ConfigurationManager
                    ).OrderBy(x => x.Key).ToList();
             }
 
+            return dto;
+        }
+
+        public async Task<List<object>> ReturnAllTenants()
+        {
+            var data = await _tenantRepository.GetListAsync();
+
+            var dto = new List<object>(ObjectMapper.Map<List<Tenant>, List<object>>(data));
             return dto;
         }
     }

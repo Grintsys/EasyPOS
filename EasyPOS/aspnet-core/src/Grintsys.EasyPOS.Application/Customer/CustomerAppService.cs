@@ -39,6 +39,7 @@ namespace Grintsys.EasyPOS.Customer
 
         public override Task<CustomerDto> CreateAsync(CreateUpdateCustomerDto input)
         {
+            input.TenantId = CurrentTenant.Id;
             input.Status = Enums.CustomerStatus.Transferred;
             input.Code = $"c{Guid.NewGuid().ToString().Replace("-", "")}".Truncate(6);
             var customer = base.CreateAsync(input);

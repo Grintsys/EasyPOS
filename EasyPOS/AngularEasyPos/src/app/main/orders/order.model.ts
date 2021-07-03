@@ -116,6 +116,7 @@ export class OrderItemDto extends DocumentItemDto {
         this.code = product.code || '',
         this.salePrice = product.salePrice || 0,
         this.taxes = product.taxes || false,
+        this.selectedTax = '',
         this.discount = 0,
         this.quantity = 0,
         this.totalItem = this.quantity * this.salePrice

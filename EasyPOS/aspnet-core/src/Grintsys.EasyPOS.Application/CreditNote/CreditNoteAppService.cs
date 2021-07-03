@@ -50,6 +50,8 @@ namespace Grintsys.EasyPOS.CreditNote
         public override Task<CreditNoteDto> CreateAsync(CreateUpdateCreditNoteDto input)
         {
             input.State = DocumentState.Transferred;
+            input.TenantId = CurrentTenant.Id;
+
             var document = base.CreateAsync(input);
 
             var dto = new CreateOrUpdateSalesOrder()

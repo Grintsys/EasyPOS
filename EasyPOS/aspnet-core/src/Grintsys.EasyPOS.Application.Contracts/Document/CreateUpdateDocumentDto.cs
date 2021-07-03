@@ -6,6 +6,7 @@ namespace Grintsys.EasyPOS.Document
 {
     public class CreateUpdateDocumentDto<T> 
     {
+        public Guid? TenantId { get; set; }
         public Guid Id { get; set; } = Guid.NewGuid();
         public Guid CustomerId { get; set; }
         public string CustomerName { get; set; }

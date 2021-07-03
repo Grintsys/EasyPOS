@@ -7,6 +7,7 @@ using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.TenantManagement;
 
@@ -26,6 +27,11 @@ namespace Grintsys.EasyPOS
         {
             ConfigureLocalization();
             ConfigureIdentityOptions(context);
+
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = true;
+            });
         }
 
         private void ConfigureLocalization()

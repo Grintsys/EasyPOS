@@ -54,6 +54,12 @@ namespace Grintsys.EasyPOS.Sincronizador
             return dto;
         }
 
+        public override Task<SincronizadorDto> CreateAsync(CreateUpdateSincronizadorDto input)
+        {
+            input.TenantId = CurrentTenant.Id;
+            return base.CreateAsync(input);
+        }
+
         public async Task<List<SincronizadorDto>> Retry(Guid id)
         {
             var dto = await _syncRepository.GetAsync(id);
