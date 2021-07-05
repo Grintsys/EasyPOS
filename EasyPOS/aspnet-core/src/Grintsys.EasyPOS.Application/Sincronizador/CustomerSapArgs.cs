@@ -1,6 +1,6 @@
-﻿namespace Grintsys.EasyPOS.SAP
+﻿namespace Grintsys.EasyPOS.Sincronizador
 {
-    public class CreateOrUpdateCustomer
+    public class CustomerSapArgs
     {
         public string CustomerName { get; set; }
         public string CustomerCode { get; set; }

@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Grintsys.EasyPOS.SAP
+namespace Grintsys.EasyPOS.Sincronizador
 {
-    public class CreateOrUpdateSalesOrder
+    public class SalesOrderSapArgs
     {
         public string CustomerName { get; set; }
         public string CustomerCode { get; set; }
