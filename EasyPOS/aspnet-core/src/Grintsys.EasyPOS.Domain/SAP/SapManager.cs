@@ -53,7 +53,7 @@ namespace Grintsys.EasyPOS.SAP
             var syncRecord = new Sincronizador.Sincronizador()
             {
                 TipoTransaccion = Enums.Transacciones.CreacionNotaCredito,
-                Estado = Enums.SyncEstados.Transferred,
+                Estado = Enums.SyncEstados.Transferido,
                 Data = JsonConvert.SerializeObject(input)
             };
 
@@ -65,7 +65,7 @@ namespace Grintsys.EasyPOS.SAP
                 _logger.LogError(errorMessage, errorCode);
 
                 syncRecord.Message = errorMessage;
-                syncRecord.Estado = Enums.SyncEstados.Failed;
+                syncRecord.Estado = Enums.SyncEstados.Fallido;
 
                 await _syncRepository.InsertAsync(syncRecord);
 
@@ -105,7 +105,7 @@ namespace Grintsys.EasyPOS.SAP
                             + " - "
                             + oCompany.GetLastErrorDescription();
 
-                    syncRecord.Estado = Enums.SyncEstados.Failed;
+                    syncRecord.Estado = Enums.SyncEstados.Fallido;
 
                     _logger.LogError(sapMessage);
                 }
@@ -113,7 +113,7 @@ namespace Grintsys.EasyPOS.SAP
             catch (Exception e)
             {
                 sapMessage = e.Message;
-                syncRecord.Estado = Enums.SyncEstados.Failed;
+                syncRecord.Estado = Enums.SyncEstados.Fallido;
                 _logger.LogError(sapMessage);
             }
 
@@ -134,7 +134,7 @@ namespace Grintsys.EasyPOS.SAP
             {
                 TipoTransaccion = Enums.Transacciones.CreacionCliente,
                 Data = JsonConvert.SerializeObject(input),
-                Estado = Enums.SyncEstados.Transferred
+                Estado = Enums.SyncEstados.Transferido
             };
 
             if (companyResponse != 0)
@@ -142,7 +142,7 @@ namespace Grintsys.EasyPOS.SAP
                 company.GetLastError(out int errorCode, out string errorMessage);
 
                 syncRecord.Message = errorMessage;
-                syncRecord.Estado = Enums.SyncEstados.Failed;
+                syncRecord.Estado = Enums.SyncEstados.Fallido;
 
                 await _syncRepository.InsertAsync(syncRecord);
 
@@ -177,7 +177,7 @@ namespace Grintsys.EasyPOS.SAP
                             + " - "
                             + company.GetLastErrorDescription();
 
-                    syncRecord.Estado = Enums.SyncEstados.Failed;
+                    syncRecord.Estado = Enums.SyncEstados.Fallido;
 
                     _logger.LogError(sapMessage);
                 }
@@ -185,7 +185,7 @@ namespace Grintsys.EasyPOS.SAP
             catch (Exception e)
             {
                 sapMessage = e.Message;
-                syncRecord.Estado = Enums.SyncEstados.Failed;
+                syncRecord.Estado = Enums.SyncEstados.Fallido;
                 _logger.LogError(sapMessage);
             }
 
@@ -207,7 +207,7 @@ namespace Grintsys.EasyPOS.SAP
             {
                 TipoTransaccion = Enums.Transacciones.CreacionNotaDebito,
                 Data = JsonConvert.SerializeObject(input),
-                Estado = Enums.SyncEstados.Transferred
+                Estado = Enums.SyncEstados.Transferido
             };
 
             if (companyResponse != 0)
@@ -215,7 +215,7 @@ namespace Grintsys.EasyPOS.SAP
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
 
                 syncRecord.Message = errorMessage;
-                syncRecord.Estado = Enums.SyncEstados.Failed;
+                syncRecord.Estado = Enums.SyncEstados.Fallido;
 
                 await _syncRepository.InsertAsync(syncRecord);
 
@@ -257,7 +257,7 @@ namespace Grintsys.EasyPOS.SAP
                         + " - "
                         + oCompany.GetLastErrorDescription();
 
-                syncRecord.Estado = Enums.SyncEstados.Failed;
+                syncRecord.Estado = Enums.SyncEstados.Fallido;
 
                 _logger.LogError(sapMessage);
             }
@@ -282,7 +282,7 @@ namespace Grintsys.EasyPOS.SAP
             {
                 TipoTransaccion = Enums.Transacciones.CreacionOrden,
                 Data = JsonConvert.SerializeObject(input),
-                Estado = Enums.SyncEstados.Transferred
+                Estado = Enums.SyncEstados.Transferido
             };
 
             if (companyResponse != 0)
@@ -290,7 +290,7 @@ namespace Grintsys.EasyPOS.SAP
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
 
                 syncRecord.Message = errorMessage;
-                syncRecord.Estado = Enums.SyncEstados.Failed;
+                syncRecord.Estado = Enums.SyncEstados.Fallido;
 
                 await _syncRepository.InsertAsync(syncRecord);
 
@@ -331,7 +331,7 @@ namespace Grintsys.EasyPOS.SAP
                             + " - "
                             + oCompany.GetLastErrorDescription();
 
-                    syncRecord.Estado = Enums.SyncEstados.Failed;
+                    syncRecord.Estado = Enums.SyncEstados.Fallido;
 
                     _logger.LogError(sapMessage);
                 }
@@ -339,7 +339,7 @@ namespace Grintsys.EasyPOS.SAP
             catch (Exception e)
             {
                 sapMessage = e.Message;
-                syncRecord.Estado = Enums.SyncEstados.Failed;
+                syncRecord.Estado = Enums.SyncEstados.Fallido;
                 _logger.LogError(sapMessage);
             }
 
@@ -361,7 +361,7 @@ namespace Grintsys.EasyPOS.SAP
             {
                 TipoTransaccion = Enums.Transacciones.SyncMetadata,
                 Data = string.Empty,
-                Estado = Enums.SyncEstados.Transferred
+                Estado = Enums.SyncEstados.Transferido
             };
 
             if (companyResponse != 0)
@@ -369,7 +369,7 @@ namespace Grintsys.EasyPOS.SAP
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
 
                 syncRecord.Message = errorMessage;
-                syncRecord.Estado = Enums.SyncEstados.Failed;
+                syncRecord.Estado = Enums.SyncEstados.Fallido;
 
                 await _syncRepository.InsertAsync(syncRecord);
 
@@ -421,7 +421,7 @@ namespace Grintsys.EasyPOS.SAP
             {
                 TipoTransaccion = Enums.Transacciones.SyncClientes,
                 Data = string.Empty,
-                Estado = Enums.SyncEstados.Transferred
+                Estado = Enums.SyncEstados.Transferido
             };
 
             if (companyResponse != 0)
@@ -429,7 +429,7 @@ namespace Grintsys.EasyPOS.SAP
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
 
                 syncRecord.Message = errorMessage;
-                syncRecord.Estado = Enums.SyncEstados.Failed;
+                syncRecord.Estado = Enums.SyncEstados.Fallido;
 
                 await _syncRepository.InsertAsync(syncRecord);
 
@@ -485,7 +485,7 @@ namespace Grintsys.EasyPOS.SAP
             {
                 TipoTransaccion = Enums.Transacciones.SyncProductos,
                 Data = string.Empty,
-                Estado = Enums.SyncEstados.Transferred
+                Estado = Enums.SyncEstados.Transferido
             };
 
             if (companyResponse != 0)
@@ -493,7 +493,7 @@ namespace Grintsys.EasyPOS.SAP
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
 
                 syncRecord.Message = errorMessage;
-                syncRecord.Estado = Enums.SyncEstados.Failed;
+                syncRecord.Estado = Enums.SyncEstados.Fallido;
 
                 await _syncRepository.InsertAsync(syncRecord);
 
@@ -697,7 +697,7 @@ namespace Grintsys.EasyPOS.SAP
             {
                 TipoTransaccion = Enums.Transacciones.CreacionOrden,
                 Data = JsonConvert.SerializeObject(input),
-                Estado = Enums.SyncEstados.Transferred
+                Estado = Enums.SyncEstados.Transferido
             };
 
             if (companyResponse != 0)
@@ -705,7 +705,7 @@ namespace Grintsys.EasyPOS.SAP
                 oCompany.GetLastError(out int errorCode, out string errorMessage);
 
                 syncRecord.Message = errorMessage;
-                syncRecord.Estado = Enums.SyncEstados.Failed;
+                syncRecord.Estado = Enums.SyncEstados.Fallido;
 
                 await _syncRepository.InsertAsync(syncRecord);
 
@@ -746,7 +746,7 @@ namespace Grintsys.EasyPOS.SAP
                         + " - "
                         + oCompany.GetLastErrorDescription();
 
-                syncRecord.Estado = Enums.SyncEstados.Failed;
+                syncRecord.Estado = Enums.SyncEstados.Fallido;
 
                 _logger.LogError(sapMessage);
             }
