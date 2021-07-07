@@ -1,8 +1,10 @@
 ﻿using Grintsys.EasyPOS.Enums;
 using Grintsys.EasyPOS.SAP;
+using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -33,6 +35,7 @@ namespace Grintsys.EasyPOS.Sincronizador
             _backgroundJobManager = backgroundJobManager;
         }
 
+        
         public async Task<List<SincronizadorDto>> GetSyncList(string filter)
         {
             var data = await _syncRepository.GetListAsync();
@@ -40,18 +43,15 @@ namespace Grintsys.EasyPOS.Sincronizador
 
             if (!filter.IsNullOrWhiteSpace())
             {
-                //Enum.TryParse("Active", out SyncEstados estado);
-                //Enum.TryParse("Active", out Transacciones transacciones);
-
-
-                //filter = filter.ToLower();
-                //dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(),
-                //    x => x.FirstName.ToLower().Contains(filter)
-                //    || x.LastName.ToLower().Contains(filter)
-                //   )
-                //    .OrderBy(x => x.FirstName).ToList();
+                filter = filter.ToLower();
+                dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(),
+                    x => x.TipoTransaccion.ToString().ToLower().Contains(filter)
+                    || x.Estado.ToString().ToLower().Contains(filter)
+                    || (!string.IsNullOrEmpty(x.Data) && x.Data.ToLower().Contains(filter))
+                    || (!string.IsNullOrEmpty(x.Message) && x.Message.ToLower().Contains(filter))
+                    ).ToList();
             }
-            return dto;
+            return dto.OrderByDescending(x => x.CreationTime).ToList();
         }
 
         public override Task<SincronizadorDto> CreateAsync(CreateUpdateSincronizadorDto input)
@@ -66,28 +66,35 @@ namespace Grintsys.EasyPOS.Sincronizador
 
             if(dto.TipoTransaccion == Transacciones.CreacionOrden)
             {
-                var salesOrderDto = JsonConvert.DeserializeObject<CreateOrUpdateSalesOrder>(string.IsNullOrEmpty(dto.Data) ? "{}" : dto.Data);
-                await _backgroundJobManager.EnqueueAsync(_sapManager.CreateSalesOrderAsync(salesOrderDto));
+                var salesOrderDto = JsonConvert.DeserializeObject<SalesOrderSapArgs>(string.IsNullOrEmpty(dto.Data) ? "{}" : dto.Data);
+                await _backgroundJobManager.EnqueueAsync(salesOrderDto);
             }
             else if (dto.TipoTransaccion == Transacciones.CreacionNotaCredito)
             {
-                var creditNoteDto = JsonConvert.DeserializeObject<CreateOrUpdateSalesOrder>(string.IsNullOrEmpty(dto.Data) ? "{}" : dto.Data);
-                await _backgroundJobManager.EnqueueAsync(_sapManager.CreateCreditNoteAsync(creditNoteDto));
+                var creditNoteDto = JsonConvert.DeserializeObject<CreaditNodeSapArgs>(string.IsNullOrEmpty(dto.Data) ? "{}" : dto.Data);
+                await _backgroundJobManager.EnqueueAsync(creditNoteDto);
             }
-            else if (dto.TipoTransaccion == Transacciones.CreacionNotaDebito)
-            {
-                var debitNoteDto = JsonConvert.DeserializeObject<CreateOrUpdateSalesOrder>(string.IsNullOrEmpty(dto.Data) ? "{}" : dto.Data);
-                await _backgroundJobManager.EnqueueAsync(_sapManager.CreateCreditNoteAsync(debitNoteDto));
-            }
+            //else if (dto.TipoTransaccion == Transacciones.CreacionNotaDebito)
+            //{
+            //    var debitNoteDto = JsonConvert.DeserializeObject<CreateOrUpdateSalesOrder>(string.IsNullOrEmpty(dto.Data) ? "{}" : dto.Data);
+            //    await _backgroundJobManager.EnqueueAsync(debitNoteDto);
+            //}
             else if (dto.TipoTransaccion == Transacciones.CreacionCliente)
             {
-                var customerDto = JsonConvert.DeserializeObject<CreateOrUpdateCustomer>(string.IsNullOrEmpty(dto.Data) ? "{}" : dto.Data);
-                await _backgroundJobManager.EnqueueAsync(_sapManager.CreateCustomerAsync(customerDto));
+                var customerDto = JsonConvert.DeserializeObject<CustomerSapArgs>(string.IsNullOrEmpty(dto.Data) ? "{}" : dto.Data);
+                await _backgroundJobManager.EnqueueAsync(customerDto);
             }
 
             var syncList = await _syncRepository.GetListAsync();
             var syncListDto = new List<SincronizadorDto>(ObjectMapper.Map<List<Sincronizador>, List<SincronizadorDto>>(syncList));
+            
             return syncListDto;
+        }
+
+        [Authorize("Ver/Modificar_Sincronizaciones")]
+        public override Task<SincronizadorDto> UpdateAsync(Guid id, CreateUpdateSincronizadorDto input)
+        {
+            return base.UpdateAsync(id, input);
         }
     }
 }

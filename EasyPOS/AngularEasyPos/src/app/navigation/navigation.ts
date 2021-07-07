@@ -9,11 +9,12 @@ export const navigation: FuseNavigation[] = [
         children : [
             {
                 id       : 'POS',
-                title    : 'Pos',
+                title    : 'Ventas',
                 translate: 'NAV.POS.TITLE',
                 type     : 'item',
                 icon     : 'shopping_cart',
                 url      : '/pos',
+                role     : ['admin', 'vendor']
             },
             {
                 id       : 'DEBITNOTE',
@@ -22,6 +23,7 @@ export const navigation: FuseNavigation[] = [
                 type     : 'item',
                 icon     : 'assignment',
                 url      : '/debit-note',
+                role     : ['admin', 'vendor']
             },
             {
                 id       : 'ORDER',
@@ -30,6 +32,7 @@ export const navigation: FuseNavigation[] = [
                 type     : 'item',
                 icon     : 'list_alt',
                 url      : '/document-list',
+                role     : ['admin', 'vendor']
             },
             {
                 id       : 'CUSTOMERS',
@@ -38,6 +41,7 @@ export const navigation: FuseNavigation[] = [
                 type     : 'item',
                 icon     : 'person_outline',
                 url      : '/customer-list',
+                role     : ['admin', 'vendor']
             },
             {
                 id       : 'PRODUCTS',
@@ -46,6 +50,7 @@ export const navigation: FuseNavigation[] = [
                 type     : 'item',
                 icon     : 'shopping_basket',
                 url      : '/product-list',
+                role     : ['admin', 'vendor']
             },
             {
                 id       : 'SYNC',
@@ -54,6 +59,7 @@ export const navigation: FuseNavigation[] = [
                 type     : 'item',
                 icon     : 'sync',
                 url      : '/sync-list',
+                role     : ['admin']
             },
             {
                 id       : 'CONFIG',
@@ -62,6 +68,7 @@ export const navigation: FuseNavigation[] = [
                 type     : 'item',
                 icon     : 'settings',
                 url      : '/configuration-list',
+                role     : ['admin']
             },
             /* {
                 id       : 'ROLES',

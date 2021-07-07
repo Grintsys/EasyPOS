@@ -4,7 +4,7 @@ export const locale = {
         'NAV': {
             'OPTIONS' : 'Menú de opciones',
             'POS'   : {
-                'TITLE': 'POS'
+                'TITLE': 'Ventas'
             },
             'DEBITNOTE'   : {
                 'TITLE': 'Nota de Debito'

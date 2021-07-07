@@ -114,12 +114,11 @@ export class PosProductsComponent implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.orderItems && changes.orderItems.currentValue) {
-
             this.orderItems = changes.orderItems.currentValue.map(x => {
                 if (this.productList != undefined) {
                     var prodIndex = this.productList.findIndex(y => y.id == x.productId);
 
-                    if (x.quantity > this.productList[prodIndex].inventory) {
+                    if (prodIndex != -1 && x.quantity > this.productList[prodIndex].inventory) {
                         x.quantity = this.productList[prodIndex].inventory;
                     }
                 }

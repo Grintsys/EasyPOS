@@ -19,14 +19,8 @@ export class FuseNavigationComponent implements OnInit
     @Input()
     navigation: any;
 
-    // Private
     private _unsubscribeAll: Subject<any>;
 
-    /**
-     *
-     * @param {ChangeDetectorRef} _changeDetectorRef
-     * @param {FuseNavigationService} _fuseNavigationService
-     */
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _fuseNavigationService: FuseNavigationService

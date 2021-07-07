@@ -56,10 +56,11 @@ namespace Grintsys.EasyPOS.Product
             if (!filter.IsNullOrWhiteSpace())
             {
                 filter = filter.ToLower();
-                dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.ToLower().Contains(filter)
-                            || x.Description.ToLower().Contains(filter)
-                            || x.Code.ToLower().Contains(filter))
-                         .OrderBy(x => x.Name).ToList();
+                dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), 
+                    x => (!string.IsNullOrEmpty(x?.Name) && x.Name.ToLower().Contains(filter))
+                    || (!string.IsNullOrEmpty(x?.Description) && x.Description.ToLower().Contains(filter))
+                    || (!string.IsNullOrEmpty(x?.Code) && x.Code.ToLower().Contains(filter)))
+                    .ToList();
             }
 
             if (warehouseId != Guid.Empty)
@@ -78,7 +79,7 @@ namespace Grintsys.EasyPOS.Product
                 return dto.Where(p => p.Inventory > 0).ToList();
             }
 
-            return dto;
+            return dto.OrderBy(x => x.Name).ToList();
         }
 
         public async Task<List<ProductLookupDto>> GetProductLookupAsync()

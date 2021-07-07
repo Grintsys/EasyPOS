@@ -68,7 +68,7 @@ namespace Grintsys.EasyPOS.Customer
             {
                 filter = filter.ToLower();
                 dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), 
-                    x => x.FullName.ToLower().Contains(filter) 
+                    x => (!string.IsNullOrEmpty(x?.FullName) && x.FullName.ToLower().Contains(filter))
                     || (!string.IsNullOrEmpty(x?.RTN) && x.RTN.ToLower().Contains(filter))
                     || (!string.IsNullOrEmpty(x?.IdNumber) && x.IdNumber.ToLower().Contains(filter))
                     || (!string.IsNullOrEmpty(x?.PhoneNumber) && x.PhoneNumber.ToLower().Contains(filter))

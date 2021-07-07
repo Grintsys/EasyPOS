@@ -84,8 +84,6 @@ export class LoginComponent implements OnInit {
         const password = this.loginForm.get("password").value;
         const tenant = this.loginForm.get("tenant").value;
 
-        debugger;
-
         const loginInput = new LoginInput(email, password);
         this.invalidPassword = "";
         this.loginInProgress = true;

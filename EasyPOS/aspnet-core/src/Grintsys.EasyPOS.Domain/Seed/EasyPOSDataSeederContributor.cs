@@ -514,7 +514,7 @@ namespace Grintsys.EasyPOS.Seed
                 new Sincronizador.Sincronizador()
                 {
                     TipoTransaccion = Transacciones.CreacionOrden,
-                    Estado = SyncEstados.Created,
+                    Estado = SyncEstados.Creado,
                     Data = JsonConvert.SerializeObject(banks),
                     Message = string.Empty
                 });
