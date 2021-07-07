@@ -91,6 +91,7 @@ export class LoginComponent implements OnInit {
         this._loginService.authorize(loginInput).then(
             () => {
                 this.loginInProgress = false;
+                localStorage.setItem("user/email", email);
                 this.router.navigate(["/pos"]);
             },
             (error) => {

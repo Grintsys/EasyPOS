@@ -55,7 +55,7 @@
         <ng-container matColumnDef="salePrice">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Precio de venta</mat-header-cell>
             <mat-cell *matCellDef="let product">
-                <p class="text-truncate">{{currency + ' ' + product.salePrice}}</p>
+                <p class="text-truncate">{{ currency + ' ' + (product.salePrice | number : '1.2-2')}}</p>
             </mat-cell>
         </ng-container>
 
@@ -100,7 +100,7 @@
         <ng-container matColumnDef="total">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
             <mat-cell *matCellDef="let product">
-                <p class="text-truncate">{{currency + ' ' + product.totalItem}}</p>
+                <p class="text-truncate">{{ currency + ' ' + (product.totalItem | number : '1.2-2')}}</p>
             </mat-cell>
         </ng-container>
 

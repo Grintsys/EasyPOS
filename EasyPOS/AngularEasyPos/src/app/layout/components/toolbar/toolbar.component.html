@@ -54,17 +54,17 @@
                     class="user-button">
                 <div fxLayout="row" fxLayoutAlign="center center">
                    <!--  <img class="avatar mr-0 mr-sm-16" src="assets/images/avatars/Velazquez.jpg"> -->
-                    <span class="username mr-12" fxHide fxShow.gt-sm>Jesús Sarmiento</span>
+                    <span class="username mr-12" fxHide fxShow.gt-sm>{{user}}</span>
                     <mat-icon class="s-16" fxHide.xs>keyboard_arrow_down</mat-icon>
                 </div>
             </button>
 
             <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
 
-                <button mat-menu-item [routerLink]="'/profile'">
+                <!-- <button mat-menu-item [routerLink]="'/profile'">
                     <mat-icon>sentiment_satisfied</mat-icon>
                     <span>Perfil</span>
-                </button>
+                </button> -->
 
                 <button mat-menu-item [routerLink]="'/login'"
                 (click)="logOut()">

@@ -10,7 +10,7 @@ using Volo.Abp.TenantManagement;
 
 namespace Grintsys.EasyPOS.ConfigurationManager
 {
-    [Authorize("Conf_Management")]
+    //[Authorize("Conf_Management")]
     public class ConfigurationManagerAppService :
         CrudAppService<
             ConfigurationManager,
@@ -32,7 +32,7 @@ namespace Grintsys.EasyPOS.ConfigurationManager
             _tenantRepository = tenantRepository;
         }
 
-        [Authorize("Listar_Conf")]
+        //[Authorize("Listar_Conf")]
         public async Task<List<ConfigurationManagerDto>> GetConfigList(string filter)
         {
             var data = await _configRepository.GetListAsync();
