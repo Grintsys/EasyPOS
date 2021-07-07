@@ -1,9 +1,10 @@
 import { ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
-import { merge, Subject } from 'rxjs';
+import { merge, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { FuseNavigationItem } from '@fuse/types';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
+import { SharedService } from 'app/shared.service';
 
 @Component({
     selector: 'fuse-nav-vertical-item',
@@ -19,14 +20,22 @@ export class FuseNavVerticalItemComponent implements OnInit, OnDestroy {
 
     private _unsubscribeAll: Subject<any>;
     userRole: string = 'admin';
+    userRoles: string[] = [];
+    subscription: Subscription;
 
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _fuseNavigationService: FuseNavigationService,
-        private _navService: FuseNavigationService
+        private _sharedService: SharedService
     ) {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+
+        this.subscription = _sharedService.userRoles$.subscribe(
+            list => {
+                this.userRoles = list;
+            }
+        );
     }
 
     ngOnInit(): void {

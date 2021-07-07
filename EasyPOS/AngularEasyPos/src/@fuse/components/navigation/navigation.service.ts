@@ -323,7 +323,6 @@ export class FuseNavigationService
     }
 
     public getUserByUsername(userName: string): Promise<any> {
-        debugger;
         var url = `${this.baseUrl}/identity/users/by-username/${userName}`;
         const promise = this._httpClient.get<any[]>(url, this.getHttpOptions()).toPromise();
         return promise;

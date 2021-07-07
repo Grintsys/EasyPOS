@@ -3,6 +3,7 @@ import { merge, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
+import { SharedService } from 'app/shared.service';
 
 @Component({
     selector       : 'fuse-navigation',
@@ -23,6 +24,7 @@ export class FuseNavigationComponent implements OnInit
 
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
+        private _sharedService: SharedService,
         private _fuseNavigationService: FuseNavigationService
     )
     {
@@ -30,15 +32,25 @@ export class FuseNavigationComponent implements OnInit
         this._unsubscribeAll = new Subject();
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
     ngOnInit(): void
     {
+        this._fuseNavigationService.getUserByUsername('brgp').then(
+            (response) => {
+                this._sharedService.setUserRoles([]);
+                this._fuseNavigationService.getUserByEmail('brgp').then(
+                    (response) => {
+                        this._sharedService.setUserRoles([]);
+                    },
+                    (error) => {
+                        console.log("Promise rejected with " + JSON.stringify(error));
+                    }
+                );
+            },
+            (error) => {
+                console.log("Promise rejected with " + JSON.stringify(error));
+            }
+        );
+
         // Load the navigation either from the input or from the service
         this.navigation = this.navigation || this._fuseNavigationService.getCurrentNavigation();
 
