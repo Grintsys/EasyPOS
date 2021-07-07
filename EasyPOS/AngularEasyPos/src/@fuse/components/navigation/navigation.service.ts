@@ -3,12 +3,18 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import * as _ from 'lodash';
 
 import { FuseNavigationItem } from '@fuse/types';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
 })
 export class FuseNavigationService
 {
+    baseUrl: string;
+    authToken: string;
+    routeParams: any;
+
     onItemCollapsed: Subject<any>;
     onItemCollapseToggled: Subject<any>;
 
@@ -23,10 +29,7 @@ export class FuseNavigationService
     private _currentNavigationKey: string;
     private _registry: { [key: string]: any } = {};
 
-    /**
-     * Constructor
-     */
-    constructor()
+    constructor(private _httpClient: HttpClient,private router: Router)
     {
         // Set the defaults
         this.onItemCollapsed = new Subject();
@@ -40,83 +43,40 @@ export class FuseNavigationService
         this._onNavigationItemAdded = new BehaviorSubject(null);
         this._onNavigationItemUpdated = new BehaviorSubject(null);
         this._onNavigationItemRemoved = new BehaviorSubject(null);
+
+        this.checkSession();
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Accessors
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Get onNavigationChanged
-     *
-     * @returns {Observable<any>}
-     */
     get onNavigationChanged(): Observable<any>
     {
         return this._onNavigationChanged.asObservable();
     }
 
-    /**
-     * Get onNavigationRegistered
-     *
-     * @returns {Observable<any>}
-     */
     get onNavigationRegistered(): Observable<any>
     {
         return this._onNavigationRegistered.asObservable();
     }
 
-    /**
-     * Get onNavigationUnregistered
-     *
-     * @returns {Observable<any>}
-     */
     get onNavigationUnregistered(): Observable<any>
     {
         return this._onNavigationUnregistered.asObservable();
     }
 
-    /**
-     * Get onNavigationItemAdded
-     *
-     * @returns {Observable<any>}
-     */
     get onNavigationItemAdded(): Observable<any>
     {
         return this._onNavigationItemAdded.asObservable();
     }
 
-    /**
-     * Get onNavigationItemUpdated
-     *
-     * @returns {Observable<any>}
-     */
     get onNavigationItemUpdated(): Observable<any>
     {
         return this._onNavigationItemUpdated.asObservable();
     }
 
-    /**
-     * Get onNavigationItemRemoved
-     *
-     * @returns {Observable<any>}
-     */
     get onNavigationItemRemoved(): Observable<any>
     {
         return this._onNavigationItemRemoved.asObservable();
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Register the given navigation
-     * with the given key
-     *
-     * @param key
-     * @param navigation
-     */
     register(key, navigation): void
     {
         // Check if the key already being used
@@ -134,10 +94,6 @@ export class FuseNavigationService
         this._onNavigationRegistered.next([key, navigation]);
     }
 
-    /**
-     * Unregister the navigation from the registry
-     * @param key
-     */
     unregister(key): void
     {
         // Check if the navigation exists
@@ -153,12 +109,6 @@ export class FuseNavigationService
         this._onNavigationUnregistered.next(key);
     }
 
-    /**
-     * Get navigation from registry by key
-     *
-     * @param key
-     * @returns {any}
-     */
     getNavigation(key): any
     {
         // Check if the navigation exists
@@ -173,13 +123,6 @@ export class FuseNavigationService
         return this._registry[key];
     }
 
-    /**
-     * Get flattened navigation array
-     *
-     * @param navigation
-     * @param flatNavigation
-     * @returns {any[]}
-     */
     getFlatNavigation(navigation, flatNavigation: FuseNavigationItem[] = []): any
     {
         for ( const item of navigation )
@@ -203,11 +146,6 @@ export class FuseNavigationService
         return flatNavigation;
     }
 
-    /**
-     * Get the current navigation
-     *
-     * @returns {any}
-     */
     getCurrentNavigation(): any
     {
         if ( !this._currentNavigationKey )
@@ -220,12 +158,6 @@ export class FuseNavigationService
         return this.getNavigation(this._currentNavigationKey);
     }
 
-    /**
-     * Set the navigation with the key
-     * as the current navigation
-     *
-     * @param key
-     */
     setCurrentNavigation(key): void
     {
         // Check if the sidebar exists
@@ -243,14 +175,6 @@ export class FuseNavigationService
         this._onNavigationChanged.next(key);
     }
 
-    /**
-     * Get navigation item by id from the
-     * current navigation
-     *
-     * @param id
-     * @param {any} navigation
-     * @returns {any | boolean}
-     */
     getNavigationItem(id, navigation = null): any | boolean
     {
         if ( !navigation )
@@ -279,14 +203,6 @@ export class FuseNavigationService
         return false;
     }
 
-    /**
-     * Get the parent of the navigation item
-     * with the id
-     *
-     * @param id
-     * @param {any} navigation
-     * @param parent
-     */
     getNavigationItemParent(id, navigation = null, parent = null): any
     {
         if ( !navigation )
@@ -316,12 +232,6 @@ export class FuseNavigationService
         return false;
     }
 
-    /**
-     * Add a navigation item to the specified location
-     *
-     * @param item
-     * @param id
-     */
     addNavigationItem(item, id): void
     {
         // Get the current navigation
@@ -369,12 +279,6 @@ export class FuseNavigationService
         this._onNavigationItemAdded.next(true);
     }
 
-    /**
-     * Update navigation item with the given id
-     *
-     * @param id
-     * @param properties
-     */
     updateNavigationItem(id, properties): void
     {
         // Get the navigation item
@@ -393,11 +297,6 @@ export class FuseNavigationService
         this._onNavigationItemUpdated.next(true);
     }
 
-    /**
-     * Remove navigation item with the given id
-     *
-     * @param id
-     */
     removeNavigationItem(id): void
     {
         const item = this.getNavigationItem(id);
@@ -421,5 +320,35 @@ export class FuseNavigationService
 
         // Trigger the observable
         this._onNavigationItemRemoved.next(true);
+    }
+
+    public getUserByUsername(userName: string): Promise<any> {
+        var url = `${this.baseUrl}/identity/users/by-username/${userName}`;
+        const promise = this._httpClient.get<any[]>(url, this.getHttpOptions()).toPromise();
+        return promise;
+    }
+
+    public getUserByEmail(email: string): Promise<any> {
+        var url = `${this.baseUrl}/identity/users/by-email/${email}`;
+        const promise = this._httpClient.get<any[]>(url, this.getHttpOptions()).toPromise();
+        return promise;
+    }
+
+    private getHttpOptions(){
+        return {
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                Authorization: this.authToken,
+            }),
+        };
+    }
+
+    private checkSession() {
+        this.baseUrl = `${localStorage.getItem("baseUrl")}/api`;
+        this.authToken = localStorage.getItem("id_token");
+
+        if (this.authToken == null || this.baseUrl == null) {
+            this.router.navigate(["/login"]);
+        }
     }
 }

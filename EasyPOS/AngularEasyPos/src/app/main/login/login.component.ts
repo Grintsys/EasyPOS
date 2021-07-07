@@ -7,7 +7,8 @@ import { LoginService } from './login.service';
 import { LoginInput } from './login.input';
 import { Router } from "@angular/router";
 import { TenantModel } from './login.model';
-
+import { AuthService } from '@abp/ng.core';
+import { OAuthService } from 'angular-oauth2-oidc';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -22,12 +23,15 @@ export class LoginComponent implements OnInit {
 
     selectedValue: string;
     tenants: TenantModel[];
-
+    get hasLoggedIn(): boolean {
+        return this.oAuthService.hasValidAccessToken();
+      }
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _formBuilder: FormBuilder,
         private _loginService: LoginService,
-        private router: Router
+        private router: Router,
+        private oAuthService: OAuthService, private authService: AuthService
     ) {
         // Configure the layout
         this._fuseConfigService.config = {
@@ -51,6 +55,12 @@ export class LoginComponent implements OnInit {
         this.loginInProgress = false;
         this.tenants = [];
     }
+
+    login() {
+        this._loginService.setBaseUrl();
+        this.authService.initLogin();
+        
+      }
 
     ngOnInit(): void {
         this.loginForm = this._formBuilder.group({
@@ -84,8 +94,6 @@ export class LoginComponent implements OnInit {
         const password = this.loginForm.get("password").value;
         const tenant = this.loginForm.get("tenant").value;
 
-        debugger;
-
         const loginInput = new LoginInput(email, password);
         this.invalidPassword = "";
         this.loginInProgress = true;
@@ -93,6 +101,7 @@ export class LoginComponent implements OnInit {
         this._loginService.authorize(loginInput).then(
             () => {
                 this.loginInProgress = false;
+                localStorage.setItem("user/email", email);
                 this.router.navigate(["/pos"]);
             },
             (error) => {

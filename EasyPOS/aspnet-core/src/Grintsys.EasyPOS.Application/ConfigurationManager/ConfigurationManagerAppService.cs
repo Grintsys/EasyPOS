@@ -10,6 +10,7 @@ using Volo.Abp.TenantManagement;
 
 namespace Grintsys.EasyPOS.ConfigurationManager
 {
+    //[Authorize("Conf_Management")]
     public class ConfigurationManagerAppService :
         CrudAppService<
             ConfigurationManager,
@@ -31,7 +32,7 @@ namespace Grintsys.EasyPOS.ConfigurationManager
             _tenantRepository = tenantRepository;
         }
 
-        [AllowAnonymous]
+        //[Authorize("Listar_Conf")]
         public async Task<List<ConfigurationManagerDto>> GetConfigList(string filter)
         {
             var data = await _configRepository.GetListAsync();
@@ -43,12 +44,13 @@ namespace Grintsys.EasyPOS.ConfigurationManager
                 dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(),
                     x => x.Key.ToLower().Contains(filter)
                     || x.Value.ToLower().Contains(filter)
-                   ).OrderBy(x => x.Key).ToList();
+                   ).ToList();
             }
 
-            return dto;
+            return dto.OrderBy(x => x.Key).ToList();
         }
 
+        [AllowAnonymous]
         public async Task<List<object>> ReturnAllTenants()
         {
             var data = await _tenantRepository.GetListAsync();

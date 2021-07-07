@@ -95,7 +95,7 @@ export class SyncListComponent {
   }
 
   validateRetry(syncDto: SyncDto){
-    if(syncDto.estado == 2 
+    if(syncDto.estado == 0
       && (syncDto.tipoTransaccion == Transacciones.CreacionCliente
       || syncDto.tipoTransaccion == Transacciones.CreacionNotaDebito
       || syncDto.tipoTransaccion == Transacciones.CreacionOrden

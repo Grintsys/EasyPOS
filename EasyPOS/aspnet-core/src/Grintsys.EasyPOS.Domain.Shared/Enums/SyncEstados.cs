@@ -2,8 +2,8 @@
 {
     public enum SyncEstados
     {
-        Failed = 0,
-        Transferred = 1,
-        Created = 2
+        Fallido = 0,
+        Transferido = 1,
+        Creado = 2
     }
 }

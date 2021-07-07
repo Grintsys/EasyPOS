@@ -9,6 +9,7 @@ export class SharedService {
     private order = new Subject<OrderDto>();
     private posPageType = new Subject<string>();
     private productList = new Subject<ProductDto[]>();
+    private userRoles = new Subject<string[]>();
     private posProductsSearch = new Subject<string>();
 
     // Observable string streams
@@ -16,6 +17,7 @@ export class SharedService {
     order$ = this.order.asObservable();
     posPageType$ = this.posPageType.asObservable();
     productList$ = this.productList.asObservable();
+    userRoles$ = this.userRoles.asObservable();
     posProductsSearch$ = this.posProductsSearch.asObservable();
 
     // Service message commands
@@ -33,6 +35,10 @@ export class SharedService {
 
     setProductList(list: ProductDto[]) {
         this.productList.next(list);
+    }
+
+    setUserRoles(list: string[]) {
+        this.userRoles.next(list);
     }
 
     setPosProductsSearch(filter: string){

@@ -49,6 +49,10 @@ export class LoginService {
         });
     }
 
+    public setBaseUrl(){
+        localStorage.setItem("baseUrl", this.settings.API_URL);
+    }
+
     public getTenants(): Promise<any> {
         return this._appSettingService.getSettings().then((response) => {
             var url = `${response.API_URL}/api/app/configuration-manager/return-all-tenants`;

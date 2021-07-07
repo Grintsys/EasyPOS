@@ -82,9 +82,11 @@ namespace Grintsys.EasyPOS.Order
             if (!filter.IsNullOrWhiteSpace())
             {
                 filter = filter.ToLower();
-                dto = dto.WhereIf(!filter.IsNullOrWhiteSpace(), 
-                        x => x.CustomerName.ToLower().Contains(filter))
-                    .OrderBy(x => x.CustomerName).ToList();
+                dto = dto.WhereIf(
+                    !filter.IsNullOrWhiteSpace(), 
+                    x => (!string.IsNullOrEmpty(x.CustomerName) && x.CustomerName.ToLower().Contains(filter))
+                    || (!string.IsNullOrEmpty(x.CustomerCode) && x.CustomerCode.ToLower().Contains(filter)))
+                    .ToList();
             }
 
             return dto.OrderByDescending(a=> a.CreationTime).ToList();

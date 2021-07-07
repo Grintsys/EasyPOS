@@ -30,7 +30,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
     userStatusOptions: any[];
     warehouses: WarehouseDto[];
     selectedWarehouse: string;
-
+    user: string = '';
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -56,6 +56,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
 
         this.warehouses = [];
         this.selectedWarehouse = '';
+        this.user = localStorage.getItem('user/email') ?? '';
     }
 
     // -----------------------------------------------------------------------------------------------------

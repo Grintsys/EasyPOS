@@ -25,9 +25,21 @@ import { ConfigurationsModule } from 'app/main/configurations/configurations.mod
 import { LoginModule } from './main/login/login.module';
 import { ProfileModule } from './main/profile/profile.module';
 
+import { CoreModule } from '@abp/ng.core';
+import { IdentityConfigModule } from '@abp/ng.identity/config';
+import { environment } from './environment';
+import { registerLocale } from '@abp/ng.core/locale';
+import { APP_ROUTE_PROVIDER } from './route.provider';
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { TenantManagementConfigModule } from '@abp/ng.tenant-management/config';
+import { SettingManagementConfigModule } from '@abp/ng.setting-management/config';
+import { NgxsModule } from '@ngxs/store';
+import { ThemeBasicModule } from '@abp/ng.theme.basic';
+
+
 const appRoutes: Routes = [
     {
-        path      : '**',
+        path: '**',
         redirectTo: 'login'
     }
 ];
@@ -36,14 +48,26 @@ const appRoutes: Routes = [
     declarations: [
         AppComponent,
     ],
-    imports     : [
+    imports: [
         BrowserModule,
         BrowserAnimationsModule,
         HttpClientModule,
         RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
 
         TranslateModule.forRoot(),
-
+        BrowserModule,
+        BrowserAnimationsModule,
+        //AppRoutingModule,
+        CoreModule.forRoot({
+            environment,
+            registerLocaleFn: registerLocale(),
+        }),
+        ThemeSharedModule.forRoot(),
+        IdentityConfigModule.forRoot(),
+        TenantManagementConfigModule.forRoot(),
+        SettingManagementConfigModule.forRoot(),
+        NgxsModule.forRoot(),
+        ThemeBasicModule.forRoot(),
         // Material moment date module
         MatMomentDateModule,
 
@@ -68,10 +92,10 @@ const appRoutes: Routes = [
         ConfigurationsModule,
         ProfileModule,
     ],
-    bootstrap   : [
+    bootstrap: [
         AppComponent
-    ]
+    ],
+    providers: [APP_ROUTE_PROVIDER],
 })
-export class AppModule
-{
+export class AppModule {
 }
