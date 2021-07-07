@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit {
         private router: Router,
         private oAuthService: OAuthService, private authService: AuthService
     ) {
-        // Configure the layout
         this._fuseConfigService.config = {
             layout: {
                 navbar: {
@@ -54,13 +53,16 @@ export class LoginComponent implements OnInit {
         this.invalidPassword = "";
         this.loginInProgress = false;
         this.tenants = [];
+
+        if(localStorage.getItem("id_token") != undefined){
+            this.router.navigate(["/pos"]);
+        }
     }
 
     login() {
         this._loginService.setBaseUrl();
         this.authService.initLogin();
-        
-      }
+    }
 
     ngOnInit(): void {
         this.loginForm = this._formBuilder.group({
