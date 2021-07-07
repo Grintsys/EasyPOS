@@ -34,7 +34,7 @@ export class FuseNavigationComponent implements OnInit
 
     ngOnInit(): void
     {
-        this._fuseNavigationService.getUserByUsername('brgp').then(
+        /* this._fuseNavigationService.getUserByUsername('brgp').then(
             (response) => {
                 this._sharedService.setUserRoles([]);
                 this._fuseNavigationService.getUserByEmail('brgp').then(
@@ -49,7 +49,7 @@ export class FuseNavigationComponent implements OnInit
             (error) => {
                 console.log("Promise rejected with " + JSON.stringify(error));
             }
-        );
+        ); */
 
         // Load the navigation either from the input or from the service
         this.navigation = this.navigation || this._fuseNavigationService.getCurrentNavigation();
