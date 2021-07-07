@@ -163,6 +163,27 @@ namespace Grintsys.EasyPOS.IdentityServer
                 );
             }
 
+            var uiClientId = configurationSection["EasyPOS_UI:ClientId"];
+            if (!uiClientId.IsNullOrWhiteSpace())
+            {
+                var webClientRootUrl = configurationSection["EasyPOS_UI:RootUrl"].EnsureEndsWith('/');
+
+                /* EasyPOS_Web client is only needed if you created a tiered
+                 * solution. Otherwise, you can delete this client. */
+
+                await CreateClientAsync(
+                    requireClientSecret: false,
+                    name: uiClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] { "password", "client_credentials", "authorization_code" },
+                    secret: (configurationSection["EasyPOS_UI:ClientSecret"] ?? "1q2w3e*").Sha256(),
+                    redirectUri: $"{webClientRootUrl}",
+                    postLogoutRedirectUri: $"{webClientRootUrl}silent-refresh.html",
+                    frontChannelLogoutUri: $"{webClientRootUrl}Account/FrontChannelLogout",
+                    corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
+                );
+            }
+
             //Console Test / Angular Client
             var consoleAndAngularClientId = configurationSection["EasyPOS_App:ClientId"];
             if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
