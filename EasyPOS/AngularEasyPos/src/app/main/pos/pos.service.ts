@@ -121,7 +121,7 @@ export class PosService implements Resolve<any>{
 
     private checkSession() {
         this.baseUrl = `${localStorage.getItem("baseUrl")}/api/app`;
-        this.authToken = localStorage.getItem("token");
+        this.authToken = localStorage.getItem("id_token");
 
         if (this.authToken == null || this.baseUrl == null) {
             this.router.navigate(["/login"]);
