@@ -56,7 +56,8 @@ export class ToolbarComponent implements OnInit, OnDestroy
 
         this.warehouses = [];
         this.selectedWarehouse = '';
-        this.user = localStorage.getItem('user/email') ?? '';
+        var userData = localStorage.getItem('id_token_claims_obj');
+        this.user = JSON.parse(userData).preferred_username ?? '';
     }
 
     // -----------------------------------------------------------------------------------------------------

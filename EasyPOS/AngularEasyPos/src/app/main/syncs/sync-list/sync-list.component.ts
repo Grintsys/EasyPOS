@@ -35,7 +35,7 @@ export class SyncListComponent {
 
   syncList: SyncDto[];
   dialogRef: any;
-
+  userRoles: string[];
   private _unsubscribeAll: Subject<any>;
 
   constructor(
@@ -46,9 +46,19 @@ export class SyncListComponent {
     this._fuseTranslationLoaderService.loadTranslations(english, spanish);
     this._unsubscribeAll = new Subject();
     this.syncList = [];
+    this.userRoles = [];
   }
 
   ngAfterViewInit() {
+    var userData = localStorage.getItem('id_token_claims_obj');
+    var roles = JSON.parse(userData).role ?? '';
+
+    if (!Array.isArray(roles)) {
+      roles = [roles];
+    }
+
+    this.userRoles = roles;
+
     this.getSyncList('');
   }
 
@@ -59,17 +69,19 @@ export class SyncListComponent {
   }
 
   getSyncList(filter: string) {
-    this._syncService.getList(filter).then(
-      (d) => {
-        this.syncList = d;
-        this.dataSource = new MatTableDataSource(d);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      },
-      (error) => {
-        console.log("Promise rejected with " + JSON.stringify(error));
-      }
-    );
+    if (this.userRoles.indexOf('admin') > -1) {
+      this._syncService.getList(filter).then(
+        (d) => {
+          this.syncList = d;
+          this.dataSource = new MatTableDataSource(d);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        },
+        (error) => {
+          console.log("Promise rejected with " + JSON.stringify(error));
+        }
+      );
+    }
   }
 
   updateJson(data: SyncDto) {
@@ -94,15 +106,15 @@ export class SyncListComponent {
     );
   }
 
-  validateRetry(syncDto: SyncDto){
-    if(syncDto.estado == 0
+  validateRetry(syncDto: SyncDto) {
+    if (syncDto.estado == 0
       && (syncDto.tipoTransaccion == Transacciones.CreacionCliente
-      || syncDto.tipoTransaccion == Transacciones.CreacionNotaDebito
-      || syncDto.tipoTransaccion == Transacciones.CreacionOrden
-      || syncDto.tipoTransaccion == Transacciones.CreacionNotaCredito)){
-        return true;
-      }
-      return false;
+        || syncDto.tipoTransaccion == Transacciones.CreacionNotaDebito
+        || syncDto.tipoTransaccion == Transacciones.CreacionOrden
+        || syncDto.tipoTransaccion == Transacciones.CreacionNotaCredito)) {
+      return true;
+    }
+    return false;
   }
 
   check(estado: SyncEstados) {

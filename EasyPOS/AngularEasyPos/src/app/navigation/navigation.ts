@@ -14,7 +14,7 @@ export const navigation: FuseNavigation[] = [
                 type     : 'item',
                 icon     : 'shopping_cart',
                 url      : '/pos',
-                role     : ['admin', 'vendor']
+                role     : ['admin', 'vendedor']
             },
             {
                 id       : 'DEBITNOTE',
@@ -23,7 +23,7 @@ export const navigation: FuseNavigation[] = [
                 type     : 'item',
                 icon     : 'assignment',
                 url      : '/debit-note',
-                role     : ['admin', 'vendor']
+                role     : ['admin', 'vendedor']
             },
             {
                 id       : 'ORDER',
@@ -32,7 +32,7 @@ export const navigation: FuseNavigation[] = [
                 type     : 'item',
                 icon     : 'list_alt',
                 url      : '/document-list',
-                role     : ['admin', 'vendor']
+                role     : ['admin', 'vendedor']
             },
             {
                 id       : 'CUSTOMERS',
@@ -41,7 +41,7 @@ export const navigation: FuseNavigation[] = [
                 type     : 'item',
                 icon     : 'person_outline',
                 url      : '/customer-list',
-                role     : ['admin', 'vendor']
+                role     : ['admin', 'vendedor']
             },
             {
                 id       : 'PRODUCTS',
@@ -50,7 +50,7 @@ export const navigation: FuseNavigation[] = [
                 type     : 'item',
                 icon     : 'shopping_basket',
                 url      : '/product-list',
-                role     : ['admin', 'vendor']
+                role     : ['admin', 'vendedor']
             },
             {
                 id       : 'SYNC',

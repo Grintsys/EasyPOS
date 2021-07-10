@@ -30,7 +30,7 @@ export class ConfigurationListComponent {
 
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ['key', 'value'];
-
+  userRoles: string[];
   configList: ConfigurationDto[];
 
   // Private
@@ -44,11 +44,20 @@ export class ConfigurationListComponent {
 
     // Set the private defaults
     this._unsubscribeAll = new Subject();
-
+    this.userRoles = [];
     this.configList = [];
   }
 
   ngAfterViewInit() {
+    var userData = localStorage.getItem('id_token_claims_obj');
+    var roles = JSON.parse(userData).role ?? '';
+
+    if(!Array.isArray(roles)){
+        roles = [roles];
+    }
+
+    this.userRoles = roles;
+
     this.getConfigList('');
   }
 
@@ -59,16 +68,19 @@ export class ConfigurationListComponent {
   }
 
   getConfigList(filter: string) {
-    this._configService.getList(filter).then(
-      (d) => {
-        this.configList = d;
-        this.dataSource = new MatTableDataSource(d);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      },
-      (error) => {
-        console.log("Promise rejected with " + JSON.stringify(error));
-      }
-    );
+    if(this.userRoles.indexOf('admin') > -1)
+    {
+      this._configService.getList(filter).then(
+        (d) => {
+          this.configList = d;
+          this.dataSource = new MatTableDataSource(d);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        },
+        (error) => {
+          console.log("Promise rejected with " + JSON.stringify(error));
+        }
+      );
+    }
   }
 }

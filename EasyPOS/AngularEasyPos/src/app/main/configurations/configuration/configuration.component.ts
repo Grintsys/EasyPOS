@@ -23,7 +23,7 @@ export class ConfigurationComponent implements OnInit, OnDestroy {
     configuration: ConfigurationDto;
     pageType: string;
     configurationForm: FormGroup;
-
+    
     // Private
     private _unsubscribeAll: Subject<any>;
 
